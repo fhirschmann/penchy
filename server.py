@@ -15,7 +15,7 @@ class Node(object):
     This class represents a node (=a machine on which the benchmark
     will be run on).
     """
-    def __init__(self, node, pkey):
+    def __init__(self, node):
         """Initialize the node
 
         :param node: tuple of (hostname, port, username, remote path)
@@ -23,31 +23,26 @@ class Node(object):
         """
 
         self.host, self.port, self.username, self.path = node
-        self.pkey = pkey
-        self.transport = paramiko.Transport((self.host, self.port))
+        self.ssh = paramiko.SSHClient()
+        self.ssh.load_system_host_keys()
         self.sftp = None
-        self.ssh = None
 
     def connect(self):
         """Connect to the node"""
 
         log.info("Connecting to node %s" % self.host)
-        self.transport.connect(username = self.username, pkey = self.pkey)
-        self.sftp = paramiko.SFTPClient.from_transport(self.transport)
-        self.ssh = self.transport.open_session()
+        self.ssh.connect(self.host, username=self.username,
+                key_filename=ID_RSA, port=SSH_PORT)
+
+        self.sftp = self.ssh.open_sftp()
 
         # Create the directory we will be uploading to
-        try:
-            self.sftp.mkdir(self.path)
-        except IOError:
-            pass
 
     def disconnect(self):
         """Disconnect from the node"""
 
         self.sftp.close()
         self.ssh.close()
-        self.transport.close()
 
     def put(self, filename):
         """Upload a file to the node
@@ -61,11 +56,9 @@ class Node(object):
 
 
 if __name__ == "__main__":
-    pkey = paramiko.RSAKey.from_private_key_file(ID_RSA)
-
     nodes = []
     for node in NODES:
-        nodes.append(Node(node, pkey))
+        nodes.append(Node(node))
 
     for node in nodes:
         node.connect()
