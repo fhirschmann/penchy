@@ -42,6 +42,13 @@ class Node(object):
         except IOError:
             pass
 
+    def disconnect(self):
+        """Disconnect from the node"""
+
+        self.sftp.close()
+        self.ssh.close()
+        self.transport.close()
+
     def put(self, filename):
         """Upload a file to the node
 
@@ -64,3 +71,4 @@ if __name__ == "__main__":
         node.connect()
         for f in FILES:
             node.put(f)
+        node.disconnect()
