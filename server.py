@@ -58,6 +58,14 @@ class Node(object):
         log.info("Copying file %s to %s" % (filename, location))
         self.sftp.put(sys.path[0] + os.path.sep + filename, location)
 
+    def execute(self, cmd):
+        """Executes command on the node
+
+        :param cmd: string
+        """
+
+        return self.ssh.exec_command(cmd)
+
 
 if __name__ == "__main__":
     nodes = []
@@ -68,4 +76,5 @@ if __name__ == "__main__":
         node.connect()
         for f in FILES:
             node.put(f)
+        node.execute('cd %s && python /tmp/bench/client.py' % node.path)
         node.disconnect()
