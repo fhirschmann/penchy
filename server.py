@@ -76,5 +76,7 @@ if __name__ == "__main__":
         node.connect()
         for f in FILES:
             node.put(f)
-        node.execute('cd %s && python /tmp/bench/client.py' % node.path)
+
+        # Execute the client and disconnect immediately
+        node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
