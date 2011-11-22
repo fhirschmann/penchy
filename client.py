@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import subprocess
-import shlex
 
 import dacapo_analyzer
 
@@ -24,8 +23,8 @@ def run_benchmark(jvm, benchmark, options=[]):
     :param benchmark: benchmark to execute
     :param options: list of jvm options
     """
-    call = ' '.join((jvm, ' '.join(options), benchmark))
-    proc = subprocess.Popen(shlex.split(call), stderr=subprocess.PIPE)
+    call = [jvm] + options + [benchmark]
+    proc = subprocess.Popen(call, stderr=subprocess.PIPE)
     proc.wait()
     _, out = proc.communicate()
     analyzer = benchmark_analyzer(benchmark)
@@ -43,4 +42,4 @@ def send_data(filtered_output):
 
 if __name__ == '__main__':
     dacapo_jar = '/home/cofi/Downloads/dacapo-9.12-bach.jar'
-    run_benchmark('java', 'fop', ['-jar ' + dacapo_jar])
+    run_benchmark('java', 'fop', ['-jar', dacapo_jar])
