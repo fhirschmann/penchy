@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+"""
+Initiates multiple JVM Benchmarks and accumulates the results.
+"""
+
 import os
 import sys
 import paramiko
