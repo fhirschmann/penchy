@@ -41,5 +41,5 @@ def send_data(filtered_output):
     print filtered_output
 
 if __name__ == '__main__':
-    dacapo_jar = '/home/cofi/Downloads/dacapo-9.12-bach.jar'
+    dacapo_jar = 'dacapo-9.12-bach.jar'
     run_benchmark('java', 'fop', ['-jar', dacapo_jar])
