@@ -4,6 +4,7 @@ import os
 import sys
 import paramiko
 import logging
+import argparse
 
 from config import *
 
@@ -76,7 +77,19 @@ class Node(object):
         return self.ssh.exec_command(cmd)
 
 
-if __name__ == "__main__":
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    log_group = parser.add_mutually_exclusive_group()
+    log_group.add_argument("-d", "--debug",
+            action="store_const", const=logging.DEBUG,
+            dest="loglevel", default=logging.INFO,
+            help="print debugging messages")
+    log_group.add_argument("-q", "--quiet",
+            action="store_const", const=logging.WARNING,
+            dest="loglevel", help="suppress most messages")
+    args = parser.parse_args()
+    logging.root.setLevel(args.loglevel)
+
     nodes = []
     for node in NODES:
         nodes.append(Node(node))
@@ -89,3 +102,7 @@ if __name__ == "__main__":
         # Execute the client and disconnect immediately
         node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
+
+
+if __name__ == "__main__":
+    main()
