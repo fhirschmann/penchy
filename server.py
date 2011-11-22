@@ -16,10 +16,11 @@ class Node(object):
     will be run on).
     """
     def __init__(self, node):
-        """Initialize the node
+        """
+        Initialize the node.
 
         :param node: tuple of (hostname, port, username, remote path)
-        :type pkey: paramiko.RSAKey
+        :type node: tuple
         """
 
         self.host, self.port, self.username, self.path = node
@@ -28,7 +29,9 @@ class Node(object):
         self.sftp = None
 
     def connect(self):
-        """Connect to the node"""
+        """
+        Connect to the node.
+        """
 
         log.info("Connecting to node %s" % self.host)
         self.ssh.connect(self.host, username=self.username,
@@ -36,22 +39,26 @@ class Node(object):
 
         self.sftp = self.ssh.open_sftp()
 
-        # Create the directory we will be uploading to
+        # Create the directory we will be uploading to (if it doesn't exist)
         try:
             self.sftp.mkdir(self.path)
         except IOError:
             pass
 
     def disconnect(self):
-        """Disconnect from the node"""
+        """
+        Disconnect from the node.
+        """
 
         self.sftp.close()
         self.ssh.close()
 
     def put(self, filename):
-        """Upload a file to the node
+        """
+        Upload a file to the node
 
-        :param filename: string
+        :param filename: the file to upload
+        :type name: str
         """
 
         location = self.path + os.path.sep + os.path.basename(filename)
@@ -59,9 +66,11 @@ class Node(object):
         self.sftp.put(sys.path[0] + os.path.sep + filename, location)
 
     def execute(self, cmd):
-        """Executes command on the node
+        """
+        Executes command on the node
 
-        :param cmd: string
+        :param cmd: command to execute
+        :type cmd: string
         """
 
         return self.ssh.exec_command(cmd)
