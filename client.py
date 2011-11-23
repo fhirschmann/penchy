@@ -4,18 +4,7 @@
 
 import subprocess
 
-import dacapo_analyzer
-
-def benchmark_analyzer(benchmark):
-    """
-    Return analyzer for :param:`benchmark`.
-
-    :param benchmark: benchmark that will be analyzed
-    :returns: function that analyzes the benchmark
-    :rtype: function
-    """
-    if benchmark in dacapo_analyzer.BENCHMARKS:
-        return dacapo_analyzer.dacapo_wallclock
+import analyzers
 
 def run_benchmark(jvm, benchmark, options=[]):
     """
@@ -29,7 +18,7 @@ def run_benchmark(jvm, benchmark, options=[]):
     proc = subprocess.Popen(call, stderr=subprocess.PIPE)
     proc.wait()
     _, out = proc.communicate()
-    analyzer = benchmark_analyzer(benchmark)
+    analyzer = analyzers.get_analyzer(benchmark)
     filtered = analyzer(out)
     send_data(filtered)
 
