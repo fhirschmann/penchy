@@ -1,3 +1,5 @@
+""" Analyzer for dacapo benchmarks. """
+
 import re
 
 BENCHMARKS = set(( 'avrora'

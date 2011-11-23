@@ -1,5 +1,7 @@
 #!/usr/bin/env python
 
+""" Executes benchmarks and filters generated data. """
+
 import subprocess
 
 import dacapo_analyzer
