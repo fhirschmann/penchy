@@ -9,9 +9,8 @@ ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
 USERNAME = 'bench'
 
 # A list of files to copy to the node
-FILES = ['client.py', 'lib/test.txt']
+FILES = ['client.py', 'dacapo_analyzer.py']
 
-# The default SSH port
 SSH_PORT = 22
 
 # The port the server listens on
