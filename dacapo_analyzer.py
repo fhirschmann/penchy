@@ -15,7 +15,7 @@ BENCHMARKS = set(( 'avrora'
                    , 'tradesoap'
                    , 'xalan'))
 
-WALLCLOCK_RE = re.compile(r'((?P<succed>FAILED|PASSED) in (?P<time>\d+) msec)')
+WALLCLOCK_RE = re.compile(r'(?:(?P<time>\d+) msec)')
 
 def dacapo_wallclock(output):
     """
