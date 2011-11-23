@@ -34,6 +34,7 @@ class Node(object):
         self.host, self.port, self.username, self.path = node
         self.id_rsa = id_rsa
         self.ssh = paramiko.SSHClient()
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh.load_system_host_keys()
         self.sftp = None
 
