@@ -71,7 +71,12 @@ class Node(object):
         :type name: str
         """
 
-        location = self.path + os.path.sep + os.path.basename(filename)
+        try:
+            self.sftp.mkdir(self.path + os.sep + os.path.dirname(filename))
+        except IOError:
+            pass
+
+        location = self.path + os.path.sep + filename
         log.info("Copying file %s to %s" % (filename, location))
         self.sftp.put(sys.path[0] + os.path.sep + filename, location)
 
