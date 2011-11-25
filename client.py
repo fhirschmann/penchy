@@ -8,6 +8,8 @@ import rpyc
 
 import analyzers
 
+import time
+
 def send_data(filtered_output, server):
     """
     Send filtered benchmark output to server.
@@ -17,10 +19,8 @@ def send_data(filtered_output, server):
                    default will be used
     """
     host, port = server
-    conn =  rpyc.classic.connect(host, port) if port is not None \
-            else \
-            rpyc.classic.connect(host)
-    conn.modules.penchy.server.rcv_data(filtered_output)
+    conn =  rpyc.connect(host, port)
+    conn.root.rcv_data(filtered_output)
 
 def run_benchmark(jvm, benchmark, server, options=[], send_function=send_data):
     """
@@ -40,10 +40,8 @@ def run_benchmark(jvm, benchmark, server, options=[], send_function=send_data):
     send_function(filtered, server)
 
 if __name__ == '__main__':
-    def send_stub(filtered_output, _):
-        print filtered_output
+    time.sleep(1)
 
     dacapo_jar = 'dacapo-9.12-bach.jar'
-    run_benchmark('java', 'fop', ("192.168.56.11", 4343),
-                  options=['-jar', dacapo_jar],
-                  send_function=send_stub)
+    run_benchmark('java', 'fop', ("192.168.56.1", 4343),
+                  options=['-jar', dacapo_jar])

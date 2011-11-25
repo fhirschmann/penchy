@@ -94,14 +94,14 @@ class Node(object):
         return self.ssh.exec_command(cmd)
 
 class Service(rpyc.Service):
-    def exposed_rcv_data(output):
+    def exposed_rcv_data(self, output):
         """
         Receive client data.
      
         :param output: benchmark output that has been filtered by the client.
         """
         # XXX: testing stub
-        print output
+        log.info("Received: " + str(output))
 
 def main(config):
     """
@@ -124,7 +124,7 @@ def main(config):
         node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
 
-    t = ThreadedServer(Service, port=config.LISTEN_PORT)
+    t = ThreadedServer(Service, hostname="192.168.56.1", port=config.LISTEN_PORT)
     t.start()
     
 
