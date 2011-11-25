@@ -90,6 +90,14 @@ class Node(object):
 
         return self.ssh.exec_command(cmd)
 
+def rcv_data(output):
+    """
+    Receive client data.
+
+    :param output: benchmark output that has been filtered by the client.
+    """
+    # XXX: testing stub
+    print output
 
 def main(config):
     """
@@ -111,6 +119,8 @@ def main(config):
         # Execute the client and disconnect immediately
         node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
+
+    # TODO: start rpyc server
 
 
 if __name__ == "__main__":
