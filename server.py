@@ -9,6 +9,7 @@ import sys
 import paramiko
 import logging
 import argparse
+import rpyc
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("server")
@@ -90,14 +91,15 @@ class Node(object):
 
         return self.ssh.exec_command(cmd)
 
-def rcv_data(output):
-    """
-    Receive client data.
-
-    :param output: benchmark output that has been filtered by the client.
-    """
-    # XXX: testing stub
-    print output
+class Service(rpyc.Service):
+    def exposed_rcv_data(output):
+        """
+        Receive client data.
+     
+        :param output: benchmark output that has been filtered by the client.
+        """
+        # XXX: testing stub
+        print output
 
 def main(config):
     """
