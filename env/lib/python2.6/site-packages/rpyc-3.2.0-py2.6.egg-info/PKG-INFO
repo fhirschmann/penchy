@@ -1,0 +1,35 @@
+Metadata-Version: 1.0
+Name: rpyc
+Version: 3.2.0
+Summary: Remote Python Call (RPyC), a transparent and symmetric RPC library
+Home-page: http://rpyc.sourceforge.net
+Author: Tomer Filiba
+Author-email: tomerfiliba@gmail.com
+License: MIT
+Download-URL: http://sourceforge.net/projects/rpyc/files/main/3.2.0
+Description: A symmetric library for transparent RPC, clustering and distributed computing for python, built around the concept of remote services and object proxying
+Platform: POSIX
+Platform: Windows
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: System Administrators
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2
+Classifier: Programming Language :: Python :: 2.4
+Classifier: Programming Language :: Python :: 2.5
+Classifier: Programming Language :: Python :: 2.6
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.0
+Classifier: Programming Language :: Python :: 3.1
+Classifier: Programming Language :: Python :: 3.2
+Classifier: Topic :: Internet
+Classifier: Topic :: Software Development :: Libraries :: Python Modules
+Classifier: Topic :: Software Development :: Object Brokering
+Classifier: Topic :: Software Development :: Testing
+Classifier: Topic :: System :: Clustering
+Classifier: Topic :: System :: Distributed Computing
+Classifier: Topic :: System :: Monitoring
+Classifier: Topic :: System :: Networking
+Classifier: Topic :: System :: Systems Administration
