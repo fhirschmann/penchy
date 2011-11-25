@@ -11,6 +11,8 @@ import logging
 import argparse
 import rpyc
 
+from rpyc.utils.server import ThreadedServer
+
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("server")
 
@@ -122,8 +124,9 @@ def main(config):
         node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
 
-    # TODO: start rpyc server
-
+    t = ThreadedServer(Service, port=config.LISTEN_PORT)
+    t.start()
+    
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)

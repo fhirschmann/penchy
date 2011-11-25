@@ -44,6 +44,6 @@ if __name__ == '__main__':
         print filtered_output
 
     dacapo_jar = 'dacapo-9.12-bach.jar'
-    run_benchmark('java', 'fop', ("localhost", 3000),
+    run_benchmark('java', 'fop', ("192.168.56.11", 4343),
                   options=['-jar', dacapo_jar],
                   send_function=send_stub)
