@@ -18,6 +18,6 @@ LISTEN_PORT = 4343
 
 # List of nodes; tuple of (host, username, port, path)
 NODES = [
-        ('192.168.56.11', SSH_PORT, USERNAME, '/tmp/bench'),
-        ('192.168.56.10', SSH_PORT, USERNAME, '/tmp/bench'),
+        ('192.168.56.11', SSH_PORT, USERNAME, '/home/bench'),
+        ('192.168.56.10', SSH_PORT, USERNAME, '/home/bench'),
         ]
