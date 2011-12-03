@@ -16,7 +16,7 @@ def topological_sort(start_nodes, dependencies):
     """
     seen = set(start_nodes)
     for deps, target in dependencies:
-        if not deps:
+        if deps is None:
             seen.add(target)
     order = list(seen)
     old_dependencies = []
