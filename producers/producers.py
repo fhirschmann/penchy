@@ -3,9 +3,11 @@ class Producer(object):
     Base class for producers. __init__ must be called by inheriting classes.
 
     Inheriting classes must implement:
-      - ``_run`` - to run the producer
-      - ``configure(jvm, *options)`` - to configure itself with the given jvm
+      - ``_run`` to run the producer, after running `out` attribute has to be
+          set to path to produced output
+      - ``configure(jvm, *options)``  to configure itself with the given jvm
           and options (must set configured to True if fully configured)
+      - ``is_runable`` to state if producer can be run in current state
     """
     DEPENDENCIES = []
     def __init__(self):
@@ -21,6 +23,14 @@ class Producer(object):
 
     def _run():
         raise NotImplementedError("_run must be implemented by actual producers")
+
+    def is_runable():
+        """
+        :returns: if producer is runable
+        :rtype: bool
+        """
+        raise NotImplementedError("runable must be implemented by actual producers")
+
 
     def configure(jvm, **options):
         """
