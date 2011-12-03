@@ -8,9 +8,10 @@ def topological_sort(start_nodes, dependencies):
 
     Raises a ValueError if no topological sort is possible.
 
-    :param start_nodes: list of nodes of graph with no incoming edges
-    :param dependencies: list of dependency edges; ([dependencies], target),
-                         dependencies may be of any sequence or be atomic
+    :param start_nodes: sequence of nodes of graph with no incoming edges
+    :param dependencies: sequence of dependency edges; ([dependencies], target),
+                         dependencies may be of any sequence or be atomic, if
+                         there is no dependency it must be ``None``
     :returns: topologically sorted nodes
     :rtype: list of nodes
     """
