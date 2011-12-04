@@ -15,6 +15,10 @@
       <id>penchy</id>
       <url>http://mvn.0x0b.de</url>
     </repository>
+    <repository>
+      <id>scalabench</id>
+      <url>http://repo.scalabench.org/snapshots</url>
+    </repository>
   </repositories>
 
   <properties>
@@ -36,6 +40,11 @@
       <groupId>de.tu_darmstadt.penchy</groupId>
       <artifactId>poa</artifactId>
       <version>2.0.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.scalabench.benchmarks</groupId>
+      <artifactId>scala-benchmark-suite</artifactId>
+      <version>0.1.0-SNAPSHOT</version>
     </dependency>
   </dependencies>
 </project>
