@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>de.tu_darmstadt.penchy</groupId>
+  <artifactId>penchy</artifactId>
+  <version>1.0</version>
+  <packaging>jar</packaging>
+
+  <name>penchy</name>
+  <url>http://maven.apache.org</url>
+
+  <repositories>
+    <repository>
+      <id>penchy</id>
+      <url>http://mvn.0x0b.de</url>
+    </repository>
+  </repositories>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>de.tu_darmstadt.penchy</groupId>
+      <artifactId>booster</artifactId>
+      <version>2.0.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.tu_darmstadt.penchy</groupId>
+      <artifactId>pia</artifactId>
+      <version>2.0.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>de.tu_darmstadt.penchy</groupId>
+      <artifactId>poa</artifactId>
+      <version>2.0.0.0</version>
+    </dependency>
+  </dependencies>
+</project>
