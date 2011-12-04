@@ -1,6 +1,6 @@
 """ Package that harbors benchmark analyzers. """
 
-import dacapo
+from penchy.analyzers import dacapo
 
 def get_analyzer(benchmark):
     """

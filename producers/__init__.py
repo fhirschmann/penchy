@@ -1,1 +1,1 @@
-from producers import Dacapo, Tamiflex, HProf
+from penchy.producers import Dacapo, Tamiflex, HProf

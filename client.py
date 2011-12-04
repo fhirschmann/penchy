@@ -6,9 +6,9 @@ import subprocess
 
 import rpyc
 
-import analyzers
-
 import time
+
+from penchy import analyzers
 
 def send_data(filtered_output, server):
     """

@@ -7,7 +7,7 @@ import unittest
 import tempfile
 import logging
 
-from server import main as start_server
+from penchy.server import main as start_server
 
 TEST_NODES = [('127.0.0.1', 22, os.environ["USER"], '/tmp/jvmbenchtests')]
 
