@@ -103,7 +103,7 @@ class Service(rpyc.Service):
         # XXX: testing stub
         log.info("Received: " + str(output))
 
-def main(config):
+def main(config, job=None):
     """
     Runs the server component.
 
@@ -141,8 +141,11 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--config",
             action="store", dest="config", default="config",
             help="config module to use")
+    parser.add_argument("job", help="job to execute",
+            metavar="job")
     args = parser.parse_args()
     logging.root.setLevel(args.loglevel)
     log.info('Using the "%s" config module' % args.config)
     config = __import__(args.config)
-    main(config)
+    job = __import__(args.job[:-3] if args.job.endswith('py') else args.job)
+    main(config, job)
