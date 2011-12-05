@@ -12,7 +12,7 @@ setup(name='Penchy',
         install_requires=[
             'argparse',
             'paramiko',
-            'pyrcrypto',
+            'pycrypto',
             'rpyc',
             'unittest2',
             ]
