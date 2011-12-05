@@ -8,7 +8,7 @@ setup(name='Penchy',
         description='JVM Benchmarking Tool',
         url='http://www.tu-darmstadt.de/',
         packages=find_packages(),
-        scripts=['scripts/penchy_client', 'scripts/penchy_server'],
+        scripts=['bin/penchy_client', 'bin/penchy_server'],
         install_requires=[
             'argparse',
             'paramiko',
