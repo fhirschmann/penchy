@@ -1,5 +1,6 @@
 import unittest2
-import util
+
+from penchy import util
 
 class TopSortTest(unittest2.TestCase):
     def test_error(self):

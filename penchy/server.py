@@ -103,7 +103,7 @@ class Service(rpyc.Service):
         # XXX: testing stub
         log.info("Received: " + str(output))
 
-def main(config, job=None):
+def run(config, job=None):
     """
     Runs the server component.
 
@@ -128,7 +128,7 @@ def main(config, job=None):
     t.start()
     
 
-if __name__ == "__main__":
+def main():
     parser = argparse.ArgumentParser(description=__doc__)
     log_group = parser.add_mutually_exclusive_group()
     log_group.add_argument("-d", "--debug",
@@ -139,13 +139,18 @@ if __name__ == "__main__":
             action="store_const", const=logging.WARNING,
             dest="loglevel", help="suppress most messages")
     parser.add_argument("-c", "--config",
-            action="store", dest="config", default="config",
+            action="store", dest="config", default=None,
             help="config module to use")
     parser.add_argument("job", help="job to execute",
             metavar="job")
     args = parser.parse_args()
     logging.root.setLevel(args.loglevel)
     log.info('Using the "%s" config module' % args.config)
-    config = __import__(args.config)
+
+    if args.config:
+        config = __import__(args.config)
+    else:
+        from penchy import config
+
     job = __import__(args.job[:-3] if args.job.endswith('py') else args.job)
-    main(config, job)
+    run(config, job)

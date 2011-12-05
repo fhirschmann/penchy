@@ -1,0 +1,6 @@
+#!/usr/bin/env python
+
+from penchy import client
+
+if __name__ == "__main__":
+    client.main()

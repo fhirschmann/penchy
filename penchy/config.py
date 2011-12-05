@@ -9,7 +9,7 @@ ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
 USERNAME = 'bench'
 
 # A list of files to copy to the node
-FILES = ['client.py'] + ['analyzers' + os.sep + f for f in os.listdir('analyzers')]
+FILES = []
 
 SSH_PORT = 22
 

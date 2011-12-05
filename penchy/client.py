@@ -8,6 +8,8 @@ import rpyc
 
 import time
 
+import sys
+
 from penchy import analyzers
 
 def send_data(filtered_output, server):
@@ -40,6 +42,9 @@ def run_benchmark(jvm, benchmark, server, options=[], send_function=send_data):
     send_function(filtered, server)
 
 if __name__ == '__main__':
+    main(sys.argv)
+
+def main(argv=None):
     time.sleep(1)
 
     dacapo_jar = 'dacapo-9.12-bach.jar'
