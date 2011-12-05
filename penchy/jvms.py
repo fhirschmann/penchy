@@ -3,8 +3,8 @@ class JVM(object):
     Base class for JVMs.
 
     Inheriting classes must implement:
-      - ``get_commandline`` to return a commandline that contains the options
-          and runs the JVM
+      - ``get_commandline(*args, **options)`` to return a commandline that
+          contains the options and runs the JVM
     """
     def get_commandline(self, *args, **options):
         """
