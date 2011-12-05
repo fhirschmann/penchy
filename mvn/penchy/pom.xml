@@ -51,6 +51,28 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <executions>
+                    <execution>
+                        <id>my-exec</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <inherited>false</inherited>
+                    </execution>
+                </executions>
+                <configuration>
+                    <executable>echo</executable>
+                    <arguments>
+                        <argument>install</argument>
+                        <argument>${settings.localRepository}/de/tu_darmstadt/penchy/penchy/${project.version}/penchy-${project.version}-py.zip</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

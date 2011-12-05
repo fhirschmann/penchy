@@ -9,14 +9,14 @@
     <includeSiteDirectory>false</includeSiteDirectory>
     <fileSets>
         <fileSet>
+            <directory>${basedir}/../../</directory>
+            <outputDirectory>/</outputDirectory>
             <includes>
-                <include>*.py</include>
-                <include>pom.xml</include>
+                <include>penchy/*.py</include>
+                <include>penchy/*/*.py</include>
+                <include>setup.py</include>
                 <include>bin/*</include>
             </includes>
-        </fileSet>
-        <fileSet>
-            <directory>penchy</directory>
         </fileSet>
     </fileSets>
 </assembly>
