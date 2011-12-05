@@ -8,7 +8,7 @@
     <packaging>pom</packaging>
 
     <name>penchy</name>
-    <url>http://maven.apache.org</url>
+    <url>http://www.tu-darmstadt.de</url>
 
     <parent>
         <groupId>de.tu_darmstadt.penchy</groupId>

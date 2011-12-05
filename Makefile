@@ -1,7 +1,5 @@
 .PHONY: deploy deploy-booster deploy-pia deploy-poa deploy-deps upload install
 
-REPO_PATH=target/repo
-
 help:
 	@echo "Please use \`make <target>'"
 
@@ -21,5 +19,5 @@ install:
 	mvn install
 
 upload:
-	rsync -avz --delete */repo/* bp@0x0b.de:/var/www/mvn.0x0b.de/htdocs
+	rsync -avz --delete repo/* */repo/* bp@0x0b.de:/var/www/mvn.0x0b.de/htdocs
 
