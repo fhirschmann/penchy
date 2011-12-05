@@ -1,3 +1,6 @@
+from collections import namedtuple
+
+Node = namedtuple('Node', ['host', 'ssh_port', 'username', 'path'])
 
 def topological_sort(start_nodes, dependencies):
     """
