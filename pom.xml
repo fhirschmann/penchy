@@ -10,6 +10,14 @@
     <name>penchy</name>
     <url>http://maven.apache.org</url>
 
+    <distributionManagement>
+        <repository>
+            <id>repo</id>
+            <name>Penchy Repository</name>
+            <url>file:///${project.build.directory}/repo</url>
+        </repository>
+    </distributionManagement>
+
     <repositories>
         <repository>
             <id>penchy</id>
@@ -35,8 +43,16 @@
                         <descriptor>descriptor.xml</descriptor>
                     </descriptors>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>dist-assembly</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
-
         </plugins>
     </build>
 
