@@ -3,7 +3,7 @@
 from distutils.core import setup
 from setuptools import find_packages
 
-setup(name='Penchy',
+setup(name='penchy',
         version='0.1',
         description='JVM Benchmarking Tool',
         url='http://www.tu-darmstadt.de/',
