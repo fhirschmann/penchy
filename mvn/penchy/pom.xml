@@ -72,6 +72,31 @@
                     </arguments>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>                   
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>../../setup.py</file>
+                    <replacements>
+                        <replacement>
+                            <token>__version__ = '.*'</token>
+                            <value>__version__ = '${project.version}'</value>
+                        </replacement>         
+                    </replacements>
+                    <regexFlags>
+                        <regexFlag>MULTILINE</regexFlag>
+                    </regexFlags>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 
