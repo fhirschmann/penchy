@@ -3,36 +3,31 @@
 import os
 import sys
 import random
-import unittest
+import unittest2
 import tempfile
 import logging
 
-from penchy.server import main as start_server
-
-TEST_NODES = [('127.0.0.1', 22, os.environ["USER"], '/tmp/jvmbenchtests')]
-
+from penchy.server import Node
+from penchy.util import Node as NodeConfig
+from penchy.server import run as start_server
 
 logging.root.setLevel(logging.DEBUG)
 
-class SFTPTest(unittest.TestCase):
+class SFTPTest(unittest2.TestCase):
     def setUp(self):
-        self.f = tempfile.NamedTemporaryFile(dir=sys.path[0])
+        self.f = tempfile.NamedTemporaryFile(dir=tempfile.gettempdir())
         self.fname = os.path.basename(self.f.name)
         self.randint = str(random.randint(0,100))
         self.f.write(self.randint)
         self.f.flush()
 
-        class Config:
-            ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
-            FILES = [self.fname]
-            NODES = TEST_NODES
-        self.config = Config()
-
     def test_scp(self):
-        start_server(self.config)
-        f = file(self.config.NODES[0][3] + os.sep + self.fname, 'r')
-        self.assertTrue(f.read() == self.randint)
+        nodeconfig = NodeConfig('127.0.0.1', 22, os.environ["USER"],
+                tempfile.gettempdir() + os.sep + 'penchytest')
+        node = Node(nodeconfig)
         
+        node.connect()
+        node.put(self.f.name)
 
-if __name__ == '__main__':
-    unittest.main()
+        filename = tempfile.gettempdir() + os.sep + self.fname
+        self.assertTrue(file(filename, 'r').read() == self.randint)
