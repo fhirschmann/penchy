@@ -4,6 +4,10 @@ class MavenDependency(object):
     """
     This class represents a dependency which can be found in a 
     maven repository.
+
+    A sample dependency might look like::
+
+        MavenDependency("de.tu_darmstadt.penchy", "poa", "2.0.0.0", "http://mvn.0x0b.de")
     """
     def __init__(self, groupid, artifact, version, repo=None):
         """
@@ -13,6 +17,8 @@ class MavenDependency(object):
         :type artifact: string
         :param version: the version
         :type version: string
+        :param repo: the repository to load from
+        :type repo: string
         """
 
         self.groupid = groupid
@@ -23,11 +29,12 @@ class MavenDependency(object):
     def __eq__(self, other):
         return self.get_maven_cmd() == other.get_maven_cmd()
 
-    def get_maven_cmd(self):
+    def get_cmd(self):
         """
         Build the command line which installs this dependency.
 
         :return: maven call with arguments
+        :rtype: list
         """
 
         cmd = ['mvn', 'dependency:get']
@@ -41,7 +48,7 @@ class MavenDependency(object):
         cmd.append('-Dartifact=%s:%s:%s' % (self.groupid, 
             self.artifact, self.version))
 
-        return " ".join(cmd)
+        return cmd
 
 
 if __name__ == "__main__": 
