@@ -1,7 +1,6 @@
 from collections import namedtuple
 
 NodeConfig = namedtuple('NodeConfig', ['host', 'ssh_port', 'username', 'path'])
-Dependency = namedtuple('Dependency', ['groupid', 'artifact', 'version', 'repo'])
 
 def topological_sort(start_nodes, dependencies):
     """
