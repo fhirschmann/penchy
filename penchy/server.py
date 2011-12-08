@@ -22,20 +22,17 @@ class Node(object):
     This class represents a node (=a machine on which the benchmark
     will be run on).
     """
-    def __init__(self, node, id_rsa):
+    def __init__(self, node):
         """
         Initialize the node.
 
         :param node: tuple of (hostname, port, username, remote path)
         :type node: tuple
-        :param id_rsa: path of the private ssh key
-        :type id_rsa: str
         :param ssh_port: port of the remote ssh daemon
         :type ssh_port: int
         """
 
         self.host, self.port, self.username, self.path = node
-        self.id_rsa = id_rsa
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh.load_system_host_keys()
@@ -47,8 +44,7 @@ class Node(object):
         """
 
         log.info("Connecting to node %s" % self.host)
-        self.ssh.connect(self.host, username=self.username,
-                key_filename=self.id_rsa, port=self.port)
+        self.ssh.connect(self.host, username=self.username, port=self.port)
 
         self.sftp = self.ssh.open_sftp()
 
@@ -79,9 +75,9 @@ class Node(object):
         except IOError:
             pass
 
-        location = self.path + os.path.sep + filename
+        location = self.path + os.path.sep + os.path.basename(filename)
         log.info("Copying file %s to %s" % (filename, location))
-        self.sftp.put(sys.path[0] + os.path.sep + filename, location)
+        self.sftp.put(filename, location)
 
     def execute(self, cmd):
         """
@@ -113,7 +109,7 @@ def run(config, job=None):
 
     nodes = []
     for node in config.NODES:
-        nodes.append(Node(node, config.ID_RSA))
+        nodes.append(Node(node))
 
     for node in nodes:
         node.connect()
