@@ -27,12 +27,12 @@ class Node(object):
         Initialize the node.
 
         :param node: tuple of (hostname, port, username, remote path)
-        :type node: tuple
+        :type node: penchy.util.NodeConfig
         :param ssh_port: port of the remote ssh daemon
         :type ssh_port: int
         """
 
-        self.host, self.port, self.username, self.path = node
+        self.node = node
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh.load_system_host_keys()
@@ -43,14 +43,15 @@ class Node(object):
         Connect to the node.
         """
 
-        log.info("Connecting to node %s" % self.host)
-        self.ssh.connect(self.host, username=self.username, port=self.port)
+        log.info("Connecting to node %s" % self.node.host)
+        self.ssh.connect(self.node.host, username=self.node.username, 
+                port=self.node.ssh_port)
 
         self.sftp = self.ssh.open_sftp()
 
         # Create the directory we will be uploading to (if it doesn't exist)
         try:
-            self.sftp.mkdir(self.path)
+            self.sftp.mkdir(self.node.path)
         except IOError:
             pass
 
@@ -71,11 +72,11 @@ class Node(object):
         """
 
         try:
-            self.sftp.mkdir(self.path + os.sep + os.path.dirname(filename))
+            self.sftp.mkdir(self.node.path + os.sep + os.path.dirname(filename))
         except IOError:
             pass
 
-        location = self.path + os.path.sep + os.path.basename(filename)
+        location = self.node.path + os.path.sep + os.path.basename(filename)
         log.info("Copying file %s to %s" % (filename, location))
         self.sftp.put(filename, location)
 
