@@ -28,8 +28,6 @@ class Node(object):
 
         :param node: tuple of (hostname, port, username, remote path)
         :type node: penchy.util.NodeConfig
-        :param ssh_port: port of the remote ssh daemon
-        :type ssh_port: int
         """
 
         self.node = node

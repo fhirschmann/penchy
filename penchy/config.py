@@ -2,7 +2,7 @@
 
 import os
 
-from penchy.util import Node
+from penchy.util import NodeConfig
 
 # The location of your private ssh key
 ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
@@ -20,6 +20,6 @@ LISTEN_PORT = 4343
 
 # List of nodes
 NODES = [
-          Node('192.168.56.11', SSH_PORT, USERNAME, '/home/bench')
-        , Node('192.168.56.10', SSH_PORT, USERNAME, '/home/bench')
+          NodeConfig('192.168.56.11', SSH_PORT, USERNAME, '/home/bench')
+        , NodeConfig('192.168.56.10', SSH_PORT, USERNAME, '/home/bench')
         ]
