@@ -8,7 +8,7 @@ import tempfile
 import logging
 
 from penchy.server import Node
-from penchy.util import Node as NodeConfig
+from penchy.util import NodeConfig
 from penchy.server import run as start_server
 
 logging.root.setLevel(logging.DEBUG)
