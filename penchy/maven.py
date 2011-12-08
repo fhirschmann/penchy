@@ -20,6 +20,9 @@ class MavenDependency(object):
         self.version = version
         self.repo = repo
 
+    def __eq__(self, other):
+        return self.get_maven_cmd() == other.get_maven_cmd()
+
     def get_maven_cmd(self):
         """
         Build the command line which installs this dependency.
