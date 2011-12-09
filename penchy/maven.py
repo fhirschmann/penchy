@@ -27,7 +27,7 @@ class MavenDependency(object):
         self.repo = repo
 
     def __eq__(self, other):
-        return self.get_maven_cmd() == other.get_maven_cmd()
+        return self.get_cmd() == other.get_cmd()
 
     def get_cmd(self):
         """
