@@ -1,3 +1,7 @@
+"""
+This module provides JVMs to run programs.
+"""
+
 class JVM(object):
     """
     This class represents a JVM.
@@ -18,7 +22,8 @@ class JVM(object):
         """
         Configure jvm options that allows `args` to run
 
-        :param *args: :class:`Tool` or :class:`Program` instances that should be run.
+        :param *args: :class:`Tool` or :class:`Program` instances that should be
+                      run.
         """
         #TODO
         pass
@@ -32,6 +37,10 @@ class JVM(object):
 
     @property
     def cmdline(self):
+        """
+        The command line suitable for `subprocess.Popen` based on the current
+        configuration.
+        """
         #TODO
         pass
 
