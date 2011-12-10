@@ -1,38 +1,69 @@
 class JVM(object):
     """
-    Base class for JVMs.
-
-    Inheriting classes must implement:
-      - ``get_commandline(*args, **options)`` to return a commandline that
-          contains the options and runs the JVM
+    This class represents a JVM.
     """
-    def get_commandline(self, *args, **options):
+
+    def __init__(self, path, options=""):
         """
-        Return a commandline that can be executed by ``subprocess.Popen``.
-
-        :param args: positional arguments, will be at the end
-        :param options: options which should be presend in the command line
-        :returns: commandline suitable for ``subprocess.Popen``
-        :rtype: list
+        :param path: path to jvm executable relative to basepath
+        :param options: string of options that will be passed to jvm
         """
-        raise NotImplementedError("get_commandline has to be implemented by actual jvms")
 
-class OpenJDK(JVM):
-    #TODO
-    pass
+        self.basepath = '/'
+        self.path = path
+        # XXX: a passed classpath must be filtered and readded before run
+        self.options = options
 
-class J9(JVM):
-    #TODO
-    pass
+    def configure(self, *args):
+        """
+        Configure jvm options that allows `args` to run
 
-class Jikes(JVM):
-    #TODO
-    pass
+        :param *args: :class:`Tool` or :class:`Program` instances that should be run.
+        """
+        #TODO
+        pass
 
-class SunClient(JVM):
-    #TODO
-    pass
+    def run(self):
+        """
+        Run the jvm with the current configuration.
+        """
+        #TODO
+        pass
 
-class SunServer(JVM):
+    @property
+    def cmdline(self):
+        #TODO
+        pass
+
+class WrappedJVM(JVM):
+    """
+    This class is an abstract base class for a JVM that is wrapped by another
+    Program.
+
+    Inheriting classes must expose this attributes:
+
+      - ``out``: dictionary that maps logical output names to paths of output
+        files
+      - ``exports``: set of logical outputs (valid keys for ``out``)
+    """
+    def __init__(self):
+        """
+        Inheriting classes must:
+
+          - have compatible arguments with JVM.__init__
+          - call JVM.__init__
+        """
+        raise NotImplementedError("must be implemented")
+
+    def run(self):
+        """
+        Run with wrapping.
+        """
+        raise NotImplementedError("must be implemented")
+
+class ValgrindJVM(WrappedJVM):
+    """
+    This class represents a JVM which is called by valgrind.
+    """
     #TODO
     pass
