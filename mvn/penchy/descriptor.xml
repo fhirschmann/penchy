@@ -9,6 +9,7 @@
     <includeSiteDirectory>false</includeSiteDirectory>
     <fileSets>
         <fileSet>
+            <directory>${basedir}/../../</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>penchy/*.py</include>

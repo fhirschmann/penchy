@@ -53,4 +53,4 @@ class MavenDependency(object):
 
 if __name__ == "__main__": 
     x = MavenDependency('de.tu_darmstadt.penchy', 'booster', '2.0.0.0', 'http://mvn.0x0b.de')
-    print x.get_maven_cmd()
+    print x.get_cmd()

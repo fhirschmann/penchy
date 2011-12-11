@@ -52,7 +52,7 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <file>setup.py</file>
+                    <file>../../setup.py</file>
                     <replacements>
                         <replacement>
                             <token>__version__ = '.*'</token>
