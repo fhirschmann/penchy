@@ -3,6 +3,9 @@
 help:
 	@echo "Please use \`make <target>'"
 
+clean:
+	rm -rf */target */repo target repo
+
 deploy:
 	mvn deploy
 
