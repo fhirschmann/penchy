@@ -2,36 +2,56 @@
 
 from xml.dom.minidom import Document
 from collections import namedtuple
+from penchy import __version__ as penchy_version
 
-MavenDependency = namedtuple('MavenDependency', ['groupId', 'artifactId', 'version', 'repo'])
+
+class MavenDependency(object):
+    """
+    This class represents a Maven Dependency
+    """
+    def __init__(self, groupId, artifactId, version, repo=None, classifier=None, artifact_type=None):
+        self.groupId = groupId
+        self.artifactId = artifactId
+        self.version = version
+        self.repo = repo
+        self.classifier = classifier
+        self.type = artifact_type
+
+    def __eq__(self, other):
+        return self.__dict__ == other.__dict__
 
 
 class BootstrapPOM(object):
     """
     This class represents a bootstrap POM which is used to deploy 
-    PenchY and its dependencies
+    PenchY and its dependencies.
+
+    This is kind of a lazy implementation. The full XML file won't be
+    build until you call `get_xml`.
+
+    Duplicates are discarded, so no repository or dependency will
+    be defined twice in the POM.
     """
     ATTRIBS = {
             'groupId': 'de.tu_darmstadt.penchy',
             'artifactId': 'penchy-bootstrap',
             'name': 'penchy-bootstrap',
             'url': 'http://www.tu-darmstadt.de',
+            'version': penchy_version,
             'modelVersion': '4.0.0',
             'packaging': 'jar', # won't work with pom
     }
 
     def __init__(self):
-        self.xml = Document()
-        self.project = self.xml.createElement('project')
-        self.xml.appendChild(self.project)
+        self.repository_list = set()
+        self.dependency_list = set()
+        self.dependency_list.add(MavenDependency(
+            groupId='de.tu_darmstadt.penchy',
+            artifactId='penchy',
+            version=penchy_version,
+            classifier='py',
+            artifact_type='zip'))
 
-        self.dict2xml(self.project, BootstrapPOM.ATTRIBS)
-
-        self.repositories = self.xml.createElement('repositories')
-        self.project.appendChild(self.repositories)
-
-        self.dependencies = self.xml.createElement('dependencies')
-        self.project.appendChild(self.dependencies)
 
     def dict2xml(self, parent, childs, filterfunc=None):
         """
@@ -46,9 +66,11 @@ class BootstrapPOM(object):
             if filterfunc:
                if not filterfunc(k):
                    continue
+            if not v:
+                continue
 
-            attrib = self.xml.createElement(k)
-            attrib.appendChild(self.xml.createTextNode(v))
+            attrib = parent.ownerDocument.createElement(k)
+            attrib.appendChild(parent.ownerDocument.createTextNode(v))
             parent.appendChild(attrib)
     
     def add_dependency(self, dep):
@@ -58,15 +80,13 @@ class BootstrapPOM(object):
         :param dep: the dependency
         :type dep: MavenDependency
         """
+
+        self.dependency_list.add(dep)
+
         if dep.repo:
-            self.add_repository(dep.repo, dep.repo)
+            self.add_repository(dep.repo)
 
-        xdep = self.xml.createElement('dependency')
-        self.dependencies.appendChild(xdep)
-
-        self.dict2xml(xdep, dep.__dict__, lambda r: r != 'repo')
-
-    def add_repository(self, identifier, url):
+    def add_repository(self, url):
         """
         Adds a repository to the POM.
 
@@ -75,22 +95,44 @@ class BootstrapPOM(object):
         :param url: the URL of the repository
         :type url: string
         """
-        
-        xrepo = self.xml.createElement('repository')
-        self.repositories.appendChild(xrepo)
-
-        self.dict2xml(xrepo, {'id': identifier, 'url': identifier})
+        self.repository_list.add(url)
 
     def get_xml(self):
         """
         Returns the BootstrapPOM formatted as XML.
         """
-        return self.xml.toprettyxml(indent="  ")
+        xml = Document()
+        project = xml.createElement('project')
+        xml.appendChild(project)
+
+        self.dict2xml(project, BootstrapPOM.ATTRIBS)
+
+        # Repositories
+        repositories = xml.createElement('repositories')
+        project.appendChild(repositories)
+        for repo in self.repository_list:
+            xrepo = xml.createElement('repository')
+            repositories.appendChild(xrepo)
+
+            self.dict2xml(xrepo, {'id': repo, 'url': repo})
+
+
+        # Dependencies
+        dependencies = xml.createElement('dependencies')
+        project.appendChild(dependencies)
+        for dep in self.dependency_list:
+            xdep = xml.createElement('dependency')
+            dependencies.appendChild(xdep)
+
+            self.dict2xml(xdep, dep.__dict__, lambda r: r != 'repo')
+
+        return xml.toprettyxml(indent="  ")
 
 if __name__ == "__main__": 
     x = MavenDependency('de.tu_darmstadt.penchy', 'booster', '2.0.0.0', 'http://mvn.0x0b.de')
 
     p = BootstrapPOM()
+    p.add_dependency(x)
     p.add_dependency(x)
     print p.get_xml()
     
