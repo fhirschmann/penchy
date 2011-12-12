@@ -12,8 +12,8 @@
         <module>pia</module>
         <module>poa</module>
         <module>booster</module>
+        <module>asm</module>
         <module>penchy</module>
-        <module>bootstrap</module>
     </modules>
 
     <distributionManagement>
