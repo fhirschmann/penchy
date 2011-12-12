@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+
+import sys
+import logging
+
+from subprocess import Popen, PIPE
+from os.path import expanduser
+
+logging.basicConfig(level=logging.DEBUG)
+log = logging.getLogger('penchy-bootstrap')
+
+
+def mvn_install():
+    log.info("Executing mvn install")
+    proc = Popen(['mvn', 'install'], stdout=PIPE, stderr=PIPE)
+    stdout, _ = proc.communicate() # Maven doesn't use stderr...
+    log.debug(stdout)
+
+def mvn_classpath():
+    log.info("Getting classpath")
+    proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE,
+            stderr=PIPE)
+    stdout, _ = proc2.communicate()
+    for line in stdout.split("\n"):
+        if not line.startswith("["):
+            return line
+
+def main():
+    #mvn_install()
+    classpath = mvn_classpath()
+    penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
+
+    log.info("Starting PenchY Client")
+
+    # Idea 1: Import from zip
+    sys.path.insert(0, penchy_zip)
+
+    # Idea 2: Install via pip
+    #proc = Popen(['pip', '-E', expanduser('~/penchy'), 'install', penchy_zip],
+    #        stdout=PIPE, stderr=PIPE)
+    #stdout, stderr = proc.communicate()
+    #log.debug(stdout)
+
+    from penchy import client
+    log.info("PenchY client is at %s" % client.__file__)
+    client.main()
+
+if __name__ == "__main__":
+    main()
