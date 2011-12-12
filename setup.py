@@ -2,10 +2,9 @@
 
 from distutils.core import setup
 from setuptools import find_packages
+from penchy import __version__
 
 # Version will be replaced by maven!
-__version__ = '0.1'
-
 setup(name='penchy',
         version=__version__,
         description='JVM Benchmarking Tool',
