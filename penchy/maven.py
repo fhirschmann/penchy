@@ -1,56 +1,96 @@
 #!/usr/bin/env python
 
-class MavenDependency(object):
+from xml.dom.minidom import Document
+from collections import namedtuple
+
+MavenDependency = namedtuple('MavenDependency', ['groupId', 'artifactId', 'version', 'repo'])
+
+
+class BootstrapPOM(object):
     """
-    This class represents a dependency which can be found in a 
-    maven repository.
-
-    A sample dependency might look like::
-
-        MavenDependency("de.tu_darmstadt.penchy", "poa", "2.0.0.0", "http://mvn.0x0b.de")
+    This class represents a bootstrap POM which is used to deploy 
+    PenchY and its dependencies
     """
-    def __init__(self, groupid, artifact, version, repo=None):
+    ATTRIBS = {
+            'groupId': 'de.tu_darmstadt.penchy',
+            'artifactId': 'penchy-bootstrap',
+            'name': 'penchy-bootstrap',
+            'url': 'http://www.tu-darmstadt.de',
+            'modelVersion': '4.0.0',
+            'packaging': 'jar', # won't work with pom
+    }
+
+    def __init__(self):
+        self.xml = Document()
+        self.project = self.xml.createElement('project')
+        self.xml.appendChild(self.project)
+
+        self.dict2xml(self.project, BootstrapPOM.ATTRIBS)
+
+        self.repositories = self.xml.createElement('repositories')
+        self.project.appendChild(self.repositories)
+
+        self.dependencies = self.xml.createElement('dependencies')
+        self.project.appendChild(self.dependencies)
+
+    def dict2xml(self, parent, childs, filterfunc=None):
         """
-        :param groupid: the groupId
-        :type groupid: string
-        :param artifact: the artifact
-        :type artifact: string
-        :param version: the version
-        :type version: string
-        :param repo: the repository to load from
-        :type repo: string
+        Turns a dictionary into XML and append it to the parent.
+
+        :param parent: the parent to append to
+        :type parent: xml document
+        :param child: the childs to append
+        :type childs: dict
         """
+        for k, v in childs.items():
+            if filterfunc:
+               if not filterfunc(k):
+                   continue
 
-        self.groupid = groupid
-        self.artifact = artifact
-        self.version = version
-        self.repo = repo
-
-    def __eq__(self, other):
-        return self.get_cmd() == other.get_cmd()
-
-    def get_cmd(self):
+            attrib = self.xml.createElement(k)
+            attrib.appendChild(self.xml.createTextNode(v))
+            parent.appendChild(attrib)
+    
+    def add_dependency(self, dep):
         """
-        Build the command line which installs this dependency.
+        Adds a given dependency to the POM.
 
-        :return: maven call with arguments
-        :rtype: list
+        :param dep: the dependency
+        :type dep: MavenDependency
         """
+        if dep.repo:
+            self.add_repository(dep.repo, dep.repo)
 
-        cmd = ['mvn', 'dependency:get']
+        xdep = self.xml.createElement('dependency')
+        self.dependencies.appendChild(xdep)
 
-        if self.repo:
-            cmd.append('-DrepoUrl=' + self.repo)
-        else:
-            cmd.append('-DrepoUrl=' + 'http://repo1.maven.org/maven2')
+        self.dict2xml(xdep, dep.__dict__, lambda r: r != 'repo')
 
+    def add_repository(self, identifier, url):
+        """
+        Adds a repository to the POM.
 
-        cmd.append('-Dartifact=%s:%s:%s' % (self.groupid, 
-            self.artifact, self.version))
+        :param identifier: an identifier for the repository
+        :type identifier: string
+        :param url: the URL of the repository
+        :type url: string
+        """
+        
+        xrepo = self.xml.createElement('repository')
+        self.repositories.appendChild(xrepo)
 
-        return cmd
+        self.dict2xml(xrepo, {'id': identifier, 'url': identifier})
 
+    def get_xml(self):
+        """
+        Returns the BootstrapPOM formatted as XML.
+        """
+        return self.xml.toprettyxml(indent="  ")
 
 if __name__ == "__main__": 
     x = MavenDependency('de.tu_darmstadt.penchy', 'booster', '2.0.0.0', 'http://mvn.0x0b.de')
-    print x.get_cmd()
+
+    p = BootstrapPOM()
+    p.add_dependency(x)
+    print p.get_xml()
+    
