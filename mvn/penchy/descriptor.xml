@@ -16,6 +16,7 @@
                 <include>penchy/*/*.py</include>
                 <include>setup.py</include>
                 <include>bin/*</include>
+                <include>rpyc/**</include>
             </includes>
         </fileSet>
     </fileSets>
