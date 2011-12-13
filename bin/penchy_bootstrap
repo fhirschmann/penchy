@@ -16,18 +16,18 @@ def mvn_install():
     stdout, _ = proc.communicate() # Maven doesn't use stderr...
     log.debug(stdout)
 
-def mvn_classpath():
+def get_mvn_classpath():
     log.info("Getting classpath")
     proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE,
             stderr=PIPE)
     stdout, _ = proc2.communicate()
     for line in stdout.split("\n"):
-        if not line.startswith("["):
+        if line.startswith("/"):
             return line
 
 def main():
-    #mvn_install()
-    classpath = mvn_classpath()
+    mvn_install()
+    classpath = get_mvn_classpath()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
 
     log.info("Starting PenchY Client")
