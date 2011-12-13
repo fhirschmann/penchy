@@ -1,8 +1,27 @@
 #!/usr/bin/env python
 
+import logging
+
 from xml.dom.minidom import Document
 from collections import namedtuple
 from penchy import __version__ as penchy_version
+from subprocess import Popen, PIPE
+from penchy.util import memoized
+
+
+@memoized
+def get_classpath():
+    """
+    Returns the Java classpath with the help of Maven
+
+    :returns: java classpath
+    :rtype: string
+    """
+    proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
+    stdout, _ = proc2.communicate()
+    for line in stdout.split("\n"):
+        if not line.startswith("["):
+            return line
 
 
 class MavenDependency(object):
@@ -134,5 +153,6 @@ if __name__ == "__main__":
     p = BootstrapPOM()
     p.add_dependency(x)
     p.add_dependency(x)
-    print p.get_xml()
-    
+    #print p.get_xml()
+    print get_classpath()
+    print get_classpath()
