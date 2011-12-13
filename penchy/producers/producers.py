@@ -21,10 +21,10 @@ class Producer(object):
     def add_post_hooks(self, *hooks):
         self._post_hooks.extend(hooks)
 
-    def _run():
+    def _run(self):
         raise NotImplementedError("_run must be implemented by actual producers")
 
-    def is_runable():
+    def is_runable(self):
         """
         :returns: if producer is runable
         :rtype: bool
@@ -32,7 +32,7 @@ class Producer(object):
         raise NotImplementedError("runable must be implemented by actual producers")
 
 
-    def configure(jvm, **options):
+    def configure(self, jvm, **options):
         """
         Configure producer with :param:`jvm` and :param:`options`.
 
@@ -41,14 +41,14 @@ class Producer(object):
         """
         raise NotImplementedError("configure must be implemented by actual producers")
 
-    def run():
+    def run(self):
         """
         Run Producer.
         """
         for hook in self._pre_hooks:
             hook()
 
-        self.run_()
+        self._run()
 
         for hook in self._post_hooks:
             hook()
