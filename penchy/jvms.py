@@ -2,21 +2,23 @@
 This module provides JVMs to run programs.
 """
 
+from maven import get_classpath
+
 class JVM(object):
     """
     This class represents a JVM.
     """
 
-    def __init__(self, path, options=""):
+    def __init__(self, path, options=[]):
         """
         :param path: path to jvm executable relative to basepath
-        :param options: string of options that will be passed to jvm
+        :param options: list of options that will be passed to jvm
+        :type options: list
         """
 
         self.basepath = '/'
         self.path = path
-        # XXX: a passed classpath must be filtered and readded before run
-        self.options = options
+        self.options = ['-classpath', get_classpath()] + options
 
     def configure(self, *args):
         """
