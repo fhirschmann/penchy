@@ -6,24 +6,27 @@ import logging
 from subprocess import Popen, PIPE
 from os.path import expanduser
 
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO, filename='penchy_client.log')
 log = logging.getLogger('penchy-bootstrap')
 
 
+
 def mvn_install():
-    log.info("Executing mvn install")
+    log.debug("Executing mvn install:")
     proc = Popen(['mvn', 'install'], stdout=PIPE, stderr=PIPE)
     stdout, _ = proc.communicate() # Maven doesn't use stderr...
     log.debug(stdout)
 
 def get_mvn_classpath():
-    log.info("Getting classpath")
+    log.debug("Getting classpath")
     proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE,
             stderr=PIPE)
     stdout, _ = proc2.communicate()
     for line in stdout.split("\n"):
-        if line.startswith("/"):
+        if not line.startswith("["):
+            log.info("Classpath found at " + line)
             return line
+    log.error("Classpath could not be determined")
 
 def main():
     mvn_install()
@@ -32,18 +35,19 @@ def main():
 
     log.info("Starting PenchY Client")
 
-    # Idea 1: Import from zip
     sys.path.insert(0, penchy_zip)
 
-    # Idea 2: Install via pip
-    #proc = Popen(['pip', '-E', expanduser('~/penchy'), 'install', penchy_zip],
-    #        stdout=PIPE, stderr=PIPE)
-    #stdout, stderr = proc.communicate()
-    #log.debug(stdout)
-
     from penchy import client
-    log.info("PenchY client is at %s" % client.__file__)
     client.main()
 
+    return 0
+
 if __name__ == "__main__":
-    main()
+    if len(sys.argv) > 1:
+        if sys.argv[1] == '-d':
+            logging.root.setLevel(logging.DEBUG)
+    try:
+        sys.exit(main())
+    except Exception, err:
+        log.exception('Exception occured while executing PenchY')
+        sys.exit(1)
