@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 Initiates multiple JVM Benchmarks and accumulates the results.
 """
