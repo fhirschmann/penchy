@@ -21,6 +21,7 @@ class WallclockDacapo(Filter):
     #TODO
     pass
 
+
 class HProf(Filter):
     #TODO
     pass

@@ -6,6 +6,7 @@ import os
 
 from penchy.maven import get_classpath
 
+
 class JVM(object):
     """
     This class represents a JVM.
@@ -48,6 +49,7 @@ class JVM(object):
         return [self.basepath + os.sep + self.path] + \
                 ['-classpath', get_classpath()] + options
 
+
 class WrappedJVM(JVM):
     """
     This class is an abstract base class for a JVM that is wrapped by another
@@ -73,6 +75,7 @@ class WrappedJVM(JVM):
         Run with wrapping.
         """
         raise NotImplementedError("must be implemented")
+
 
 class ValgrindJVM(WrappedJVM):
     """

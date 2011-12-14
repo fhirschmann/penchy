@@ -6,16 +6,15 @@ Initiates multiple JVM Benchmarks and accumulates the results.
 
 import os
 import sys
-import paramiko
 import logging
-import argparse
-import rpyc
 
+import argparse
+import paramiko
+import rpyc
 from rpyc.utils.server import ThreadedServer
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("server")
-
 
 class Node(object):
     """
@@ -42,7 +41,7 @@ class Node(object):
         """
 
         log.info("Connecting to node %s" % self.node.host)
-        self.ssh.connect(self.node.host, username=self.node.username, 
+        self.ssh.connect(self.node.host, username=self.node.username,
                 port=self.node.ssh_port)
 
         self.sftp = self.ssh.open_sftp()
@@ -70,7 +69,8 @@ class Node(object):
         """
 
         try:
-            self.sftp.mkdir(self.node.path + os.sep + os.path.dirname(filename))
+            self.sftp.mkdir(self.node.path + os.sep + \
+                    os.path.dirname(filename))
         except IOError:
             pass
 
@@ -92,7 +92,7 @@ class Service(rpyc.Service):
     def exposed_rcv_data(self, output):
         """
         Receive client data.
-     
+
         :param output: benchmark output that has been filtered by the client.
         """
         # XXX: testing stub
@@ -119,9 +119,9 @@ def run(config, job=None):
         node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
 
-    t = ThreadedServer(Service, hostname="192.168.56.1", port=config.LISTEN_PORT)
+    t = ThreadedServer(Service, hostname="192.168.56.1",
+            port=config.LISTEN_PORT)
     t.start()
-    
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

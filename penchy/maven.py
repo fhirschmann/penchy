@@ -4,8 +4,9 @@ import logging
 
 from xml.dom.minidom import Document
 from collections import namedtuple
-from penchy import __version__ as penchy_version
 from subprocess import Popen, PIPE
+
+from penchy import __version__ as penchy_version
 from penchy.util import memoized
 
 
@@ -28,7 +29,8 @@ class MavenDependency(object):
     """
     This class represents a Maven Dependency
     """
-    def __init__(self, groupId, artifactId, version, repo=None, classifier=None, artifact_type=None):
+    def __init__(self, groupId, artifactId, version, repo=None, 
+            classifier=None, artifact_type=None):
         self.groupId = groupId
         self.artifactId = artifactId
         self.version = version
@@ -58,8 +60,8 @@ class BootstrapPOM(object):
             'url': 'http://www.tu-darmstadt.de',
             'version': penchy_version,
             'modelVersion': '4.0.0',
-            'packaging': 'jar', # won't work with pom
-    }
+            'packaging': 'jar',  # won't work with pom
+            }
 
     def __init__(self):
         self.repository_list = set()
@@ -70,7 +72,6 @@ class BootstrapPOM(object):
             version=penchy_version,
             classifier='py',
             artifact_type='zip'))
-
 
     def dict2xml(self, parent, childs, filterfunc=None):
         """
@@ -83,15 +84,15 @@ class BootstrapPOM(object):
         """
         for k, v in childs.items():
             if filterfunc:
-               if not filterfunc(k):
-                   continue
+                if not filterfunc(k):
+                    continue
             if not v:
                 continue
 
             attrib = parent.ownerDocument.createElement(k)
             attrib.appendChild(parent.ownerDocument.createTextNode(v))
             parent.appendChild(attrib)
-    
+
     def add_dependency(self, dep):
         """
         Adds a given dependency to the POM.
@@ -135,7 +136,6 @@ class BootstrapPOM(object):
 
             self.dict2xml(xrepo, {'id': repo, 'url': repo})
 
-
         # Dependencies
         dependencies = xml.createElement('dependencies')
         project.appendChild(dependencies)
@@ -147,8 +147,10 @@ class BootstrapPOM(object):
 
         return xml.toprettyxml(indent="  ")
 
+
 if __name__ == "__main__": 
-    x = MavenDependency('de.tu_darmstadt.penchy', 'booster', '2.0.0.0', 'http://mvn.0x0b.de')
+    x = MavenDependency('de.tu_darmstadt.penchy', 
+            'booster', '2.0.0.0', 'http://mvn.0x0b.de')
 
     p = BootstrapPOM()
     p.add_dependency(x)
