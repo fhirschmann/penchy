@@ -3,6 +3,7 @@ This module provides JVMs to run programs.
 """
 
 import os
+import shlex
 
 from penchy.maven import get_classpath
 
@@ -12,11 +13,11 @@ class JVM(object):
     This class represents a JVM.
     """
 
-    def __init__(self, path, options=[]):
+    def __init__(self, path, options=""):
         """
         :param path: path to jvm executable relative to basepath
-        :param options: list of options that will be passed to jvm
-        :type options: list
+        :param options: string of options that will be passed to jvm
+        :type options: string
         """
 
         self.basepath = '/'
@@ -47,7 +48,7 @@ class JVM(object):
         configuration.
         """
         return [self.basepath + os.sep + self.path] + \
-                ['-classpath', get_classpath()] + options
+                ['-classpath', get_classpath()] + shlex.split(options)
 
 
 class WrappedJVM(JVM):
