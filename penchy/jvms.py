@@ -2,7 +2,9 @@
 This module provides JVMs to run programs.
 """
 
-from maven import get_classpath
+import os
+
+from penchy.maven import get_classpath
 
 class JVM(object):
     """
@@ -18,7 +20,7 @@ class JVM(object):
 
         self.basepath = '/'
         self.path = path
-        self.options = ['-classpath', get_classpath()] + options
+        self.options = options
 
     def configure(self, *args):
         """
@@ -43,8 +45,8 @@ class JVM(object):
         The command line suitable for `subprocess.Popen` based on the current
         configuration.
         """
-        #TODO
-        pass
+        return [self.basepath + os.sep + self.path] + \
+                ['-classpath', get_classpath()] + options
 
 class WrappedJVM(JVM):
     """
