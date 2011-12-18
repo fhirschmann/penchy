@@ -54,8 +54,9 @@ class JVM(object):
         The command line suitable for `subprocess.Popen` based on the current
         configuration.
         """
-        return [self.basepath + os.sep + self.path] + \
-                ['-classpath', get_classpath()] + shlex.split(options)
+        executable = os.path.join(self.basepath, self.path)
+        cp = ['-classpath', self._classpath + ":" get_classpath()]
+        return executable + self._options + cp
 
 
 class WrappedJVM(JVM):
