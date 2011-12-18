@@ -35,7 +35,7 @@ class JVM(object):
         """
         Configure jvm options that allows `args` to run
 
-        :param *args: :class:`Tool` or :class:`Program` instances that should be
+        :param *args: :class:`Tool` or :class:`Workload` instances that should be
                       run.
         """
         #TODO
