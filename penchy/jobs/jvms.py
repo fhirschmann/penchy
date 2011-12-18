@@ -7,6 +7,7 @@ import shlex
 
 from penchy.maven import get_classpath
 from penchy.util import extract_classpath
+from penchy.jobs.elements import PipelineElement
 
 
 class JVM(object):

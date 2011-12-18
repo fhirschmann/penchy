@@ -1,3 +1,4 @@
+# FIXME: merge with penchy.jobs.elements.{Tool,Workload}
 class Producer(object):
     """
     Base class for producers. __init__ must be called by inheriting classes.
@@ -52,15 +53,3 @@ class Producer(object):
 
         for hook in self._post_hooks:
             hook()
-
-class Dacapo(Producer):
-    #TODO
-    pass
-
-class Tamiflex(Producer):
-    #TODO
-    pass
-
-class HProf(Producer):
-    #TODO
-    pass
