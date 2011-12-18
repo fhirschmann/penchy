@@ -22,9 +22,9 @@ class JVM(object):
         """
 
         self.basepath = '/'
-        self.path = path
+        self._path = path
         # keep user_options for user messages around
-        self.user_options = options
+        self._user_options = options
 
         self._options = shlex.split(options)
         self._classpath = extract_classpath(self.options)
@@ -54,7 +54,7 @@ class JVM(object):
         The command line suitable for `subprocess.Popen` based on the current
         configuration.
         """
-        executable = os.path.join(self.basepath, self.path)
+        executable = os.path.join(self.basepath, self._path)
         cp = ['-classpath', self._classpath + ":" get_classpath()]
         return executable + self._options + cp
 
