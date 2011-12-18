@@ -6,6 +6,7 @@ import os
 import shlex
 
 from penchy.maven import get_classpath
+from penchy.util import extract_classpath
 
 
 class JVM(object):
@@ -22,8 +23,13 @@ class JVM(object):
 
         self.basepath = '/'
         self.path = path
-        # XXX: a passed classpath must be filtered and readded before run
+        # keep user_options for user messages around
         self.user_options = options
+
+        self._options = shlex.split(options)
+        self._classpath = extract_classpath(self.options)
+        self._tool_options = []
+        self._payload_options = []
 
     def configure(self, *args):
         """
