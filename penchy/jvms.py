@@ -55,11 +55,11 @@ class JVM(object):
         configuration.
         """
         executable = os.path.join(self.basepath, self._path)
-        cp = ['-classpath', self._classpath + ":" get_classpath()]
+        cp = ['-classpath', self._classpath + ":" + get_classpath()]
         return executable + self._options + cp
 
 
-class WrappedJVM(JVM):
+class WrappedJVM(JVM, PipelineElement):
     """
     This class is an abstract base class for a JVM that is wrapped by another
     Program.
