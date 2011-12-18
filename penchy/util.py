@@ -80,3 +80,28 @@ class memoized(object):
     def __get__(self, obj, objtype):
         """Support instance methods."""
         return functools.partial(self.__call__, obj)
+
+def extract_classpath(options):
+    """
+    Return the jvm classpath from a sequence of option strings.
+
+    :param options: sequence of jvm options to search
+    :returns: classpath in options
+    :rtype: string
+    """
+    # a later classpath overwrites previous definitions so we have to search
+    # from the end
+    options = options[::-1]
+    classpath = ''
+    for i, x in enumerate(options):
+        if x in ('-cp', '-classpath'):
+            try:
+                # cp is positioned before option because order is reversed, take
+                # abs to avoid referencing from end
+                cp_index = abs(i - 1)
+                classpath = options[cp_index]
+            except IndexError, e:
+                # XXX: maybe use logging? or handle exception in caller?
+                classpath = ''
+            break
+    return classpath
