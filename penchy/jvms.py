@@ -22,7 +22,8 @@ class JVM(object):
 
         self.basepath = '/'
         self.path = path
-        self.options = options
+        # XXX: a passed classpath must be filtered and readded before run
+        self.user_options = options
 
     def configure(self, *args):
         """
