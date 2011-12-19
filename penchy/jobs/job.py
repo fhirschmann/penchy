@@ -12,6 +12,7 @@ class JVMNodeConfiguration(object):
         self.node = node
         self.name = name
 
+
 class Job(object):
     """
     Represents a job.

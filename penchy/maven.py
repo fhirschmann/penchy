@@ -29,7 +29,7 @@ class MavenDependency(object):
     """
     This class represents a Maven Dependency
     """
-    def __init__(self, groupId, artifactId, version, repo=None, 
+    def __init__(self, groupId, artifactId, version, repo=None,
             classifier=None, artifact_type=None):
         self.groupId = groupId
         self.artifactId = artifactId
