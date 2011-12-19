@@ -1,23 +1,25 @@
 from job import *
-from jvms import *
-from tools import *
-from filters import *
-from workloads import *
+import jvms
+import tools
+import filters
+import workloads
+from dependency import Edge
 
+
+JVM = jvms.JVM
 
 # all job elements that are interesting for the user have to be enumerated here
 __all__ = [
     # job
     'Job',
     'JVMNodeConfiguration',
-    # jvm
+    # dependencies
+    'Edge',
+    # jvms
     'JVM',
-    'ValgrindJVM',
-    # filters
-    # workloads
-    'Dacapo',
-    'ScalaBench',
-    # tools
-    'Tamiflex',
-    'HProf'
+    # modules
+    'jvms'
+    'filters'
+    'workloads'
+    'tools'
 ]
