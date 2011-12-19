@@ -42,10 +42,9 @@ class MavenDependency(object):
         return self.__dict__ == other.__dict__
 
 
-class BootstrapPOM(object):
+class POM(object):
     """
-    This class represents a bootstrap POM which is used to deploy 
-    PenchY and its dependencies.
+    This class represents a basic Maven POM.
 
     This is kind of a lazy implementation. The full XML file won't be
     build until you call `get_xml`.
@@ -53,25 +52,9 @@ class BootstrapPOM(object):
     Duplicates are discarded, so no repository or dependency will
     be defined twice in the POM.
     """
-    ATTRIBS = {
-            'groupId': 'de.tu_darmstadt.penchy',
-            'artifactId': 'penchy-bootstrap',
-            'name': 'penchy-bootstrap',
-            'url': 'http://www.tu-darmstadt.de',
-            'version': penchy_version,
-            'modelVersion': '4.0.0',
-            'packaging': 'jar',  # won't work with pom
-            }
-
     def __init__(self):
         self.repository_list = set()
         self.dependency_list = set()
-        self.dependency_list.add(MavenDependency(
-            groupId='de.tu_darmstadt.penchy',
-            artifactId='penchy',
-            version=penchy_version,
-            classifier='py',
-            artifact_type='zip'))
 
     def dict2xml(self, parent, childs, filterfunc=None):
         """
@@ -148,13 +131,26 @@ class BootstrapPOM(object):
         return xml.toprettyxml(indent="  ")
 
 
-if __name__ == "__main__": 
-    x = MavenDependency('de.tu_darmstadt.penchy', 
-            'booster', '2.0.0.0', 'http://mvn.0x0b.de')
+class BootstrapPOM(POM):
+    """
+    This class represents a bootstrap POM which is used to deploy
+    PenchY and its dependencies.
+    """
+    ATTRIBS = {
+            'groupId': 'de.tu_darmstadt.penchy',
+            'artifactId': 'penchy-bootstrap',
+            'name': 'penchy-bootstrap',
+            'url': 'http://www.tu-darmstadt.de',
+            'version': penchy_version,
+            'modelVersion': '4.0.0',
+            'packaging': 'jar',  # won't work with pom
+            }
 
-    p = BootstrapPOM()
-    p.add_dependency(x)
-    p.add_dependency(x)
-    #print p.get_xml()
-    print get_classpath()
-    print get_classpath()
+    def __init__(self):
+        POM.__init__(self)
+        self.dependency_list.add(MavenDependency(
+            groupId='de.tu_darmstadt.penchy',
+            artifactId='penchy',
+            version=penchy_version,
+            classifier='py',
+            artifact_type='zip'))
