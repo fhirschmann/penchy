@@ -2,12 +2,13 @@
 
 import logging
 
-from xml.dom.minidom import Document
 from collections import namedtuple
 from subprocess import Popen, PIPE
 
+from xml.etree.ElementTree import Element, SubElement, ElementTree
+
 from penchy import __version__ as penchy_version
-from penchy.util import memoized
+from penchy.util import memoized, tree_pp, dict2tree
 
 
 @memoized
@@ -30,13 +31,14 @@ class MavenDependency(object):
     This class represents a Maven Dependency
     """
     def __init__(self, groupId, artifactId, version, repo=None,
-            classifier=None, artifact_type=None):
+            classifier=None, artifact_type=None, packaging=None):
         self.groupId = groupId
         self.artifactId = artifactId
         self.version = version
         self.repo = repo
         self.classifier = classifier
         self.type = artifact_type
+        self.packaging = packaging
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
@@ -52,29 +54,23 @@ class POM(object):
     Duplicates are discarded, so no repository or dependency will
     be defined twice in the POM.
     """
-    def __init__(self):
+
+    ATTRIBS = {
+            'modelVersion': '4.0.0',
+    }
+
+    def __init__(self, **kwargs):
         self.repository_list = set()
         self.dependency_list = set()
 
-    def dict2xml(self, parent, childs, filterfunc=None):
-        """
-        Turns a dictionary into XML and append it to the parent.
+        self.root = Element('project')
+        self.tree = ElementTree(self.root)
+        self.dependency_tree = SubElement(self.root, 'dependencies')
+        self.repository_tree = SubElement(self.root, 'repositories')
 
-        :param parent: the parent to append to
-        :type parent: xml document
-        :param child: the childs to append
-        :type childs: dict
-        """
-        for k, v in childs.items():
-            if filterfunc:
-                if not filterfunc(k):
-                    continue
-            if not v:
-                continue
-
-            attrib = parent.ownerDocument.createElement(k)
-            attrib.appendChild(parent.ownerDocument.createTextNode(v))
-            parent.appendChild(attrib)
+        attribs = POM.ATTRIBS
+        attribs.update(kwargs)
+        dict2tree(self.root, attribs)
 
     def add_dependency(self, dep):
         """
@@ -83,11 +79,19 @@ class POM(object):
         :param dep: the dependency
         :type dep: MavenDependency
         """
-
-        self.dependency_list.add(dep)
+        if dep in self.dependency_list:
+            return
 
         if dep.repo:
             self.add_repository(dep.repo)
+
+        clean_dep = dep.__dict__.copy()
+        clean_dep.pop('repo')
+
+        e = SubElement(self.dependency_tree, 'dependency')
+        dict2tree(e, clean_dep)
+
+        self.dependency_list.add(dep)
 
     def add_repository(self, url):
         """
@@ -98,37 +102,27 @@ class POM(object):
         :param url: the URL of the repository
         :type url: string
         """
+        if url in self.repository_list:
+            return
+
+        e = SubElement(self.repository_tree, 'repository')
+        dict2tree(e, {'url': url, 'id': url})
+
         self.repository_list.add(url)
 
-    def get_xml(self):
+    def write(self, filename, pretty=True):
         """
-        Returns the BootstrapPOM formatted as XML.
+        Writes the POM to a file.
+
+        :param filename: the filename to write to
+        :type filename: string
+        :param pretty: pretty-print resulting file
+        :type pretty: bool
         """
-        xml = Document()
-        project = xml.createElement('project')
-        xml.appendChild(project)
+        if pretty:
+            tree_pp(self.root)
 
-        self.dict2xml(project, BootstrapPOM.ATTRIBS)
-
-        # Repositories
-        repositories = xml.createElement('repositories')
-        project.appendChild(repositories)
-        for repo in self.repository_list:
-            xrepo = xml.createElement('repository')
-            repositories.appendChild(xrepo)
-
-            self.dict2xml(xrepo, {'id': repo, 'url': repo})
-
-        # Dependencies
-        dependencies = xml.createElement('dependencies')
-        project.appendChild(dependencies)
-        for dep in self.dependency_list:
-            xdep = xml.createElement('dependency')
-            dependencies.appendChild(xdep)
-
-            self.dict2xml(xdep, dep.__dict__, lambda r: r != 'repo')
-
-        return xml.toprettyxml(indent="  ")
+        self.tree.write(filename)
 
 
 class BootstrapPOM(POM):
@@ -147,8 +141,16 @@ class BootstrapPOM(POM):
             }
 
     def __init__(self):
-        POM.__init__(self)
-        self.dependency_list.add(MavenDependency(
+        POM.__init__(self,
+                groupId='de.tu_darmstadt.penchy',
+                artifactId='penchy-bootstrap',
+                name='penchy-bootstrap',
+                url='http://www.tu-darmstadt.de',
+                version=penchy_version,
+                packaging='jar',  # won't work with pom
+                )
+
+        self.add_dependency(MavenDependency(
             groupId='de.tu_darmstadt.penchy',
             artifactId='penchy',
             version=penchy_version,

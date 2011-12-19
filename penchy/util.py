@@ -3,6 +3,7 @@ This module provides miscellaneous utilities.
 """
 
 from collections import namedtuple
+from xml.etree.ElementTree import SubElement
 
 
 NodeConfig = namedtuple('NodeConfig', ['host', 'ssh_port', 'username', 'path'])
@@ -81,6 +82,7 @@ class memoized(object):
         """Support instance methods."""
         return functools.partial(self.__call__, obj)
 
+
 def extract_classpath(options):
     """
     Return the jvm classpath from a sequence of option strings.
@@ -105,3 +107,29 @@ def extract_classpath(options):
                 classpath = ''
             break
     return classpath
+
+
+def tree_pp(elem, level=0):
+    """
+    Pretty-prints an ElementTree.
+    """
+    i = "\n" + level * "  "
+    if len(elem):
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+        for elem in elem:
+            tree_pp(elem, level + 1)
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+
+
+def dict2tree(elem, dictionary):
+    for k, v in dictionary.items():
+        if v:
+            e = SubElement(elem, k)
+            e.text = v
