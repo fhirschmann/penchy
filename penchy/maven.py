@@ -28,10 +28,31 @@ def get_classpath():
 
 class MavenDependency(object):
     """
-    This class represents a Maven Dependency
+    This class represents a Maven Dependency.
+
+    A sample Maven Dependency might look like::
+
+        dep = MavenDependency('de.tu_darmstadt.penchy',
+                              'pia', '2.0.0.0', 'http://mvn.0x0b.de')
     """
     def __init__(self, groupId, artifactId, version, repo=None,
             classifier=None, artifact_type=None, packaging=None):
+        """
+        :param groupId: the maven group id.
+        :type groupId: string
+        :param artifactId: the maven artifact id.
+        :type artifactId: string
+        :param version: the version of the artifact.
+        :type version: string
+        :param repo: the maven repository to use.
+        :type repo: string
+        :param classifier: the classifier of the artifact.
+        :type classifier: string
+        :param artifact_type: the type of the artifact.
+        :type artifact_type: string
+        :param packaging: the packaging of the artifact.
+        :type packaging: string
+        """
         self.groupId = groupId
         self.artifactId = artifactId
         self.version = version
@@ -47,9 +68,6 @@ class MavenDependency(object):
 class POM(object):
     """
     This class represents a basic Maven POM.
-
-    This is kind of a lazy implementation. The full XML file won't be
-    build until you call `get_xml`.
 
     Duplicates are discarded, so no repository or dependency will
     be defined twice in the POM.
@@ -97,8 +115,6 @@ class POM(object):
         """
         Adds a repository to the POM.
 
-        :param identifier: an identifier for the repository
-        :type identifier: string
         :param url: the URL of the repository
         :type url: string
         """
