@@ -71,6 +71,17 @@ class POM(object):
 
     Duplicates are discarded, so no repository or dependency will
     be defined twice in the POM.
+
+    Keywords are directly translated into children of the <project>
+    node::
+
+        POM(groupId='de.tu_darmstadt.penchy').write('pom.xml')
+
+    would result in something like::
+
+        <project>
+            <groupId>de.tu_darmstadt.penchy</groupId>
+        </project>
     """
 
     ATTRIBS = {
@@ -95,7 +106,7 @@ class POM(object):
         Adds a given dependency to the POM.
 
         :param dep: the dependency
-        :type dep: MavenDependency
+        :type dep: :class:`MavenDependency`
         """
         if dep in self.dependency_list:
             return
@@ -111,18 +122,24 @@ class POM(object):
 
         self.dependency_list.add(dep)
 
-    def add_repository(self, url):
+    def add_repository(self, url, identifier=None):
         """
         Adds a repository to the POM.
+
+        The identifier of the repository will be equal to
+        the url by default.
 
         :param url: the URL of the repository
         :type url: string
         """
         if url in self.repository_list:
             return
+        
+        if not identifier:
+            identifier = url
 
         e = SubElement(self.repository_tree, 'repository')
-        dict2tree(e, {'url': url, 'id': url})
+        dict2tree(e, {'url': url, 'id': identifier})
 
         self.repository_list.add(url)
 
