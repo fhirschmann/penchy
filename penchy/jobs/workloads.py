@@ -49,6 +49,9 @@ class Dacapo(Workload):
 
         # XXX: call check here?
 
+        # initialize output dictionary
+        self.out = dict()
+
     @property
     def arguments(self):
         """
