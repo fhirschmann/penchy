@@ -68,6 +68,11 @@ class MavenDependency(object):
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__,
+                ":".join(filter(None, (self.groupId, self.artifactId, self.version, 
+                    self.classifier, self.packaging))))
+
 
 class POM(object):
     """
