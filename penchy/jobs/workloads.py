@@ -70,7 +70,8 @@ class Dacapo(Workload):
         """
         valid_benchmark = self.benchmark in self.__class__.BENCHMARKS
         if not valid_benchmark:
-            log.critical("{0} is not a valid benchmark".format(self.benchmark))
+            log.critical("{0} is not a valid benchmark for {1}".format(
+                self.benchmark, self.__class__.__name__))
 
         return all((valid_benchmark,))
 
