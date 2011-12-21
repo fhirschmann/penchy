@@ -54,8 +54,9 @@ class Dacapo(Workload):
         """
         The arguments to call the workload in the current configuration.
         """
-        return ['-n', self.iterations] + shlex.split(harness_args) + \
-               [self.benchmark] + shlex.split(benchmark_args)
+        return ['Harness'] + \
+               ['-n', self.iterations] + shlex.split(self.harness_args) + \
+               [self.benchmark] + shlex.split(self.benchmark_args)
 
     def check(self):
         """
