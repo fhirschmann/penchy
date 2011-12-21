@@ -23,4 +23,5 @@ class Tool(NotRunnable, PipelineElement):
 
 
 class Workload(NotRunnable, PipelineElement):
+    exports = set(('stdout', 'stderr', 'exit code'))
     pass
