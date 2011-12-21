@@ -1,5 +1,5 @@
 """
-This module provides the base of job elements.
+This module provides the foundation of job elements.
 """
 
 
