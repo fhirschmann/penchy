@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import logging
+import os
 
 from collections import namedtuple
 from subprocess import Popen, PIPE
@@ -19,6 +20,9 @@ def get_classpath():
     :returns: java classpath
     :rtype: string
     """
+    if not os.path.exists('pom.xml'):
+        raise OSError("No pom.xml found in the current directory!")
+
     proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
     stdout, _ = proc2.communicate()
     for line in stdout.split("\n"):
