@@ -18,11 +18,14 @@ class Dacapo(Workload):
     This class represents the workload for the `DaCapo Benchmark-Suite
     <http://dacapobench.org/>_.
     """
-    DEPENDENCIES = (MavenDependency(
-        'org.scalabench.benchmarks',
-        'scala-benchmark-suite',
-        '0.1.0-SNAPSHOT',
-        'http://repo.scalabench.org'))
+    DEPENDENCIES = set((
+        MavenDependency(
+            'org.scalabench.benchmarks',
+            'scala-benchmark-suite',
+            '0.1.0-SNAPSHOT',
+            'http://repo.scalabench.org'
+        ),
+    ))
 
     BENCHMARKS = set((  'avrora'
                       , 'batik'
