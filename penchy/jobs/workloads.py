@@ -22,8 +22,8 @@ class Dacapo(Workload):
         MavenDependency(
             'org.scalabench.benchmarks',
             'scala-benchmark-suite',
-            '0.1.0-SNAPSHOT',
-            'http://repo.scalabench.org'
+            '0.1.0-20110908.085753-2',
+            'http://repo.scalabench.org/snapshots/'
         ),
     ))
 
