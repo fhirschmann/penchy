@@ -138,7 +138,7 @@ class POM(object):
         """
         if url in self.repository_list:
             return
-        
+
         if not identifier:
             identifier = url
 
@@ -167,16 +167,6 @@ class BootstrapPOM(POM):
     This class represents a bootstrap POM which is used to deploy
     PenchY and its dependencies.
     """
-    ATTRIBS = {
-            'groupId': 'de.tu_darmstadt.penchy',
-            'artifactId': 'penchy-bootstrap',
-            'name': 'penchy-bootstrap',
-            'url': 'http://www.tu-darmstadt.de',
-            'version': penchy_version,
-            'modelVersion': '4.0.0',
-            'packaging': 'jar',  # won't work with pom
-            }
-
     def __init__(self):
         POM.__init__(self,
                 groupId='de.tu_darmstadt.penchy',
