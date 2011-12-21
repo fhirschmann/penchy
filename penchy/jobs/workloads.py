@@ -6,18 +6,24 @@ import logging
 import shlex
 
 from penchy.jobs.elements import Workload
+from penchy.maven import MavenDependency
 
 
 # TODO: we need a module that configures logging
 log = logging.getLogger("Workload")
+
 
 class Dacapo(Workload):
     """
     This class represents the workload for the `DaCapo Benchmark-Suite
     <http://dacapobench.org/>_.
     """
-    # TODO: dependencies
-    DEPENDENCIES = ()
+    DEPENDENCIES = (MavenDependency(
+        'org.scalabench.benchmarks',
+        'scala-benchmark-suite',
+        '0.1.0-SNAPSHOT',
+        'http://repo.scalabench.org'))
+
     BENCHMARKS = set((  'avrora'
                       , 'batik'
                       , 'eclipse'
