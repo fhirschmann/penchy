@@ -187,4 +187,5 @@ class BootstrapPOM(POM):
             artifactId='penchy',
             version=penchy_version,
             classifier='py',
+            repo='http://mvn.0x0b.de',
             artifact_type='zip'))
