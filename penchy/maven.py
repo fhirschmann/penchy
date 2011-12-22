@@ -9,7 +9,7 @@ from subprocess import Popen, PIPE
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
-from penchy.util import memoized, tree_pp, dict2tree
+from penchy.util import memoized, tree_pp, dict2tree, dict2string
 
 
 @memoized
@@ -99,9 +99,8 @@ class MavenDependency(object):
         return self.__dict__ == other.__dict__
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__,
-                ":".join([self.__dict__[k] for k in MavenDependency.POM_ATTRIBS if \
-                        self.__dict__[k]]))
+        return "<%s: %s>" % (self.__class__.__name__, 
+                dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
 
 
 class POM(object):

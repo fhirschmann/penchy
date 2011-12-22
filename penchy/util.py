@@ -133,3 +133,15 @@ def dict2tree(elem, dictionary):
         if v:
             e = SubElement(elem, k)
             e.text = v
+
+
+def dict2string(d, attribs):
+    """
+    PrettyPrints a dictionary as string.
+    """
+    s = []
+    for k, v in d.items():
+        if not attribs or k in attribs:
+            if v:
+                s.append("%s=%s" % (k, v))
+    return ", ".join(s)
