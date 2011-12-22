@@ -30,7 +30,10 @@ class JVM(object):
         self._options = shlex.split(options)
         self._classpath = extract_classpath(self.options)
         self._tool_options = []
-        self._payload_options = []
+        self._workload_options = []
+
+        self.prehooks = []
+        self.posthooks = []
 
     def configure(self, *args):
         """
