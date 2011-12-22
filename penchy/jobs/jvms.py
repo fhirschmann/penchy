@@ -12,6 +12,8 @@ from penchy.maven import get_classpath
 from penchy.util import extract_classpath
 
 
+log = logging.getLogger("JVMs")
+
 class JVM(object):
     """
     This class represents a JVM.
@@ -37,53 +39,46 @@ class JVM(object):
 
         # for tools and workloads
         self._tool_options = []
-        self._temporary_prehooks = []
-        self._temporary_posthooks = []
-        self._current_workload = None
+        self._workload = None
 
-    def configure(self, *args):
-        """
-        Configure jvm options that allows `args` to run
+    @property
+    def workload(self):
+        return self._workload
 
-        :param *args: :class:`Tool` or :class:`Workload` instances that should be
-                      run.
-        """
-        for arg in args:
-            if isinstance(arg, Workload):
-                if self._current_workload is None:
-                    self._current_workload = arg
-                else:
-                    # XXX: use error flags and wait for check?
-                    raise ValueError("JVM can only execute one Workload")
+    @workload.setter
+    def workload(self, workload):
+        if self._workload is not None:
+            log.warn("Overwriting workload!")
 
-            elif isinstance(arg, Tool):
-                self._tool_options = arg.arguments
-            else:
-                # XXX: use error flags and wait for check?
-                raise ValueError("JVM can only be configured by Workloads and"
-                                 " Tools")
-            self._temporary_prehooks.extend(arg.prehooks)
-            self._temporary_posthooks.extend(arg.posthooks)
+        self._workload = workload
 
+    @property
+    def tool(self):
+        return self._tool
+
+    @tool.setter
+    def tool(self, tool):
+        if not self._tool:
+            log.warn("Overwriting Tool!")
+
+        self._tool = tool
 
     def run(self):
         """
         Run the jvm with the current configuration.
         """
-        for hook in itertools.chain(self.prehooks, self._temporary_prehooks):
+        prehooks, posthooks = self._get_hooks()
+
+        log.info("executing prehooks")
+        for hook in prehooks:
             hook()
 
         # FIXME:add temp files for stdout and stderr
-        self._current_workload.out['error code'] = subprocess.call(self.cmdline)
+        self.workload.out['error code'] = subprocess.call(self.cmdline)
 
-        for hook in itertools.chain(self.posthooks, self._temporary_posthooks):
+        log.info("executing posthooks")
+        for hook in posthooks:
             hook()
-
-        # reset temporaries
-        self._temporary_prehooks = list()
-        self._temporary_posthooks = list()
-        self._tool_options = list()
-        self._current_workload = None
 
     @property
     def cmdline(self):
@@ -95,6 +90,28 @@ class JVM(object):
         cp = ['-classpath', self._classpath + ":" + get_classpath()]
         options = self._options + self._tool_options
         return [executable] + options + cp + self._current_workload.arguments
+
+    def _get_hooks(self):
+        """
+        Return hooks of jvm together with possible workload and tool hooks.
+        """
+        if self.workload is None:
+            workload_prehooks = []
+            workload_posthooks = []
+        else:
+            workload_prehooks = self.workload.prehooks
+            workload_posthooks = self.workload.posthooks
+
+        if self.tool is None:
+            tool_prehooks = []
+            tool_posthooks = []
+        else:
+            tool_prehooks = self.tool.prehooks
+            tool_posthooks = self.tool.posthooks
+
+        prehooks = itertools.chain(self.prehooks, tool_prehooks, workload_prehooks)
+        posthooks = itertools.chain(self.posthooks, tool_posthooks, workload_posthooks)
+        return prehooks, posthooks
 
 
 class WrappedJVM(JVM, PipelineElement):
