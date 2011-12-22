@@ -90,6 +90,12 @@ class Workload(NotRunnable, PipelineElement):
     classpath (via its dependencies) and the complete commandline arguments to
     call it correctly. The DaCapo benchmark suite is a workload (with a
     benchmark specified).
+
+    A workload has at least three exported values:
+
+    - `stdout`, the path to the file that contains the output on stdout
+    - `stderr`, the path to the file that contains the output on stderr
+    - `exit code`, the exitcode
     """
     exports = set(('stdout', 'stderr', 'exit code'))
     @property
