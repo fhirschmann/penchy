@@ -12,6 +12,9 @@ from penchy import __version__ as penchy_version
 from penchy.util import memoized, tree_pp, dict2tree, dict2string, sha1sum
 
 
+log = logging.getLogger("maven")
+
+
 @memoized
 def get_classpath():
     """
@@ -21,15 +24,24 @@ def get_classpath():
     :rtype: string
     """
     if not os.path.exists('pom.xml'):
-        raise OSError("No pom.xml found in the current directory!")
+        raise OSError("No pom.xml found in the current directory")
 
-    # TODO: Make this raise an exception when maven fails
-    
-    proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
-    stdout, _ = proc2.communicate()
+    proc = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
+    stdout, _ = proc.communicate()
+
+    if proc.returncode is not 0:
+        log.error(stdout)
+        raise MavenError("The classpath could not be determined")
+
     for line in stdout.split("\n"):
         if not line.startswith("["):
             return line
+
+    raise MavenError("The classpath was not in maven's output")
+
+
+class MavenError(Exception):
+    pass
 
 
 class IntegrityError(Exception):
