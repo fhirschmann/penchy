@@ -27,12 +27,11 @@ class Job(object):
         :param invocations: number of times to run job on each configuration
         """
         self.configurations = configurations
-        self.producers = producers
-        self.client_filters = client_filters
-        self.server_filters = server_filters
-        self.nodes = nodes
+        self.client_flow = client_flow
+        self.server_flow = server_flow
+        self.invocations = invocations
 
-        # to be set by server on transfering job to client
+        # to be set by client before executing job
         self.return_address = None
 
     def run(self):
