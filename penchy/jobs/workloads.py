@@ -52,6 +52,8 @@ class Dacapo(Workload):
         :param benchmark_args: String of additional arguments for benchmark
         :param harness_args: String of additional arguments for harness
         """
+        super(Dacapo, self).__init__()
+
         self.benchmark = benchmark
         self.iterations = iterations
 
