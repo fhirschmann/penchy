@@ -9,7 +9,7 @@ from subprocess import Popen, PIPE
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
-from penchy.util import memoized, tree_pp, dict2tree, dict2string
+from penchy.util import memoized, tree_pp, dict2tree, dict2string, sha1sum
 
 
 @memoized
@@ -28,6 +28,10 @@ def get_classpath():
     for line in stdout.split("\n"):
         if not line.startswith("["):
             return line
+
+
+class IntegrityError(Exception):
+    pass
 
 
 class MavenDependency(object):
@@ -73,7 +77,7 @@ class MavenDependency(object):
         self.type = artifact_type
         self.packaging = packaging
         self._filename = filename
-        self.checksum = checksum
+        self.wanted_checksum = checksum
 
     @property
     def filename(self):
@@ -87,13 +91,34 @@ class MavenDependency(object):
 
         for artifact in cp:
             if self._filename:
-                print self._filename
                 if os.path.basename(artifact) == self._filename:
                     return artifact
             else:
                 if os.path.basename(artifact).startswith("-".join((
                     self.artifactId, self.version))):
                     return artifact
+
+        raise LookupError('Artifact filename could not be determined!')
+
+    @property
+    @memoized
+    def actual_checksum(self):
+        """
+        The actual checksum of this artifact.
+        """
+        return sha1sum(self.filename)
+
+    def check_checksum(self):
+        """
+        Checks if the checksum is correct.
+        Raises an :class:`IntegrityError` if not.
+        """
+        if not self.wanted_checksum:
+            return
+
+        if not self.wanted_checksum == self.actual_checksum:
+            raise IntegrityError("Checksums don't match! Actual %s; Wanted %s" % \
+                    (self.actual_checksum, self.wanted_checksum))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

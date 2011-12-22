@@ -2,6 +2,8 @@
 This module provides miscellaneous utilities.
 """
 
+import hashlib
+
 from collections import namedtuple
 from xml.etree.ElementTree import SubElement
 
@@ -145,3 +147,19 @@ def dict2string(d, attribs):
             if v:
                 s.append("%s=%s" % (k, v))
     return ", ".join(s)
+
+
+def sha1sum(filename, blocksize=65536):
+    """
+    Returns the sha1 hexdigest of a file.
+    """
+    afile = file(filename, 'r')
+    hasher = hashlib.sha1()
+
+    buf = afile.read(blocksize)
+    while len(buf) > 0:
+        hasher.update(buf)
+        buf = afile.read(blocksize)
+    afile.close()
+    return hasher.hexdigest()
+
