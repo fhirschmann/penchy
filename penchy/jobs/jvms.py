@@ -6,6 +6,7 @@ import itertools
 import os
 import shlex
 import subprocess
+import logging
 
 from penchy.jobs.elements import PipelineElement, Tool, Workload
 from penchy.maven import get_classpath
