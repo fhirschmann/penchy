@@ -90,7 +90,7 @@ class JVM(object):
         executable = os.path.join(self.basepath, self._path)
         if self._classpath:
             cp = self._classpath + ":" + get_classpath()
-        else
+        else:
             cp = get_classpath()
         options = self._options + self.tool.arguments
         return ([executable] + options + ['-classpath', cp]
