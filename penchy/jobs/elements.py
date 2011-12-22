@@ -7,6 +7,17 @@ class PipelineElement(object):
     """
     This class is the base class for all objects participating in the
     transformation pipeline.
+
+    A PipelineElement must have the following attributes:
+
+    - `out`, a dictionary that maps logical names for output to actual.
+    - `exports`, a set of names that describes which logical names are valid for
+                the element.
+
+    A PipelineElement must have the following methods:
+
+    - `_run`, to run the element on the parameters.
+    - `check`, to check the element configuration for plausibility.
     """
     def __init__(self):
         self.out = {}
@@ -14,7 +25,28 @@ class PipelineElement(object):
         self.prehooks = []
         self.posthooks = []
 
-    def run(self):
+    def run(self, *args, **kwargs):
+        """
+        Run element with hooks.
+        """
+        for hook in self.prehooks:
+            hook()
+
+        self._run(*args, **kwargs)
+
+        for hook in self.posthooks:
+            hook()
+
+    def _run(self, *args, **kwargs):
+        """
+        Run the actual Element on the arguments.
+        """
+        raise NotImplementedError("PipelineElements must implement this")
+
+    def check(self):
+        """
+        Check element for plausibility.
+        """
         raise NotImplementedError("PipelineElements must implement this")
 
 class NotRunnable(object):
@@ -27,12 +59,20 @@ class NotRunnable(object):
 
 
 class Filter(PipelineElement):
+    """
+    This represents a Filter of the pipeline.
+
+    A Filter receives and processes data.
+    """
     pass
 
 
 class Tool(NotRunnable, PipelineElement):
     """
-    This represents a Tool of the pipeline
+    This represents a Tool of the pipeline.
+
+    A Tool modifies the JVM on which it runs, so that data about that run is
+    gathered. Hprof, for example, is a Tool.
     """
     @property
     def arguments(self):
@@ -43,6 +83,14 @@ class Tool(NotRunnable, PipelineElement):
 
 
 class Workload(NotRunnable, PipelineElement):
+    """
+    This represents a Workload of the pipeline.
+
+    A Workload is code that the JVM should execute. Typically it provides the
+    classpath (via its dependencies) and the complete commandline arguments to
+    call it correctly. The DaCapo benchmark suite is a workload (with a
+    benchmark specified).
+    """
     exports = set(('stdout', 'stderr', 'exit code'))
     @property
     def arguments(self):
