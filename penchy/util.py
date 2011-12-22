@@ -3,6 +3,7 @@ This module provides miscellaneous utilities.
 """
 
 import hashlib
+import functools
 
 from collections import namedtuple
 from xml.etree.ElementTree import SubElement
@@ -54,7 +55,7 @@ def topological_sort(start_nodes, dependencies):
         old_dependencies = list(dependencies)
 
 
-class memoized(object):
+class _memoized(object):
     """
     Decorator that caches a function's return value each time it is called.
     If called later with the same arguments, the cached value is returned, and
@@ -83,6 +84,20 @@ class memoized(object):
     def __get__(self, obj, objtype):
         """Support instance methods."""
         return functools.partial(self.__call__, obj)
+
+
+def memoized(f):
+    """
+    Wraps the _memoized decorator using functools so that,
+    for example, the correct docstring will be used.
+    """
+    memoize = _memoized(f)
+
+    @functools.wraps(f)
+    def helper(*args, **kwargs):
+        return memoize(*args, **kwargs)
+
+    return helper
 
 
 def extract_classpath(options):
