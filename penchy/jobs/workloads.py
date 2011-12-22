@@ -92,8 +92,6 @@ class ScalaBench(Dacapo):
     This class represents the workload for the `Scalabench Benchmark-Suite
     <http://scalabench.org/>_.
     """
-    # TODO: dependencies
-    DEPENDENCIES = ()
     BENCHMARKS = set((# dacapo
                         'avrora'
                       , 'batik'

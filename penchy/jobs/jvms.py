@@ -57,7 +57,7 @@ class JVM(object):
         """
         executable = os.path.join(self.basepath, self._path)
         cp = ['-classpath', self._classpath + ":" + get_classpath()]
-        return executable + self._options + cp
+        return [executable] + self._options + cp
 
 
 class WrappedJVM(JVM, PipelineElement):
