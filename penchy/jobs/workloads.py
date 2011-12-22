@@ -23,7 +23,7 @@ class Dacapo(Workload):
             'org.scalabench.benchmarks',
             'scala-benchmark-suite',
             '0.1.0-20110908.085753-2',
-            'http://repo.scalabench.org/snapshots/'
+            'http://repo.scalabench.org/snapshots/',
             filename='scala-benchmark-suite-0.1.0-SNAPSHOT.jar',
             checksum='fb68895a6716cc5e77f62ed7992d027b1dbea355'
         ),
