@@ -40,6 +40,7 @@ class Job(object):
         Run Job.
         """
         # FIXME: implement me!
+        # for invocations: make tmpdir and change working directory to it
         pass
 
     def check(self):
