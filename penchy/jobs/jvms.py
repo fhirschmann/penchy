@@ -39,7 +39,7 @@ class JVM(object):
         self.posthooks = []
 
         # for tools and workloads
-        self._tool_options = []
+        self._tool = None
         self._workload = None
 
     @property
