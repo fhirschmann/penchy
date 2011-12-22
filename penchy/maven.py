@@ -80,7 +80,7 @@ class MavenDependency(object):
         :type packaging: string
         :param filename: filename of the artifact; guessed if not specified.
         :type filename: string
-        :param checksum: the md5 checksum of the file.
+        :param checksum: the sha1 checksum of the file.
         :type checksum: string
         """
         self.groupId = groupId
