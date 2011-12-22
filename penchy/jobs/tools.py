@@ -31,13 +31,17 @@ class Tamiflex(Tool):
     
     def __init__(self):
         super(Tamiflex, self).__init__()
-        # TODO: do not set 'out' until the files are created
-        out = {
-            "reflection_log" : "out/refl.log", 
-                # provides info/log about reflective calls
-            "classfolder" : "out",
-                # contains all classes of which objects were created (?)
-              }
+        self.out = {}
+        self.posthooks.append(after_execution)
+              
+    def after_execution(self):
+        if True:  # if successful:
+            self.out = {
+                "reflection_log" : "out/refl.log",
+                    # provides info/log about reflective calls
+                "classfolder" : "out"
+                    # contains all classes of which objects were created (?)
+            }   
     
     def check(self):
         # some jmv's might not support java.lang.instrument
