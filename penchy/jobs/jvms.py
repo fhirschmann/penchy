@@ -2,12 +2,14 @@
 This module provides JVMs to run programs.
 """
 
+import itertools
 import os
 import shlex
+import subprocess
 
+from penchy.jobs.elements import PipelineElement, Tool, Workload
 from penchy.maven import get_classpath
 from penchy.util import extract_classpath
-from penchy.jobs.elements import PipelineElement
 
 
 class JVM(object):
@@ -29,11 +31,15 @@ class JVM(object):
 
         self._options = shlex.split(options)
         self._classpath = extract_classpath(self._options)
-        self._tool_options = []
-        self._workload_options = []
 
         self.prehooks = []
         self.posthooks = []
+
+        # for tools and workloads
+        self._tool_options = []
+        self._temporary_prehooks = []
+        self._temporary_posthooks = []
+        self._current_workload = None
 
     def configure(self, *args):
         """
@@ -42,15 +48,42 @@ class JVM(object):
         :param *args: :class:`Tool` or :class:`Workload` instances that should be
                       run.
         """
-        #TODO
-        pass
+        for arg in args:
+            if isinstance(arg, Workload):
+                if self._current_workload is None:
+                    self._current_workload = arg
+                else:
+                    # XXX: use error flags and wait for check?
+                    raise ValueError("JVM can only execute one Workload")
+
+            elif isinstance(arg, Tool):
+                self._tool_options = arg.arguments
+            else:
+                # XXX: use error flags and wait for check?
+                raise ValueError("JVM can only be configured by Workloads and"
+                                 " Tools")
+            self._temporary_prehooks.extend(arg.prehooks)
+            self._temporary_posthooks.extend(arg.posthooks)
+
 
     def run(self):
         """
         Run the jvm with the current configuration.
         """
-        #TODO
-        pass
+        for hook in itertools.chain(self.prehooks, self._temporary_prehooks):
+            hook()
+
+        # FIXME:add temp files for stdout and stderr
+        self._current_workload.out['error code'] = subprocess.call(self.cmdline)
+
+        for hook in itertools.chain(self.posthooks, self._temporary_posthooks):
+            hook()
+
+        # reset temporaries
+        self._temporary_prehooks = list()
+        self._temporary_posthooks = list()
+        self._tool_options = list()
+        self._current_workload = None
 
     @property
     def cmdline(self):
@@ -60,7 +93,8 @@ class JVM(object):
         """
         executable = os.path.join(self.basepath, self._path)
         cp = ['-classpath', self._classpath + ":" + get_classpath()]
-        return [executable] + self._options + cp
+        options = self._options + self._tool_options
+        return [executable] + options + cp + self._current_workload.arguments
 
 
 class WrappedJVM(JVM, PipelineElement):
