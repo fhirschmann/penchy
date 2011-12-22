@@ -39,8 +39,12 @@ class MavenDependency(object):
         dep = MavenDependency('de.tu_darmstadt.penchy',
                               'pia', '2.0.0.0', 'http://mvn.0x0b.de')
     """
+    POM_ATTRIBS = ('version', 'groupId', 'artifactId', 'version', 
+            'classifier', 'packaging', 'type')
+
     def __init__(self, groupId, artifactId, version, repo=None,
-            classifier=None, artifact_type=None, packaging=None):
+            classifier=None, artifact_type=None, packaging=None,
+            filename=None, checksum=None):
         """
         :param groupId: the maven group id.
         :type groupId: string
@@ -56,6 +60,10 @@ class MavenDependency(object):
         :type artifact_type: string
         :param packaging: the packaging of the artifact.
         :type packaging: string
+        :param filename: the filename of the artifact; guessed if not specified.
+        :type filename: string
+        :param checksum: the md5 checksum of the file.
+        :type checksum: string
         """
         self.groupId = groupId
         self.artifactId = artifactId
@@ -64,14 +72,36 @@ class MavenDependency(object):
         self.classifier = classifier
         self.type = artifact_type
         self.packaging = packaging
+        self._filename = filename
+        self.checksum = checksum
+
+    @property
+    def filename(self):
+        """
+        The full absolute path to this artifact.
+
+        :return: path to artifact
+        :rtype: string
+        """
+        cp = get_classpath().split(":")
+
+        for artifact in cp:
+            if self._filename:
+                print self._filename
+                if os.path.basename(artifact) == self._filename:
+                    return artifact
+            else:
+                if os.path.basename(artifact).startswith("-".join((
+                    self.artifactId, self.version))):
+                    return artifact
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
     def __repr__(self):
         return "<%s: %s>" % (self.__class__.__name__,
-                ":".join(filter(None, (self.groupId, self.artifactId, self.version, 
-                    self.classifier, self.packaging))))
+                ":".join([self.__dict__[k] for k in MavenDependency.POM_ATTRIBS if \
+                        self.__dict__[k]]))
 
 
 class POM(object):
@@ -123,8 +153,8 @@ class POM(object):
         if dep.repo:
             self.add_repository(dep.repo)
 
-        clean_dep = dep.__dict__.copy()
-        clean_dep.pop('repo')
+        clean_dep = dict((k, v) for k, v in dep.__dict__.items() if k in 
+                MavenDependency.POM_ATTRIBS and v)
 
         e = SubElement(self.dependency_tree, 'dependency')
         dict2tree(e, clean_dep)
