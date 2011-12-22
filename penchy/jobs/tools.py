@@ -16,9 +16,9 @@ class Tamiflex(Tool):
     """
     
     DEPENDENCIES = set((
-        MavenDependency(
+        #MavenDependency(
             # TODO: add dependencies (poa-2.0.0.0.jar)
-        ),
+        #),
     ))
     
     exports = ["reflection_log", "classfolder"]
