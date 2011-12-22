@@ -88,9 +88,13 @@ class JVM(object):
         configuration.
         """
         executable = os.path.join(self.basepath, self._path)
-        cp = ['-classpath', self._classpath + ":" + get_classpath()]
-        options = self._options + self._tool_options
-        return [executable] + options + cp + self._current_workload.arguments
+        if self._classpath:
+            cp = self._classpath + ":" + get_classpath()
+        else
+            cp = get_classpath()
+        options = self._options + self.tool.arguments
+        return ([executable] + options + ['-classpath', cp]
+                + self.workload.arguments)
 
     def _get_hooks(self):
         """
