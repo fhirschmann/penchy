@@ -23,14 +23,28 @@ class NotRunnable(object):
         # TODO: Add logging?
         raise ValueError("{0} can't be run!".format(self.__class__.__name__))
 
+
 class Filter(PipelineElement):
     pass
 
 
 class Tool(NotRunnable, PipelineElement):
-    pass
+    """
+    This represents a Tool of the pipeline
+    """
+    @property
+    def arguments(self):
+        """
+        The arguments the jvm has to include to use the tool.
+        """
+        raise NotImplementedError("Tools must implement this")
 
 
 class Workload(NotRunnable, PipelineElement):
     exports = set(('stdout', 'stderr', 'exit code'))
-    pass
+    @property
+    def arguments(self):
+        """
+        The arguments the jvm has to include to execute the workloads.
+        """
+        raise NotImplementedError("Workloads must implement this")
