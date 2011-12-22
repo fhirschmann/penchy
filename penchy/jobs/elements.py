@@ -4,7 +4,16 @@ This module provides the foundation of job elements.
 
 
 class PipelineElement(object):
-    pass
+    """
+    This class is the base class for all objects participating in the
+    transformation pipeline.
+    """
+    def __init__(self):
+        self.out = {}
+
+        self.prehooks = []
+        self.posthooks = []
+
 
 class NotRunnable(object):
     """
