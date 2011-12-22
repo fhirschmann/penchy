@@ -9,7 +9,12 @@ class Tamiflex(Tool):
     """
     Currently only the play-out-agent is supported.
     
+    The argument "-javaagent:poa-2.0.0.0.jar" effects that the following get's
+    created during the execution of the workload:
+    * a log file of all uses of the reflection-api
+    * a folder of all classes that were used (including generated classes)
     """
+    
     DEPENDENCIES = set((
         MavenDependency(
             # TODO: add dependencies (poa-2.0.0.0.jar)
@@ -20,7 +25,7 @@ class Tamiflex(Tool):
     
     # TODO: do not set 'out' until the files are created
     out = {
-        "reflection" : "out/refl.log", 
+        "reflection_log" : "out/refl.log", 
             # provides info/log about reflective calls
         "classfolder" : "out",
             # contains all classes of which objects were created (?)
