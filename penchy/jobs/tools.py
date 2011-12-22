@@ -15,24 +15,33 @@ class Tamiflex(Tool):
     * a folder of all classes that were used (including generated classes)
     """
     
-    DEPENDENCIES = set((
-        MavenDependency(
-            # TODO: add dependencies (poa-2.0.0.0.jar)
-        ),
-    ))
+    #DEPENDENCIES = set((
+    #    MavenDependency(
+    #        # TODO: add dependencies (poa-2.0.0.0.jar)
+    #        'org.???',
+    #        '???',
+    #        '2.0.0.0?',
+    #        'http://mvn.0x0b.de ... ?',
+    #        filename='poa-2.0.0.0.jar',
+    #        checksum='df4418bed92205e4f27135bbf077895bd4c8c652'
+    #    ),
+    #))
     
     exports = ["reflection_log", "classfolder"]
     
-    # TODO: do not set 'out' until the files are created
-    out = {
-        "reflection_log" : "out/refl.log", 
-            # provides info/log about reflective calls
-        "classfolder" : "out",
-            # contains all classes of which objects were created (?)
-          }
-    
     def __init__(self):
         super(Tamiflex, self).__init__()
+        # TODO: do not set 'out' until the files are created
+        out = {
+            "reflection_log" : "out/refl.log", 
+                # provides info/log about reflective calls
+            "classfolder" : "out",
+                # contains all classes of which objects were created (?)
+              }
+    
+    def check(self):
+        # some jmv's might not support java.lang.instrument
+        pass
     
     @property
     def arguments(self):
