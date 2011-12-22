@@ -23,6 +23,8 @@ def get_classpath():
     if not os.path.exists('pom.xml'):
         raise OSError("No pom.xml found in the current directory!")
 
+    # TODO: Make this raise an exception when maven fails
+    
     proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
     stdout, _ = proc2.communicate()
     for line in stdout.split("\n"):
