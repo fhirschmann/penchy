@@ -12,7 +12,6 @@
         <module>pia</module>
         <module>poa</module>
         <module>booster</module>
-        <module>asm</module>
         <module>penchy</module>
     </modules>
 

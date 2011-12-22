@@ -15,7 +15,7 @@ class Tamiflex(Tool):
     * a folder of all classes that were used (including generated classes)
     """
     
-    #DEPENDENCIES = set((
+    DEPENDENCIES = set((
     #    MavenDependency(
     #        # TODO: add dependencies (poa-2.0.0.0.jar)
     #        'org.???',
@@ -25,7 +25,7 @@ class Tamiflex(Tool):
     #        filename='poa-2.0.0.0.jar',
     #        checksum='df4418bed92205e4f27135bbf077895bd4c8c652'
     #    ),
-    #))
+    ))
     
     exports = ["reflection_log", "classfolder"]
     

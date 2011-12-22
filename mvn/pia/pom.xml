@@ -4,6 +4,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>pia</artifactId>
     <version>2.0.0.0</version>
+    <packaging>pom</packaging>
 
     <parent>
         <groupId>de.tu_darmstadt.penchy</groupId>
@@ -15,12 +16,12 @@
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-install-plugin</artifactId>
+                <artifactId>maven-deploy-plugin</artifactId>
                 <executions>
                     <execution>
-                        <phase>install</phase>
+                        <phase>deploy</phase>
                         <goals>
-                            <goal>install-file</goal>
+                            <goal>deploy-file</goal>
                         </goals>
                         <configuration>
                             <packaging>jar</packaging>
@@ -30,6 +31,7 @@
                             <file>
                                 ${project.artifactId}-${project.version}.jar
                             </file>
+                            <url>${project.distributionManagement.repository.url}</url>
                         </configuration>
                     </execution>
                 </executions>

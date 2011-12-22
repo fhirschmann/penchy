@@ -175,7 +175,7 @@ class POM(object):
         self.dependency_tree = SubElement(self.root, 'dependencies')
         self.repository_tree = SubElement(self.root, 'repositories')
 
-        attribs = POM.ATTRIBS
+        attribs = POM.ATTRIBS.copy()
         attribs.update(kwargs)
         dict2tree(self.root, attribs)
 

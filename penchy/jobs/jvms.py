@@ -2,13 +2,18 @@
 This module provides JVMs to run programs.
 """
 
+import itertools
 import os
 import shlex
+import subprocess
+import logging
 
+from penchy.jobs.elements import PipelineElement, Tool, Workload
 from penchy.maven import get_classpath
 from penchy.util import extract_classpath
-from penchy.jobs.elements import PipelineElement
 
+
+log = logging.getLogger("JVMs")
 
 class JVM(object):
     """
@@ -28,26 +33,53 @@ class JVM(object):
         self._user_options = options
 
         self._options = shlex.split(options)
-        self._classpath = extract_classpath(self.options)
-        self._tool_options = []
-        self._payload_options = []
+        self._classpath = extract_classpath(self._options)
 
-    def configure(self, *args):
-        """
-        Configure jvm options that allows `args` to run
+        self.prehooks = []
+        self.posthooks = []
 
-        :param *args: :class:`Tool` or :class:`Workload` instances that should be
-                      run.
-        """
-        #TODO
-        pass
+        # for tools and workloads
+        self._tool = None
+        self._workload = None
+
+    @property
+    def workload(self):
+        return self._workload
+
+    @workload.setter
+    def workload(self, workload):
+        if self._workload is not None:
+            log.warn("Overwriting workload!")
+
+        self._workload = workload
+
+    @property
+    def tool(self):
+        return self._tool
+
+    @tool.setter
+    def tool(self, tool):
+        if not self._tool:
+            log.warn("Overwriting Tool!")
+
+        self._tool = tool
 
     def run(self):
         """
         Run the jvm with the current configuration.
         """
-        #TODO
-        pass
+        prehooks, posthooks = self._get_hooks()
+
+        log.info("executing prehooks")
+        for hook in prehooks:
+            hook()
+
+        # FIXME:add temp files for stdout and stderr
+        self.workload.out['error code'] = subprocess.call(self.cmdline)
+
+        log.info("executing posthooks")
+        for hook in posthooks:
+            hook()
 
     @property
     def cmdline(self):
@@ -56,8 +88,35 @@ class JVM(object):
         configuration.
         """
         executable = os.path.join(self.basepath, self._path)
-        cp = ['-classpath', self._classpath + ":" + get_classpath()]
-        return [executable] + self._options + cp
+        if self._classpath:
+            cp = self._classpath + ":" + get_classpath()
+        else
+            cp = get_classpath()
+        options = self._options + self.tool.arguments
+        return ([executable] + options + ['-classpath', cp]
+                + self.workload.arguments)
+
+    def _get_hooks(self):
+        """
+        Return hooks of jvm together with possible workload and tool hooks.
+        """
+        if self.workload is None:
+            workload_prehooks = []
+            workload_posthooks = []
+        else:
+            workload_prehooks = self.workload.prehooks
+            workload_posthooks = self.workload.posthooks
+
+        if self.tool is None:
+            tool_prehooks = []
+            tool_posthooks = []
+        else:
+            tool_prehooks = self.tool.prehooks
+            tool_posthooks = self.tool.posthooks
+
+        prehooks = itertools.chain(self.prehooks, tool_prehooks, workload_prehooks)
+        posthooks = itertools.chain(self.posthooks, tool_posthooks, workload_posthooks)
+        return prehooks, posthooks
 
 
 class WrappedJVM(JVM, PipelineElement):

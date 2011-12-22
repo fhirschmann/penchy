@@ -6,7 +6,7 @@ help:
 clean:
 	rm -rf */target */repo target repo
 
-deploy: booster/booster-2.0.0.0.jar pia/pia-2.0.0.0.jar poa/poa-2.0.0.0.jar asm/asm-4.0.jar
+deploy: booster/booster-2.0.0.0.jar pia/pia-2.0.0.0.jar poa/poa-2.0.0.0.jar
 	mvn deploy
 
 booster/booster-2.0.0.0.jar:
@@ -17,9 +17,6 @@ pia/pia-2.0.0.0.jar:
 
 poa/poa-2.0.0.0.jar:
 	wget http://tamiflex.googlecode.com/files/poa-2.0.0.0.jar -O poa/poa-2.0.0.0.jar
-
-asm/asm-4.0.jar:
-	wget http://download.forge.objectweb.org/asm/asm-4.0.jar -O asm/asm-4.0.jar
 
 install:
 	mvn install

@@ -19,10 +19,10 @@ class Job(object):
     """
     def __init__(self, configurations, client_flow, server_flow, invocations=1):
         """
-        :param configurations: :class:`JVMNodeConfiguration`s to execute jobs on
-        :param client_flow: sequence of :class:`Edge`s that describes the
+        :param configurations: :class:`JVMNodeConfiguration` to execute jobs on
+        :param client_flow: sequence of :class:`Edge` that describes the
                             execution of the job on nodes
-        :param server_flow: sequence of :class:`Edge`s that describes the
+        :param server_flow: sequence of :class:`Edge` that describes the
                             execution of the job on nodes
         :param invocations: number of times to run job on each configuration
         """
@@ -40,6 +40,7 @@ class Job(object):
         Run Job.
         """
         # FIXME: implement me!
+        # for invocations: make tmpdir and change working directory to it
         pass
 
     def check(self):

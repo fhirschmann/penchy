@@ -18,8 +18,8 @@ __all__ = [
     # jvms
     'JVM',
     # modules
-    'jvms'
-    'filters'
-    'workloads'
+    'jvms',
+    'filters',
+    'workloads',
     'tools'
 ]
