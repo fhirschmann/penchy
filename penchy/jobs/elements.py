@@ -14,6 +14,8 @@ class PipelineElement(object):
         self.prehooks = []
         self.posthooks = []
 
+    def run(self):
+        raise NotImplementedError("PipelineElements must implement this")
 
 class NotRunnable(object):
     """
