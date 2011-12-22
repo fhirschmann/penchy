@@ -2,6 +2,8 @@
 This module provides tools.
 """
 
+import os.path
+
 from penchy.jobs.elements import Tool
 
 
@@ -31,17 +33,13 @@ class Tamiflex(Tool):
     
     def __init__(self):
         super(Tamiflex, self).__init__()
-        self.out = {}
-        self.posthooks.append(after_execution)
+        self.posthooks.append(self._after_execution)
               
-    def after_execution(self):
-        if True:  # if successful:
-            self.out = {
-                "reflection_log" : "out/refl.log",
-                    # provides info/log about reflective calls
-                "classfolder" : "out"
-                    # contains all classes of which objects were created (?)
-            }   
+    def _after_execution(self):
+        # provides info/log about reflective calls
+        out['reflection log'] = os.path.abspath("out/refl.log")
+        # contains all classes of which objects were created (?)
+        out['classfolder'] = os.path.abspath("out")
     
     def check(self):
         # some jmv's might not support java.lang.instrument
