@@ -28,7 +28,7 @@ class JVM(object):
         self._user_options = options
 
         self._options = shlex.split(options)
-        self._classpath = extract_classpath(self.options)
+        self._classpath = extract_classpath(self._options)
         self._tool_options = []
         self._workload_options = []
 
