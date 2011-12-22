@@ -57,7 +57,7 @@ class MavenDependency(object):
         dep = MavenDependency('de.tu_darmstadt.penchy',
                               'pia', '2.0.0.0', 'http://mvn.0x0b.de')
     """
-    POM_ATTRIBS = ('version', 'groupId', 'artifactId', 'version', 
+    POM_ATTRIBS = ('version', 'groupId', 'artifactId', 'version',
             'classifier', 'packaging', 'type')
 
     def __init__(self, groupId, artifactId, version, repo=None,
@@ -78,7 +78,7 @@ class MavenDependency(object):
         :type artifact_type: string
         :param packaging: the packaging of the artifact.
         :type packaging: string
-        :param filename: the filename of the artifact; guessed if not specified.
+        :param filename: filename of the artifact; guessed if not specified.
         :type filename: string
         :param checksum: the md5 checksum of the file.
         :type checksum: string
@@ -131,14 +131,15 @@ class MavenDependency(object):
             return
 
         if not self.wanted_checksum == self.actual_checksum:
-            raise IntegrityError("Checksums don't match! Actual %s; Wanted %s" % \
+            raise IntegrityError(
+                    "Checksums don't match! Actual %s; Wanted %s" % \
                     (self.actual_checksum, self.wanted_checksum))
 
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
     def __repr__(self):
-        return "<%s: %s>" % (self.__class__.__name__, 
+        return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
 
 
@@ -191,7 +192,7 @@ class POM(object):
         if dep.repo:
             self.add_repository(dep.repo)
 
-        clean_dep = dict((k, v) for k, v in dep.__dict__.items() if k in 
+        clean_dep = dict((k, v) for k, v in dep.__dict__.items() if k in
                 MavenDependency.POM_ATTRIBS and v)
 
         e = SubElement(self.dependency_tree, 'dependency')
