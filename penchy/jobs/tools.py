@@ -6,7 +6,6 @@ import os.path
 
 from penchy.jobs.elements import Tool
 from penchy.maven import MavenDependency
-from penchy.util import get_dependency
 
 
 class Tamiflex(Tool):
