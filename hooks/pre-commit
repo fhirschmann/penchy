@@ -1,0 +1,24 @@
+#! /bin/sh
+
+PYTHONVER=2.6
+
+penchydir=$(dirname $(dirname $(realpath "$0")))
+
+cd $penchydir
+
+pep8 --exclude=".git,.ropeproject,*pyc,*pyo" \
+    --filename="*.py" \
+    --ignore="E201,E202,E203" penchy
+
+pep8ret=$?
+
+pychecker penchy
+pycheckerret=$?
+
+pyflakes penchy
+pyflakesret=$?
+
+ret=$(python -c 'import sys; print max(map(int, sys.argv[3:]))' \
+    $pep8ret $pycheckerret $pyflakesret)
+
+return $ret
