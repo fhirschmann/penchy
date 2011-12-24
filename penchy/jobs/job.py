@@ -2,6 +2,7 @@ class JVMNodeConfiguration(object):
     """
     Represents the combination of a jvm with a node.
     """
+
     def __init__(self, jvm, node, name=""):
         """
         :param jvm: :class:`JVM` to execute the job
@@ -17,7 +18,10 @@ class Job(object):
     """
     Represents a job.
     """
-    def __init__(self, configurations, client_flow, server_flow, invocations=1):
+
+    def __init__(self, configurations,
+                 client_flow, server_flow,
+                 invocations=1):
         """
         :param configurations: :class:`JVMNodeConfiguration` to execute jobs on
         :param client_flow: sequence of :class:`Edge` that describes the

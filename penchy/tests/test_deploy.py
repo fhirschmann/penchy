@@ -13,11 +13,13 @@ from penchy.server import run as start_server
 
 logging.root.setLevel(logging.DEBUG)
 
+
 class SFTPTest(unittest2.TestCase):
+
     def setUp(self):
         self.f = tempfile.NamedTemporaryFile(dir=tempfile.gettempdir())
         self.fname = os.path.basename(self.f.name)
-        self.randint = str(random.randint(0,100))
+        self.randint = str(random.randint(0, 100))
         self.f.write(self.randint)
         self.f.flush()
 
@@ -25,7 +27,7 @@ class SFTPTest(unittest2.TestCase):
         nodeconfig = NodeConfig('127.0.0.1', 22, os.environ["USER"],
                 tempfile.gettempdir() + os.sep + 'penchytest')
         node = Node(nodeconfig)
-        
+
         node.connect()
         node.put(self.f.name)
 

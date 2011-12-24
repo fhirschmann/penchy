@@ -12,8 +12,8 @@ from penchy.jobs.elements import PipelineElement, Tool, Workload
 from penchy.maven import get_classpath
 from penchy.util import extract_classpath
 
-
 log = logging.getLogger("JVMs")
+
 
 class JVM(object):
     """
@@ -114,8 +114,10 @@ class JVM(object):
             tool_prehooks = self.tool.prehooks
             tool_posthooks = self.tool.posthooks
 
-        prehooks = itertools.chain(self.prehooks, tool_prehooks, workload_prehooks)
-        posthooks = itertools.chain(self.posthooks, tool_posthooks, workload_posthooks)
+        prehooks = itertools.chain(self.prehooks, tool_prehooks,
+                                   workload_prehooks)
+        posthooks = itertools.chain(self.posthooks, tool_posthooks,
+                                    workload_posthooks)
         return prehooks, posthooks
 
 
@@ -130,6 +132,7 @@ class WrappedJVM(JVM, PipelineElement):
         files
       - ``exports``: set of logical outputs (valid keys for ``out``)
     """
+
     def __init__(self):
         """
         Inheriting classes must:

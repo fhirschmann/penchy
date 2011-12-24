@@ -3,14 +3,13 @@
 """ Executes benchmarks and filters generated data. """
 
 import subprocess
+import time
+import sys
 
 import rpyc
 
-import time
-
-import sys
-
 from penchy import analyzers
+
 
 def send_data(filtered_output, server):
     """
@@ -21,8 +20,9 @@ def send_data(filtered_output, server):
                    default will be used
     """
     host, port = server
-    conn =  rpyc.connect(host, port)
+    conn = rpyc.connect(host, port)
     conn.root.rcv_data(filtered_output)
+
 
 def run_benchmark(jvm, benchmark, server, options=[], send_function=send_data):
     """
@@ -41,8 +41,6 @@ def run_benchmark(jvm, benchmark, server, options=[], send_function=send_data):
     filtered = analyzer(out)
     send_function(filtered, server)
 
-if __name__ == '__main__':
-    main(sys.argv)
 
 def main(argv=None):
     time.sleep(1)
@@ -50,3 +48,6 @@ def main(argv=None):
     dacapo_jar = 'dacapo-9.12-bach.jar'
     run_benchmark('java', 'fop', ("192.168.56.1", 4343),
                   options=['-jar', dacapo_jar])
+
+if __name__ == '__main__':
+    main(sys.argv)

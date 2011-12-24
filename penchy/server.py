@@ -14,11 +14,13 @@ from rpyc.utils.server import ThreadedServer
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger("server")
 
+
 class Node(object):
     """
     This class represents a node (=a machine on which the benchmark
     will be run on).
     """
+
     def __init__(self, node):
         """
         Initialize the node.
@@ -86,7 +88,9 @@ class Node(object):
 
         return self.ssh.exec_command(cmd)
 
+
 class Service(rpyc.Service):
+
     def exposed_rcv_data(self, output):
         """
         Receive client data.
@@ -95,6 +99,7 @@ class Service(rpyc.Service):
         """
         # XXX: testing stub
         log.info("Received: " + str(output))
+
 
 def run(config, job=None):
     """
@@ -120,6 +125,7 @@ def run(config, job=None):
     t = ThreadedServer(Service, hostname="192.168.56.1",
             port=config.LISTEN_PORT)
     t.start()
+
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)

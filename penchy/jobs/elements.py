@@ -11,14 +11,15 @@ class PipelineElement(object):
     A PipelineElement must have the following attributes:
 
     - `out`, a dictionary that maps logical names for output to actual.
-    - `exports`, a set of names that describes which logical names are valid for
-                the element.
+    - `exports`, a set of names that describes which logical names are valid
+                 for the element.
 
     A PipelineElement must have the following methods:
 
     - `_run`, to run the element on the parameters.
     - `check`, to check the element configuration for plausibility.
     """
+
     def __init__(self):
         self.out = {}
 
@@ -49,10 +50,12 @@ class PipelineElement(object):
         """
         raise NotImplementedError("PipelineElements must implement this")
 
+
 class NotRunnable(object):
     """
     This represents a pipeline element that can't be run.
     """
+
     def run(self):
         # TODO: Add logging?
         raise ValueError("{0} can't be run!".format(self.__class__.__name__))
@@ -74,6 +77,7 @@ class Tool(NotRunnable, PipelineElement):
     A Tool modifies the JVM on which it runs, so that data about that run is
     gathered. Hprof, for example, is a Tool.
     """
+
     @property
     def arguments(self):
         """
@@ -98,6 +102,7 @@ class Workload(NotRunnable, PipelineElement):
     - `exit code`, the exitcode
     """
     exports = set(('stdout', 'stderr', 'exit code'))
+
     @property
     def arguments(self):
         """

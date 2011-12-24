@@ -22,9 +22,10 @@ def topological_sort(start_nodes, dependencies):
     Raises a ValueError if no topological sort is possible.
 
     :param start_nodes: sequence of nodes of graph with no incoming edges
-    :param dependencies: sequence of dependency edges; ([dependencies], target),
-                         dependencies may be of any sequence or be atomic, if
-                         there is no dependency it must be ``None``
+    :param dependencies: sequence of dependency edges
+                         ([dependencies], target), dependencies may be of any
+                         sequence or be atomic, if there is no dependency it
+                         must be ``None``
     :returns: topologically sorted nodes
     :rtype: list of nodes
     """
@@ -35,7 +36,8 @@ def topological_sort(start_nodes, dependencies):
     order = list(seen)
     old_dependencies = []
     while True:
-        dependencies = [(deps, target) for deps, target in dependencies if target not in seen]
+        dependencies = [(deps, target) for deps, target in dependencies
+                        if target not in seen]
         if not dependencies:
             return order
         if old_dependencies == dependencies:
@@ -61,6 +63,7 @@ class _memoized(object):
     If called later with the same arguments, the cached value is returned, and
     not re-evaluated.
     """
+
     def __init__(self, func):
         self.func = func
         self.cache = {}
@@ -115,8 +118,8 @@ def extract_classpath(options):
     for i, x in enumerate(options):
         if x in ('-cp', '-classpath'):
             try:
-                # cp is positioned before option because order is reversed, take
-                # abs to avoid referencing from end
+                # cp is positioned before option because order is reversed,
+                # take abs to avoid referencing from end
                 cp_index = abs(i - 1)
                 classpath = options[cp_index]
             except IndexError, e:
@@ -177,4 +180,3 @@ def sha1sum(filename, blocksize=65536):
         buf = afile.read(blocksize)
     afile.close()
     return hasher.hexdigest()
-

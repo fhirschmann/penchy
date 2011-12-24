@@ -86,7 +86,7 @@ class Dacapo(Workload):
             log.critical("{0} is not a valid benchmark for {1}".format(
                 self.benchmark, self.__class__.__name__))
 
-        return all((valid_benchmark,))
+        return all((valid_benchmark, ))
 
 
 class ScalaBench(Dacapo):
