@@ -8,7 +8,7 @@ import shlex
 import subprocess
 import logging
 
-from penchy.jobs.elements import PipelineElement, Tool, Workload
+from penchy.jobs.elements import PipelineElement
 from penchy.maven import get_classpath
 from penchy.util import extract_classpath
 

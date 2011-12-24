@@ -124,6 +124,7 @@ def extract_classpath(options):
                 classpath = options[cp_index]
             except IndexError, e:
                 # XXX: maybe use logging? or handle exception in caller?
+                print e
                 classpath = ''
             break
     return classpath

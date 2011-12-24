@@ -3,7 +3,6 @@
 import logging
 import os
 
-from collections import namedtuple
 from subprocess import Popen, PIPE
 
 from xml.etree.ElementTree import Element, SubElement, ElementTree
