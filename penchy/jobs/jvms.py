@@ -7,7 +7,8 @@ import os
 import shlex
 import subprocess
 import logging
-from tempfile import TemporaryFile
+from tempfile import NamedTemporaryFile
+from contextlib import nested
 
 from penchy.jobs.elements import PipelineElement
 from penchy.maven import get_classpath
@@ -43,10 +44,6 @@ class JVM(object):
         self._tool = None
         self._workload = None
 
-        # temporary files for stdout and stderr
-        self.stdout = TemporaryFile("w+")
-        self.stderr = TemporaryFile("w+")
-
     @property
     def workload(self):
         return self._workload
@@ -79,9 +76,15 @@ class JVM(object):
         for hook in prehooks:
             hook()
 
-        self.workload.out['error code'] = subprocess.call(self.cmdline,
-                                                          stderr=self.stderr,
-                                                          stdout=self.stdout)
+        with nested(NamedTemporaryFile(delete=False),
+                    NamedTemporaryFile(delete=False)) as (stderr, stdout):
+            error_code = subprocess.call(self.cmdline,
+                                         stderr=stderr,
+                                         stdout=stdout)
+
+            self.workload.out['error code'] = error_code
+            self.workload.out['stdout'] = stdout.name
+            self.workload.out['stderr'] = stderr.name
 
         log.info("executing posthooks")
         for hook in posthooks:
