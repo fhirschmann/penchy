@@ -172,9 +172,9 @@ def sha1sum(filename, blocksize=65536):
     """
     Returns the sha1 hexdigest of a file.
     """
-    with file(filename, 'r') as afile:
-        hasher = hashlib.sha1()
+    hasher = hashlib.sha1()
 
+    with file(filename, 'r') as afile:
         buf = afile.read(blocksize)
         while len(buf) > 0:
             hasher.update(buf)
