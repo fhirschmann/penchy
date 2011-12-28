@@ -49,4 +49,44 @@ class Tamiflex(Tool):
 
 
 class HProf(Tool):
-    pass
+    """
+    HProf must be called with exactly one option. Valid
+    options can be obtained with the command
+       java -agentlib:hprof=help
+
+    After execution a file with the full hprof output
+    is exported.
+    """
+    
+    # hprof has no dependencies, because it is included
+    # in the hotspot jvm.
+    DEPENDENCIES = set()
+    
+    exports = ["java_hprof_txt"]
+
+    def __init__(self, option):
+        """
+        :param option: the argument for hprof
+        """
+        super(HProf, self).__init__()
+        self.posthooks.append(self._after_execution)
+        self.option = option
+        
+    def _after_execution(self):
+        # Provides the full hprof output
+        out['java_hprof_txt'] = os.path.abspath("java.hprof.txt")
+        # FIXME: Should stdout be included?
+
+    def check(self):
+        # Only Hotspot supports/includes hprof
+        # FIXME: Check this in a reliable way.
+        pass
+
+    @property
+    def arguments(self):
+        # We use -agentlib:hprof because -Xrunhprof is
+        # deprecated and will be removed in a future release
+        # of the hotspot jvm.
+        # FIXME: If javac is executed, the argument has to
+        # be prefixed with -J
+        return ["-agentlib:hprof=%s" % self.option]
