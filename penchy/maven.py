@@ -111,6 +111,11 @@ class MavenDependency(object):
                     self.artifactId, self.version))):
                     return artifact
 
+        if not self._filename:
+            log.error("Please specify the filename as argument to %s." % self)
+        else:
+            log.error("Incorrect artifact filename for %s." % self)
+
         raise LookupError('Artifact filename could not be determined!')
 
     @property
