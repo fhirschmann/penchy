@@ -7,6 +7,7 @@ import os
 import shlex
 import subprocess
 import logging
+from tempfile import TemporaryFile
 
 from penchy.jobs.elements import PipelineElement
 from penchy.maven import get_classpath
@@ -42,6 +43,10 @@ class JVM(object):
         self._tool = None
         self._workload = None
 
+        # temporary files for stdout and stderr
+        self.stdout = TemporaryFile("w+")
+        self.stderr = TemporaryFile("w+")
+
     @property
     def workload(self):
         return self._workload
@@ -74,8 +79,9 @@ class JVM(object):
         for hook in prehooks:
             hook()
 
-        # FIXME:add temp files for stdout and stderr
-        self.workload.out['error code'] = subprocess.call(self.cmdline)
+        self.workload.out['error code'] = subprocess.call(self.cmdline,
+                                                          stderr=self.stderr,
+                                                          stdout=self.stdout)
 
         log.info("executing posthooks")
         for hook in posthooks:
