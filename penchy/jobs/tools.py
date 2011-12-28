@@ -57,11 +57,11 @@ class HProf(Tool):
     After execution a file with the full hprof output
     is exported.
     """
-    
+
     # hprof has no dependencies, because it is included
     # in the hotspot jvm.
     DEPENDENCIES = set()
-    
+
     exports = ["java_hprof_txt"]
 
     def __init__(self, option):
@@ -71,7 +71,7 @@ class HProf(Tool):
         super(HProf, self).__init__()
         self.posthooks.append(self._after_execution)
         self.option = option
-        
+
     def _after_execution(self):
         # Provides the full hprof output
         out['java_hprof_txt'] = os.path.abspath("java.hprof.txt")
