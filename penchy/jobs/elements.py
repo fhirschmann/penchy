@@ -2,6 +2,8 @@
 This module provides the foundation of job elements.
 """
 
+from collections import defaultdict
+
 
 class PipelineElement(object):
     """
@@ -21,7 +23,7 @@ class PipelineElement(object):
     """
 
     def __init__(self):
-        self.out = {}
+        self.out = defaultdict(list)
 
         self.prehooks = []
         self.posthooks = []
