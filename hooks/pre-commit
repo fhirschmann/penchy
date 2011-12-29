@@ -2,7 +2,7 @@
 
 PYTHONVER=2.6
 
-penchydir=$(dirname $(dirname $(realpath "$0")))
+penchydir=$(dirname $(dirname $(readlink -f "$0")))
 
 cd $penchydir
 
