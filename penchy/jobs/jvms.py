@@ -82,9 +82,9 @@ class JVM(object):
                                          stderr=stderr,
                                          stdout=stdout)
 
-            self.workload.out['error code'] = error_code
-            self.workload.out['stdout'] = stdout.name
-            self.workload.out['stderr'] = stderr.name
+            self.workload.out['error code'].append(error_code)
+            self.workload.out['stdout'].append(stdout.name)
+            self.workload.out['stderr'].append(stderr.name)
 
         log.info("executing posthooks")
         for hook in posthooks:

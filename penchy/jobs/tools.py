@@ -35,9 +35,9 @@ class Tamiflex(Tool):
 
     def _after_execution(self):
         # provides info/log about reflective calls
-        out['reflection log'] = os.path.abspath("out/refl.log")
+        out['reflection log'].append(os.path.abspath("out/refl.log"))
         # contains all classes of which objects were created (?)
-        out['classfolder'] = os.path.abspath("out")
+        out['classfolder'].append(os.path.abspath("out"))
 
     def check(self):
         # some jmv's might not support java.lang.instrument
@@ -74,7 +74,7 @@ class HProf(Tool):
 
     def _after_execution(self):
         # Provides the full hprof output
-        out['java_hprof_txt'] = os.path.abspath("java.hprof.txt")
+        out['java_hprof_txt'].append(os.path.abspath("java.hprof.txt"))
         # FIXME: Should stdout be included?
 
     def check(self):
