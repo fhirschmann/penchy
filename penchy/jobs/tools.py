@@ -18,14 +18,14 @@ class Tamiflex(Tool):
     * a folder of all classes that were used (including generated classes)
     """
 
-    poa = MavenDependency(
+    _POA = MavenDependency(
         'de.tu_darmstadt.penchy',
         'poa',
         '2.0.0.0',
         'http://mvn.0x0b.de',
         checksum='df4418bed92205e4f27135bbf077895bd4c8c652')
 
-    DEPENDENCIES = set((poa,))
+    DEPENDENCIES = set((_POA,))
 
     exports = ["reflection_log", "classfolder"]
 
@@ -45,7 +45,7 @@ class Tamiflex(Tool):
 
     @property
     def arguments(self):
-        return ["-javaagent:%s" % Tamiflex.poa.filename]
+        return ["-javaagent:%s" % __class__._POA.filename]
 
 
 class HProf(Tool):
