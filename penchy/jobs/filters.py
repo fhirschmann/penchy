@@ -11,3 +11,15 @@ class Tamiflex(Filter):
 
 class HProf(Filter):
     pass
+
+class Dacapo(Filter):
+    pass
+
+class Send(Filter):
+    pass
+
+class Receive(Filter):
+    pass
+
+class Print(Filter):
+    pass
