@@ -28,3 +28,4 @@ class TempdirTest(unittest2.TestCase):
         cwd = os.getcwd()
         with util.tempdir():
             self.assertNotEquals(cwd, os.getcwd())
+        self.assertEquals(cwd, os.getcwd())
