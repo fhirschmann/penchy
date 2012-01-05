@@ -1,4 +1,13 @@
+import logging
 from collections import namedtuple
+from itertools import groupby, ifilter
+from operator import attrgetter
+
+from penchy.jobs.dependency import build_keys, edgesort
+from penchy.util import tempdir
+
+
+log = logging.getLogger('job')
 
 def makeJVMNodeConfiguration(jvm, node, name=None):
     """
@@ -36,16 +45,21 @@ class Job(object):
         self.server_flow = server_flow
         self.invocations = invocations
 
-        # to be set by client before executing job
-        self.return_address = None
-
-    def run(self):
+    def run(self, configuration):
         """
         Run Job.
+
+        :param configuration: configuration to run.
         """
-        # FIXME: implement me!
-        # for invocations: make tmpdir and change working directory to it
-        pass
+        starts = ifilter(bool, (configuration.workload, configuration.tool))
+        _, edge_order = edgesort(starts, self.client_flow)
+        for i in self.invocations:
+            log.info('Run invocation {0}'.format(i))
+            with tempdir():
+                configuration.jvm.run()
+                for sink, group in groupby(edge_order, attrgetter('sink')):
+                    kwargs = build_keys(group)
+                    sink.run(**kwargs)
 
     def check(self):
         """
