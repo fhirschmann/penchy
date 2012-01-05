@@ -1,18 +1,19 @@
-class JVMNodeConfiguration(object):
+from collections import namedtuple
+
+def makeJVMNodeConfiguration(jvm, node, name=None):
     """
-    Represents the combination of a jvm with a node.
+    Return a JVMNodeConfiguration.
+
+    :param jvm: :class:`JVM` to execute the job
+    :param node: :class:`NodeConfiguration` to execute on
+    :param name: decorative name of the configuration
     """
 
-    def __init__(self, jvm, node, name=""):
-        """
-        :param jvm: :class:`JVM` to execute the job
-        :param node: :class:`NodeConfiguration` to execute on
-        :param name: decorative name of the configuration
-        """
-        self.jvm = jvm
-        self.node = node
-        self.name = name
+    name = name or "{0} @ {1}".format(jvm, node)
 
+    return JVMNodeConfiguration(jvm, node, name)
+
+JVMNodeConfiguration = namedtuple('JVMNodeConfiguration', ['jvm', 'node', 'name'])
 
 class Job(object):
     """
