@@ -21,6 +21,7 @@ class EdgeSortTest(unittest2.TestCase):
         starts = [0]
         edges = [Edge(0, 1), Edge(2, 1),
                  Edge(0, 2)]
-        order, edge_order = edgesort(starts, edges) 
+        order, edge_order = edgesort(starts, edges)
         self.assertEqual(order, [2, 1])
-        self.assertTrue(edge_order in (edges[::-1], [edges[2], edges[0], edges[1]]))
+        self.assertIn(edge_order, (edges[::-1],
+                                   [edges[2], edges[0], edges[1]]))
