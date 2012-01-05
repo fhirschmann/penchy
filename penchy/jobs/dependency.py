@@ -18,6 +18,9 @@ class Edge(object):
         self.sink = sink
         self.map_ = map_
 
+    def __repr__(self):
+        return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
+
 
 def edgesort(starts, edges):
     """
