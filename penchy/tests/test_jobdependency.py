@@ -1,6 +1,6 @@
 import unittest2
 
-from penchy.jobs.dependency import Edge, edgesort
+from penchy.jobs.dependency import Edge, edgesort, build_keys
 
 
 class EdgeSortTest(unittest2.TestCase):
@@ -25,3 +25,59 @@ class EdgeSortTest(unittest2.TestCase):
         self.assertEqual(order, [2, 1])
         self.assertIn(edge_order, (edges[::-1],
                                    [edges[2], edges[0], edges[1]]))
+
+
+class BuildKeysTest(unittest2.TestCase):
+    def test_multi_sinks(self):
+        edges = [make_edge(1, (('foo', 'bar'),
+                               ('baz', 'bad'))),
+                 make_edge(2, (('foz', 'bas'),
+                               ('boz', 'bat')))]
+        with self.assertRaises(AssertionError):
+            build_keys(edges)
+
+    def test_single_edge(self):
+        edges = [make_edge(1, (('foo', 'bar'),
+                               ('baz', 'bad')))]
+        self.assertDictEqual(build_keys(edges),
+                             {'bar' : 42,
+                              'bad' : 42})
+
+    def test_multi_edge(self):
+        edges = [make_edge(1, (('foo', 'bar'),
+                               ('baz', 'bad'))),
+                 make_edge(1, (('foz', 'bas'),
+                               ('boz', 'bat')))]
+        self.assertDictEqual(build_keys(edges),
+                             {'bar' : 42,
+                              'bad' : 42,
+                              'bas' : 42,
+                              'bat' : 42})
+
+    def test_complete_copy(self):
+        edges = [make_edge(1, (('foo', 'bar'),
+                               ('baz', 'bad'))),
+                 make_edge(1, (('foz', 'bas'),
+                               ('boz', 'bat')))]
+        # set edges to None for complete copy
+        for edge in edges:
+            edge.map_ = None
+
+        self.assertDictEqual(build_keys(edges),
+                             {'foo' : 42,
+                              'baz' : 42,
+                              'foz' : 42,
+                              'boz' : 42})
+
+
+def make_edge(sink, map_):
+    e = Edge(MockElement(x[0] for x in map_), sink, map_)
+    return e
+
+class MockElement(object):
+    def __init__(self, names):
+        self.exports = tuple(names)
+        self.out = dict((name, 42) for name in self.exports)
+
+    def __repr__(self):
+        return "MockElement({0}, {1})".format(self.exports, self.out)

@@ -54,3 +54,32 @@ def edgesort(starts, edges):
 
         old_edges = list(edges)
         edges = [edge for edge in edges if edge.sink not in resolved]
+
+def build_keys(edges):
+    """
+    Return dictionary that maps the the sink's inputs to the outputs of all its
+    sources.
+
+    All ``edges`` must have the identical sink.
+
+    :param edges: iterable of :class:`Edge`
+    :returns: dictionary that contains the mapping of sink arguments to all
+              wired sources' output
+    :rtype: dict of strings to values
+    """
+    sink = None
+    keys = dict()
+
+    for edge in edges:
+        # check for identical sinks
+        if sink is not None:
+            assert sink == edge.sink
+        sink = edge.sink
+
+        if edge.map_ is None:
+            for key in edge.source.exports:
+                keys[key] = edge.source.out[key]
+        else:
+            for output, input_ in edge.map_:
+                keys[input_] = edge.source.out[output]
+    return keys
