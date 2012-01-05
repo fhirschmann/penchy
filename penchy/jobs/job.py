@@ -22,7 +22,8 @@ def makeJVMNodeConfiguration(jvm, node, name=None):
 
     return JVMNodeConfiguration(jvm, node, name)
 
-JVMNodeConfiguration = namedtuple('JVMNodeConfiguration', ['jvm', 'node', 'name'])
+JVMNodeConfiguration = namedtuple('JVMNodeConfiguration',
+                                  ['jvm', 'node', 'name'])
 
 class Job(object):
     """
