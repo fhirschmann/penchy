@@ -1,9 +1,6 @@
-from job import *
-import jvms
-import tools
-import filters
-import workloads
-from dependency import Edge
+from penchy.jobs import jvms, tools, filters, workloads
+from penchy.jobs.job import Job, makeJVMNodeConfiguration
+from penchy.jobs.dependency import Edge
 
 
 JVM = jvms.JVM
@@ -12,7 +9,7 @@ JVM = jvms.JVM
 __all__ = [
     # job
     'Job',
-    'JVMNodeConfiguration',
+    'makeJVMNodeConfiguration',
     # dependencies
     'Edge',
     # jvms
