@@ -2,10 +2,6 @@
 This module provides the parts to model and resolve dependencies in the flow of
 execution.
 """
-
-from penchy.util import topological_sort
-
-
 class Edge(object):
     """
     This class represents edges in the dependency graph.
@@ -23,21 +19,35 @@ class Edge(object):
         self.map = map
 
 
-def edgesort(edges):
+def edgesort(starts, edges):
     """
     Return the topological sorted elements of ``edges``.
 
+    ``starts`` won't be included.
+
+    :param starts: Sequence of :class:`PipelineElement` that have no deps
     :param edges: Sequence of :class:`Edge`
-    :returns: topological sorted :class:`PipelineElement`
+    :returns: pair of topological sorted :class:`PipelineElement` and
+              sorted list of corresponding :class:`Edge`
     """
-    starts = set(edge.source for edge in edges)
-    deps = []
+    resolved = set(starts)
+    order = []
+    edge_order = []
     edges = list(edges)
-    while edges:
-        target = edges[0].sink
-        starts.discard(target)
-        sources = [edge.source for edge in edges if edge.sink is target]
-        deps.append((sources if sources else None, target))
-        edges = [edge for edge in edges if edge.sink is not target]
-    deps.extend((None, start) for start in starts)
-    return topological_sort(deps)
+    old_edges = []
+    while True:
+        if not edges:
+            return order, edge_order
+
+        if edges == old_edges:
+            raise ValueError("no topological sort possible")
+
+        for target in set(edge.sink for edge in edges):
+            current = [edge for edge in edges if edge.sink is target]
+            if all(edge.source in resolved for edge in current):
+                resolved.add(target)
+                order.append(target)
+                edge_order.extend(current)
+
+        old_edges = list(edges)
+        edges = [edge for edge in edges if edge.sink not in resolved]
