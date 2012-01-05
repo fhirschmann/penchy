@@ -1,3 +1,4 @@
+import os
 import unittest2
 
 from penchy import util
@@ -45,3 +46,9 @@ class ClasspathTest(unittest2.TestCase):
     def test_only_option(self):
         options = ['-cp']
         self.assertEquals(util.extract_classpath(options), '')
+
+class TempdirTest(unittest2.TestCase):
+    def test_change(self):
+        cwd = os.getcwd()
+        with util.tempdir():
+            self.assertNotEquals(cwd, os.getcwd())

@@ -4,8 +4,11 @@ This module provides miscellaneous utilities.
 
 import hashlib
 import functools
+import os
+import tempfile
 
 from collections import namedtuple
+from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
 
 
@@ -179,3 +182,14 @@ def sha1sum(filename, blocksize=65536):
             buf = afile.read(blocksize)
 
     return hasher.hexdigest()
+
+@contextmanager
+def tempdir(prefix='penchy-invocation'):
+    """
+    Execute in new created temporary directory.
+    """
+    fwd = os.getcwd()
+    cwd = tempfile.mkdtemp(prefix=prefix)
+    os.chdir(cwd)
+    yield
+    os.chdir(fwd)
