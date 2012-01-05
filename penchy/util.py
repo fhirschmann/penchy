@@ -12,16 +12,14 @@ from xml.etree.ElementTree import SubElement
 NodeConfig = namedtuple('NodeConfig', ['host', 'ssh_port', 'username', 'path'])
 
 
-def topological_sort(start_nodes, dependencies):
+def topological_sort(dependencies):
     """
-    Return a topologically sorted list of :param:`start_nodes` and
-    :param:`dependencies`.
+    Return a topologically sorted list of `dependencies`.
 
     Nodes are checked on identity, not equality.
 
     Raises a ValueError if no topological sort is possible.
 
-    :param start_nodes: sequence of nodes of graph with no incoming edges
     :param dependencies: sequence of dependency edges
                          ([dependencies], target), dependencies may be of any
                          sequence or be atomic, if there is no dependency it
@@ -29,7 +27,7 @@ def topological_sort(start_nodes, dependencies):
     :returns: topologically sorted nodes
     :rtype: list of nodes
     """
-    seen = set(start_nodes)
+    seen = set()
     for deps, target in dependencies:
         if deps is None:
             seen.add(target)
