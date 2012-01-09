@@ -50,9 +50,10 @@ class Job(object):
         """
         Run Job.
 
-        :param configuration: configuration to run.
+        :param configuration: :class:`JVMNodeConfiguration` to run.
         """
-        starts = ifilter(bool, (configuration.workload, configuration.tool))
+        starts = ifilter(bool, (configuration.jvm.workload,
+                                configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
         for i in self.invocations:
             log.info('Run invocation {0}'.format(i))
