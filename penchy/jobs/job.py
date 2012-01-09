@@ -76,6 +76,16 @@ class Job(object):
                          ifilter(bool, (configuration.jvm.workload,
                                         configuration.jvm.tool))))
 
+    def get_server_elements(self):
+        """
+        Return the :class:`PipelineElement` that are executed at the serverside
+        of this job.
+
+        :returns: The :class:`PipelineElement` contained in the serverside job.
+        :rtype: a set of :class:`PipelineElement`
+        """
+        return set(e.sink for e in self.server_flow)
+
     def check(self):
         """
         Check job for plausibility.
