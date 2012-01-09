@@ -13,7 +13,7 @@ receiver = filters.Receive()
 w = workloads.Dacapo('fop', 'small')
 jvm.workload = w
 
-f1 = filters.Dacapo()
+f1 = filters.DacapoHarness()
 f2 = filters.Send()
 
 job = Job(configurations=jconfig,
