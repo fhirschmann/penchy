@@ -58,7 +58,7 @@ class Job(object):
         _, edge_order = edgesort(starts, self.client_flow)
         configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
 
-        for i in self.invocations:
+        for i in range(self.invocations):
             log.info('Run invocation {0}'.format(i))
             with tempdir():
                 configuration.jvm.run()
