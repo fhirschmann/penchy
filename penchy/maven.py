@@ -13,12 +13,12 @@ log = logging.getLogger("maven")
 
 
 @memoized
-def get_classpath():
+def get_classpath(path=None):
     """
     Returns the Java classpath using Maven.
 
-    This method expects a Maven POM (pom.xml) in the current
-    working directory. A POM can be generated using the
+    This method expects a Maven POM (pom.xml).
+    A POM can be generated using the
     :class:`BootstrapPOM` or :class:`POM` class::
 
         >>> from penchy.maven import BootstrapPOM, get_classpath
@@ -31,13 +31,21 @@ def get_classpath():
         >>> get_classpath()
         '/home/fabian/.m2/repository/de/tu_darmstadt/penchy/penchy/0.1/penchy-0.1-py.zip:/home/fabian/.m2/repository/org/scalabench/benchmarks/scala-benchmark-suite/0.1.0-SNAPSHOT/scala-benchmark-suite-0.1.0-SNAPSHOT.jar'
 
+    :param path: path to look for pom.xml in
+    :type path: string
     :returns: java classpath
     :rtype: string
     """
-    if not os.path.exists('pom.xml'):
-        raise OSError("No pom.xml found in the current directory")
+    for p in ([path, path + os.sep + 'pom.xml'] if path else []) + ['pom.xml']:
+        if os.path.isfile(p):
+            path = p
+            break
 
-    proc = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE)
+    if not path or not os.path.isfile(path):
+        raise OSError("No pom.xml found!")
+
+    log.debug("Using %s" % path)
+    proc = Popen(['mvn', '-f', path, 'dependency:build-classpath'], stdout=PIPE)
     stdout, _ = proc.communicate()
 
     if proc.returncode is not 0:
