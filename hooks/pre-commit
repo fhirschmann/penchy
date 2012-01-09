@@ -15,11 +15,11 @@ pycheckerret=$?
 # pyflakesret=$?
 pyflakesret=0
 
-unit2 discover -s penchy/tests
+unit2 discover -s penchy/tests -t .
 unittests=$?
 
 
 ret=$(python -c 'import sys; print sum(map(int, sys.argv[3:]))' \
     $pep8ret $pycheckerret $pyflakesret)
 
-return $ret
+exit $ret
