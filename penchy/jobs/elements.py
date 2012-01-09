@@ -21,6 +21,7 @@ class PipelineElement(object):
     - `_run`, to run the element on the parameters.
     - `check`, to check the element configuration for plausibility.
     """
+    DEPENDENCIES = set()
 
     def __init__(self):
         self.out = defaultdict(list)
