@@ -35,3 +35,17 @@ class JobClientElementsTest(unittest2.TestCase):
         self.config.jvm.tool = 23
         self.assertSetEqual(self.job.get_client_elements(self.config),
                             set([23, 2, 4]))
+
+
+class JobServerElementsTest(unittest2.TestCase):
+    def setUp(self):
+        super(JobServerElementsTest, self).setUp()
+        self.config = job.makeJVMNodeConfiguration(JVM('foo'), 'pseudo_node')
+        self.job = job.Job([self.config], [], [])
+
+    def test_empty_elements(self):
+        self.assertSetEqual(self.job.get_server_elements(), set())
+
+    def test_nonempty_elements(self):
+        self.job.server_flow = [Edge(1, 2), Edge(3, 4)]
+        self.assertSetEqual(self.job.get_server_elements(), set([2, 4]))
