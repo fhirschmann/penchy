@@ -1,6 +1,6 @@
 import logging
 from collections import namedtuple
-from itertools import groupby, ifilter
+from itertools import groupby, ifilter, chain
 from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
@@ -62,6 +62,19 @@ class Job(object):
                 for sink, group in groupby(edge_order, attrgetter('sink')):
                     kwargs = build_keys(group)
                     sink.run(**kwargs)
+
+    def get_client_elements(self, configuration):
+        """
+        Return the :class:`PipelineElement` that are executed at the clientside
+        of this job.
+
+        :param configuration: :class:`JVMNodeConfiguration` to analyze.
+        :returns: The :class:`PipelineElement` contained in the clientside job.
+        :rtype: a set of :class:`PipelineElement`
+        """
+        return set(chain((e.sink for e in self.client_flow),
+                         ifilter(bool, (configuration.jvm.workload,
+                                        configuration.jvm.tool))))
 
     def check(self):
         """
