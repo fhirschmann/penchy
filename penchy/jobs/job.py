@@ -5,6 +5,7 @@ from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.util import tempdir
+from penchy.maven import get_classpath
 
 
 log = logging.getLogger('job')
@@ -55,6 +56,8 @@ class Job(object):
         starts = ifilter(bool, (configuration.jvm.workload,
                                 configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
+        configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
+
         for i in self.invocations:
             log.info('Run invocation {0}'.format(i))
             with tempdir():

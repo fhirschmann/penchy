@@ -11,7 +11,6 @@ from tempfile import NamedTemporaryFile
 from contextlib import nested
 
 from penchy.jobs.elements import PipelineElement
-from penchy.maven import get_classpath
 from penchy.util import extract_classpath
 
 log = logging.getLogger("JVMs")
@@ -66,6 +65,18 @@ class JVM(object):
 
         self._tool = tool
 
+    def add_to_cp(self, path):
+        """
+        Adds a path to the classpath.
+
+        :param path: classpath to add
+        :type path: string
+        """
+        if self._classpath:
+            self._classpath += ":" + path
+        else:
+            self._classpath = path
+
     def run(self):
         """
         Run the jvm with the current configuration.
@@ -97,12 +108,9 @@ class JVM(object):
         configuration.
         """
         executable = os.path.join(self.basepath, self._path)
-        if self._classpath:
-            cp = self._classpath + ":" + get_classpath()
-        else:
-            cp = get_classpath()
         options = self._options + self.tool.arguments
-        return ([executable] + options + ['-classpath', cp]
+        return ([executable] + options + \
+                ['-classpath', cp] if self._classpath else [] + \
                 + self.workload.arguments)
 
     def _get_hooks(self):
