@@ -2,9 +2,7 @@
 
 import logging
 import os
-
 from subprocess import Popen, PIPE
-
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
