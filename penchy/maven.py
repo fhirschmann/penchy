@@ -225,7 +225,7 @@ class POM(object):
 
         self.repository_list.add(url)
 
-    def write(self, filename, pretty=True):
+    def write(self, filename='pom.xml', pretty=True):
         """
         Writes the POM to a file.
 
