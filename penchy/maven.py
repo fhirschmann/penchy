@@ -17,7 +17,21 @@ log = logging.getLogger("maven")
 @memoized
 def get_classpath():
     """
-    Returns the Java classpath with the help of Maven
+    Returns the Java classpath using Maven.
+
+    This method expects a Maven POM (pom.xml) in the current
+    working directory. A POM can be generated using the
+    :class:`BootstrapPOM` or :class:`POM` class::
+
+        >>> from penchy.maven import BootstrapPOM, get_classpath
+        >>> from penchy.jobs.workloads import ScalaBench
+        >>> pom = BootstrapPOM()
+        >>> for dep in ScalaBench.DEPENDENCIES:
+        ...     pom.add_dependency(dep)
+        ...
+        >>> pom.write()
+        >>> get_classpath()
+        '/home/fabian/.m2/repository/de/tu_darmstadt/penchy/penchy/0.1/penchy-0.1-py.zip:/home/fabian/.m2/repository/org/scalabench/benchmarks/scala-benchmark-suite/0.1.0-SNAPSHOT/scala-benchmark-suite-0.1.0-SNAPSHOT.jar'
 
     :returns: java classpath
     :rtype: string
