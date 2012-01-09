@@ -5,7 +5,7 @@ from penchy.config import NODES
 
 node = NODES[0]
 jvm = jvms.JVM('openjvm')
-jconfig = JVMNodeConfiguration(jvm, node, name="Hello, Node!")
+jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
 
 # receiver = filters.Receive(jconfig)
 receiver = filters.Receive()
