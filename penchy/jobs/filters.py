@@ -22,4 +22,8 @@ class Receive(Filter):
     pass
 
 class Print(Filter):
-    pass
+    """
+    Prints everything fed to it on stdout.
+    """
+    def run(self, **kwargs):
+        print kwargs
