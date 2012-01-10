@@ -13,7 +13,7 @@ from contextlib import nested
 from penchy.jobs.elements import PipelineElement
 from penchy.util import extract_classpath
 
-log = logging.getLogger("JVMs")
+log = logging.getLogger("jvms")
 
 
 class JVM(object):
@@ -87,6 +87,7 @@ class JVM(object):
         for hook in prehooks:
             hook()
 
+        log.info("executing {0}".format(self.cmdline))
         with nested(NamedTemporaryFile(delete=False, dir='.'),
                     NamedTemporaryFile(delete=False, dir='.')) \
             as (stderr, stdout):
