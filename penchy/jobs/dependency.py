@@ -9,7 +9,7 @@ class Edge(object):
     This class represents edges in the dependency graph.
     """
 
-    def __init__(self, source, sink=None, map_=None):
+    def __init__(self, source, sink, map_=None):
         """
         :param source: source of data
         :param sink: sink of data
