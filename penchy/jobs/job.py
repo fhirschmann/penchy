@@ -10,6 +10,7 @@ from penchy.maven import get_classpath, BootstrapPOM
 
 log = logging.getLogger('job')
 
+
 def makeJVMNodeConfiguration(jvm, node, name=None):
     """
     Return a JVMNodeConfiguration.
@@ -25,6 +26,7 @@ def makeJVMNodeConfiguration(jvm, node, name=None):
 
 JVMNodeConfiguration = namedtuple('JVMNodeConfiguration',
                                   ['jvm', 'node', 'name'])
+
 
 class Job(object):
     """
@@ -94,7 +96,8 @@ class Job(object):
 
     def get_client_dependencies(self, configuration):
         """
-        Returns all :class:`MavenDependency` for a given :class:`JVMNodeConfiguration`.
+        Returns all :class:`MavenDependency` for a given
+        :class:`JVMNodeConfiguration`.
 
         :returns: Set of :class:`MavenDependency`.
         :rtype: Set
