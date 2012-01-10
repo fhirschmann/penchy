@@ -89,11 +89,11 @@ class JVM(object):
 
         with nested(NamedTemporaryFile(delete=False),
                     NamedTemporaryFile(delete=False)) as (stderr, stdout):
-            error_code = subprocess.call(self.cmdline,
+            exit_code = subprocess.call(self.cmdline,
                                          stderr=stderr,
                                          stdout=stdout)
 
-            self.workload.out['error code'].append(error_code)
+            self.workload.out['exit_code'].append(exit_code)
             self.workload.out['stdout'].append(stdout.name)
             self.workload.out['stderr'].append(stderr.name)
 
