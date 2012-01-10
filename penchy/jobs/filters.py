@@ -22,8 +22,7 @@ class DacapoHarness(Filter):
     Filters output of a DaCapo Harness.
 
     Inputs:
-    - ``stderr``:  List of Paths to stderror output files, or
-                   list of file-like objects
+    - ``stderr``:  List of Paths to stderror output files
     - ``exit_code``: List of program exit codes
 
     Exports:
@@ -47,12 +46,8 @@ class DacapoHarness(Filter):
         for f, exit_code in izip(stderror, exit_codes):
             failures = 0
             times = []
-            # not file-like
-            if not hasattr(f, 'read'):
-                with open(f) as fobj:
-                    buf = fobj.read()
-            else:
-                buf = f.read()
+            with open(f) as fobj:
+                buf = fobj.read()
             for match in DacapoHarness.TIME_RE.finditer(buf):
                 success, time = match.groups()
                 if success is not None and success == 'FAILED':
