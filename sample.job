@@ -4,25 +4,34 @@ from penchy.jobs import *
 from penchy.config import NODES
 
 node = NODES[0]
-jvm = jvms.JVM('openjvm')
+jvm = jvms.JVM('java')
+jvm.basepath = '/usr/bin'
 jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
 
 # receiver = filters.Receive(jconfig)
 receiver = filters.Receive()
 
-w = workloads.Dacapo('fop', 'small')
+w = workloads.Dacapo('fop')
 jvm.workload = w
 
 f1 = filters.DacapoHarness()
-f2 = filters.Send()
+# f2 = filters.Send()
+f2 = filters.Print()
 
 job = Job(configurations=jconfig,
           client_flow=[
-                      Edge(w, f1, ('stderr', 'input')),
-                      Edge(w, f2)
-                      ],
+              Edge(w, f1, [('stderr', 'stderr'),
+                           ('exit_code', 'exit_code')]),
+              Edge(w, f2, [('stderr', 'workload_stderr'),
+                          ('exit_code', 'workload_exit_code')]),
+              Edge(f1, f2)
+          ],
           server_flow=[
-                      Edge(receiver, filters.Print(), ('all', 'input'))
+#               Edge(receiver, filters.Print(), ('all', 'input'))
                       ],
-          invocations = 10
+          invocations = 1
           )
+
+
+if __name__ == '__main__':
+    job.run(jconfig)
