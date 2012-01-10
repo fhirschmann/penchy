@@ -51,6 +51,8 @@ class Job(object):
         """
         Installs the required dependencies and adjusts the configuration's
         classpath.
+
+        :param configuration: :class:`JVMNodeConfiguration` to work on
         """
         pom = BootstrapPOM()
         for dependency in self.get_client_dependencies(configuration):
