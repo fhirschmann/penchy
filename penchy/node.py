@@ -40,7 +40,6 @@ class Node(object):
         :param node: tuple of (hostname, port, username, remote path)
         :type node: penchy.util.NodeConfig
         """
-
         self.node = node
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
@@ -51,7 +50,6 @@ class Node(object):
         """
         Connect to the node.
         """
-
         log.info("Connecting to node %s" % self.node.host)
         self.ssh.connect(self.node.host, username=self.node.username,
                 port=self.node.ssh_port)
@@ -68,7 +66,6 @@ class Node(object):
         """
         Disconnect from the node.
         """
-
         self.sftp.close()
         self.ssh.close()
 
@@ -79,7 +76,6 @@ class Node(object):
         :param filename: the file to upload
         :type name: str
         """
-
         try:
             self.sftp.mkdir(self.node.path + os.sep + \
                     os.path.dirname(filename))
@@ -97,5 +93,4 @@ class Node(object):
         :param cmd: command to execute
         :type cmd: string
         """
-
         return self.ssh.exec_command(cmd)
