@@ -4,6 +4,7 @@ This module provides filters.
 
 import re
 from itertools import izip
+from pprint import pprint
 
 from penchy.jobs.elements import Filter
 
@@ -72,4 +73,4 @@ class Print(Filter):
     Prints everything fed to it on stdout.
     """
     def run(self, **kwargs):
-        print kwargs
+        pprint(kwargs)
