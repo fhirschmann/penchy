@@ -1,25 +1,38 @@
-#! /bin/sh
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
 
-PYTHONVER=2.6
-
-pep8 --exclude=".git,.ropeproject,*pyc,*pyo" \
-    --filename="*.py" \
-    --ignore="E201,E202,E203" penchy
-
-pep8ret=$?
-
-pychecker penchy
-pycheckerret=$?
-
-# pyflakes penchy
-# pyflakesret=$?
-pyflakesret=0
-
-unit2 discover -s penchy/tests -t .
-unittests=$?
+import os
+from subprocess import call
 
 
-ret=$(python -c 'import sys; print sum(map(int, sys.argv[3:]))' \
-    $pep8ret $pycheckerret $pyflakesret)
+def main(additional=None, human=False):
+    os.environ['PYTHONVER'] = '2.6'
+    cmds = [['pep8',
+             '--exclude', '.git,.ropeproject,*pyc,*pyo',
+             '--filename=*.py',
+             '--ignore=E201,E202,E203,E501',
+             '--count']
+            + (['--show-source', '--show-pep8', '--repeat', 'penchy'] if human
+               else ['penchy']),
+            ['pychecker', 'penchy'],
+            ['unit2', 'discover', '-s', 'penchy/tests', '-t', '.']
+           ]
+    cmds += additional if additional is not None else []
+    return sum(call(cmd) for cmd in cmds)
 
-exit $ret
+
+def run_all():
+    """
+    Run all checks, for manual purpose, not for git hook
+    """
+    main(additional=[['pyflakes', 'penchy'],
+                     ['pylint', 'penchy']],
+         human=True)
+
+
+if __name__ == '__main__':
+    import sys
+    if '--all' in sys.argv:
+        run_all()
+    else:
+        sys.exit(main(human='--human' in sys.argv))
