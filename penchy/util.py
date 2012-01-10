@@ -110,7 +110,7 @@ def dict2tree(elem, dictionary):
             e.text = v
 
 
-def dict2string(d, attribs):
+def dict2string(d, attribs=None):
     """
     PrettyPrints a dictionary as string.
     """
