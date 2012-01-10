@@ -87,11 +87,12 @@ class JVM(object):
         for hook in prehooks:
             hook()
 
-        with nested(NamedTemporaryFile(delete=False),
-                    NamedTemporaryFile(delete=False)) as (stderr, stdout):
+        with nested(NamedTemporaryFile(delete=False, dir='.'),
+                    NamedTemporaryFile(delete=False, dir='.')) \
+            as (stderr, stdout):
             exit_code = subprocess.call(self.cmdline,
-                                         stderr=stderr,
-                                         stdout=stdout)
+                                        stderr=stderr,
+                                        stdout=stdout)
 
             self.workload.out['exit_code'].append(exit_code)
             self.workload.out['stdout'].append(stdout.name)
