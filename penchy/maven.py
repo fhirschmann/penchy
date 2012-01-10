@@ -162,7 +162,7 @@ class MavenDependency(object):
     def __eq__(self, other):
         return self.__dict__ == other.__dict__
 
-    def __repr__(self):
+    def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
 
