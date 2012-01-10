@@ -99,6 +99,16 @@ class Job(object):
         """
         return set(e.sink for e in self.server_flow)
 
+    def get_server_dependencies(self):
+        """
+        Returns all :class:`MavenDependency`.
+
+        :returns: Set of :class:`MavenDependency`.
+        :rtype: Set
+        """
+        return set((element.DEPENDENCIES for element in
+            self.get_server_elements() if element.DEPENDENCIES))
+
     def check(self):
         """
         Check job for plausibility.
