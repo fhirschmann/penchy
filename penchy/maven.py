@@ -281,6 +281,9 @@ class POM(object):
         if pretty:
             tree_pp(self.root)
 
+        if os.path.isdir(filename):
+            filename += os.sep + 'pom.xml'
+
         self.tree.write(filename)
 
 
