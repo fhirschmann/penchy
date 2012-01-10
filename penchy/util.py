@@ -140,6 +140,7 @@ def sha1sum(filename, blocksize=65536):
 
     return hasher.hexdigest()
 
+
 @contextmanager
 def tempdir(prefix='penchy-invocation'):
     """

@@ -73,6 +73,7 @@ class BuildKeysTest(unittest2.TestCase):
 def make_edge(sink, map_):
     return Edge(MockElement(x[0] for x in map_), sink, map_)
 
+
 class MockElement(object):
     def __init__(self, names):
         self.exports = tuple(names)

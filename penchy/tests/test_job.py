@@ -4,6 +4,7 @@ from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.jvms import JVM
 
+
 class JobClientElementsTest(unittest2.TestCase):
 
     def setUp(self):

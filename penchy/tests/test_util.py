@@ -23,6 +23,7 @@ class ClasspathTest(unittest2.TestCase):
         options = ['-cp']
         self.assertEquals(util.extract_classpath(options), '')
 
+
 class TempdirTest(unittest2.TestCase):
     def test_change(self):
         cwd = os.getcwd()

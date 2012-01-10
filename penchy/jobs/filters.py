@@ -16,6 +16,7 @@ class Tamiflex(Filter):
 class HProf(Filter):
     pass
 
+
 class DacapoHarness(Filter):
     """
     Filters output of a DaCapo Harness.
@@ -62,11 +63,14 @@ class DacapoHarness(Filter):
             self.out['times'].append(times)
             self.out['valid'].append(exit_code == 0 and failures == 0)
 
+
 class Send(Filter):
     pass
 
+
 class Receive(Filter):
     pass
+
 
 class Print(Filter):
     """

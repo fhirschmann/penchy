@@ -57,6 +57,7 @@ def edgesort(starts, edges):
         old_edges = list(edges)
         edges = [edge for edge in edges if edge.sink not in resolved]
 
+
 def build_keys(edges):
     """
     Return dictionary that maps the the sink's inputs to the outputs of all its
