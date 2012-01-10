@@ -27,25 +27,24 @@ class Service(rpyc.Service):
         log.info("Received: " + str(output))
 
 
-def run(config, job=None):
+def run(config, job):
     """
     Runs the server component.
 
     :param config: the config module to use
     :type config: config
+    :param job: filename of the job to execute
+    :type job: string
     """
 
-    nodes = []
-    for node in config.NODES:
-        nodes.append(Node(node))
+    nodes = [Node(n) for n in config.NODES]
 
     for node in nodes:
         node.connect()
-        for f in config.FILES:
-            node.put(f)
+        node.put(job)
 
-        # Execute the client and disconnect immediately
-        node.execute('cd %s && python client.py' % node.path)
+        # TODO: Execute the client and disconnect immediately
+        #node.execute('cd %s && python client.py' % node.path)
         node.disconnect()
 
     t = ThreadedServer(Service, hostname="192.168.56.1",
@@ -77,5 +76,4 @@ def main():
     else:
         from penchy import config
 
-    job = __import__(args.job[:-3] if args.job.endswith('py') else args.job)
-    run(config, job)
+    run(config, args.job)
