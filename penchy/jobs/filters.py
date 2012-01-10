@@ -38,7 +38,7 @@ class DacapoHarness(Filter):
         \ in\ (?P<time>\d+)\ msec         # time of execution
         """, re.VERBOSE)
 
-    def run(self, **kwargs):
+    def _run(self, **kwargs):
         exit_codes = kwargs['exit_code']
         stderror = kwargs['stderr']
 
