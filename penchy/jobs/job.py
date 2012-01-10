@@ -47,6 +47,17 @@ class Job(object):
         self.server_flow = server_flow
         self.invocations = invocations
 
+    def _setup_dependencies(self, configuration):
+        """
+        Installs the required dependencies and adjusts the configuration's
+        classpath.
+        """
+        pom = BootstrapPOM()
+        for dependency in self.get_client_dependencies(configuration):
+            pom.add_dependency(dependency)
+        pom.write(configuration.node.path)
+        configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
+
     def run(self, configuration):
         """
         Run Job.
@@ -56,12 +67,7 @@ class Job(object):
         starts = ifilter(bool, (configuration.jvm.workload,
                                 configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
-
-        pom = BootstrapPOM()
-        for dependency in self.get_client_dependencies(configuration):
-            pom.add_dependency(dependency)
-        pom.write(configuration.node.path)
-        configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
+        self._setup_dependencies(configuration)
 
         for i in range(self.invocations):
             log.info('Run invocation {0}'.format(i))
