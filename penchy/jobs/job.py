@@ -77,9 +77,9 @@ class Job(object):
             log.info('Run invocation {0}'.format(i))
             with tempdir():
                 configuration.jvm.run()
-                for sink, group in groupby(edge_order, attrgetter('sink')):
-                    kwargs = build_keys(group)
-                    sink.run(**kwargs)
+        for sink, group in groupby(edge_order, attrgetter('sink')):
+            kwargs = build_keys(group)
+            sink.run(**kwargs)
 
     def get_client_elements(self, configuration):
         """
