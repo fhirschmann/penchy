@@ -40,6 +40,9 @@ class Node(object):
         :param node: tuple of (hostname, port, username, remote path)
         :type node: :class:`NodeConfig`
         """
+
+        # TODO: SSH Keyfile and Passphrase may need to be specified
+
         self.node = node
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
