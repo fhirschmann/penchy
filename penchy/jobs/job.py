@@ -79,6 +79,16 @@ class Job(object):
                          ifilter(bool, (configuration.jvm.workload,
                                         configuration.jvm.tool))))
 
+    def get_client_dependencies(self, configuration):
+        """
+        Returns all :class:`MavenDependency` for a given :class:`JVMNodeConfiguration`.
+
+        :returns: Set of :class:`MavenDependency`.
+        :rtype: Set
+        """
+        return set(chain(*(element.DEPENDENCIES for element in
+            self.get_client_elements(configuration) if element.DEPENDENCIES)))
+
     def get_server_elements(self):
         """
         Return the :class:`PipelineElement` that are executed at the serverside
