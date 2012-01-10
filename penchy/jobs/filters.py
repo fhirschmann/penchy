@@ -31,8 +31,8 @@ class DacapoHarness(Filter):
     - ``times``: execution time per itertion per invocation ([[int]])
     - ``valid``: flag that indicates if execution was valid
     """
-    inputs = set(('stderror', 'error'))
-    exports = set(('failures', 'times', 'flawed'))
+    inputs = set(('stderr', 'exit_code'))
+    exports = set(('failures', 'times', 'valid'))
     TIME_RE = re.compile(
         r"""
         (?:completed\ warmup\ \d+|        # for iterations
