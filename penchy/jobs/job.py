@@ -1,5 +1,4 @@
 import logging
-import os
 from collections import namedtuple
 from itertools import groupby, ifilter, chain
 from operator import attrgetter
