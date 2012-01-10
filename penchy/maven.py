@@ -75,6 +75,30 @@ class MavenDependency(object):
 
         dep = MavenDependency('de.tu_darmstadt.penchy',
                               'pia', '2.0.0.0', 'http://mvn.0x0b.de')
+
+    This class will try its best to determine the filename on its own,
+    but since it's not always clear what the exact filename will be
+    like, it might be neccessary to pass it as keyword argument.
+    If the filename cannot be determined, :class:`LookupError` will
+    be thrown.
+
+    If the checksum parameter is specified, the file's sha1 checksum
+    will be checked against this checksum. An artifact's checksum can
+    be computed using::
+
+        $ sha1sum myartifact-0.1.jar
+
+    A real life :class:`MavenDependency` making use of the checksum
+    feature would look like::
+
+        MavenDependency(
+            'org.scalabench.benchmarks',
+            'scala-benchmark-suite',
+            '0.1.0-20110908.085753-2',
+            'http://repo.scalabench.org/snapshots/',
+            filename='scala-benchmark-suite-0.1.0-SNAPSHOT.jar',
+            checksum='fb68895a6716cc5e77f62ed7992d027b1dbea355')
+
     """
     POM_ATTRIBS = ('version', 'groupId', 'artifactId', 'version',
             'classifier', 'packaging', 'type')
@@ -142,7 +166,7 @@ class MavenDependency(object):
     @memoized
     def actual_checksum(self):
         """
-        The actual checksum of this artifact.
+        The actual checksum of this artifact. Will be computed and cached.
         """
         return sha1sum(self.filename)
 
@@ -264,6 +288,9 @@ class BootstrapPOM(POM):
     """
     This class represents a bootstrap POM which is used to deploy
     PenchY and its dependencies.
+
+    All it does is extending :class:`POM` so that the POM depends
+    on the PenchY client as found in the Maven Repository.
     """
 
     def __init__(self):
