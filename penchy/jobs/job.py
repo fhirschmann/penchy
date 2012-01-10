@@ -73,7 +73,7 @@ class Job(object):
         _, edge_order = edgesort(starts, self.client_flow)
         self._setup_dependencies(configuration)
 
-        for i in range(self.invocations):
+        for i in range(1, self.invocations + 1):
             log.info('Run invocation {0}'.format(i))
             with tempdir():
                 configuration.jvm.run()
