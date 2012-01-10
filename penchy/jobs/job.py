@@ -1,11 +1,12 @@
 import logging
+import os
 from collections import namedtuple
 from itertools import groupby, ifilter, chain
 from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.util import tempdir
-from penchy.maven import get_classpath
+from penchy.maven import get_classpath, BootstrapPOM
 
 
 log = logging.getLogger('job')
@@ -56,6 +57,11 @@ class Job(object):
         starts = ifilter(bool, (configuration.jvm.workload,
                                 configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
+
+        pom = BootstrapPOM()
+        for dependency in self.get_client_dependencies(configuration):
+            pom.add_dependency(dependency)
+        pom.write(configuration.node.path)
         configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
 
         for i in range(self.invocations):
