@@ -7,12 +7,8 @@ import functools
 import os
 import tempfile
 
-from collections import namedtuple
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
-
-
-NodeConfig = namedtuple('NodeConfig', ['host', 'ssh_port', 'username', 'path'])
 
 
 class _memoized(object):

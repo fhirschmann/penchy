@@ -2,7 +2,7 @@
 
 import os
 
-from penchy.util import NodeConfig
+from penchy.node import NodeConfig
 
 # The location of your private ssh key
 ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
