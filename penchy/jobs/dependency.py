@@ -75,7 +75,7 @@ def build_keys(edges):
     for edge in edges:
         # check for identical sinks
         if sink is not None:
-            assert sink == edge.sink
+            assert sink == edge.sink, "different sinks!"
         sink = edge.sink
 
         if edge.map_ is None:
