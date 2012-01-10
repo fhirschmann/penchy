@@ -38,7 +38,7 @@ class Node(object):
         Initialize the node.
 
         :param node: tuple of (hostname, port, username, remote path)
-        :type node: penchy.util.NodeConfig
+        :type node: :class:`NodeConfig`
         """
         self.node = node
         self.ssh = paramiko.SSHClient()
@@ -91,6 +91,6 @@ class Node(object):
         Executes command on the node
 
         :param cmd: command to execute
-        :type cmd: string
+        :type cmd: str
         """
         return self.ssh.exec_command(cmd)
