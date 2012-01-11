@@ -16,11 +16,23 @@ class NodeConfig(object):
     This class represents a configuration of a node.
     """
 
-    def __init__(self, host, ssh_port, username, path):
+    def __init__(self, host, ssh_port, username, path,
+                 basepath, description=""):
+        """
+        :param host: hostname of node
+        :param ssh_port: port number of ssh server on node
+        :type ssh_port: int
+        :param username: login name for penchy on node
+        :param path:
+        :param basepath: basepath for JVMs on this node
+        :param description: Textual description of node
+        """
         self.host = host
         self.ssh_port = ssh_port
         self.username = username
         self.path = path
+        self.basepath = basepath
+        self.description = description
 
     def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__,

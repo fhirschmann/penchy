@@ -20,8 +20,8 @@ LISTEN_PORT = 4343
 
 # List of nodes
 NODES = [
-          NodeConfig('192.168.56.11', SSH_PORT, USERNAME, '/home/bench')
-        , NodeConfig('192.168.56.10', SSH_PORT, USERNAME, '/home/bench')
-        ]
+    NodeConfig('192.168.56.11', SSH_PORT, USERNAME, '/home/bench', '/usr/bin'),
+    NodeConfig('192.168.56.10', SSH_PORT, USERNAME, '/home/bench', '/usr/bin')
+]
 
-LOCALNODE = NodeConfig('localhost', 22, os.eviron['USER'], '/tmp')
+LOCALNODE = NodeConfig('localhost', 22, os.eviron['USER'], '/tmp', '/usr/bin')
