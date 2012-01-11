@@ -52,10 +52,6 @@ class DacapoHarnessTest(unittest2.TestCase):
         self.d._run(exit_code=exit_codes, stderr=stderr)
         self._assert_correct_out(invocations)
 
-    def test_missing_input(self):
-        # TODO: add test after filter decorator
-        pass
-
     def _assert_correct_out(self, invocations):
         self.assertSetEqual(set(self.d.out), self.d._output_names)
         self.assertEqual(len(self.d.out['failures']), invocations)
