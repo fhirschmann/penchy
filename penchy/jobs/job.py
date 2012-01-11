@@ -68,13 +68,17 @@ class Job(object):
 
         :param configuration: :class:`JVMNodeConfiguration` to run.
         """
+        # setup
+        self._setup_dependencies(configuration)
+        configuration.jvm.basepath = configuration.node.basepath
+
         starts = ifilter(bool, (configuration.jvm.workload,
                                 configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
-        self._setup_dependencies(configuration)
 
         for i in range(1, self.invocations + 1):
             log.info('Run invocation {0}'.format(i))
+            # TODO: execute in node.path
             with tempdir():
                 configuration.jvm.run()
         for sink, group in groupby(edge_order, attrgetter('sink')):
