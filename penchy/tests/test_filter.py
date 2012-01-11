@@ -57,7 +57,7 @@ class DacapoHarnessTest(unittest2.TestCase):
         pass
 
     def _assert_correct_out(self, invocations):
-        self.assertSetEqual(set(self.d.out), DacapoHarness.exports)
+        self.assertSetEqual(set(self.d.out), self.d._output_names)
         self.assertEqual(len(self.d.out['failures']), invocations)
         self.assertEqual(len(self.d.out['times']), invocations)
         self.assertEqual(len(self.d.out['valid']), invocations)

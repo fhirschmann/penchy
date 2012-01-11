@@ -130,7 +130,9 @@ class Workload(NotRunnable, PipelineElement):
     - `stderr`, the path to the file that contains the output on stderr
     - `exit_code`, the exitcode as int
     """
-    exports = set(('stdout', 'stderr', 'exit_code'))
+    outputs = [('stdout', list, str),
+               ('stderr', list, str),
+               ('exit_code', list, int)]
 
     @property
     def arguments(self):

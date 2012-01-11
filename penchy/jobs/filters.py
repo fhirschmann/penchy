@@ -25,7 +25,7 @@ class DacapoHarness(Filter):
     - ``stderr``:  List of Paths to stderror output files
     - ``exit_code``: List of program exit codes
 
-    Exports:
+    Outputs:
     - ``failures``: failure count per invocation ([int])
     - ``times``: execution time per itertion per invocation ([[int]])
     - ``valid``: flag that indicates if execution was valid
@@ -33,7 +33,10 @@ class DacapoHarness(Filter):
     inputs = [('stderr', list, str),
               ('exit_code', list, int)]
 
-    exports = set(('failures', 'times', 'valid'))
+    outputs = [('failures', list, int),
+               ('times', list, list),
+               ('valid', list, bool)]
+
     TIME_RE = re.compile(
         r"""
         (?:completed\ warmup\ \d+|        # for iterations

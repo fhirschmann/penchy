@@ -27,7 +27,8 @@ class Tamiflex(Tool):
 
     DEPENDENCIES = set((_POA,))
 
-    exports = ["reflection_log", "classfolder"]
+    outputs = [('reflection_log', list, str),
+               ('classfolder', list, str)]
 
     def __init__(self):
         super(Tamiflex, self).__init__()
@@ -62,7 +63,7 @@ class HProf(Tool):
     # in the hotspot jvm.
     DEPENDENCIES = set()
 
-    exports = ["java_hprof_txt"]
+    outputs = [('java_hprof_txt', list, str)]
 
     def __init__(self, option):
         """

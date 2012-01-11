@@ -151,7 +151,7 @@ class WrappedJVM(JVM, PipelineElement):
 
       - ``out``: dictionary that maps logical output names to paths of output
         files
-      - ``exports``: set of logical outputs (valid keys for ``out``)
+      - ``outputs``: set of logical outputs (valid keys for ``out``)
     """
 
     def __init__(self):

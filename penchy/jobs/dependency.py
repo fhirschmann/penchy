@@ -80,7 +80,7 @@ def build_keys(edges):
         sink = edge.sink
 
         if edge.map_ is None:
-            for key in edge.source.exports:
+            for key in edge.source._output_names:
                 keys[key] = edge.source.out[key]
         else:
             for output, input_ in edge.map_:

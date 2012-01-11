@@ -1,6 +1,7 @@
 import os
 import json
 
+from penchy.jobs.elements import PipelineElement
 from penchy.jobs.dependency import Edge
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -22,14 +23,14 @@ def make_edge(sink, map_):
     return Edge(MockPipelineElement(x[0] for x in map_), sink, map_)
 
 
-class MockPipelineElement(object):
+class MockPipelineElement(PipelineElement):
     def __init__(self, names=None):
-        names = names if names is not None else ()
-        self.exports = tuple(names)
-        self.out = dict((name, 42) for name in self.exports)
+        names = [x for x in names] if names is not None else ()
+        self.outputs = [(name, int) for name in names]
+        self.out = dict((name, 42) for name in names)
 
     def __repr__(self):
-        return "MockPipelineElement({0}, {1})".format(self.exports, self.out)
+        return "MockPipelineElement({0}, {1})".format(self.outputs, self.out)
 
     def _run(self):
         pass
