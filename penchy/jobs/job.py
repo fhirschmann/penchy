@@ -64,7 +64,7 @@ class Job(object):
 
     def run(self, configuration):
         """
-        Run Job.
+        Run clientside Job.
 
         :param configuration: :class:`JVMNodeConfiguration` to run.
         """
