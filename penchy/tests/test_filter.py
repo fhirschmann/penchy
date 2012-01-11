@@ -1,6 +1,4 @@
-import os
 from operator import attrgetter
-from StringIO import StringIO
 from tempfile import NamedTemporaryFile
 
 import unittest2
