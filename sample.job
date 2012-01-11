@@ -5,7 +5,6 @@ from penchy.config import LOCALNODE
 
 node = LOCALNODE
 jvm = jvms.JVM('java')
-jvm.basepath = '/usr/bin'
 jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
 
 # receiver = filters.Receive(jconfig)
