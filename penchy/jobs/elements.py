@@ -16,13 +16,25 @@ class PipelineElement(object):
     A PipelineElement must have the following attributes:
 
     - `out`, a dictionary that maps logical names for output to actual.
-    - `exports`, a set of names that describes which logical names are valid
-                 for the element.
+    - `inputs`, a list of tuples that describe the name and type of the inputs
+                for ``run`` and have the form
+        - ``(name, type)`` that is: a argument with the name ``name`` and type
+                                   ``type``
+        - ``(name, type, subtype)`` that is: a argument with the name ``name``
+          and type ``type`` and all elements of it have type ``subtype``, useful
+          for collections such as tuples and lists
+
+    - ``outputs`, a list of tuples that describe the logical name of an output
+                 and its type it is built alike ``inputs`` for all output of the
+                 element
 
     A PipelineElement must have the following methods:
 
-    - `_run`, to run the element on the parameters.
+    - ``_run(**kwargs)``, to run the element on kwargs, kwargs has to have the
+                          types that ``input`` describes
     - `check`, to check the element configuration for plausibility.
+
+    A PipelineElement must call PipelineElement.__init__ on its initialization.
     """
     DEPENDENCIES = set()
 
@@ -136,6 +148,7 @@ def _check_kwargs(instance, kwargs):
     :type kwargs: dict
     """
 
+    # TODO: no upper bound on count of subtypes .. or at least go to subsubtype
     for t in instance.inputs:
         length = len(t)
         if length == 2:
