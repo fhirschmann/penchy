@@ -78,8 +78,7 @@ class Job(object):
 
         for i in range(1, self.invocations + 1):
             log.info('Run invocation {0}'.format(i))
-            # TODO: execute in node.path
-            with tempdir():
+            with tempdir(prefix='penchy-invocation{0}-'.format(i)):
                 configuration.jvm.run()
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
