@@ -2,7 +2,15 @@
 # -*- coding: utf-8 -*-
 
 import os
-from subprocess import call
+from subprocess import call as scall
+
+def call(cmd):
+    try:
+        return scall(cmd)
+    except OSError, e:
+        print e
+        print "Try installing {0}".format(cmd[0])
+        return 1
 
 
 def main(additional=None, human=False):
