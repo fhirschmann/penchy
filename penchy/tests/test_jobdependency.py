@@ -1,6 +1,7 @@
 import unittest2
 
 from penchy.jobs.dependency import Edge, edgesort, build_keys
+from penchy.tests.util import make_edge
 
 
 class EdgeSortTest(unittest2.TestCase):
@@ -68,16 +69,3 @@ class BuildKeysTest(unittest2.TestCase):
                               'baz' : 42,
                               'foz' : 42,
                               'boz' : 42})
-
-
-def make_edge(sink, map_):
-    return Edge(MockElement(x[0] for x in map_), sink, map_)
-
-
-class MockElement(object):
-    def __init__(self, names):
-        self.exports = tuple(names)
-        self.out = dict((name, 42) for name in self.exports)
-
-    def __repr__(self):
-        return "MockElement({0}, {1})".format(self.exports, self.out)
