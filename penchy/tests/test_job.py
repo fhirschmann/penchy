@@ -2,7 +2,9 @@ import unittest2
 
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
+from penchy.jobs.elements import _check_kwargs
 from penchy.jobs.jvms import JVM
+from penchy.tests.util import MockPipelineElement
 
 
 class JobClientElementsTest(unittest2.TestCase):
@@ -50,3 +52,56 @@ class JobServerElementsTest(unittest2.TestCase):
     def test_nonempty_elements(self):
         self.job.server_flow = [Edge(1, 2), Edge(3, 4)]
         self.assertSetEqual(self.job.get_server_elements(), set([2, 4]))
+
+
+class CheckArgsTest(unittest2.TestCase):
+    def setUp(self):
+        super(CheckArgsTest, self).setUp()
+
+        self.p = MockPipelineElement()
+        self.p.inputs = (('foo', str), ('bar', list, int))
+        self.d = {'foo' : '23', 'bar' : range(5)}
+
+    def test_malformed_types(self):
+        for t in ((1, str),
+                 (1, list, str),
+                 ('bar', str, 2),
+                 ('baz', 2, list)):
+            with self.assertRaises(AssertionError):
+                self.p.inputs = (t,)
+                _check_kwargs(self.p, {})
+
+    def test_wrong_type(self):
+        self._raising_error_on_replacement(ValueError,
+                                           (('foo', 23),
+                                            ('foo', ['23']),
+                                            ('bar', 42)))
+
+    def test_wrong_subtype(self):
+        self._raising_error_on_replacement(ValueError,
+                                           (('bar', ['23']),
+                                            ('bar', [(), ()])))
+
+    def test_missing_arg(self):
+        self._raising_error_on_deletion(ValueError,
+                                           (('foo'),
+                                            ('bar'),
+                                            (['foo', 'bar']),
+                                            (['foo', 'bar'])))
+
+    def _raising_error_on_deletion(self, error, deletions):
+        for del_ in deletions:
+            with self.assertRaises(error):
+                d = self.d.copy()
+                if not isinstance(del_, (list, tuple)):
+                    del_ = [del_]
+                for del__ in del_:
+                    d.pop(del__, None)
+                _check_kwargs(self.p, d)
+
+    def _raising_error_on_replacement(self, error, replacements):
+        for k, v in replacements:
+            with self.assertRaises(error):
+                d = self.d.copy()
+                d[k] = v
+                _check_kwargs(self.p, d)
