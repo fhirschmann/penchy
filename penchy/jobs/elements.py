@@ -2,7 +2,10 @@
 This module provides the foundation of job elements.
 """
 
+import logging
 from collections import defaultdict
+
+log = logging.getLogger('elements')
 
 
 class PipelineElement(object):
@@ -165,3 +168,6 @@ def _check_kwargs(instance, kwargs):
                                                        type_))
         else:
             raise ValueError('Argument {0} is missing'.format(name))
+
+    for name in set(kwargs) - set(t[0] in instance.inputs):
+        log.warn("Unknown input {0}".format(name))
