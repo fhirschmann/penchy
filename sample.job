@@ -1,9 +1,9 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from penchy.config import NODES
+from penchy.config import LOCALNODE
 
-node = NODES[0]
+node = LOCALNODE
 jvm = jvms.JVM('java')
 jvm.basepath = '/usr/bin'
 jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
@@ -29,7 +29,7 @@ job = Job(configurations=jconfig,
           server_flow=[
 #               Edge(receiver, filters.Print(), ('all', 'input'))
                       ],
-          invocations = 1
+          invocations = 10
           )
 
 
