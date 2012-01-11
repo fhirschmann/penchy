@@ -29,7 +29,7 @@ class PipelineElement(object):
         self.prehooks = []
         self.posthooks = []
 
-    def run(self, *args, **kwargs):
+    def run(self, **kwargs):
         """
         Run element with hooks.
         """
@@ -41,7 +41,7 @@ class PipelineElement(object):
         for hook in self.posthooks:
             hook()
 
-    def _run(self, *args, **kwargs):
+    def _run(self, **kwargs):
         """
         Run the actual Element on the arguments.
         """
