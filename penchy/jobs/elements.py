@@ -120,14 +120,20 @@ class Workload(NotRunnable, PipelineElement):
 
 def _check_kwargs(instance, kwargs):
     """
-    Check that all names are in the keyword arguments with the corresponding
-    type.
+    Check if ``kwargs`` satisfies the restrictions of ``instance.inputs``.
+    That is:
+        - All required names are found and
+        - have the right type (and subtype)
 
     Raises a :class:`ValueError` if a name is missing or has the wrong type.
+    Raises a :class:`AssertError` if ``instance.inputs`` has a wrong format.
+
     Logs warnings if there are more arguments than the required.
 
-    :param name_types: triple of string names, type and subtype.
-    :type name_types: tuple
+    :param instance: :PipelineElement: for which to check kwargs
+    :type instance: PipelineElement
+    :param kwargs: arguments for _run of ``instance``
+    :type kwargs: dict
     """
 
     for t in instance.inputs:
