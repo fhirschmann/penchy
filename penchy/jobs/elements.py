@@ -69,6 +69,16 @@ class PipelineElement(object):
         """
         raise NotImplementedError("PipelineElements must implement this")
 
+    @property
+    def _output_names(self):
+        """
+        Return the set of output names
+
+        :returns: the output names
+        :rtype: set
+        """
+        return set(t[0] for t in self.outputs)
+
 
 class NotRunnable(object):
     """
