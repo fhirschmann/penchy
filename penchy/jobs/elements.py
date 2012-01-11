@@ -33,6 +33,7 @@ class PipelineElement(object):
         """
         Run element with hooks.
         """
+        _check_kwargs(self, kwargs)
         for hook in self.prehooks:
             hook()
 
@@ -112,3 +113,55 @@ class Workload(NotRunnable, PipelineElement):
         The arguments the jvm has to include to execute the workloads.
         """
         raise NotImplementedError("Workloads must implement this")
+
+
+def _check_kwargs(instance, kwargs):
+    """
+    Check that all names are in the keyword arguments with the corresponding
+    type.
+
+    Raises a :class:`ValueError` if a name is missing or has the wrong type.
+    Logs warnings if there are more arguments than the required.
+
+    :param name_types: triple of string names, type and subtype.
+    :type name_types: tuple
+    """
+
+    for t in instance.inputs:
+        length = len(t)
+        if length == 2:
+            t = (t[0], t[1], object)
+
+        if not all(isinstance(x, y) for x, y in zip(t, (str, type, type))):
+            if length == 2:
+                msg = 'Malformed type description: {0} is not of form '
+                '(str, type, type)'.format(t)
+            elif length == 3:
+                msg = 'Malformed type description: {0} is not of form'
+                '(str, type, type)'.format(t)
+
+            else:
+                msg = 'Malformed type description: '
+                '{0} is not of form (str, type, type) or (str, type)'.format(t)
+
+            raise AssertionError(msg)
+
+    for t in instance.inputs:
+        if len(t) == 3:
+            name, type_, subtype = t
+        else:
+            name, type_ = t
+            subtype = None
+        if name in kwargs:
+            if isinstance(kwargs[name], type_):
+                if subtype is not None and any(not isinstance(e, subtype)
+                                               for e in kwargs[name]):
+                    raise ValueError('Argument {0} has no uniform '
+                                     'subtype {1}'.format(name, subtype))
+            else:
+                raise ValueError('Argument {0} is {1} instead of '
+                                 'expected {2}'.format(name,
+                                                       type(kwargs[name]),
+                                                       type_))
+        else:
+            raise ValueError('Argument {0} is missing'.format(name))
