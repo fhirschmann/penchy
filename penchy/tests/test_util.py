@@ -1,6 +1,8 @@
 import os
 import unittest2
 
+from tempfile import NamedTemporaryFile
+
 from penchy import util
 
 
@@ -30,3 +32,12 @@ class TempdirTest(unittest2.TestCase):
         with util.tempdir():
             self.assertNotEquals(cwd, os.getcwd())
         self.assertEquals(cwd, os.getcwd())
+
+
+class MiscTest(unittest2.TestCase):
+    def test_sha1sum(self):
+        with NamedTemporaryFile(delete=False) as tf:
+            tf.write('sha1 checksum test')
+            tf.flush()
+            self.assertEquals(util.sha1sum(tf.name),
+                    '14eb73d6e6e404471f7c71dc2ad114609c51c579')
