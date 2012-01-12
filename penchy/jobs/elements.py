@@ -200,5 +200,5 @@ def _check_kwargs(instance, kwargs):
         else:
             raise ValueError('Argument {0} is missing'.format(name))
 
-    for name in set(kwargs) - set(t[0] in instance.inputs):
+    for name in set(kwargs) - set(t[0] for t in instance.inputs):
         log.warn("Unknown input {0}".format(name))
