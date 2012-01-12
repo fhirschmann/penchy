@@ -49,10 +49,7 @@ def parse_args(argv):
             except AttributeError:
                 loglevel = None
 
-    try:
-        job = imp.load_source('job', args[0])
-    except:
-        raise
+    job = imp.load_source('job', args[0])
 
     return (job, loglevel)
 
