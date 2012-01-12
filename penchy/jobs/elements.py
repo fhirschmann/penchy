@@ -52,7 +52,7 @@ class PipelineElement(object):
         for hook in self.prehooks:
             hook()
 
-        self._run(*args, **kwargs)
+        self._run(**kwargs)
 
         for hook in self.posthooks:
             hook()
