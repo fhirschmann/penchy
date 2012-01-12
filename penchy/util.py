@@ -5,7 +5,9 @@ This module provides miscellaneous utilities.
 import hashlib
 import functools
 import os
+import sys
 import tempfile
+import pkg_resources
 
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
@@ -147,3 +149,12 @@ def tempdir(prefix='penchy-invocation'):
     os.chdir(cwd)
     yield
     os.chdir(fwd)
+
+
+def find_bootstrap_client():
+    """
+    Returns the path of the penchy bootstrap client.
+    """
+    import penchy
+    return pkg_resources.resource_filename('penchy',
+            os.path.join('bin', 'penchy_bootstrap'))
