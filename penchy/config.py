@@ -24,4 +24,4 @@ NODES = [
     NodeConfig('192.168.56.10', SSH_PORT, USERNAME, '/home/bench', '/usr/bin')
 ]
 
-LOCALNODE = NodeConfig('localhost', 22, os.eviron['USER'], '/tmp', '/usr/bin')
+LOCALNODE = NodeConfig('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
