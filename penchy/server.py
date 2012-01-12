@@ -11,6 +11,7 @@ import rpyc
 from rpyc.utils.server import ThreadedServer
 
 from penchy.node import Node
+from penchy.util import find_bootstrap_client
 
 log = logging.getLogger("server")
 
@@ -39,6 +40,7 @@ class Server:
         self.config = config
         self.job = job
         self.nodes = [Node(n) for n in config.NODES]
+        self.uploads = set(self.job, find_bootstrap_client())
 
     def run(self):
         """
@@ -51,7 +53,8 @@ class Server:
         """
         for node in self.nodes:
             node.connect()
-            node.put(job)
+            for upload in self.uploads:
+                node.put(upload)
 
             # TODO: Upload the bootstrap client and execute it.
             #node.execute('cd %s && python client.py' % node.path)
