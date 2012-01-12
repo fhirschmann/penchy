@@ -15,7 +15,7 @@ def maven_setup():
     log.debug("Executing mvn install:")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'],
             stdout=PIPE, stderr=PIPE)
-    stdout, _ = proc.communicate() # Maven doesn't use stderr...
+    stdout, _ = proc.communicate()  # Maven doesn't use stderr...
     log.debug(stdout)
 
     log.debug("Getting classpath")
@@ -28,6 +28,7 @@ def maven_setup():
             return line
     log.error("Classpath could not be determined")
 
+
 def run(job):
     classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
@@ -37,6 +38,7 @@ def run(job):
     sys.path.insert(0, penchy_zip)
     from penchy import client
     client.main(job)
+
 
 def parse_args(argv):
     options, args = getopt(argv[1:], 'l:')
@@ -53,6 +55,7 @@ def parse_args(argv):
         raise
 
     return (job, loglevel)
+
 
 if __name__ == "__main__":
     try:
