@@ -2,25 +2,25 @@
 
 import sys
 import logging
+import imp
+from getopt import getopt, GetoptError
 
 from subprocess import Popen, PIPE
-from os.path import expanduser
 
-logging.basicConfig(level=logging.INFO, filename='penchy_client.log')
+logging.basicConfig(level=logging.INFO, filename='penchy_bootstrap.log')
 log = logging.getLogger('penchy-bootstrap')
 
 
-
-def mvn_install():
+def maven_setup():
     log.debug("Executing mvn install:")
-    proc = Popen(['mvn', 'install'], stdout=PIPE, stderr=PIPE)
+    proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'],
+            stdout=PIPE, stderr=PIPE)
     stdout, _ = proc.communicate() # Maven doesn't use stderr...
     log.debug(stdout)
 
-def get_mvn_classpath():
     log.debug("Getting classpath")
-    proc2 = Popen(['mvn', 'dependency:build-classpath'], stdout=PIPE,
-            stderr=PIPE)
+    proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
+            stdout=PIPE, stderr=PIPE)
     stdout, _ = proc2.communicate()
     for line in stdout.split("\n"):
         if not line.startswith("["):
@@ -28,26 +28,38 @@ def get_mvn_classpath():
             return line
     log.error("Classpath could not be determined")
 
-def main():
-    mvn_install()
-    classpath = get_mvn_classpath()
+def run(job):
+    classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
 
     log.info("Starting PenchY Client")
 
     sys.path.insert(0, penchy_zip)
-
     from penchy import client
-    client.main()
+    client.main(job)
 
-    return 0
+def parse_args(argv):
+    options, args = getopt(argv[1:], 'l:')
+    for opt in options:
+        if opt[0] == '-l':
+            try:
+                loglevel = getattr(logging, opt[1].upper())
+            except AttributeError:
+                loglevel = None
+
+    try:
+        job = imp.load_source('job', args[0])
+    except:
+        raise
+
+    return (job, loglevel)
 
 if __name__ == "__main__":
-    if len(sys.argv) > 1:
-        if sys.argv[1] == '-d':
-            logging.root.setLevel(logging.DEBUG)
     try:
-        sys.exit(main())
+        (job, loglevel) = parse_args(sys.argv)
+        if loglevel:
+            logging.root.setLevel(loglevel)
+        run(job)
     except Exception, err:
-        log.exception('Exception occured while executing PenchY')
+        log.exception('Exception occured while executing PenchY:')
         sys.exit(1)
