@@ -11,6 +11,11 @@ Workloads
 .. automodule:: penchy.jobs.workloads
    :members:
 
+Elements
+--------
+.. automodule:: penchy.jobs.elements
+   :members:
+
 Filters
 -------
 .. automodule:: penchy.jobs.filters
