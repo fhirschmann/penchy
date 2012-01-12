@@ -19,13 +19,20 @@ class NodeConfig(object):
     def __init__(self, host, ssh_port, username, path,
                  basepath, description=""):
         """
-        :param host: hostname of node
+        :param host: hostname (or IP) of node
+        :type host: string
         :param ssh_port: port number of ssh server on node
         :type ssh_port: int
         :param username: login name for penchy on node
-        :param path:
+        :type username: string
+        :param path: working directory on the node (this is where
+                     the job will be uploaded to and where the
+                     temporary files and directories will be created)
+        :type path: string
         :param basepath: basepath for JVMs on this node
+        :type basepath: string
         :param description: Textual description of node
+        :type description: string
         """
         self.host = host
         self.ssh_port = ssh_port
