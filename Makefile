@@ -1,7 +1,10 @@
 .PHONY: tests help hooks coverage
 
 help:
-	@echo "Please use \`make <target>'"
+	@echo "Please use \`make <target>', target in {tests,hooks,coverage}"
+	@echo "    - tests: run unittests"
+	@echo "    - hooks: install git hooks"
+	@echo "    - coverage: run unittests, gather coverage and produce html output"
 
 tests:
 	unit2 discover -s penchy/tests -t .
