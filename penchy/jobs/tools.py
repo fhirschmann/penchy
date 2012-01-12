@@ -52,7 +52,8 @@ class Tamiflex(Tool):
 class HProf(Tool):
     """
     HProf must be called with exactly one option. Valid
-    options can be obtained with the command
+    options can be obtained with the command::
+
        java -agentlib:hprof=help
 
     After execution a file with the full hprof output
