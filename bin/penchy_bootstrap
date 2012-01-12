@@ -32,7 +32,6 @@ def maven_setup():
 def run(job):
     classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
-
     log.info("Starting PenchY Client")
 
     sys.path.insert(0, penchy_zip)
@@ -42,12 +41,13 @@ def run(job):
 
 def parse_args(argv):
     options, args = getopt(argv[1:], 'l:')
+    loglevel = None
     for opt in options:
         if opt[0] == '-l':
             try:
                 loglevel = getattr(logging, opt[1].upper())
             except AttributeError:
-                loglevel = None
+                pass
 
     job = imp.load_source('job', args[0])
 
