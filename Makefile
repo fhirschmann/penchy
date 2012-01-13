@@ -17,3 +17,7 @@ coverage:
 	coverage run -m unittest2 discover -s penchy/tests -t .
 	coverage report
 	coverage html
+
+dev:
+	pip install coverage pep8 pyflakes pylint
+	pip install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download
