@@ -11,5 +11,11 @@
   "\n===== DaCapo 9.12 batik starting =====\n===== DaCapo 9.12 batik PASSED in 5125 msec =====\n", 
   "\n===== DaCapo 9.12 xalan starting =====\n===== DaCapo 9.12 xalan PASSED in 6023 msec =====\n", 
   "\n===== DaCapo 9.12 pmd starting =====\n===== DaCapo 9.12 pmd PASSED in 5542 msec =====\n"
+ ], 
+ "failed_single": [
+  "\n===== DaCapo 9.12 fop starting =====\n===== DaCapo 9.12 fop FAILED in 3133 msec =====\n", 
+  "\n===== DaCapo 9.12 batik starting =====\n===== DaCapo 9.12 batik FAILED in 5125 msec =====\n", 
+  "\n===== DaCapo 9.12 xalan starting =====\n===== DaCapo 9.12 xalan FAILED in 6023 msec =====\n", 
+  "\n===== DaCapo 9.12 pmd starting =====\n===== DaCapo 9.12 pmd FAILED in 5542 msec =====\n"
  ]
 }
