@@ -9,7 +9,6 @@ from penchy.jobs.elements import Workload
 from penchy.maven import MavenDependency
 
 
-# TODO: we need a module that configures logging
 log = logging.getLogger(__name__)
 
 
