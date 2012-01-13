@@ -44,7 +44,8 @@ class Job(object):
                             execution of the job on nodes
         :param invocations: number of times to run job on each configuration
         """
-        self.configurations = configurations
+        self.configurations = configurations if isinstance(configurations, list) \
+                              else [configurations]
         self.client_flow = client_flow
         self.server_flow = server_flow
         self.invocations = invocations
