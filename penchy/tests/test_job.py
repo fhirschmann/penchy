@@ -90,6 +90,14 @@ class CheckArgsTest(unittest2.TestCase):
                                             (['foo', 'bar']),
                                             (['foo', 'bar'])))
 
+    def test_unused_input_count(self):
+        self.d['baz'] = 42
+        self.d['bad'] = 23
+        self.assertEqual(_check_kwargs(self.p, self.d), 2)
+
+    def test_fully_used_input_count(self):
+        self.assertEqual(_check_kwargs(self.p, self.d), 0)
+
     def _raising_error_on_deletion(self, error, deletions):
         for del_ in deletions:
             with self.assertRaises(error):
