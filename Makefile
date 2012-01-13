@@ -1,4 +1,4 @@
-.PHONY: tests help hooks coverage
+.PHONY: tests help hooks coverage dev
 
 help:
 	@echo "Please use \`make <target>', target in {tests,hooks,coverage}"
