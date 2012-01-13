@@ -20,7 +20,7 @@ class Edge(object):
         self.sink = sink
         self.map_ = map_
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
 
 

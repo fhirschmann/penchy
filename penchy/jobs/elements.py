@@ -57,13 +57,13 @@ class PipelineElement(object):
         for hook in self.posthooks:
             hook()
 
-    def _run(self, **kwargs):
+    def _run(self, **kwargs):  # pragma: no cover
         """
         Run the actual Element on the arguments.
         """
         raise NotImplementedError("PipelineElements must implement this")
 
-    def check(self):
+    def check(self):  # pragma: no cover
         """
         Check element for plausibility.
         """
@@ -108,7 +108,7 @@ class Tool(NotRunnable, PipelineElement):
     """
 
     @property
-    def arguments(self):
+    def arguments(self):  # pragma: no cover
         """
         The arguments the jvm has to include to use the tool.
         """
@@ -135,7 +135,7 @@ class Workload(NotRunnable, PipelineElement):
                ('exit_code', list, int)]
 
     @property
-    def arguments(self):
+    def arguments(self):  # pragma: no cover
         """
         The arguments the jvm has to include to execute the workloads.
         """

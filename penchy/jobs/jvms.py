@@ -49,7 +49,7 @@ class JVM(object):
 
     @workload.setter
     def workload(self, workload):
-        if self._workload is not None:
+        if self._workload is not None:  # pragma: no cover
             log.warn("Overwriting workload!")
 
         self._workload = workload

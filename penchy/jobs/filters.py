@@ -76,5 +76,5 @@ class Print(Filter):
     """
     Prints everything fed to it on stdout.
     """
-    def run(self, **kwargs):
+    def run(self, **kwargs):  # pragma: no cover
         pprint(kwargs)
