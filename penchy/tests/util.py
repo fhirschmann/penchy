@@ -25,6 +25,8 @@ def make_edge(sink, map_):
 
 class MockPipelineElement(PipelineElement):
     def __init__(self, names=None):
+        super(MockPipelineElement, self).__init__()
+
         names = [x for x in names] if names is not None else ()
         self.outputs = [(name, int) for name in names]
         self.out = dict((name, 42) for name in names)
