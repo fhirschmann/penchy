@@ -16,7 +16,7 @@ coverage:
 	coverage erase
 	coverage run -m unittest2 discover -s penchy/tests -t .
 	coverage report
-	coverage html
+	coverage html -i --omit="*/env/*,*/tests/*,*unittest2*,*pkg_resources*"
 
 dev:
 	pip install coverage pep8 pyflakes pylint
