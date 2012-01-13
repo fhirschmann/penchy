@@ -35,7 +35,7 @@ class TempdirTest(unittest2.TestCase):
         self.assertEquals(cwd, os.getcwd())
 
 
-class MiscTest(unittest2.TestCase):
+class HashTest(unittest2.TestCase):
     def test_sha1sum(self):
         with NamedTemporaryFile(delete=False) as tf:
             tf.write('sha1 checksum test')
