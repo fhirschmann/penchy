@@ -81,6 +81,8 @@ class Dacapo(Workload):
             log.critical("{0} is not a valid benchmark for {1}".format(
                 self.benchmark, self.__class__.__name__))
 
+        # TODO: check for valid harness args
+
         return all((valid_benchmark, ))
 
 
