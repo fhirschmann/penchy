@@ -72,3 +72,6 @@ class MemoizedTest(unittest2.TestCase):
 class MiscTest(unittest2.TestCase):
     def test_dict2string(self):
         self.assertEquals(util.dict2string({'foo': 'bar'}), "foo=bar")
+
+    def test_find_bootstrap_client(self):
+        self.assertTrue(util.find_bootstrap_client().endswith('penchy_bootstrap'))
