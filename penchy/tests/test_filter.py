@@ -1,3 +1,4 @@
+import itertools
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
@@ -18,38 +19,27 @@ class DacapoHarnessTest(unittest2.TestCase):
     def setUp(self):
         super(DacapoHarnessTest, self).setUp()
         self.d = DacapoHarness()
-        self.mi_files = []
-        self.si_files = []
 
-        for data in DacapoHarnessTest.multiple_iterations:
-            f = NamedTemporaryFile(prefix='penchy')
-            f.write(data)
-            f.seek(0)
-            self.mi_files.append(f)
-
-        for data in DacapoHarnessTest.single_iterations:
-            f = NamedTemporaryFile(prefix='penchy')
-            f.write(data)
-            f.seek(0)
-            self.si_files.append(f)
+        self.mi = write_to_tempfiles(DacapoHarnessTest.multiple_iterations)
+        self.si = write_to_tempfiles(DacapoHarnessTest.single_iterations)
 
     def tearDown(self):
-        for f in self.mi_files + self.si_files:
+        for f in itertools.chain(self.mi, self.si):
             f.close()
 
     def test_multi_iteration_path(self):
-        invocations = len(self.mi_files)
+        invocations = len(self.mi)
         exit_codes = [0] * invocations
-        stderr = map(attrgetter('name'), self.mi_files)
-        self.d._run(exit_code=exit_codes, stderr=stderr)
+        stderr = map(attrgetter('name'), self.mi)
+        self.d.run(exit_code=exit_codes, stderr=stderr)
 
         self._assert_correct_out(invocations)
 
     def test_single_iteration_path(self):
-        invocations = len(self.si_files)
+        invocations = len(self.si)
         exit_codes = [0] * invocations
-        stderr = map(attrgetter('name'), self.si_files)
-        self.d._run(exit_code=exit_codes, stderr=stderr)
+        stderr = map(attrgetter('name'), self.si)
+        self.d.run(exit_code=exit_codes, stderr=stderr)
         self._assert_correct_out(invocations)
 
     def _assert_correct_out(self, invocations):
@@ -57,3 +47,15 @@ class DacapoHarnessTest(unittest2.TestCase):
         self.assertEqual(len(self.d.out['failures']), invocations)
         self.assertEqual(len(self.d.out['times']), invocations)
         self.assertEqual(len(self.d.out['valid']), invocations)
+
+
+def write_to_tempfiles(data):
+    files = []
+    for d in data:
+        # itentially not closing, do in tearDown
+        f = NamedTemporaryFile(prefix='penchy')
+        f.write(d)
+        f.seek(0)
+        files.append(f)
+
+    return files
