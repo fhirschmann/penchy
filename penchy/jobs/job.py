@@ -84,20 +84,7 @@ class Job(object):
             kwargs = build_keys(group)
             sink.run(**kwargs)
 
-    def get_client_elements(self, configuration):
-        """
-        Return the :class:`PipelineElement` that are executed at the clientside
-        of this job.
-
-        :param configuration: :class:`JVMNodeConfiguration` to analyze.
-        :returns: The :class:`PipelineElement` contained in the clientside job.
-        :rtype: a set of :class:`PipelineElement`
-        """
-        return set(chain((e.sink for e in self.client_flow),
-                         ifilter(bool, (configuration.jvm.workload,
-                                        configuration.jvm.tool))))
-
-    def get_client_dependencies(self, configuration):
+    def _get_client_dependencies(self, configuration):
         """
         Returns all :class:`MavenDependency` for a given
         :class:`JVMNodeConfiguration`.
@@ -105,8 +92,17 @@ class Job(object):
         :returns: Set of :class:`MavenDependency`.
         :rtype: Set
         """
-        return set(chain(*(element.DEPENDENCIES for element in
-            self.get_client_elements(configuration) if element.DEPENDENCIES)))
+        if configuration not in self.configurations:
+            raise ValueError('configuration not part of this job')
+
+        deps = (element.DEPENDENCIES for element
+                in chain((e.sink for e in self.client_flow),
+                        # only include set workloads & tools
+                        ifilter(bool, (configuration.jvm.workload,
+                                       configuration.jvm.tool)))
+                if element.DEPENDENCIES)
+
+        return set(chain.from_iterable(deps))
 
     def get_server_elements(self):
         """
