@@ -88,6 +88,4 @@ class HProf(Tool):
         # We use -agentlib:hprof because -Xrunhprof is
         # deprecated and will be removed in a future release
         # of the hotspot jvm.
-        # FIXME: If javac is executed, the argument has to
-        # be prefixed with -J
         return ["-agentlib:hprof=%s" % self.option]
