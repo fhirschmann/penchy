@@ -13,7 +13,7 @@ from contextlib import nested
 from penchy.jobs.elements import PipelineElement
 from penchy.util import extract_classpath
 
-log = logging.getLogger("jvms")
+log = logging.getLogger(__name__)
 
 
 class JVM(object):

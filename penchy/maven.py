@@ -9,7 +9,7 @@ from penchy import __version__ as penchy_version
 from penchy.util import memoized, tree_pp, dict2tree, dict2string, sha1sum
 
 
-log = logging.getLogger("maven")
+log = logging.getLogger(__name__)
 
 
 @memoized

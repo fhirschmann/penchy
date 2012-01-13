@@ -13,7 +13,7 @@ from rpyc.utils.server import ThreadedServer
 from penchy.node import Node
 from penchy.util import find_bootstrap_client
 
-log = logging.getLogger("server")
+log = logging.getLogger(__name__)
 
 
 class Service(rpyc.Service):

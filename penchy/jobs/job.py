@@ -8,7 +8,7 @@ from penchy.util import tempdir
 from penchy.maven import get_classpath, BootstrapPOM
 
 
-log = logging.getLogger('job')
+log = logging.getLogger(__name__)
 
 
 def makeJVMNodeConfiguration(jvm, node, name=None):

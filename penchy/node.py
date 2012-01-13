@@ -8,7 +8,7 @@ import paramiko
 from penchy.util import dict2string
 
 
-log = logging.getLogger("node")
+log = logging.getLogger(__name__)
 
 
 class NodeConfig(object):

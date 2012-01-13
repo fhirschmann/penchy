@@ -10,7 +10,7 @@ from penchy.maven import MavenDependency
 
 
 # TODO: we need a module that configures logging
-log = logging.getLogger("Workload")
+log = logging.getLogger(__name__)
 
 
 class Dacapo(Workload):

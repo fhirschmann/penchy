@@ -5,7 +5,7 @@ This module provides the foundation of job elements.
 import logging
 from collections import defaultdict
 
-log = logging.getLogger('elements')
+log = logging.getLogger(__name__)
 
 
 class PipelineElement(object):
