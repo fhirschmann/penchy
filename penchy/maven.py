@@ -136,6 +136,20 @@ class MavenDependency(object):
         self._filename = filename
         self.wanted_checksum = checksum
 
+    def __key(self):
+        return (self.groupId, self.artifactId, self.version)
+
+    def __eq__(self, other):
+        return isinstance(other, MavenDependency) and \
+                self.__key() == other.__key()
+
+    def __hash__(self):
+        return hash(self.__key())
+
+    def __str__(self):
+        return "<%s: %s>" % (self.__class__.__name__,
+                dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
+
     @property
     def filename(self):
         """
@@ -182,13 +196,6 @@ class MavenDependency(object):
             raise IntegrityError(
                     "Checksums don't match! Actual %s; Wanted %s" % \
                     (self.actual_checksum, self.wanted_checksum))
-
-    def __eq__(self, other):
-        return self.__dict__ == other.__dict__
-
-    def __str__(self):
-        return "<%s: %s>" % (self.__class__.__name__,
-                dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
 
 
 class POM(object):
