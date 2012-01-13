@@ -36,7 +36,7 @@ class _memoized(object):
             # Better to not cache than to blow up entirely.
             return self.func(*args)
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         """Return the function's docstring."""
         return self.func.__doc__
 
