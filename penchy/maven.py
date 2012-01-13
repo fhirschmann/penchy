@@ -302,21 +302,22 @@ class BootstrapPOM(POM):
     All it does is extending :class:`POM` so that the POM depends
     on the PenchY client as found in the Maven Repository.
     """
+    ATTRIBS = {
+            'groupId': 'de.tu_darmstadt.penchy',
+            'artifactId': 'penchy-bootstrap',
+            'name': 'penchy-bootstrap',
+            'url': 'http://www.tu-darmstadt.de',
+            'version': penchy_version,
+            'packaging': 'jar',  # won't work with pom
+            }
+    DEPENDENCY = {
+            'groupId': 'de.tu_darmstadt.penchy',
+            'artifactId': 'penchy',
+            'version': penchy_version,
+            'classifier': 'py',
+            'repo': 'http://mvn.0x0b.de',
+            'artifact_type': 'zip'}
 
     def __init__(self):
-        POM.__init__(self,
-                groupId='de.tu_darmstadt.penchy',
-                artifactId='penchy-bootstrap',
-                name='penchy-bootstrap',
-                url='http://www.tu-darmstadt.de',
-                version=penchy_version,
-                packaging='jar',  # won't work with pom
-                )
-
-        self.add_dependency(MavenDependency(
-            groupId='de.tu_darmstadt.penchy',
-            artifactId='penchy',
-            version=penchy_version,
-            classifier='py',
-            repo='http://mvn.0x0b.de',
-            artifact_type='zip'))
+        POM.__init__(self, **BootstrapPOM.ATTRIBS)
+        self.add_dependency(MavenDependency(**BootstrapPOM.DEPENDENCY))
