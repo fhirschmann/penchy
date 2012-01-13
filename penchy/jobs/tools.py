@@ -77,7 +77,6 @@ class HProf(Tool):
     def _after_execution(self):
         # Provides the full hprof output
         out['java_hprof_txt'].append(os.path.abspath("java.hprof.txt"))
-        # FIXME: Should stdout be included?
 
     def check(self):
         # Only Hotspot supports/includes hprof
