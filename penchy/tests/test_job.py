@@ -66,7 +66,8 @@ class CheckArgsTest(unittest2.TestCase):
         for t in ((1, str),
                  (1, list, str),
                  ('bar', str, 2),
-                 ('baz', 2, list)):
+                 ('baz', 2, list),
+                 ()):
             with self.assertRaises(AssertionError):
                 self.p.inputs = (t,)
                 _check_kwargs(self.p, {})
