@@ -166,17 +166,18 @@ def _check_kwargs(instance, kwargs):
         if length == 2:
             t = (t[0], t[1], object)
 
+        if length not in (2, 3):
+            msg = 'Malformed type description: '
+            '{0} is not of form (str, type, type) or (str, type)'.format(t)
+            raise AssertionError(msg)
+
         if not all(isinstance(x, y) for x, y in zip(t, (str, type, type))):
             if length == 2:
                 msg = 'Malformed type description: {0} is not of form '
-                '(str, type, type)'.format(t)
+                '(str, type)'.format(t)
             elif length == 3:
                 msg = 'Malformed type description: {0} is not of form'
-                '(str, type)'.format(t)
-
-            else:
-                msg = 'Malformed type description: '
-                '{0} is not of form (str, type, type) or (str, type)'.format(t)
+                '(str, type, type)'.format(t)
 
             raise AssertionError(msg)
 
