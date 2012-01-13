@@ -112,25 +112,14 @@ class Job(object):
 
         return set(chain.from_iterable(deps))
 
-    def get_server_elements(self):
-        """
-        Return the :class:`PipelineElement` that are executed at the serverside
-        of this job.
-
-        :returns: The :class:`PipelineElement` contained in the serverside job.
-        :rtype: a set of :class:`PipelineElement`
-        """
-        return set(e.sink for e in self.server_flow)
-
-    def get_server_dependencies(self):
+    def _get_server_dependencies(self):
         """
         Return the serverside dependencies of the job.
 
         :returns: Set of :class:`MavenDependency`.
         :rtype: set
         """
-        return set((element.DEPENDENCIES for element in
-            self.get_server_elements() if element.DEPENDENCIES))
+        return set((element.DEPENDENCIES for element in self.server_flow))
 
     def check(self):
         """

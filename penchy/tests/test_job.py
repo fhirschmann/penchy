@@ -51,11 +51,7 @@ class JobServerElementsTest(unittest2.TestCase):
         self.job = job.Job([self.config], [], [])
 
     def test_empty_elements(self):
-        self.assertSetEqual(self.job.get_server_elements(), set())
-
-    def test_nonempty_elements(self):
-        self.job.server_flow = [Edge(1, 2), Edge(3, 4)]
-        self.assertSetEqual(self.job.get_server_elements(), set([2, 4]))
+        self.assertSetEqual(self.job._get_server_dependencies(), set())
 
 
 class CheckArgsTest(unittest2.TestCase):
