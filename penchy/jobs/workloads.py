@@ -44,23 +44,21 @@ class Dacapo(Workload):
                       , 'tradesoap'
                       , 'xalan'))
 
-    def __init__(self, benchmark, iterations=1,
-                 benchmark_args='', harness_args=''):
+    def __init__(self, benchmark, iterations=1, args=''):
         """
         :param benchmark: benchmark to execute
+        :type benchmark: str
         :param iterations: Number of iterations in an invocation.
-        :param benchmark_args: String of additional arguments for benchmark
-        :param harness_args: String of additional arguments for harness
+        :type iterations: int
+        :param args: additional arguments for harness (shell escaped)
+        :type args: str
         """
         super(Dacapo, self).__init__()
 
         self.benchmark = benchmark
         self.iterations = iterations
 
-        self.harness_args = harness_args
-        self.benchmark_args = benchmark_args
-
-        # XXX: call check here?
+        self.args = args
 
     @property
     def arguments(self):
@@ -68,8 +66,8 @@ class Dacapo(Workload):
         The arguments to call the workload in the current configuration.
         """
         return ['Harness'] + \
-               ['-n', str(self.iterations)] + shlex.split(self.harness_args) + \
-               [self.benchmark] + shlex.split(self.benchmark_args)
+               ['-n', str(self.iterations)] + shlex.split(self.args) + \
+               [self.benchmark]
 
     def check(self):
         """
