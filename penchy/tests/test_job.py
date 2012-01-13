@@ -43,6 +43,11 @@ class JobClientElementsTest(unittest2.TestCase):
         self.assertSetEqual(self.job._get_client_dependencies(self.config),
                             HProf.DEPENDENCIES)
 
+    def test_wrong_config(self):
+        with self.assertRaises(ValueError):
+            self.job._get_client_dependencies(job.makeJVMNodeConfiguration(JVM('java'),
+                                                                           'pseudo'))
+
 
 class JobServerElementsTest(unittest2.TestCase):
     def setUp(self):
