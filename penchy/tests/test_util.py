@@ -51,3 +51,11 @@ class MemoizedTest(unittest2.TestCase):
             return randint(0, 1000)
 
         self.assertEquals(func(), func())
+
+    def test_docstring(self):
+        @util.memoized
+        def func():
+            """this is a docstring"""
+            pass
+
+        self.assertEquals(func.__doc__, "this is a docstring")
