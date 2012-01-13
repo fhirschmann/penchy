@@ -67,3 +67,8 @@ class MemoizedTest(unittest2.TestCase):
 
         self.assertEquals(func([1, 2]), [1, 2])
         self.assertEquals(func([1, 2]), [1, 2])
+
+
+class MiscTest(unittest2.TestCase):
+    def test_dict2string(self):
+        self.assertEquals(util.dict2string({'foo': 'bar'}), "foo=bar")
