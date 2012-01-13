@@ -82,6 +82,12 @@ class MavenTest(unittest2.TestCase):
                 '0.1.0-20110908.085753-2',
                 'http://repo.scalabench.org/snapshots/')
 
+        self.d3 = MavenDependency(
+                'org.scalabench.benchmarks',
+                'scala-benchmark-suite2',
+                '0.1',
+                'http://repo.scalabench.org/snapshots/')
+
     def test_mavendep_equal(self):
         self.assertEquals(self.d1, self.d2)
 
@@ -90,3 +96,14 @@ class MavenTest(unittest2.TestCase):
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
         self.assertEquals(p.dependency_list, set((self.d1,)))
+
+    def test_mavendep_repo_duplicates(self):
+        p = POM()
+        p.add_repository('foo')
+        p.add_repository('foo')
+        self.assertEquals(p.repository_list, set(('foo',)))
+
+        p = POM()
+        p.add_dependency(self.d1)
+        p.add_dependency(self.d2)
+        self.assertEquals(p.repository_list, set((self.d1.repo,)))
