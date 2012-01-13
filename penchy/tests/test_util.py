@@ -2,6 +2,7 @@ import os
 import unittest2
 
 from tempfile import NamedTemporaryFile
+from random import randint
 
 from penchy import util
 
@@ -41,3 +42,12 @@ class MiscTest(unittest2.TestCase):
             tf.flush()
             self.assertEquals(util.sha1sum(tf.name),
                     '14eb73d6e6e404471f7c71dc2ad114609c51c579')
+
+
+class MemoizedTest(unittest2.TestCase):
+    def test_cache(self):
+        @util.memoized
+        def func():
+            return randint(0, 1000)
+
+        self.assertEquals(func(), func())
