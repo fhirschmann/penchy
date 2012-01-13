@@ -67,17 +67,26 @@ class PomTest(unittest2.TestCase):
             self.assertEqual(root.find('artifactId').text, 'penchy-bootstrap')
             self.assertEqual(root.find('version').text, penchy_version)
 
+
+class MavenTest(unittest2.TestCase):
+    def setUp(self):
+        self.d1 = MavenDependency(
+                'org.scalabench.benchmarks',
+                'scala-benchmark-suite',
+                '0.1.0-20110908.085753-2',
+                'http://repo.scalabench.org/snapshots/')
+
+        self.d2 = MavenDependency(
+                'org.scalabench.benchmarks',
+                'scala-benchmark-suite',
+                '0.1.0-20110908.085753-2',
+                'http://repo.scalabench.org/snapshots/')
+
     def test_mavendep_equal(self):
-        d1 = MavenDependency(
-            'org.scalabench.benchmarks',
-            'scala-benchmark-suite',
-            '0.1.0-20110908.085753-2',
-            'http://repo.scalabench.org/snapshots/')
+        self.assertEquals(self.d1, self.d2)
 
-        d2 = MavenDependency(
-            'org.scalabench.benchmarks',
-            'scala-benchmark-suite',
-            '0.1.0-20110908.085753-2',
-            'http://repo.scalabench.org/snapshots/')
-
-        self.assertEqual(d1, d2)
+    def test_mavendep_duplicates(self):
+        p = POM()
+        p.add_dependency(self.d1)
+        p.add_dependency(self.d2)
+        self.assertEquals(p.dependency_list, set((self.d1,)))
