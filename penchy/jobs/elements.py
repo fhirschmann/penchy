@@ -86,7 +86,7 @@ class NotRunnable(object):
     """
 
     def run(self):
-        # TODO: Add logging?
+        log.error("{0} can't be run!".format(self.__class_.__name))
         raise ValueError("{0} can't be run!".format(self.__class__.__name__))
 
 
