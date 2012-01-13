@@ -37,6 +37,8 @@ class PipelineElement(object):
     A PipelineElement must call PipelineElement.__init__ on its initialization.
     """
     DEPENDENCIES = set()
+    inputs = []
+    outputs = []
 
     def __init__(self):
         self.out = defaultdict(list)
