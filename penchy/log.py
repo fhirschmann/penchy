@@ -20,7 +20,7 @@ def configure_for_tests():
     logging.root.addHandler(NullHandler())
 
 
-class NullHandler(logging.Handler):
+class NullHandler(logging.Handler):  # pragma: no cover
     """
     Handler that does nothing.
     """
