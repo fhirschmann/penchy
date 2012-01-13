@@ -38,11 +38,14 @@ class Job(object):
                  invocations=1):
         """
         :param configurations: :class:`JVMNodeConfiguration` to execute jobs on
-        :param client_flow: sequence of :class:`Edge` that describes the
-                            execution of the job on nodes
-        :param server_flow: sequence of :class:`Edge` that describes the
-                            execution of the job on nodes
+        :type configurations: List of :class:`JVMNodeConfiguration`
+                              or :class:`JVMNodeConfiguration`
+        :param client_flow: describes execution of the job on nodes
+        :type client_flow: sequence of :class:`Edge`
+        :param server_flow: describes the execution of the job on the server
+        :type client_flow: sequence of :class:`Edge`
         :param invocations: number of times to run job on each configuration
+        :type invocations: int
         """
         self.configurations = configurations if isinstance(configurations, list) \
                               else [configurations]
@@ -87,11 +90,15 @@ class Job(object):
 
     def _get_client_dependencies(self, configuration):
         """
-        Returns all :class:`MavenDependency` for a given
+        Return all clientside :class:`MavenDependency` of this job for a given
         :class:`JVMNodeConfiguration`.
 
+        Raises :class:`ValueError` if ``configuration`` is not part of this job.
+
+        :param configuration: configuration to analyze.
+        :type configuration::class:`JVMNodeConfiguration`
         :returns: Set of :class:`MavenDependency`.
-        :rtype: Set
+        :rtype: set
         """
         if configuration not in self.configurations:
             raise ValueError('configuration not part of this job')
@@ -117,10 +124,10 @@ class Job(object):
 
     def get_server_dependencies(self):
         """
-        Returns all :class:`MavenDependency`.
+        Return the serverside dependencies of the job.
 
         :returns: Set of :class:`MavenDependency`.
-        :rtype: Set
+        :rtype: set
         """
         return set((element.DEPENDENCIES for element in
             self.get_server_elements() if element.DEPENDENCIES))
