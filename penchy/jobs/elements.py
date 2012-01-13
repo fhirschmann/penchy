@@ -172,7 +172,7 @@ def _check_kwargs(instance, kwargs):
                 '(str, type, type)'.format(t)
             elif length == 3:
                 msg = 'Malformed type description: {0} is not of form'
-                '(str, type, type)'.format(t)
+                '(str, type)'.format(t)
 
             else:
                 msg = 'Malformed type description: '
