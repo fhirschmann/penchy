@@ -13,5 +13,7 @@ hooks:
 	ln -s $(realpath hooks/pre-commit) .git/hooks/pre-commit
 
 coverage:
+	coverage erase
 	coverage run -m unittest2 discover -s penchy/tests -t .
+	coverage report
 	coverage html
