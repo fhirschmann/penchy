@@ -1,4 +1,4 @@
-.PHONY: tests help hooks coverage dev
+.PHONY: tests help hooks coverage full-coverage dev
 
 help:
 	@echo "Please use \`make <target>', target in {tests,hooks,coverage}"
@@ -12,11 +12,17 @@ tests:
 hooks:
 	ln -s $(realpath hooks/pre-commit) .git/hooks/pre-commit
 
-coverage:
-	coverage erase
-	coverage run -m unittest2 discover -s penchy/tests -t .
+coverage: .coverage
 	coverage report -i --include='penchy/*'
 	coverage html --include='penchy/*' --omit='penchy/tests/*'
+	coverage erase
+
+full-coverage: .coverage
+	coverage html --include='penchy/*'
+	coverage erase
+
+.coverage:
+	coverage run -m unittest2 discover -s penchy/tests -t .
 
 dev:
 	pip install coverage pep8 pyflakes pylint
