@@ -158,6 +158,8 @@ def _check_kwargs(instance, kwargs):
     :type instance: PipelineElement
     :param kwargs: arguments for _run of ``instance``
     :type kwargs: dict
+    :returns: count of unused inputs
+    :rtype: int
     """
 
     # TODO: no upper bound on count of subtypes .. or at least go to subsubtype
@@ -201,5 +203,9 @@ def _check_kwargs(instance, kwargs):
         else:
             raise ValueError('Argument {0} is missing'.format(name))
 
+    unused_inputs = 0
     for name in set(kwargs) - set(t[0] for t in instance.inputs):
+        unused_inputs += 1
         log.warn("Unknown input {0}".format(name))
+
+    return unused_inputs
