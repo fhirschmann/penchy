@@ -88,8 +88,9 @@ class NotRunnable(object):
     """
 
     def run(self):
-        log.error("{0} can't be run!".format(self.__class_.__name))
-        raise ValueError("{0} can't be run!".format(self.__class__.__name__))
+        msg = "{0} can't be run!".format(self.__class__.__name__)
+        log.error(msg)
+        raise ValueError(msg)
 
 
 class Filter(PipelineElement):
