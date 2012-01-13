@@ -4,7 +4,7 @@ from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import ElementTree as ET
 from random import randint
 
-from penchy.maven import BootstrapPOM, POM, MavenDependency, IntegrityError
+from penchy.maven import *
 
 
 class PomTest(unittest2.TestCase):
