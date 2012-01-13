@@ -59,3 +59,11 @@ class MemoizedTest(unittest2.TestCase):
             pass
 
         self.assertEquals(func.__doc__, "this is a docstring")
+
+    def test_invalid_argument(self):
+        @util.memoized
+        def func(lst):
+            return lst
+
+        self.assertEquals(func([1, 2]), [1, 2])
+        self.assertEquals(func([1, 2]), [1, 2])
