@@ -5,6 +5,7 @@ This module provides miscellaneous utilities.
 import hashlib
 import functools
 import os
+import shutil
 import sys
 import tempfile
 import pkg_resources
@@ -138,7 +139,7 @@ def sha1sum(filename, blocksize=65536):
 
 
 @contextmanager
-def tempdir(prefix='penchy-invocation'):
+def tempdir(prefix='penchy-invocation', delete=False):
     """
     Execute in new created temporary directory.
     """
@@ -147,6 +148,8 @@ def tempdir(prefix='penchy-invocation'):
     os.chdir(cwd)
     yield
     os.chdir(fwd)
+    if delete:
+        shutil.rmtree(cwd)
 
 
 def find_bootstrap_client():
