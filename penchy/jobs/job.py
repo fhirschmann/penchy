@@ -61,7 +61,7 @@ class Job(object):
         :param configuration: :class:`JVMNodeConfiguration` to work on
         """
         pom = BootstrapPOM()
-        for dependency in self.get_client_dependencies(configuration):
+        for dependency in self._get_client_dependencies(configuration):
             pom.add_dependency(dependency)
         pom.write(configuration.node.path)
         configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
