@@ -1,6 +1,6 @@
 from itertools import chain
 
-from penchy.jobs.jvms import JVM
+from penchy.jobs.jvms import JVM, JVMNotConfiguredError
 from penchy.jobs.workloads import ScalaBench
 from penchy.jobs.tools import HProf
 from penchy.tests.unit import unittest
@@ -81,3 +81,13 @@ class JVMTest(unittest.TestCase):
         jvm.tool = t
         self.assertListEqual(map(list, jvm._get_hooks()), [t.prehooks,
                                                            t.posthooks])
+
+    def test_raise_nonconfigured_workload(self):
+        self.jvm.workload = None
+        with self.assertRaises(JVMNotConfiguredError):
+            self.jvm.run()
+
+    def test_raise_nonconfigured_classpath(self):
+        self.jvm._classpath = None
+        with self.assertRaises(JVMNotConfiguredError):
+            self.jvm.run()

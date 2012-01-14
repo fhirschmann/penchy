@@ -16,6 +16,14 @@ from penchy.util import extract_classpath
 log = logging.getLogger(__name__)
 
 
+class JVMNotConfiguredError(Exception):
+    """
+    Signals that a JVM is not sufficiently configured, i.e. a workload is
+    missing or no classpath is set.
+    """
+    pass
+
+
 class JVM(object):
     """
     This class represents a JVM.
@@ -80,8 +88,19 @@ class JVM(object):
     def run(self):
         """
         Run the jvm with the current configuration.
+
+        Raises :class:`JVMNotConfiguredError` if no workload or classpath is
+        set.
         """
         prehooks, posthooks = self._get_hooks()
+
+        if not self._classpath:
+            log.error('No classpath configured')
+            raise JVMNotConfiguredError('no classpath configured')
+
+        if not self.workload:
+            log.error('No workload configured')
+            raise JVMNotConfiguredError('no workload configured')
 
         log.info("executing prehooks")
         for hook in prehooks:
