@@ -143,7 +143,7 @@ class JVM(object):
         return prehooks, posthooks
 
 
-class WrappedJVM(JVM, PipelineElement):
+class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
     """
     This class is an abstract base class for a JVM that is wrapped by another
     Program.
