@@ -115,7 +115,8 @@ class JVM(object):
             options = self._options + self.tool.arguments
         else:
             options = self._options
-        return [executable] + options + cp + self.workload.arguments
+        args = self.workload.arguments if self.workload else []
+        return [executable] + options + cp + args
 
     def _get_hooks(self):
         """
