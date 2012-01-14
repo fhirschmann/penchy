@@ -70,3 +70,14 @@ class JVMTest(unittest.TestCase):
         jvm.workload = w
         self.assertListEqual(map(list, jvm._get_hooks()), [w.prehooks,
                                                            w.posthooks])
+
+    def test_get_hooks_workload(self):
+        a = [0]
+        b = [0]
+        jvm = JVM('foo')
+        t = MockPipelineElement()
+        t.prehooks = [lambda: a.__setitem__(0, 23)]
+        t.posthooks = [lambda: a.__setitem__(0, 42)]
+        jvm.tool = t
+        self.assertListEqual(map(list, jvm._get_hooks()), [t.prehooks,
+                                                           t.posthooks])
