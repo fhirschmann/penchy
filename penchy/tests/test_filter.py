@@ -2,12 +2,12 @@ import itertools
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
-import unittest2
 from penchy.tests.util import get_json_data
 from penchy.jobs.filters import DacapoHarness
+from penchy.tests.unit import unittest
 
 
-class DacapoHarnessTest(unittest2.TestCase):
+class DacapoHarnessTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):

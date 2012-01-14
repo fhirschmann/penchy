@@ -1,10 +1,9 @@
-import unittest2
-
 from penchy.jobs.dependency import Edge, edgesort, build_keys
 from penchy.tests.util import make_edge
+from penchy.tests.unit import unittest
 
 
-class EdgeSortTest(unittest2.TestCase):
+class EdgeSortTest(unittest.TestCase):
 
     def test_circ(self):
         starts = []
@@ -28,7 +27,7 @@ class EdgeSortTest(unittest2.TestCase):
                                    [edges[2], edges[0], edges[1]]))
 
 
-class BuildKeysTest(unittest2.TestCase):
+class BuildKeysTest(unittest.TestCase):
     def test_multi_sinks(self):
         edges = [make_edge(1, (('foo', 'bar'),
                                ('baz', 'bad'))),

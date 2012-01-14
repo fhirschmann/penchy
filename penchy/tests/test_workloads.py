@@ -1,9 +1,8 @@
-import unittest2
-
 from penchy.jobs.workloads import Dacapo, ScalaBench
+from penchy.tests.unit import unittest
 
 
-class DacapoWorkloadTest(unittest2.TestCase):
+class DacapoWorkloadTest(unittest.TestCase):
     def test_invalid_benchmark(self):
         w = Dacapo('scalac')
         self.assertFalse(w.check())
@@ -24,7 +23,7 @@ class DacapoWorkloadTest(unittest2.TestCase):
                              'Harness -n 1 --callback foo jython'.split())
 
 
-class ScalabenchWorkloadTest(unittest2.TestCase):
+class ScalabenchWorkloadTest(unittest.TestCase):
     def test_invalid_benchmark(self):
         w = ScalaBench('baz')
         self.assertFalse(w.check())

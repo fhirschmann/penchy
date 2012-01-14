@@ -1,4 +1,3 @@
-import unittest2
 from itertools import chain
 
 from penchy.jobs import job
@@ -8,10 +7,11 @@ from penchy.jobs.jvms import JVM
 from penchy.jobs.workloads import ScalaBench
 from penchy.jobs.tools import HProf
 from penchy.jobs.filters import Print
+from penchy.tests.unit import unittest
 from penchy.tests.util import MockPipelineElement
 
 
-class JobClientElementsTest(unittest2.TestCase):
+class JobClientElementsTest(unittest.TestCase):
 
     def setUp(self):
         super(JobClientElementsTest, self).setUp()
@@ -49,7 +49,7 @@ class JobClientElementsTest(unittest2.TestCase):
                                                                            'pseudo'))
 
 
-class JobServerElementsTest(unittest2.TestCase):
+class JobServerElementsTest(unittest.TestCase):
     def setUp(self):
         super(JobServerElementsTest, self).setUp()
         self.config = job.makeJVMNodeConfiguration(JVM('foo'), 'pseudo_node')
@@ -59,7 +59,7 @@ class JobServerElementsTest(unittest2.TestCase):
         self.assertSetEqual(self.job._get_server_dependencies(), set())
 
 
-class CheckArgsTest(unittest2.TestCase):
+class CheckArgsTest(unittest.TestCase):
     def setUp(self):
         super(CheckArgsTest, self).setUp()
 

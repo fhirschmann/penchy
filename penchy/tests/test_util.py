@@ -1,13 +1,13 @@
 import os
-import unittest2
 
 from tempfile import NamedTemporaryFile
 from random import randint
 
 from penchy import util
+from penchy.tests.unit import unittest
 
 
-class ClasspathTest(unittest2.TestCase):
+class ClasspathTest(unittest.TestCase):
 
     def test_valid_options(self):
         expected = 'foo:bar:baz'
@@ -27,7 +27,7 @@ class ClasspathTest(unittest2.TestCase):
         self.assertEquals(util.extract_classpath(options), '')
 
 
-class TempdirTest(unittest2.TestCase):
+class TempdirTest(unittest.TestCase):
     def test_change(self):
         cwd = os.getcwd()
         with util.tempdir():
@@ -35,7 +35,7 @@ class TempdirTest(unittest2.TestCase):
         self.assertEquals(cwd, os.getcwd())
 
 
-class HashTest(unittest2.TestCase):
+class HashTest(unittest.TestCase):
     def test_sha1sum(self):
         with NamedTemporaryFile(delete=False) as tf:
             tf.write('sha1 checksum test')
@@ -44,7 +44,7 @@ class HashTest(unittest2.TestCase):
                     '14eb73d6e6e404471f7c71dc2ad114609c51c579')
 
 
-class MemoizedTest(unittest2.TestCase):
+class MemoizedTest(unittest.TestCase):
     def test_cache(self):
         @util.memoized
         def func():
@@ -69,7 +69,7 @@ class MemoizedTest(unittest2.TestCase):
         self.assertEquals(func([1, 2]), [1, 2])
 
 
-class MiscTest(unittest2.TestCase):
+class MiscTest(unittest.TestCase):
     def test_dict2string(self):
         self.assertEquals(util.dict2string({'foo': 'bar'}), "foo=bar")
 

@@ -1,10 +1,9 @@
-import unittest2
-
 from penchy.jobs.elements import Workload, Tool
 from penchy.tests.util import MockPipelineElement
+from penchy.tests.unit import unittest
 
 
-class PipelineElementHookTest(unittest2.TestCase):
+class PipelineElementHookTest(unittest.TestCase):
     def setUp(self):
         self.e = MockPipelineElement()
         self.list_ = [23, 42, 5]
@@ -30,7 +29,7 @@ class PipelineElementHookTest(unittest2.TestCase):
         self.assertListEqual(self.list_, [1, 1, 1])
 
 
-class NotRunnableTest(unittest2.TestCase):
+class NotRunnableTest(unittest.TestCase):
     def test_throw_exception(self):
         w = Workload()
         t = Tool()
