@@ -22,7 +22,7 @@ full-coverage: .coverage
 	coverage erase
 
 .coverage:
-	coverage run -m unittest2 discover -s penchy/tests -t .
+	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
 
 dev:
 	pip install coverage pep8 pyflakes pylint
