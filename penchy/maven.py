@@ -54,6 +54,7 @@ def get_classpath(path=None):
 
     for line in stdout.split("\n"):
         if not line.startswith("["):
+            log.debug("Using classpath %s" % line)
             return line
 
     raise MavenError("The classpath was not in maven's output")  # pragma: no cover
