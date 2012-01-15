@@ -24,7 +24,7 @@ full-coverage: .coverage
 .coverage:
 	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
 
-coverage-upload:
+coverage-upload: coverage
 	rsync -avz htmlcov bp@0x0b.de:~/docs/
 
 dev:
