@@ -29,37 +29,19 @@ def maven_setup():
     log.error("Classpath could not be determined")
 
 
-def run(job):
+def main(args):
     classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
     log.info("Starting PenchY Client")
 
     sys.path.insert(0, penchy_zip)
     from penchy import client
-    client.main(job)
-
-
-def parse_args(argv):
-    options, args = getopt(argv[1:], 'l:')
-    loglevel = None
-    for opt in options:
-        if opt[0] == '-l':
-            try:
-                loglevel = getattr(logging, opt[1].upper())
-            except AttributeError:
-                pass
-
-    job = imp.load_source('job', args[0])
-
-    return (job, loglevel)
+    client.main(args)
 
 
 if __name__ == "__main__":
     try:
-        (job, loglevel) = parse_args(sys.argv)
-        if loglevel:
-            logging.root.setLevel(loglevel)
-        run(job)
+        main(sys.argv)
     except Exception, err:
         log.exception('Exception occured while executing PenchY:')
         sys.exit(1)
