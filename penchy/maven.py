@@ -48,7 +48,7 @@ def get_classpath(path=None):
     proc = Popen(['mvn', '-f', path, 'dependency:build-classpath'], stdout=PIPE)
     stdout, _ = proc.communicate()
 
-    if proc.returncode is not 0:
+    if proc.returncode is not 0:  # pragma: no cover
         log.error(stdout)
         raise MavenError("The classpath could not be determined: ")
 
@@ -56,7 +56,7 @@ def get_classpath(path=None):
         if not line.startswith("["):
             return line
 
-    raise MavenError("The classpath was not in maven's output")
+    raise MavenError("The classpath was not in maven's output")  # pragma: no cover
 
 
 class MavenError(Exception):
