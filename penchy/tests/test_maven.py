@@ -111,3 +111,6 @@ class MavenTest(unittest.TestCase):
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
         self.assertEquals(p.repository_list, set((self.d1.repo,)))
+
+    def test_required_keywords(self):
+        self.assertRaises(POMError, POM)
