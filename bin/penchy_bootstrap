@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO, filename='penchy_bootstrap.log')
 log = logging.getLogger('penchy-bootstrap')
 
 
-def maven_setup():
+def main(args):
     log.debug("Executing mvn install:")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'],
             stdout=PIPE, stderr=PIPE)
@@ -28,8 +28,6 @@ def maven_setup():
             return line
     log.error("Classpath could not be determined")
 
-
-def main(args):
     classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
     log.info("Starting PenchY Client")
