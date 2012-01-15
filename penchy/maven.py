@@ -139,6 +139,7 @@ class MavenDependency(object):
         self.packaging = packaging
         self._filename = filename
         self.wanted_checksum = checksum
+        self.pom_path = None
 
     def __key(self):
         return (self.groupId, self.artifactId, self.version)
@@ -162,7 +163,7 @@ class MavenDependency(object):
         :return: path to artifact
         :rtype: string
         """
-        cp = get_classpath().split(":")
+        cp = get_classpath(self.pom_path).split(":")
 
         for artifact in cp:
             if self._filename:
