@@ -24,5 +24,9 @@ class MavenTest(unittest.TestCase):
         self.dep.filename = 'log4j-1.2.9.jar'
         self.assertTrue(self.dep.filename.endswith('log4j-1.2.9.jar'))
 
+    def test_get_incorrect_filename(self):
+        self.dep.filename = 'foo.jar'
+        self.assertRaises(LookupError, lambda: self.dep.filename)
+
     def test_pom_not_found(self):
         self.assertRaises(OSError, get_classpath, '')
