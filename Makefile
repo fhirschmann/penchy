@@ -24,6 +24,9 @@ full-coverage: .coverage
 .coverage:
 	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
 
+coverage-upload:
+	rsync -avz htmlcov bp@0x0b.de:~/docs/
+
 dev:
 	pip install coverage pep8 pyflakes pylint
 	pip install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download
