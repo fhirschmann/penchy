@@ -151,7 +151,7 @@ class MavenDependency(object):
     def __hash__(self):
         return hash(self.__key())
 
-    def __str__(self):
+    def __str__(self):  # pragma: no cover
         return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
 
@@ -180,6 +180,10 @@ class MavenDependency(object):
             log.error("Incorrect artifact filename for %s." % self)
 
         raise LookupError('Artifact filename could not be determined!')
+
+    @filename.setter
+    def filename(self, value):
+        self._filename = value
 
     @property
     @memoized
