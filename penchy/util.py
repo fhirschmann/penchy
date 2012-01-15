@@ -158,4 +158,4 @@ def find_bootstrap_client():
     """
     import penchy
     return pkg_resources.resource_filename('penchy',
-            os.path.join('bin', 'penchy_bootstrap'))
+            os.path.join('../', 'bin', 'penchy_bootstrap'))
