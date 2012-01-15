@@ -28,7 +28,7 @@ job = Job(configurations=jconfig,
           server_flow=[
 #               Edge(receiver, filters.Print(), ('all', 'input'))
                       ],
-          invocations = 10
+          invocations = 2
           )
 
 
