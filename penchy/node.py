@@ -78,12 +78,6 @@ class Node(object):
 
         self.sftp = self.ssh.open_sftp()
 
-        # Create the directory we will be uploading to (if it doesn't exist)
-        try:
-            self.sftp.mkdir(self.node.path)
-        except IOError:
-            pass
-
     def disconnect(self):
         """
         Disconnect from the node.
