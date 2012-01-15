@@ -12,6 +12,13 @@ log = logging.getLogger('penchy-bootstrap')
 
 
 def main(args):
+    """
+    This method starts the bootstrap client. All arguments will be
+    passed to the real client.
+
+    A valid bootstrap.pom in the current working directory is
+    expected!
+    """
     log.debug("Executing mvn install:")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'],
             stdout=PIPE, stderr=PIPE)
