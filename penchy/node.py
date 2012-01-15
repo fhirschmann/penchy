@@ -85,22 +85,31 @@ class Node(object):
         self.sftp.close()
         self.ssh.close()
 
-    def put(self, filename):
+    def put(self, local, remote=None):
         """
         Upload a file to the node
 
-        :param filename: the file to upload
-        :type name: str
+        :param local: path to the local file
+        :type local: str
+        :param remote: path to the remote file
+        :type remote: str
         """
+
+        local = os.path.abspath(local)
+
+        if not remote:
+            remote = os.path.basename(local)
+
+        if not os.path.isabs(remote):
+            remote = os.path.join(self.node.path, remote)
+
         try:
-            self.sftp.mkdir(self.node.path + os.sep + \
-                    os.path.dirname(filename))
+            self.sftp.mkdir(os.path.dirname(remote))
         except IOError:
             pass
 
-        location = self.node.path + os.path.sep + os.path.basename(filename)
-        log.info("Copying file %s to %s" % (filename, location))
-        self.sftp.put(filename, location)
+        log.info("Copying file %s to %s" % (local, remote))
+        self.sftp.put(local, remote)
 
     def execute(self, cmd):
         """
