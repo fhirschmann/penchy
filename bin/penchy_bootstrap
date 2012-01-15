@@ -42,7 +42,8 @@ def main(args):
     sys.path.insert(0, penchy_zip)
     from penchy.client import Client
     client = Client()
-    client.main(args)
+    client.parse_args(sys.argv)
+    client.run()
 
 
 if __name__ == "__main__":
