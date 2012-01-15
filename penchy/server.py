@@ -64,37 +64,5 @@ class Server:
 
     def start_listening(self):
         t = ThreadedServer(Service, hostname="192.168.56.1",
-                port=config.LISTEN_PORT)
+                port=self.config.LISTEN_PORT)
         t.start()
-
-
-def main(config, job):
-    server = Server(config, args.job)
-    server.run()
-
-if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
-    log_group = parser.add_mutually_exclusive_group()
-    log_group.add_argument("-d", "--debug",
-            action="store_const", const=logging.DEBUG,
-            dest="loglevel", default=logging.INFO,
-            help="print debugging messages")
-    log_group.add_argument("-q", "--quiet",
-            action="store_const", const=logging.WARNING,
-            dest="loglevel", help="suppress most messages")
-    parser.add_argument("-c", "--config",
-            action="store", dest="config",
-            default=os.path.expanduser("~/.penchyrc"),
-            help="config module to use")
-    parser.add_argument("job", help="job to execute",
-            metavar="job")
-    args = parser.parse_args()
-    logging.root.setLevel(args.loglevel)
-    log.info('Using the "%s" config module' % args.config)
-
-    try:
-        config = imp.load_source('Config', args.config)
-    except IOError:
-        raise IOError("Config file could not be found: %s" % args.config)
-
-    main(config, args.job)
