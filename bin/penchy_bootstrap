@@ -40,7 +40,8 @@ def main(args):
     log.info("Starting PenchY Client")
 
     sys.path.insert(0, penchy_zip)
-    from penchy import client
+    from penchy.client import Client
+    client = Client()
     client.main(args)
 
 
