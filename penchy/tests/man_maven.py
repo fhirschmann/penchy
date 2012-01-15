@@ -7,7 +7,8 @@ from penchy.tests.unit import unittest
 class MavenTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
-        cls.dep = MavenDependency('log4j', 'log4j', '1.2.9')
+        cls.dep = MavenDependency('log4j', 'log4j', '1.2.9',
+                checksum='55856d711ab8b88f8c7b04fd85ff1643ffbfde7c')
         cls.tf = NamedTemporaryFile()
         cls.dep.pom_path = cls.tf.name
         cls.pom = POM(groupId='a', artifactId='b', version='1')
@@ -16,6 +17,7 @@ class MavenTest(unittest.TestCase):
 
     def setUp(self):
         self.dep.pom_path = self.tf.name
+        self.dep.filename = None
 
     def test_get_classpath(self):
         classpath = get_classpath(self.tf.name)
@@ -38,3 +40,16 @@ class MavenTest(unittest.TestCase):
     def test_checksum(self):
         self.assertEquals(self.dep.actual_checksum,
                 '55856d711ab8b88f8c7b04fd85ff1643ffbfde7c')
+
+    def test_checksum2(self):
+        self.assertTrue(self.dep.check_checksum())
+
+    def test_checksum3(self):
+        with NamedTemporaryFile() as tf:
+            dep = MavenDependency('log4j', 'log4j', '1.2.9',
+                    checksum='asdf')
+            dep.pom_path = tf.name
+            pom = POM(groupId='a', artifactId='b', version='1')
+            pom.add_dependency(dep)
+            pom.write(tf.name)
+            self.assertRaises(IntegrityError, dep.check_checksum)
