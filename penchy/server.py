@@ -40,7 +40,7 @@ class Server:
         self.config = config
         self.job = job
         self.nodes = [Node(n) for n in config.NODES]
-        self.uploads = set(self.job, find_bootstrap_client())
+        self.uploads = set((self.job, find_bootstrap_client()))
 
     def run(self):
         """
