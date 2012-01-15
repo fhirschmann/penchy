@@ -174,7 +174,7 @@ class MavenDependency(object):
                     self.artifactId, self.version))):
                     return artifact
 
-        if not self._filename:
+        if not self._filename:  # pragma: no cover
             log.error("Please specify the filename as argument to %s." % self)
         else:
             log.error("Incorrect artifact filename for %s." % self)
