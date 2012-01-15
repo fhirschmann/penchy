@@ -50,7 +50,7 @@ def get_classpath(path=None):
 
     if proc.returncode is not 0:
         log.error(stdout)
-        raise MavenError("The classpath could not be determined")
+        raise MavenError("The classpath could not be determined: ")
 
     for line in stdout.split("\n"):
         if not line.startswith("["):
@@ -64,6 +64,10 @@ class MavenError(Exception):
 
 
 class IntegrityError(Exception):
+    pass
+
+
+class POMError(Exception):
     pass
 
 
@@ -220,8 +224,12 @@ class POM(object):
     ATTRIBS = {
             'modelVersion': '4.0.0',
     }
+    REQUIRED_ATTRIBS = set(('artifactId', 'groupId', 'version'))
 
     def __init__(self, **kwargs):
+        if not set(kwargs.keys()).issuperset(self.__class__.REQUIRED_ATTRIBS):
+            raise POMError(", ".join(self.__class__.REQUIRED_ATTRIBS) +
+                    " are required keywords")
         self.repository_list = set()
         self.dependency_list = set()
 
