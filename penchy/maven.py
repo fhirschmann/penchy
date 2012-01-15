@@ -199,7 +199,7 @@ class MavenDependency(object):
         Raises an :class:`IntegrityError` if not.
         """
         if not self.wanted_checksum:
-            return
+            return True
 
         if not self.wanted_checksum == self.actual_checksum:
             raise IntegrityError(
