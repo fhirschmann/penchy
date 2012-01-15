@@ -201,7 +201,9 @@ class MavenDependency(object):
         if not self.wanted_checksum:
             return True
 
-        if not self.wanted_checksum == self.actual_checksum:
+        if self.wanted_checksum == self.actual_checksum:
+            return True
+        else:
             raise IntegrityError(
                     "Checksums don't match! Actual %s; Wanted %s" % \
                     (self.actual_checksum, self.wanted_checksum))
