@@ -5,6 +5,7 @@ Initiates multiple JVM Benchmarks and accumulates the results.
 import os
 import imp
 import logging
+from tempfile import NamedTemporaryFile
 
 import argparse
 import rpyc
@@ -12,6 +13,7 @@ from rpyc.utils.server import ThreadedServer
 
 from penchy.node import Node
 from penchy.util import find_bootstrap_client
+from penchy.maven import make_bootstrap_pom
 
 log = logging.getLogger(__name__)
 
@@ -51,14 +53,16 @@ class Server:
         :param job: filename of the job to execute
         :type job: string
         """
-        for node in self.nodes:
-            node.connect()
-            for upload in self.uploads:
-                node.put(upload)
+        with makeBootstrapPom() as pom:
+            for node in self.nodes:
+                node.connect()
+                for upload in self.uploads:
+                    node.put(upload)
+                node.put(pom.name, 'bootstrap.pom')
 
-            # TODO: Upload the bootstrap client and execute it.
-            #node.execute('cd %s && python client.py' % node.path)
-            node.disconnect()
+                # TODO: Execute client
+
+                node.disconnect()
 
         self.start_listening()
 
