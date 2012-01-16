@@ -31,7 +31,7 @@ class Client(object):
         """
         Parses the arguments.
 
-        :param argv: arguments; this would normally be sys.argv
+        :param args: arguments; this would normally be sys.argv
         :type args: list
         """
         parser = argparse.ArgumentParser(description=__doc__, prog=args[0])
