@@ -60,6 +60,8 @@ class Node(object):
     will be run on).
     """
 
+    _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
+
     def __init__(self, configuration):
         """
         Initialize the node.
@@ -118,6 +120,22 @@ class Node(object):
 
         log.info("Copying file %s to %s" % (local, remote))
         self.sftp.put(local, remote)
+
+    def get_logs(self):
+        """
+        This method will read the client's log file
+        and log it using the server's logging facilities.
+        """
+        for filename in self.__class__._LOGFILES:
+            try:
+                filename = os.path.join(self.config.path, filename)
+                logfile = self.sftp.open(filename)
+                log.info("".join(["Replaying logfile for",
+                    str(self), os.linesep, logfile.read()]))
+                logfile.close()
+            except IOError:
+                log.error("Logfile %s could not be received from %s" % \
+                        (filename, self))
 
     def execute(self, cmd):
         """
