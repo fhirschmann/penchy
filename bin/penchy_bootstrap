@@ -21,24 +21,20 @@ def main(args):
     expected!
     """
     log.debug("Executing mvn install:")
-    proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'],
-            stdout=PIPE, stderr=PIPE)
-    stdout, _ = proc.communicate()  # Maven doesn't use stderr...
+    proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
+    stdout, _ = proc.communicate()
     log.debug(stdout)
 
     log.debug("Getting classpath")
     proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
-            stdout=PIPE, stderr=PIPE)
+            stdout=PIPE)
     stdout, _ = proc2.communicate()
-    for line in stdout.split("\n"):
-        if not line.startswith("["):
-            log.info("Classpath found at " + line)
-            return line
-    log.error("Classpath could not be determined")
+    for classpath in stdout.split(os.linesep):
+        if classpath.endswith('-py.zip'):
+            break
 
-    classpath = maven_setup()
     penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
-    log.info("Starting PenchY Client")
+    log.info("Starting PenchY Client from %s" % penchy_zip)
 
     sys.path.insert(0, penchy_zip)
     from penchy.client import Client
