@@ -2,6 +2,7 @@
 
 import os
 import logging
+import atexit
 
 import paramiko
 
@@ -171,6 +172,11 @@ class Node(object):
         self.execute('cd %s && python penchy_bootstrap %s' % (
             self.config.path, job))
         self.client_is_running = True
+
+        @atexit.register
+        def kill():
+            self.connect()
+            self.kill()
 
     def kill(self):
         """
