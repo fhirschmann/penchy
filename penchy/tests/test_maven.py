@@ -63,12 +63,36 @@ class PomTest(unittest.TestCase):
         with NamedTemporaryFile() as tf:
             p = BootstrapPOM()
             p.write(tf.name)
+            for f in [tf, makeBootstrapPom()]:
+                tree = ET()
+                tree.parse(f.name)
+                root = tree.getroot()
+                from penchy import __version__ as penchy_version
+
+                self.assertEqual(root.find('artifactId').text, 'penchy-bootstrap')
+                self.assertEqual(root.find('version').text, penchy_version)
+
+    def test_penchy_pom(self):
+        with NamedTemporaryFile() as tf:
+            p = PenchyPOM()
+            p.write(tf.name)
             tree = ET()
             tree.parse(tf.name)
             root = tree.getroot()
             from penchy import __version__ as penchy_version
 
-            self.assertEqual(root.find('artifactId').text, 'penchy-bootstrap')
+            self.assertEqual(root.find('artifactId').text, 'penchy')
+            self.assertEqual(root.find('version').text, penchy_version)
+
+    def test_penchy_pom2(self):
+        with NamedTemporaryFile() as tf:
+            pom = write_penchy_pom([MavenDependency('a', 'b', '1')], tf.name)
+            tree = ET()
+            tree.parse(tf)
+            root = tree.getroot()
+            from penchy import __version__ as penchy_version
+
+            self.assertEqual(root.find('artifactId').text, 'penchy')
             self.assertEqual(root.find('version').text, penchy_version)
 
 
