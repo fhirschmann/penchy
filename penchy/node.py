@@ -68,8 +68,6 @@ class Node(object):
         :type node: :class:`NodeConfiguration`
         """
 
-        # TODO: SSH Keyfile and Passphrase may need to be specified
-
         self.config = configuration
         self.ssh = paramiko.SSHClient()
         if self.config.keyfile:
