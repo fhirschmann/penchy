@@ -31,6 +31,12 @@ class MavenTest(unittest.TestCase):
                 ['log4j', 'log4j', '1.2.9'],
                 {'checksum': 'invalid_checksum'})
 
+    @classmethod
+    def tearDownClass(cls):
+        cls.tf.close()
+        cls.tf_cs.close()
+        cls.tf_cs2.close()
+
     def setUp(self):
         self.dep.pom_path = self.tf.name
         self.dep.filename = None
