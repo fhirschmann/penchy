@@ -63,7 +63,7 @@ class Server:
                 node.put(pom.name, 'bootstrap.pom')
 
                 # TODO: Execute client
-                node.get_logs()
+                node.execute_penchy(self.job)
                 node.disconnect()
 
     def run(self):
