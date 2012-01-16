@@ -11,7 +11,7 @@ from penchy.util import dict2string
 log = logging.getLogger(__name__)
 
 
-class NodeConfig(object):
+class NodeConfiguration(object):
     """
     This class represents a configuration of a node.
     """
@@ -57,7 +57,7 @@ class Node(object):
         Initialize the node.
 
         :param node: tuple of (hostname, port, username, remote path)
-        :type node: :class:`NodeConfig`
+        :type node: :class:`NodeConfiguration`
         """
 
         # TODO: SSH Keyfile and Passphrase may need to be specified
