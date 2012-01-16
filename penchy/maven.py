@@ -3,6 +3,7 @@
 import logging
 import os
 from subprocess import Popen, PIPE
+from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
@@ -337,3 +338,14 @@ class BootstrapPOM(POM):
     def __init__(self):
         POM.__init__(self, **BootstrapPOM.ATTRIBS)
         self.add_dependency(MavenDependency(**BootstrapPOM.DEPENDENCY))
+
+
+def makeBootstrapPom():
+    """
+    Creates a Bootstrap POM and returns the temporary
+    file it has been written to.
+    """
+    tf = NamedTemporaryFile()
+    pom = BootstrapPOM()
+    pom.write(tf.name)
+    return tf
