@@ -37,7 +37,7 @@ class Server:
         """
         :param config: A config module
         :param job: The job to execute:
-        :type job: :class:`penchy.jobs.job`
+        :type job: :class:`penchy.jobs.Job`
         """
         self.config = config
         self.job = job

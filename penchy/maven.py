@@ -69,14 +69,25 @@ def get_classpath(path=None):
 
 
 class MavenError(Exception):
+    """
+    Error which occurs when there Maven causes errors.
+    """
     pass
 
 
 class IntegrityError(Exception):
+    """
+    Error which occurs when the checksum of an artifact is
+    incorrect.
+    """
     pass
 
 
 class POMError(Exception):
+    """
+    Error which occurs if there are problems during the generation
+    of a POM.
+    """
     pass
 
 
@@ -371,6 +382,9 @@ def makeBootstrapPOM():
     """
     Creates a Bootstrap POM and returns the temporary
     file it has been written to.
+
+    :returns: temporary file
+    :rtype: :class:`NamedTemporaryFile`
     """
     tf = NamedTemporaryFile()
     pom = BootstrapPOM()
@@ -383,9 +397,9 @@ def write_penchy_pom(dependencies, path):
     Creates a POM specifying dependencies.
 
     :param dependencies: dependencies to install
-    :type dependencies: Iterable of :class:`MavenDependency`
+    :type dependencies: Sequence of :class:`MavenDependency`
     :param path: path to write the pom to
-    :type path: str
+    :type path: string
     """
     pom = PenchyPOM()
     for dependency in dependencies:

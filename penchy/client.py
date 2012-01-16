@@ -13,10 +13,11 @@ log = logging.getLogger(__name__)
 
 
 class Client(object):
+    """
+    This class represents a client which executes a job
+    and sends the results to the server.
+    """
     def __init__(self):
-        """
-        Initiates the client.
-        """
         self.args = None
         self.job = None
 
@@ -31,7 +32,7 @@ class Client(object):
         Parses the arguments.
 
         :param argv: arguments; this would normally be sys.argv
-        :type argv: list
+        :type args: list
         """
         parser = argparse.ArgumentParser(description=__doc__, prog=args[0])
         parser.add_argument("job", help="job to execute", metavar="job")

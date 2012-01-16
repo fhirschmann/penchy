@@ -90,9 +90,9 @@ class Node(object):
         Upload a file to the node
 
         :param local: path to the local file
-        :type local: str
+        :type local: string
         :param remote: path to the remote file
-        :type remote: str
+        :type remote: string
         """
 
         local = os.path.abspath(local)
@@ -116,6 +116,6 @@ class Node(object):
         Executes command on the node
 
         :param cmd: command to execute
-        :type cmd: str
+        :type cmd: string
         """
         return self.ssh.exec_command(cmd)
