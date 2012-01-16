@@ -6,10 +6,14 @@ def configure(level=logging.INFO):
     Configure the root logger for our purposes.
     """
     logging.root.setLevel(level)
-    ch = logging.StreamHandler()
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch = logging.StreamHandler()
     ch.setFormatter(formatter)
+    ch2 = logging.FileHandler('penchy.log')
+    ch2.setFormatter(formatter)
+
     logging.root.addHandler(ch)
+    logging.root.addHandler(ch2)
 
 
 def configure_for_tests():
