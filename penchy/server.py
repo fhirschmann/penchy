@@ -4,8 +4,11 @@ Initiates multiple JVM Benchmarks and accumulates the results.
 
 import os
 import imp
+import atexit
 import logging
+import threading
 from tempfile import NamedTemporaryFile
+from time import sleep
 
 import argparse
 import rpyc
@@ -43,15 +46,14 @@ class Server:
         self.job = job
         self.nodes = [Node(n) for n in config.NODES]
         self.uploads = set((self.job, find_bootstrap_client()))
+        self.listener = ThreadedServer(Service, hostname="192.168.56.1",
+                port=self.config.LISTEN_PORT)
+        self.client_thread = threading.Thread(target=self.run_clients)
+        self.client_thread.daemon = True
 
-    def run(self):
+    def run_clients(self):
         """
-        Runs the server component.
-
-        :param config: the config module to use
-        :type config: config
-        :param job: filename of the job to execute
-        :type job: string
+        This method will run the clients on all nodes.
         """
         with makeBootstrapPOM() as pom:
             for node in self.nodes:
@@ -61,12 +63,12 @@ class Server:
                 node.put(pom.name, 'bootstrap.pom')
 
                 # TODO: Execute client
-
+                node.get_logs()
                 node.disconnect()
 
-        self.start_listening()
-
-    def start_listening(self):
-        t = ThreadedServer(Service, hostname="192.168.56.1",
-                port=self.config.LISTEN_PORT)
-        t.start()
+    def run(self):
+        """
+        Runs the server component.
+        """
+        self.client_thread.start()
+        self.listener.start()
