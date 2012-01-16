@@ -53,10 +53,15 @@ def get_classpath(path=None):
         log.error(stdout)
         raise MavenError("The classpath could not be determined: ")
 
-    for line in stdout.split("\n"):
-        if not line.startswith("["):
-            log.debug("Using classpath %s" % line)
-            return line
+    for line in stdout.split(os.linesep):
+        if line.startswith("["):
+            # maven logging output
+            continue
+
+        if line.startswith("/"):
+            if all(filter(os.path.isabs, line.split(os.pathsep))):
+                log.debug("Using classpath %s" % line)
+                return line
 
     raise MavenError("The classpath was not in maven's output")  # pragma: no cover
 
