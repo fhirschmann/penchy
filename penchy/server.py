@@ -13,7 +13,7 @@ from rpyc.utils.server import ThreadedServer
 
 from penchy.node import Node
 from penchy.util import find_bootstrap_client
-from penchy.maven import make_bootstrap_pom
+from penchy.maven import makeBootstrapPOM
 
 log = logging.getLogger(__name__)
 
