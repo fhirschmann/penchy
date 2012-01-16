@@ -5,7 +5,7 @@ from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.util import tempdir
-from penchy.maven import get_classpath, BootstrapPOM
+from penchy.maven import get_classpath, write_penchy_pom
 
 
 log = logging.getLogger(__name__)
@@ -60,10 +60,8 @@ class Job(object):
 
         :param configuration: :class:`JVMNodeConfiguration` to work on
         """
-        pom = BootstrapPOM()
-        for dependency in self._get_client_dependencies(configuration):
-            pom.add_dependency(dependency)
-        pom.write(configuration.node.path)
+        write_penchy_pom(self._get_client_dependencies(configuration),
+                configuration.node.path)
         configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
 
     def run(self, configuration):
