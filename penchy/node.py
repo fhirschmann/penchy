@@ -17,7 +17,8 @@ class NodeConfiguration(object):
     """
 
     def __init__(self, host, ssh_port, username, path,
-                 basepath, description=""):
+                 basepath, description="", password=None,
+                 keyfile=None):
         """
         :param host: hostname (or IP) of node
         :type host: string
@@ -33,6 +34,11 @@ class NodeConfiguration(object):
         :type basepath: string
         :param description: Textual description of node
         :type description: string
+        :param password: this is either the password for a given username
+                         or the passphrase to unlock the keyfile
+        :type password: string
+        :param keyfile: path to the ssh keyfile to use
+        :type keyfile: string
         """
         self.host = host
         self.ssh_port = ssh_port
@@ -40,10 +46,12 @@ class NodeConfiguration(object):
         self.path = path
         self.basepath = basepath
         self.description = description
+        self.password = password
+        self.keyfile = keyfile
 
     def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__,
-                dict2string(self.__dict__))
+                dict2string(self.__dict__), ['host', 'ssh_port'])
 
 
 class Node(object):
@@ -62,10 +70,13 @@ class Node(object):
 
         # TODO: SSH Keyfile and Passphrase may need to be specified
 
-        self.config = node
+        self.config = configuration
         self.ssh = paramiko.SSHClient()
-        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.load_system_host_keys()
+        if self.config.keyfile:
+            pass
+        else:
+            self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+            self.ssh.load_system_host_keys()
         self.sftp = None
 
     def connect(self):
@@ -74,7 +85,8 @@ class Node(object):
         """
         log.info("Connecting to node %s" % self.config.host)
         self.ssh.connect(self.config.host, username=self.config.username,
-                port=self.config.ssh_port)
+                port=self.config.ssh_port, password=self.config.password,
+                key_filename=self.config.keyfile)
 
         self.sftp = self.ssh.open_sftp()
 
