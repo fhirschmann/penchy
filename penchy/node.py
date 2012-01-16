@@ -159,3 +159,16 @@ class Node(object):
         """
         return self.execute('cd %s && python penchy_bootstrap %s' % (
             self.config.path, job))
+
+    def kill(self):
+        """
+        This kills the PenchY on this node.
+
+        An existing pidfile named `penchy.pid` must exist on the node.
+        """
+        pidfile_name = os.path.join(self.config.path, 'penchy.pid')
+        pidfile = self.sftp.open(pidfile_name)
+        pid = pidfile.read()
+        pidfile.close()
+        self.execute('kill ' + pid)
+        log.warn('Client on %s was terminated' % self)
