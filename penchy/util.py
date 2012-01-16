@@ -129,7 +129,7 @@ def sha1sum(filename, blocksize=65536):
     """
     hasher = hashlib.sha1()
 
-    with file(filename, 'r') as afile:
+    with open(filename, 'r') as afile:
         buf = afile.read(blocksize)
         while len(buf) > 0:
             hasher.update(buf)
