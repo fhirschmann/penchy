@@ -53,7 +53,7 @@ class Server:
         :param job: filename of the job to execute
         :type job: string
         """
-        with makeBootstrapPom() as pom:
+        with makeBootstrapPOM() as pom:
             for node in self.nodes:
                 node.connect()
                 for upload in self.uploads:

@@ -63,7 +63,7 @@ class PomTest(unittest.TestCase):
         with NamedTemporaryFile() as tf:
             p = BootstrapPOM()
             p.write(tf.name)
-            for f in [tf, makeBootstrapPom()]:
+            for f in [tf, makeBootstrapPOM()]:
                 tree = ET()
                 tree.parse(f.name)
                 root = tree.getroot()
