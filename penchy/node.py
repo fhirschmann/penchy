@@ -115,18 +115,18 @@ class Node(object):
         log.info("Executing %s on %s" % (cmd, self))
         return self.ssh.exec_command(cmd)
 
-    def execute_penchy(self, job):
+    def execute_penchy(self, args):
         """
         Executes penchy on this node.
 
-        :param job: the job to execute
-        :type job: string
+        :param args: arguments to pass to penchy
+        :type args: string
         """
         if self.client_is_running:
             raise NodeError("You may not start penchy twice!")
 
         self.execute('cd %s && python penchy_bootstrap %s' % (
-            self.config.path, job))
+            self.config.path, args))
         self.client_is_running = True
 
         @atexit.register

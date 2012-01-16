@@ -26,6 +26,7 @@ class Client(object):
         Runs the client.
         """
         self.job.job.run(self.job.jconfig)
+        self.send_data("Job finished!", (self.args.server, int(self.args.port)))
 
     def parse_args(self, args):
         """
@@ -36,8 +37,9 @@ class Client(object):
         """
         parser = argparse.ArgumentParser(description=__doc__, prog=args[0])
         parser.add_argument("job", help="job to execute", metavar="job")
-        parser.add_argument("-l", "--loglevel", dest="loglevel",
-                default='INFO')
+        parser.add_argument("server", help="server to use", metavar="server")
+        parser.add_argument("port", help="port to use", metavar="port", type=int)
+        parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
         self.args = parser.parse_args(args=args[1:])
 
         try:

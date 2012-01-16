@@ -62,7 +62,8 @@ class Server:
                     node.put(upload)
                 node.put(pom.name, 'bootstrap.pom')
 
-                node.execute_penchy(self.job)
+                node.execute_penchy(" ".join(
+                    [self.job, "192.168.56.1", "4343"]))
                 node.disconnect()
 
     def run(self):
