@@ -28,5 +28,5 @@ coverage-upload: coverage
 	rsync -avz htmlcov bp@0x0b.de:~/docs/
 
 dev:
-	pip install coverage pep8 pyflakes pylint
+	pip install coverage pep8 pyflakes pylint sphinx
 	pip install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download
