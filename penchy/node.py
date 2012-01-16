@@ -70,10 +70,8 @@ class Node(object):
 
         self.config = configuration
         self.ssh = paramiko.SSHClient()
-        if self.config.keyfile:
-            pass
-        else:
-            self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        if not self.config.keyfile:
             self.ssh.load_system_host_keys()
         self.sftp = None
 
