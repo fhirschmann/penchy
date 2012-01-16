@@ -54,6 +54,13 @@ class NodeConfiguration(object):
                 dict2string(self.__dict__, ['host', 'ssh_port']))
 
 
+class NodeError(Exception):
+    """
+    Raised when errors occur while dealing
+    with :class:`Node`.
+    """
+
+
 class Node(object):
     """
     This class represents a node (=a machine on which the benchmark
@@ -76,6 +83,7 @@ class Node(object):
         if not self.config.keyfile:
             self.ssh.load_system_host_keys()
         self.sftp = None
+        self.client_is_running = False
 
     def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__, self.config)
@@ -157,8 +165,12 @@ class Node(object):
         :param job: the job to execute
         :type job: string
         """
-        return self.execute('cd %s && python penchy_bootstrap %s' % (
+        if self.client_is_running:
+            raise NodeError("You may not start penchy twice!")
+
+        self.execute('cd %s && python penchy_bootstrap %s' % (
             self.config.path, job))
+        self.client_is_running = True
 
     def kill(self):
         """
