@@ -340,6 +340,26 @@ class BootstrapPOM(POM):
         self.add_dependency(MavenDependency(**BootstrapPOM.DEPENDENCY))
 
 
+class PenchyPOM(POM):
+    """
+    This class represents the POM for PenchY. It is used to install
+    PenchY's dependencies.
+
+    This is similar to :class:`BootstrapPOM`
+    """
+    ATTRIBS = {
+            'groupId': 'de.tu_darmstadt.penchy',
+            'artifactId': 'penchy',
+            'name': 'penchy',
+            'url': 'http://www.tu-darmstadt.de',
+            'version': penchy_version,
+            'packaging': 'jar',  # won't work with pom
+            }
+
+    def __init__(self):
+        POM.__init__(self, **PenchyPOM.ATTRIBS)
+
+
 def makeBootstrapPom():
     """
     Creates a Bootstrap POM and returns the temporary
@@ -349,3 +369,18 @@ def makeBootstrapPom():
     pom = BootstrapPOM()
     pom.write(tf.name)
     return tf
+
+
+def write_penchy_pom(dependencies, path):
+    """
+    Creates a POM specifying dependencies.
+
+    :param dependencies: dependencies to install
+    :type dependencies: Iterable of :class:`MavenDependency`
+    :param path: path to write the pom to
+    :type path: str
+    """
+    pom = PenchyPOM()
+    for dependency in dependencies:
+        pom.add_dependency(dependency)
+        pom.write(path)
