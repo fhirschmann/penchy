@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+import os
 import sys
 import logging
 import imp
@@ -48,6 +49,9 @@ def main(args):
 
 if __name__ == "__main__":
     try:
+        with open('penchy.pid', 'w') as pidfile:
+            pidfile.write(str(os.getpid()))
+
         main(sys.argv)
     except Exception, err:
         log.exception('Exception occured while executing PenchY:')
