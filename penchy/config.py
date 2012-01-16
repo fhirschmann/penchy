@@ -2,6 +2,8 @@
 
 import os
 
+from penchy.util import dict2string
+
 
 class NodeConfiguration(object):
     """
