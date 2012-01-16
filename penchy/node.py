@@ -52,17 +52,17 @@ class Node(object):
     will be run on).
     """
 
-    def __init__(self, node):
+    def __init__(self, configuration):
         """
         Initialize the node.
 
-        :param node: tuple of (hostname, port, username, remote path)
+        :param node: the node configuration
         :type node: :class:`NodeConfiguration`
         """
 
         # TODO: SSH Keyfile and Passphrase may need to be specified
 
-        self.node = node
+        self.config = node
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         self.ssh.load_system_host_keys()
@@ -72,9 +72,9 @@ class Node(object):
         """
         Connect to the node.
         """
-        log.info("Connecting to node %s" % self.node.host)
-        self.ssh.connect(self.node.host, username=self.node.username,
-                port=self.node.ssh_port)
+        log.info("Connecting to node %s" % self.config.host)
+        self.ssh.connect(self.config.host, username=self.config.username,
+                port=self.config.ssh_port)
 
         self.sftp = self.ssh.open_sftp()
 
@@ -101,7 +101,7 @@ class Node(object):
             remote = os.path.basename(local)
 
         if not os.path.isabs(remote):
-            remote = os.path.join(self.node.path, remote)
+            remote = os.path.join(self.config.path, remote)
 
         try:
             self.sftp.mkdir(os.path.dirname(remote))
