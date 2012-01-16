@@ -51,7 +51,7 @@ class NodeConfiguration(object):
 
     def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__,
-                dict2string(self.__dict__), ['host', 'ssh_port'])
+                dict2string(self.__dict__, ['host', 'ssh_port']))
 
 
 class Node(object):
@@ -76,6 +76,9 @@ class Node(object):
         if not self.config.keyfile:
             self.ssh.load_system_host_keys()
         self.sftp = None
+
+    def __str__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self.config)
 
     def connect(self):
         """
