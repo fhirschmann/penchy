@@ -383,4 +383,4 @@ def write_penchy_pom(dependencies, path):
     pom = PenchyPOM()
     for dependency in dependencies:
         pom.add_dependency(dependency)
-        pom.write(path)
+    pom.write(path)
