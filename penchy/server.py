@@ -62,7 +62,6 @@ class Server:
                     node.put(upload)
                 node.put(pom.name, 'bootstrap.pom')
 
-                # TODO: Execute client
                 node.execute_penchy(self.job)
                 node.disconnect()
 
