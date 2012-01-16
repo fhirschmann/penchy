@@ -1,4 +1,6 @@
-#!/usr/bin/env python
+"""
+Deals with Apache Maven.
+"""
 
 import logging
 import os
