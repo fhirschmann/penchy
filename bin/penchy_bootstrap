@@ -33,6 +33,25 @@ def load_penchy(path):
     return Client
 
 
+def find_penchy_zip(source):
+    """
+    This will try to find the path to the penchy zip file.
+
+    Raises OSError if the zip cannot be found.
+
+    :param source: source to look for the zip file for
+    :type source: string
+    :returns: path to zip file
+    :rtype: string
+    """
+    for path in source.split(os.linesep):
+        if path.endswith('-py.zip'):
+            if os.path.isfile(path):
+                return path
+
+    raise OSError("PenchY zip could not be found")
+
+
 def main(args, load_from=False):
     """
     This method starts the bootstrap client. All arguments will be
@@ -59,12 +78,7 @@ def main(args, load_from=False):
         proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
                 stdout=PIPE)
         stdout, _ = proc2.communicate()
-        for classpath in stdout.split(os.linesep):
-            if classpath.endswith('-py.zip'):
-                break
-
-        penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
-
+        penchy_zip = find_penchy_zip(stdout)
         Client = load_penchy(penchy_zip)
 
     client = Client()
