@@ -141,6 +141,7 @@ class Node(object):
         def kill():
             self.connect()
             self.kill()
+            self.disconnect()
 
     def kill(self):
         """
