@@ -3,6 +3,7 @@
 import os
 import logging
 import atexit
+import imp
 from threading import Timer
 
 import paramiko
@@ -28,26 +29,48 @@ class Node(object):
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
 
-    def __init__(self, configuration, timeout=0):
+    def __init__(self, configuration, jobfile):
         """
         Initialize the node.
 
         :param node: the node configuration
         :type node: :class:`NodeConfiguration`
+        :param jobfile: the file of the job
+        :type jobfile: string
         """
         self.config = configuration
+
+        self.jobfile = jobfile
+        self.job = imp.load_source('job', jobfile)
+        self.timer = self._setup_timer()
+
+        self.client_is_running = False
+        self.client_has_finished = False
+        self.client_timed_out = False
+
+        self._setup_ssh()
+
+    def __str__(self):
+        return "<Node %s>" % self.config.host
+
+    def _setup_timer(self):
+        """
+        Sets up the Timer from the current job.
+        """
+        if hasattr(self.job, 'timeout'):
+            timeout_after = getattr(self.job, 'timeout')
+            if timeout_after:
+                return Timer(timeout_after, self.timeout)
+
+    def _setup_ssh(self):
+        """
+        Sets up the SSH objects.
+        """
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         if not self.config.keyfile:
             self.ssh.load_system_host_keys()
         self.sftp = None
-        self.client_is_running = False
-        self.timer = Timer(timeout, self.timeout)
-        self.timer.daemon = True
-        self.client_has_finished = False
-
-    def __str__(self):
-        return "<Node %s>" % self.config.host
 
     def logformat(self, msg):
         """
@@ -140,7 +163,7 @@ class Node(object):
             self.config.path, args))
         self.client_is_running = True
 
-        if self.timer.interval:
+        if self.timer:
             self.timer.start()
 
         @atexit.register

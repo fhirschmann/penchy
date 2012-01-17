@@ -44,7 +44,7 @@ class Server:
         """
         self.config = config
         self.job = job
-        self.nodes = [Node(n) for n in config.NODES]
+        self.nodes = [Node(n, job) for n in config.NODES]
         self.uploads = set((self.job, find_bootstrap_client()))
         self.listener = ThreadedServer(Service, hostname="192.168.56.1",
                 port=self.config.LISTEN_PORT)
