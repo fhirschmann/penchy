@@ -4,7 +4,7 @@ __version__ = '0.1'
 import sys
 
 
-if sys.version_info > (3, 0):
+if sys.version_info > (3, 0):  # pragma: no cover
     from . import log
 else:
     import log
