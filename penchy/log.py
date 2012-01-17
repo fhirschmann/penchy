@@ -1,4 +1,5 @@
 import logging
+from logging.handlers import RotatingFileHandler
 
 
 def configure(level=logging.INFO):
@@ -9,7 +10,8 @@ def configure(level=logging.INFO):
     formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
     ch = logging.StreamHandler()
     ch.setFormatter(formatter)
-    ch2 = logging.FileHandler('penchy.log')
+    ch2 = RotatingFileHandler('penchy.log', backupCount=10)
+    ch2.doRollover()
     ch2.setFormatter(formatter)
 
     logging.root.addHandler(ch)

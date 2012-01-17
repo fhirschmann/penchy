@@ -2,8 +2,9 @@
 
 import os
 import sys
-import logging
 import imp
+import logging
+from logging.handlers import RotatingFileHandler
 from getopt import getopt, GetoptError
 
 from subprocess import Popen, PIPE
@@ -11,7 +12,8 @@ from subprocess import Popen, PIPE
 
 log = logging.getLogger('penchy.bootstrap')
 formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
-ch = logging.FileHandler('penchy_bootstrap.log')
+ch = RotatingFileHandler('penchy_bootstrap.log', backupCount=10)
+ch.doRollover()
 ch.setFormatter(formatter)
 log.addHandler(ch)
 
