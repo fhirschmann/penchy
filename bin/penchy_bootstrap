@@ -43,7 +43,6 @@ def main(args, load_from=False):
                 break
 
         penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
-        log.info("Starting PenchY Client from %s" % penchy_zip)
 
         sys.path.insert(0, penchy_zip)
 
