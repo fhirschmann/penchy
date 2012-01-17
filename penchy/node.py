@@ -41,15 +41,22 @@ class Node(object):
             self.ssh.load_system_host_keys()
         self.sftp = None
         self.client_is_running = False
+        self.client_has_finished = False
 
     def __str__(self):
-        return "<%s: %s>" % (self.__class__.__name__, self.config)
+        return "<Node %s>" % self.config.host
+
+    def logformat(self, msg):
+        """
+        Prepends the name of this node to a (log)message.
+        """
+        return " ".join([str(self), msg])
 
     def connect(self):
         """
         Connect to the node.
         """
-        log.info("Connecting to node %s" % self.config.host)
+        log.info(self.logformat("Connecting"))
         self.ssh.connect(self.config.host, username=self.config.username,
                 port=self.config.ssh_port, password=self.config.password,
                 key_filename=self.config.keyfile)
@@ -60,6 +67,7 @@ class Node(object):
         """
         Disconnect from the node.
         """
+        log.info(self.logformat("Disconnecting"))
         self.sftp.close()
         self.ssh.close()
 
@@ -86,7 +94,7 @@ class Node(object):
         except IOError:
             pass
 
-        log.info("Copying file %s to %s" % (local, remote))
+        log.debug(self.logformat("Copying file %s to %s" % (local, remote)))
         self.sftp.put(local, remote)
 
     def get_logs(self):
@@ -112,7 +120,7 @@ class Node(object):
         :param cmd: command to execute
         :type cmd: string
         """
-        log.info("Executing %s on %s" % (cmd, self))
+        log.info(self.logformat("Executing %s" % cmd))
         return self.ssh.exec_command(cmd)
 
     def execute_penchy(self, args):
@@ -145,4 +153,4 @@ class Node(object):
         pid = pidfile.read()
         pidfile.close()
         self.execute('kill ' + pid)
-        log.warn('Client on %s was terminated' % self)
+        log.warn(self.logformat("Client was terminated"))
