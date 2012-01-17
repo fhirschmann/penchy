@@ -50,7 +50,9 @@ def get_classpath(path=None):
     if path:
         log.debug("Using %s" % path)
 
-    proc = Popen(['mvn', '-f', path, 'dependency:build-classpath'], stdout=PIPE)
+    cmd = ['mvn', '-f', path, 'dependency:build-classpath']
+    log.info("Executing maven. This may take a while")
+    proc = Popen(cmd, stdout=PIPE)
     stdout, _ = proc.communicate()
 
     if proc.returncode is not 0:  # pragma: no cover
