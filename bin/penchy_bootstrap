@@ -52,6 +52,21 @@ def find_penchy_zip(source):
     raise OSError("PenchY zip could not be found")
 
 
+def install_penchy():
+    """
+    This function will execute maven, install PenchY and return
+    maven's output.
+
+    :returns: maven output
+    :rtype: string
+    """
+    log.debug("Installing/updating PenchY using Maven")
+    proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
+            stdout=PIPE)
+    stdout, _ = proc2.communicate()
+    return stdout
+
+
 def main(args, load_from=False):
     """
     This method starts the bootstrap client. All arguments will be
@@ -74,11 +89,8 @@ def main(args, load_from=False):
     if load_from:
         Client = load_penchy(load_from)
     else:
-        log.debug("Getting classpath")
-        proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
-                stdout=PIPE)
-        stdout, _ = proc2.communicate()
-        penchy_zip = find_penchy_zip(stdout)
+        maven_output = install_penchy()
+        penchy_zip = find_penchy_zip(maven_output)
         Client = load_penchy(penchy_zip)
 
     client = Client()
