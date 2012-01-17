@@ -3,6 +3,7 @@
 import os
 import logging
 import atexit
+from threading import Timer
 
 import paramiko
 
@@ -27,7 +28,7 @@ class Node(object):
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
 
-    def __init__(self, configuration):
+    def __init__(self, configuration, timeout=0):
         """
         Initialize the node.
 
@@ -41,6 +42,8 @@ class Node(object):
             self.ssh.load_system_host_keys()
         self.sftp = None
         self.client_is_running = False
+        self.timer = Timer(timeout, self.timeout)
+        self.timer.daemon = True
         self.client_has_finished = False
 
     def __str__(self):
@@ -137,11 +140,20 @@ class Node(object):
             self.config.path, args))
         self.client_is_running = True
 
+        if self.timer.interval:
+            self.timer.start()
+
         @atexit.register
         def kill():
             self.connect()
             self.kill()
             self.disconnect()
+
+    def timeout(self):
+        """
+        Executed when this node times out.
+        """
+        log.error(self.logformat("Timed out"))
 
     def kill(self):
         """
