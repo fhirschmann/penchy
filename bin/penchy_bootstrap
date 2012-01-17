@@ -62,7 +62,6 @@ if __name__ == "__main__":
         args = sys.argv[:]
         if '--load-from' in args:
             load_from = args[args.index('--load-from') + 1]
-            log.info(args)
             args.remove('--load-from')
             args.remove(load_from)
         else:
