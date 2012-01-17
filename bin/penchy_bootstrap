@@ -16,6 +16,23 @@ ch.setFormatter(formatter)
 log.addHandler(ch)
 
 
+def load_penchy(path):
+    """
+    This loads :class:`penchy.client.Client` from
+    a zip file or directory.
+
+    :param path: zip or directory to load from
+    :type path: string
+    :returns: PenchY client
+    :rtype: :class:`penchy.client.Client`
+    """
+    sys.path.insert(0, os.path.abspath(path))
+    from penchy.client import Client
+    import penchy
+    log.info("Running PenchY %s from %s" % (penchy.__version__, penchy.__file__))
+    return Client
+
+
 def main(args, load_from=False):
     """
     This method starts the bootstrap client. All arguments will be
@@ -36,7 +53,7 @@ def main(args, load_from=False):
     log.debug(stdout)
 
     if load_from:
-        sys.path.insert(0, os.path.abspath(load_from))
+        Client = load_penchy(load_from)
     else:
         log.debug("Getting classpath")
         proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
@@ -48,11 +65,8 @@ def main(args, load_from=False):
 
         penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
 
-        sys.path.insert(0, penchy_zip)
+        Client = load_penchy(penchy_zip)
 
-    from penchy.client import Client
-    import penchy
-    log.info("Running PenchY %s from %s" % (penchy.__version__, penchy.__file__))
     client = Client()
     client.parse_args(args)
     client.run()
