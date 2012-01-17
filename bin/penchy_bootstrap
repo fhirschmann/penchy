@@ -9,7 +9,7 @@ from getopt import getopt, GetoptError
 from subprocess import Popen, PIPE
 
 logging.basicConfig(level=logging.INFO, filename='penchy_bootstrap.log')
-log = logging.getLogger('penchy-bootstrap')
+log = logging.getLogger('penchy.bootstrap')
 
 
 def main(args, load_from=False):
