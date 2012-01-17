@@ -12,34 +12,46 @@ logging.basicConfig(level=logging.INFO, filename='penchy_bootstrap.log')
 log = logging.getLogger('penchy-bootstrap')
 
 
-def main(args):
+def main(args, load_from=False):
     """
     This method starts the bootstrap client. All arguments will be
     passed to the real client.
 
     A valid bootstrap.pom in the current working directory is
     expected!
+
+    :param args: arguments to pass; this would normally be sys.argv
+    :type args: list
+    :param load_from: this will load PenchY from this path instead of
+                      running it from the maven repository
+    :type load_from: string
     """
     log.debug("Executing mvn install:")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
     stdout, _ = proc.communicate()
     log.debug(stdout)
 
-    log.debug("Getting classpath")
-    proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
-            stdout=PIPE)
-    stdout, _ = proc2.communicate()
-    for classpath in stdout.split(os.linesep):
-        if classpath.endswith('-py.zip'):
-            break
+    if load_from:
+        sys.path.insert(0, os.path.abspath(load_from))
+    else:
+        log.debug("Getting classpath")
+        proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
+                stdout=PIPE)
+        stdout, _ = proc2.communicate()
+        for classpath in stdout.split(os.linesep):
+            if classpath.endswith('-py.zip'):
+                break
 
-    penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
-    log.info("Starting PenchY Client from %s" % penchy_zip)
+        penchy_zip = filter(lambda x: x.endswith("zip"), classpath.split(":"))[0]
+        log.info("Starting PenchY Client from %s" % penchy_zip)
 
-    sys.path.insert(0, penchy_zip)
+        sys.path.insert(0, penchy_zip)
+
     from penchy.client import Client
+    import penchy
+    log.info("Running PenchY %s from %s" % (penchy.__version__, penchy.__file__))
     client = Client()
-    client.parse_args(sys.argv)
+    client.parse_args(args)
     client.run()
 
 
@@ -48,7 +60,16 @@ if __name__ == "__main__":
         with open('penchy.pid', 'w') as pidfile:
             pidfile.write(str(os.getpid()))
 
-        main(sys.argv)
+        args = sys.argv[:]
+        if '--load-from' in args:
+            load_from = args[args.index('--load-from') + 1]
+            log.info(args)
+            args.remove('--load-from')
+            args.remove(load_from)
+        else:
+            load_from = None
+
+        main(args, load_from)
     except Exception, err:
         log.exception('Exception occured while executing PenchY:')
         sys.exit(1)

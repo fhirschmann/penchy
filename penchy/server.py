@@ -50,6 +50,7 @@ class Server:
                 port=self.config.LISTEN_PORT)
         self.client_thread = threading.Thread(target=self.run_clients)
         self.client_thread.daemon = True
+        self.bootstrap_args = []
 
     def run_clients(self):
         """
@@ -63,7 +64,7 @@ class Server:
                 node.put(pom.name, 'bootstrap.pom')
 
                 node.execute_penchy(" ".join(
-                    [self.job, "192.168.56.1", "4343"]))
+                    self.bootstrap_args + [self.job, "192.168.56.1", "4343"]))
                 node.disconnect()
 
     def run(self):
