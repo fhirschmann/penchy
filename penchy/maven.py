@@ -47,7 +47,9 @@ def get_classpath(path=None):
     if not path or not os.path.isfile(path):
         raise OSError("No pom.xml found!")
 
-    log.debug("Using %s" % path)
+    if path:
+        log.debug("Using %s" % path)
+
     proc = Popen(['mvn', '-f', path, 'dependency:build-classpath'], stdout=PIPE)
     stdout, _ = proc.communicate()
 
