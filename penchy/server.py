@@ -64,7 +64,8 @@ class Server:
                 node.put(pom.name, 'bootstrap.pom')
 
                 node.execute_penchy(" ".join(
-                    self.bootstrap_args + [self.job, "192.168.56.1", "4343"]))
+                    self.bootstrap_args + \
+                    [self.job, "192.168.56.1", "4343", node.identifier]))
                 node.disconnect()
 
     def run(self):
