@@ -29,19 +29,17 @@ class Node(object):
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
 
-    def __init__(self, configuration, jobfile):
+    def __init__(self, configuration, job):
         """
         Initialize the node.
 
         :param node: the node configuration
         :type node: :class:`NodeConfiguration`
-        :param jobfile: the file of the job
-        :type jobfile: string
+        :param job: the job to execute
         """
         self.config = configuration
 
-        self.jobfile = jobfile
-        self.job = imp.load_source('job', jobfile)
+        self.job = job
         self.timer = self._setup_timer()
 
         self.client_is_running = False

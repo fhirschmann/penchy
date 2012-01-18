@@ -36,16 +36,17 @@ class Server:
     """
     This class represents the server.
     """
-    def __init__(self, config, job):
+    def __init__(self, config, jobfile):
         """
-        :param config: A config module
-        :param job: The job to execute:
-        :type job: :class:`penchy.jobs.Job`
+        :param config: a config module
+        :param job: the job to execute
+        :type jobfile: string
         """
         self.config = config
-        self.job = job
-        self.nodes = [Node(n, job) for n in config.NODES]
-        self.uploads = set((self.job, find_bootstrap_client()))
+        self.jobfile = jobfile
+        self.job = imp.load_source('job', jobfile)
+        self.nodes = [Node(n, self.job) for n in config.NODES]
+        self.uploads = set((self.jobfile, find_bootstrap_client()))
         self.listener = ThreadedServer(Service, hostname="192.168.56.1",
                 port=self.config.LISTEN_PORT)
         self.client_thread = threading.Thread(target=self.run_clients)
@@ -65,7 +66,7 @@ class Server:
 
                 node.execute_penchy(" ".join(
                     self.bootstrap_args + \
-                    [self.job, "192.168.56.1", "4343", node.identifier]))
+                    [self.jobfile, "192.168.56.1", "4343", node.identifier]))
                 node.disconnect()
 
     def run(self):
