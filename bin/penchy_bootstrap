@@ -63,6 +63,20 @@ def install_penchy():
     :rtype: string
     """
     log.debug("Installing/updating PenchY using Maven")
+    proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
+    stdout, _ = proc.communicate()
+    log.debug(stdout)
+    return stdout
+
+
+def build_classpath():
+    """
+    This function will build the classpath using bootstrap.pom
+
+    :returns: maven output
+    :rtype: string
+    """
+    log.debug("Building the Maven classpath")
     proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
             stdout=PIPE)
     stdout, _ = proc2.communicate()
@@ -83,15 +97,11 @@ def main(args, load_from=False):
                       running it from the maven repository
     :type load_from: string
     """
-    log.debug("Executing mvn install:")
-    proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
-    stdout, _ = proc.communicate()
-    log.debug(stdout)
-
     if load_from:
         Client = load_penchy(load_from)
     else:
-        maven_output = install_penchy()
+        install_penchy()
+        maven_output = build_classpath()
         penchy_zip = find_penchy_zip(maven_output)
         Client = load_penchy(penchy_zip)
 
