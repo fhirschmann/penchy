@@ -34,12 +34,16 @@ if __name__ == "__main__":
             metavar="job")
     args = parser.parse_args()
     logging.root.setLevel(args.loglevel)
-    log.info('Using the "%s" config module' % args.config)
 
     try:
         config = imp.load_source('Config', args.config)
     except IOError:
-        raise IOError("Config file could not be found: %s" % args.config)
+        try:
+            config = imp.load_source('Config', 'penchyrc')
+        except IOError:
+            raise IOError("Config file could not be loaded from: %s or ./penchyrc" % args.config)
+
+    log.info('Using %s config module' % config.__file__)
 
     server = Server(config, args.job)
 
