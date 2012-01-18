@@ -25,6 +25,8 @@ class Client(object):
         """
         Runs the client.
         """
+        # TODO: Check MavenDependency checksums
+
         self.job.job.run(self.job.jconfig)
         self.send_data("Job finished!", (self.args.server, int(self.args.port)))
 
