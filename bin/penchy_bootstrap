@@ -118,6 +118,8 @@ if __name__ == "__main__":
         args = sys.argv[:]
         if '--load-from' in args:
             load_from = args[args.index('--load-from') + 1]
+            if not os.path.isdir(load_from):
+                raise ValueError("Argument to --load-from must be a directory")
             args.remove('--load-from')
             args.remove(load_from)
         else:
