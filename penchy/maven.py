@@ -327,9 +327,6 @@ class POM(object):
         if pretty:
             tree_pp(self.root)
 
-        if os.path.isdir(filename):  # pragma: no cover
-            filename += os.sep + 'pom.xml'
-
         self.tree.write(filename)
 
 
