@@ -36,4 +36,6 @@ if __name__ == "__main__":
 
         config = load_config(args.config)
         job = load_job(args.job, config)
-        job.job.run(job.jconfig)
+
+        for configuration in job.job.configurations_for_node(self.identifier):
+            job.job.run(configuration)

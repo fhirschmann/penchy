@@ -27,6 +27,7 @@ class Client(object):
         self.args = self.parse_args(args)
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job, self.config)
+        self.identifier = args.identifier
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
@@ -37,9 +38,10 @@ class Client(object):
         """
         Runs the client.
         """
-        # TODO: Check MavenDependency checksums
 
-        self.job.job.run(self.job.jconfig)
+        for configuration in job.job.configurations_for_node(self.identifier):
+            self.job.job.run(configuration)
+
         self.send_data("Job finished!", (self.config.SERVER_HOST,
             self.config.SERVER_PORT))
 
@@ -54,7 +56,7 @@ class Client(object):
         parser = argparse.ArgumentParser(description=__doc__, prog=args)
         parser.add_argument("job", help="job to execute", metavar="job")
         parser.add_argument("config", help="config file to use", metavar="config")
-        parser.add_argument("myname", help="my hostname", metavar="myname")
+        parser.add_argument("identifier", help="my identifier", metavar="identifier")
         parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
         args = parser.parse_args(args=args)
         return args
