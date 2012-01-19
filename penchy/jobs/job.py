@@ -6,7 +6,7 @@ from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.util import tempdir
-from penchy.maven import get_classpath, write_penchy_pom
+from penchy.maven import get_classpath, setup_dependencies
 
 
 log = logging.getLogger(__name__)
@@ -54,21 +54,6 @@ class Job(object):
         self.server_flow = server_flow
         self.invocations = invocations
 
-    def _setup_dependencies(self, configuration):
-        """
-        Installs the required dependencies and adjusts the configuration's
-        classpath.
-
-        :param configuration: :class:`JVMNodeConfiguration` to work on
-        """
-        pomfile = os.path.join(configuration.node.path, 'pom.xml')
-        client_dependencies = self._get_client_dependencies(configuration)
-        write_penchy_pom(client_dependencies, pomfile)
-        configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
-        for dependency in client_dependencies:
-            dependency.pom_path = pomfile
-            dependency.check_checksum()
-
     def run(self, configuration):
         """
         Run clientside Job.
@@ -76,7 +61,10 @@ class Job(object):
         :param configuration: :class:`JVMNodeConfiguration` to run.
         """
         # setup
-        self._setup_dependencies(configuration)
+        pomfile = os.path.join(configuration.node.path, 'pom.xml')
+        setup_dependencies(pomfile, self._get_client_dependencies(configuration))
+        configuration.jvm.add_to_cp(get_classpath(pomfile))
+
         configuration.jvm.basepath = configuration.node.basepath
 
         starts = ifilter(bool, (configuration.jvm.workload,

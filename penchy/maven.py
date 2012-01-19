@@ -72,6 +72,21 @@ def get_classpath(path=None):
     raise MavenError("The classpath was not in maven's output")  # pragma: no cover
 
 
+def setup_dependencies(pomfile, dependencies):
+    """
+    Installs the required dependencies.
+
+    :param pomfile: POM to use
+    :type pomfile: string
+    :param dependencies: dependencies to install
+    :type dependencies: string
+    """
+    write_penchy_pom(dependencies, pomfile)
+    for dependency in dependencies:
+        dependency.pom_path = pomfile
+        dependency.check_checksum()
+
+
 class MavenError(Exception):
     """
     Error which occurs when there Maven causes errors.
