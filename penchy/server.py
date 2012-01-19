@@ -50,13 +50,13 @@ class Server:
         self.nodes = [Node(n, self.job) for n in self.config.NODES]
         self.uploads = (
                 (args.job,),
-                (config_filename,),
                 (find_bootstrap_client(),),
                 (config_filename, 'config.py'))
         self.listener = ThreadedServer(Service,
                 hostname=self.config.SERVER_HOST,
                 port=self.config.SERVER_PORT)
-        self.client_thread = self._setup_client_thread([args.job])
+        self.client_thread = self._setup_client_thread([args.job,
+            'config.py'])
 
     def _setup_client_thread(self, args):
         """
@@ -102,7 +102,7 @@ class Server:
             self.bootstrap_args.extend(['--load-from', args.load_from])
         return args
 
-    def run_clients(self, jobfile):
+    def run_clients(self, jobfile, configfile):
         """
         This method will run the clients on all nodes.
         """
@@ -115,7 +115,7 @@ class Server:
 
                 node.execute_penchy(" ".join(
                     self.bootstrap_args + \
-                    [jobfile, "192.168.56.1", "4343", node.identifier]))
+                    [jobfile, configfile, "192.168.56.1", "4343", node.identifier]))
                 node.disconnect()
 
     def run(self):

@@ -1,9 +1,9 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from config import *
+import config
 
-node = LOCALNODE
+node = config.LOCALNODE
 jvm = jvms.JVM('java')
 jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
 

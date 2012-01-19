@@ -8,6 +8,8 @@ import imp
 import argparse
 import rpyc
 
+from penchy.util import load_config, load_job
+
 
 log = logging.getLogger(__name__)
 
@@ -24,7 +26,8 @@ class Client(object):
         """
         self.args = self.parse_args(args)
         log.info('Loading job from %s' % self.args.job)
-        self.job = imp.load_source('job', self.args.job)
+        self.config, _ = load_config(self.args.config)
+        self.job = load_job(self.args.job, self.config)
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
@@ -48,8 +51,9 @@ class Client(object):
         :type args: list
         """
         # TODO: This could be imported from the config file
-        parser = argparse.ArgumentParser(description=__doc__, prog=args[0])
+        parser = argparse.ArgumentParser(description=__doc__, prog=args)
         parser.add_argument("job", help="job to execute", metavar="job")
+        parser.add_argument("config", help="config file to use", metavar="config")
         parser.add_argument("server", help="server to use", metavar="server")
         parser.add_argument("port", help="port to use", metavar="port", type=int)
         parser.add_argument("myname", help="my hostname", metavar="myname")
