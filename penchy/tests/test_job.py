@@ -1,5 +1,6 @@
 from itertools import chain
 
+from penchy.config import NodeConfiguration
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
@@ -7,6 +8,7 @@ from penchy.jobs.jvms import JVM
 from penchy.jobs.workloads import ScalaBench
 from penchy.jobs.tools import HProf
 from penchy.jobs.filters import Print
+from penchy.node import Node
 from penchy.tests.unit import unittest
 from penchy.tests.util import MockPipelineElement
 
@@ -119,3 +121,38 @@ class CheckArgsTest(unittest.TestCase):
                 d = self.d.copy()
                 d[k] = v
                 _check_kwargs(self.p, d)
+
+
+class JVMNodeConfigurationsTest(unittest.TestCase):
+
+    def setUp(self):
+        self.single_host = [job.makeJVMNodeConfiguration(JVM('foo'),
+                                                        NodeConfiguration('192.168.1.10',
+                                                                          22,
+                                                                          'foo',
+                                                                          'path',
+                                                                          'base'))]
+        self.multi_host = [job.makeJVMNodeConfiguration(JVM('foz'),
+                                                        NodeConfiguration('192.168.1.11',
+                                                                          22,
+                                                                          'foo',
+                                                                          'path',
+                                                                          'base')),
+                           job.makeJVMNodeConfiguration(JVM('for'),
+                                                        NodeConfiguration('192.168.1.11',
+                                                                          22,
+                                                                          'foo',
+                                                                          'path',
+                                                                          'base'))]
+        self.job = job.Job(self.single_host + self.multi_host, [], [])
+
+    def test_wrong_identifier(self):
+        self.assertListEqual(self.job.configurations_for_node('baz'), [])
+
+    def test_single_host_identifier(self):
+        self.assertListEqual(self.job.configurations_for_node('192.168.1.10'),
+                             self.single_host)
+
+    def test_multi_host_identifier(self):
+        self.assertListEqual(self.job.configurations_for_node('192.168.1.11'),
+                             self.multi_host)
