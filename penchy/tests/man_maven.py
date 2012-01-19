@@ -71,3 +71,10 @@ class MavenTest(unittest.TestCase):
 
     def test_checksum_required_fails(self):
         self.assertRaises(IntegrityError, self.dep_cs2.check_checksum)
+
+    def test_setup_dependencies(self):
+        setup_dependencies(self.tf_cs, [self.dep_cs])
+
+    def test_setup_dependencies_incorrect_checksum(self):
+        self.assertRaises(IntegrityError, setup_dependencies,
+                self.tf_cs2, [self.dep_cs2])
