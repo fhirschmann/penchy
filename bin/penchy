@@ -1,5 +1,12 @@
 #!/usr/bin/env python
 
+"""
+This is the main entry point for PenchY.
+
+Execute this if you want to run the full PenchY
+cycle (deploying jobs, executing jobs, accumulating results).
+"""
+
 import sys
 import imp
 import logging
@@ -11,7 +18,17 @@ from penchy.server import Server
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
+    if '--load-from' in sys.argv:
+        test_doc = """
+        By running this, you'll execute PenchY in test mode, which
+        means the PenchY client will not be executed from the zip
+        file deployed in the maven repository but loaded from a path
+        (--load-from).
+        """
+    else:
+        test_doc = ''
+
+    parser = argparse.ArgumentParser(description=__doc__ + test_doc)
     log_group = parser.add_mutually_exclusive_group()
     log_group.add_argument("-d", "--debug",
             action="store_const", const=logging.DEBUG,
