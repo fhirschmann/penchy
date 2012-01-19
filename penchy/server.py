@@ -44,7 +44,9 @@ class Server:
         :param jobfile: job file to execute
         :type jobfile: string
         """
+        # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
+
         self.config = load_config(configfile)
         self.job = load_job(jobfile, self.config)
 
