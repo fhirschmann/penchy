@@ -39,7 +39,7 @@ class PipelineElement(object):
     outputs = []
 
     def __init__(self):
-        self.out = defaultdict(list)
+        self.reset()
 
         self.prehooks = []
         self.posthooks = []
@@ -56,6 +56,15 @@ class PipelineElement(object):
 
         for hook in self.posthooks:
             hook()
+
+    def reset(self):
+        """
+        Reset state of element.
+
+        Resets
+          - element.out
+        """
+        self.out = defaultdict(list)
 
     def _run(self, **kwargs):  # pragma: no cover
         """
