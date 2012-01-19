@@ -8,11 +8,15 @@ import os
 import shutil
 import sys
 import imp
+import logging
 import tempfile
 import pkg_resources
 
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
+
+
+log = logging.getLogger(__name__)
 
 
 class _memoized(object):
@@ -184,6 +188,7 @@ def load_job(filename, config):
     sys.modules['config'] = config
 
     job = imp.load_source('job', filename)
+    log.info("Loaded job from %s" % filename)
     return job
 
 
@@ -207,4 +212,5 @@ def load_config(filename):
         except IOError:
             raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
 
+    log.info("Loaded configuration from %s" % filename)
     return (config, actual_filename)
