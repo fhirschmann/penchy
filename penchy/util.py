@@ -175,12 +175,12 @@ def load_job(filename, config):
     :param config: config file to export to job namespace
     """
     sys.modules['config'] = config
-    # XXX: This is voodoo.
+    # XXX: This is bad voodoo.
     #
     # This will insert the "config" module into the namespace
     # so that you can do
     #
-    #   from config import *
+    #   import config
     #
     # in the job file without knowing where the configuration
     # file is actually located.
