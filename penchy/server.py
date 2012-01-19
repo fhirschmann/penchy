@@ -16,7 +16,7 @@ import rpyc
 from rpyc.utils.server import ThreadedServer
 
 from penchy.node import Node
-from penchy.util import find_bootstrap_client
+from penchy.util import find_bootstrap_client, load_job, load_config
 from penchy.maven import makeBootstrapPOM
 
 log = logging.getLogger(__name__)
@@ -44,8 +44,8 @@ class Server:
         """
         self.bootstrap_args = []
         args = self.parse_args(args)
-        self.config, config_filename = self._load_config(args.config)
-        self.job = self._load_job(args.job)
+        self.config, config_filename = load_config(args.config)
+        self.job = load_job(args.job, self.config)
 
         self.nodes = [Node(n, self.job) for n in self.config.NODES]
         self.uploads = (
@@ -57,41 +57,6 @@ class Server:
                 hostname=self.config.SERVER_HOST,
                 port=self.config.SERVER_PORT)
         self.client_thread = self._setup_client_thread([args.job])
-
-    def _load_config(self, filename):
-        """
-        Loads the config module from filename. Looks
-        in the current working directory as well.
-
-        :param filename: filename of the config file
-        :type filename: string
-        :returns: tuple of (config object, config filename)
-        :rtype: tuple
-        """
-        try:
-            config = imp.load_source('config', filename)
-            actual_filename = filename
-        except IOError:
-            try:
-                config = imp.load_source('config', 'penchyrc')
-                actual_filename = 'penchyrc'
-            except IOError:
-                raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
-
-        sys.modules['config'] = config
-
-        log.info('Using %s config module' % config.__file__)
-        return (config, actual_filename)
-
-    def _load_job(self, filename):
-        """
-        Loads a job.
-
-        :param filename: filename of the job
-        :type filename: string
-        """
-        job = imp.load_source('job', filename)
-        return job
 
     def _setup_client_thread(self, args):
         """

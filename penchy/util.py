@@ -7,6 +7,7 @@ import functools
 import os
 import shutil
 import sys
+import imp
 import tempfile
 import pkg_resources
 
@@ -159,3 +160,39 @@ def find_bootstrap_client():
     import penchy
     return pkg_resources.resource_filename('penchy',
             os.path.join('../', 'bin', 'penchy_bootstrap'))
+
+
+def load_job(filename, config):
+    """
+    Loads a job.
+
+    :param filename: filename of the job
+    :type filename: string
+    :param config: config file to export to job namespace
+    """
+    sys.modules['config'] = config
+    job = imp.load_source('job', filename)
+    return job
+
+
+def load_config(filename):
+    """
+    Loads the config module from filename. Looks
+    in the current working directory as well.
+
+    :param filename: filename of the config file
+    :type filename: string
+    :returns: tuple of (config object, config filename)
+    :rtype: tuple
+    """
+    try:
+        config = imp.load_source('config', filename)
+        actual_filename = filename
+    except IOError:
+        try:
+            config = imp.load_source('config', 'penchyrc')
+            actual_filename = 'penchyrc'
+        except IOError:
+            raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
+
+    return (config, actual_filename)
