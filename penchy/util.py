@@ -171,6 +171,18 @@ def load_job(filename, config):
     :param config: config file to export to job namespace
     """
     sys.modules['config'] = config
+    # XXX: This is voodoo.
+    #
+    # This will insert the "config" module into the namespace
+    # so that you can do
+    #
+    #   from config import *
+    #
+    # in the job file without knowing where the configuration
+    # file is actually located.
+
+    sys.modules['config'] = config
+
     job = imp.load_source('job', filename)
     return job
 
