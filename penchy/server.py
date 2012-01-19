@@ -48,8 +48,8 @@ class Server:
         self.config = load_config(configfile)
         self.job = load_job(jobfile, self.config)
 
-        self.nodes = [Node(nc.node, self.job) for nc in
-                self.job.job.configurations]
+        self.nodes = set((Node(nc.node, self.job) for nc in
+                self.job.job.configurations))
         self.uploads = (
                 (jobfile,),
                 (find_bootstrap_client(),),
