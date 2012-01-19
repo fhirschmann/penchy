@@ -4,6 +4,7 @@ This module provides the foundation of job elements.
 
 import logging
 from collections import defaultdict
+from itertools import chain
 
 log = logging.getLogger(__name__)
 
@@ -165,46 +166,30 @@ def _check_kwargs(instance, kwargs):
     :rtype: int
     """
 
-    # TODO: no upper bound on count of subtypes .. or at least go to subsubtype
     for t in instance.inputs:
-        length = len(t)
-        if length == 2:
-            t = (t[0], t[1], object)
-
-        if length not in (2, 3):
-            msg = 'Malformed type description: '
-            '{0} is not of form (str, type, type) or (str, type)'.format(t)
+        msg = 'Malformed type description: '
+        '{0} is not of form (str, *type) [str, *type]'.format(t)
+        if not len(t) > 1:
             raise AssertionError(msg)
-
-        if not all(isinstance(x, y) for x, y in zip(t, (str, type, type))):
-            if length == 2:
-                msg = 'Malformed type description: {0} is not of form '
-                '(str, type)'.format(t)
-            elif length == 3:
-                msg = 'Malformed type description: {0} is not of form'
-                '(str, type, type)'.format(t)
-
+        if not isinstance(t, (tuple, list)) or not isinstance(t[0], str):
+            raise AssertionError(msg)
+        if any(not isinstance(type_, type) for type_ in t[1:]):
             raise AssertionError(msg)
 
     for t in instance.inputs:
-        if len(t) == 3:
-            name, type_, subtype = t
-        else:
-            name, type_ = t
-            subtype = None
-        if name in kwargs:
-            if isinstance(kwargs[name], type_):
-                if subtype is not None and any(not isinstance(e, subtype)
-                                               for e in kwargs[name]):
-                    raise ValueError('Argument {0} has no uniform '
-                                     'subtype {1}'.format(name, subtype))
-            else:
-                raise ValueError('Argument {0} is {1} instead of '
-                                 'expected {2}'.format(name,
-                                                       type(kwargs[name]),
-                                                       type_))
-        else:
+        name, types = t[0], t[1:]
+        if name not in kwargs:
             raise ValueError('Argument {0} is missing'.format(name))
+
+        value = [kwargs[name]]  # pack start value in list to reuse loop
+        for type_ in types:
+            if any(not isinstance(v, type_) for v in value):
+                raise ValueError('Argument {0} is not of type {1}'.format(name,
+                                                                          types))
+            if len(value) > 1:
+                value = chain(subvalue for subvalue in value)
+            else:
+                value = value[0]
 
     unused_inputs = 0
     for name in set(kwargs) - set(t[0] for t in instance.inputs):
