@@ -123,7 +123,7 @@ class Job(object):
         :rtype: list
         """
         return [config for config in self.configurations if
-                config.node.host == identifier]
+                config.node.identifier == identifier]
 
     def check(self):
         """

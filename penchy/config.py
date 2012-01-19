@@ -43,6 +43,13 @@ class NodeConfiguration(object):
         self.password = password
         self.keyfile = keyfile
 
+    @property
+    def identifier(self):
+        """
+        A unique identifier for this node.
+        """
+        return self.host
+
     def __str__(self):
         return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, ['host', 'ssh_port']))
