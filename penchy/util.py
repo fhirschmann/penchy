@@ -203,7 +203,7 @@ def load_config(filename):
     try:
         config = imp.load_source('config', filename)
     except IOError:
-        raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
+        raise IOError("Config file could not be loaded from: %s" % filename)
 
     log.info("Loaded configuration from %s" % filename)
     return config
