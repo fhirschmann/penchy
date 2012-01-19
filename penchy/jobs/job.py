@@ -112,6 +112,19 @@ class Job(object):
         """
         return set((element.DEPENDENCIES for element in self.server_flow))
 
+    def configurations_for_node(self, identifier):
+        """
+        Return the configurations of this job that are to be run on the node
+        that corresponds to ``identifier``.
+
+        :param identifier: identifier for node.
+        :type host: str
+        :returns: :class:`JVMNodeConfiguration` of job that run on host
+        :rtype: list
+        """
+        return [config for config in self.configurations if
+                config.node.identifier == identifier]
+
     def check(self):
         """
         Check job for plausibility.
