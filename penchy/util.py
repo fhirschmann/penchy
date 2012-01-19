@@ -174,7 +174,6 @@ def load_job(filename, config):
     :type filename: string
     :param config: config file to export to job namespace
     """
-    sys.modules['config'] = config
     # XXX: This is bad voodoo.
     #
     # This will insert the "config" module into the namespace
