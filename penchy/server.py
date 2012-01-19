@@ -53,8 +53,9 @@ class Server:
                 (config_filename,),
                 (find_bootstrap_client(),),
                 (config_filename, 'config.py'))
-        self.listener = ThreadedServer(Service, hostname="192.168.56.1",
-                port=self.config.LISTEN_PORT)
+        self.listener = ThreadedServer(Service,
+                hostname=self.config.SERVER_HOST,
+                port=self.config.SERVER_PORT)
         self.client_thread = self._setup_client_thread([args.job])
 
     def _load_config(self, filename):

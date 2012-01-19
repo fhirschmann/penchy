@@ -7,16 +7,17 @@ from penchy.config import NodeConfiguration
 # The location of your private ssh key
 ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
 
-# The default username on the nodes
+# The default username on nodes
 USERNAME = 'bench'
 
-# A list of files to copy to the node
-FILES = []
-
+# Default SSH port on nodes
 SSH_PORT = 22
 
-# The port the server listens on
-LISTEN_PORT = 4343
+# The hostname (or IP) of this server
+SERVER_HOST = '192.168.56.1'
+
+# The port the server will listen on
+SERVER_PORT = 4343
 
 # List of nodes
 NODES = [
