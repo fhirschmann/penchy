@@ -42,16 +42,20 @@ class Server:
         :param args: arguments; this would normally be sys.argv
         :type args: list
         """
+        self.bootstrap_args = []
         args = self.parse_args(args)
         self.config, config_filename = self._load_config(args.config)
         self.job = self._load_job(args.job)
 
         self.nodes = [Node(n, self.job) for n in self.config.NODES]
-        self.uploads = set((args.job, config_filename, find_bootstrap_client()))
+        self.uploads = (
+                (args.job,),
+                (config_filename,),
+                (find_bootstrap_client(),),
+                (config_filename, 'config.py'))
         self.listener = ThreadedServer(Service, hostname="192.168.56.1",
                 port=self.config.LISTEN_PORT)
         self.client_thread = self._setup_client_thread([args.job])
-        self.bootstrap_args = []
 
     def _load_config(self, filename):
         """
@@ -140,7 +144,7 @@ class Server:
             for node in self.nodes:
                 node.connect()
                 for upload in self.uploads:
-                    node.put(upload)
+                    node.put(*upload)
                 node.put(pom.name, 'bootstrap.pom')
 
                 node.execute_penchy(" ".join(
