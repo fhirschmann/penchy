@@ -19,11 +19,8 @@ class PipelineElement(object):
     - `out`, a dictionary that maps logical names for output to actual.
     - `inputs`, a list of tuples that describe the name and type of the inputs
                 for ``run`` and have the form
-        - ``(name, type)`` that is: a argument with the name ``name`` and type
-                                   ``type``
-        - ``(name, type, subtype)`` that is: a argument with the name ``name``
-          and type ``type`` and all elements of it have type ``subtype``, useful
-          for collections such as tuples and lists
+    - ``(name, type, *types)`` that is: a argument with the name ``name``
+                               and type ``type`` and possible subtypes ``types``
 
     - ``outputs`, a list of tuples that describe the logical name of an output
                  and its type it is built alike ``inputs`` for all output of the
