@@ -79,6 +79,9 @@ class Job(object):
             kwargs = build_keys(group)
             sink.run(**kwargs)
 
+        # reset state of filters for running multiple configurations
+        self._reset_client_pipeline()
+
     def _get_client_dependencies(self, configuration):
         """
         Return all clientside :class:`MavenDependency` of this job for a given
@@ -102,6 +105,13 @@ class Job(object):
                 if element.DEPENDENCIES)
 
         return set(chain.from_iterable(deps))
+
+    def _reset_client_pipeline(self):
+        """
+        Reset the clientside pipeline.
+        """
+        for edge in self.client_flow:
+            edge.sink.reset()
 
     def _get_server_dependencies(self):
         """
