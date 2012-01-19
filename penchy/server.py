@@ -37,25 +37,26 @@ class Server:
     """
     This class represents the server.
     """
-    def __init__(self, args):
+    def __init__(self, configfile, jobfile):
         """
-        :param args: arguments; this would normally be sys.argv
-        :type args: list
+        :param configfile: config file to use
+        :type configfile: string
+        :param jobfile: job file to execute
+        :type jobfile: string
         """
         self.bootstrap_args = []
-        args = self.parse_args(args)
-        self.config, config_filename = load_config(args.config)
-        self.job = load_job(args.job, self.config)
+        self.config, config_filename = load_config(configfile)
+        self.job = load_job(jobfile, self.config)
 
         self.nodes = [Node(n, self.job) for n in self.config.NODES]
         self.uploads = (
-                (args.job,),
+                (jobfile,),
                 (find_bootstrap_client(),),
                 (config_filename, 'config.py'))
         self.listener = ThreadedServer(Service,
                 hostname=self.config.SERVER_HOST,
                 port=self.config.SERVER_PORT)
-        self.client_thread = self._setup_client_thread([args.job,
+        self.client_thread = self._setup_client_thread([jobfile,
             'config.py'])
 
     def _setup_client_thread(self, args):
@@ -70,37 +71,6 @@ class Server:
         thread = threading.Thread(target=self.run_clients, args=args)
         thread.daemon = True
         return thread
-
-    def parse_args(self, args):
-        """
-        Parses the arguments.
-
-        :param args: arguments; this would normally be sys.argv
-        :type args: list
-        """
-        parser = argparse.ArgumentParser()
-        log_group = parser.add_mutually_exclusive_group()
-        log_group.add_argument("-d", "--debug",
-                action="store_const", const=logging.DEBUG,
-                dest="loglevel", default=logging.INFO,
-                help="print debugging messages")
-        log_group.add_argument("-q", "--quiet",
-                action="store_const", const=logging.WARNING,
-                dest="loglevel", help="suppress most messages")
-        parser.add_argument("-c", "--config",
-                action="store", dest="config",
-                default=os.path.expanduser("~/.penchyrc"),
-                help="config module to use")
-        parser.add_argument("-f", "--load-from",
-                action="store", dest="load_from",
-                help="load penchy from this path on the node")
-        parser.add_argument("job", help="job to execute",
-                metavar="job")
-        args = parser.parse_args(args)
-        logging.root.setLevel(args.loglevel)
-        if args.load_from:
-            self.bootstrap_args.extend(['--load-from', args.load_from])
-        return args
 
     def run_clients(self, jobfile, configfile):
         """

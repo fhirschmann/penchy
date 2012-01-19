@@ -2,10 +2,40 @@
 
 import sys
 import imp
+import logging
+import os
+
+import argparse
 
 from penchy.server import Server
 
 
 if __name__ == "__main__":
-    server = Server(sys.argv[1:])
+    parser = argparse.ArgumentParser(description=__doc__)
+    log_group = parser.add_mutually_exclusive_group()
+    log_group.add_argument("-d", "--debug",
+            action="store_const", const=logging.DEBUG,
+            dest="loglevel", default=logging.INFO,
+            help="print debugging messages")
+    log_group.add_argument("-q", "--quiet",
+            action="store_const", const=logging.WARNING,
+            dest="loglevel", help="suppress most messages")
+    parser.add_argument("-c", "--config",
+            action="store", dest="config",
+            default=os.path.expanduser("~/.penchyrc"),
+            help="config module to use")
+    parser.add_argument("-f", "--load-from",
+            action="store", dest="load_from",
+            help="load penchy from this path on the node")
+    parser.add_argument("job", help="job to execute",
+            metavar="job")
+    args = parser.parse_args()
+
+    server = Server(args.config, args.job)
+
+    logging.root.setLevel(args.loglevel)
+
+    if args.load_from:
+        server.bootstrap_args.extend(['--load-from', args.load_from])
+
     server.run()
