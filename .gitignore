@@ -1,6 +1,8 @@
 *.swp
 *.pyc
-*.log
+*.jobc
+*.log*
+*.jar
 *~
 /scratch
 /dacapo-9.12-bach.jar
