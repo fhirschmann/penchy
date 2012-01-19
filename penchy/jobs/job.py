@@ -1,4 +1,5 @@
 import logging
+import os
 from collections import namedtuple
 from itertools import groupby, ifilter, chain
 from operator import attrgetter
@@ -60,9 +61,13 @@ class Job(object):
 
         :param configuration: :class:`JVMNodeConfiguration` to work on
         """
-        write_penchy_pom(self._get_client_dependencies(configuration),
-                configuration.node.path)
+        pomfile = os.path.join(configuration.node.path, 'pom.xml')
+        client_dependencies = self._get_client_dependencies(configuration)
+        write_penchy_pom(client_dependencies, pomfile)
         configuration.jvm.add_to_cp(get_classpath(configuration.node.path))
+        for dependency in client_dependencies:
+            dependency.pom_path = pomfile
+            dependency.check_checksum()
 
     def run(self, configuration):
         """
