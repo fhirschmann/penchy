@@ -33,8 +33,8 @@ class DacapoHarness(Filter):
     inputs = [('stderr', list, str),
               ('exit_code', list, int)]
 
-    outputs = [('failures', list, int),
-               ('times', list, list),
+    outputs = [('failures', list, int, int),
+               ('times', list, list, int),
                ('valid', list, bool)]
 
     TIME_RE = re.compile(
