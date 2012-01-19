@@ -41,7 +41,8 @@ class Client(object):
         # TODO: Check MavenDependency checksums
 
         self.job.job.run(self.job.jconfig)
-        self.send_data("Job finished!", (self.args.server, int(self.args.port)))
+        self.send_data("Job finished!", (self.config.SERVER_HOST,
+            self.config.SERVER_PORT))
 
     def parse_args(self, args):
         """
@@ -54,8 +55,6 @@ class Client(object):
         parser = argparse.ArgumentParser(description=__doc__, prog=args)
         parser.add_argument("job", help="job to execute", metavar="job")
         parser.add_argument("config", help="config file to use", metavar="config")
-        parser.add_argument("server", help="server to use", metavar="server")
-        parser.add_argument("port", help="port to use", metavar="port", type=int)
         parser.add_argument("myname", help="my hostname", metavar="myname")
         parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
         args = parser.parse_args(args=args)

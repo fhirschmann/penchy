@@ -115,7 +115,7 @@ class Server:
 
                 node.execute_penchy(" ".join(
                     self.bootstrap_args + \
-                    [jobfile, configfile, "192.168.56.1", "4343", node.identifier]))
+                    [jobfile, configfile, node.identifier]))
                 node.disconnect()
 
     def run(self):
