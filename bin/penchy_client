@@ -6,5 +6,5 @@ from penchy.client import Client
 
 if __name__ == "__main__":
     client = Client()
-    client.parse_args(sys.argv)
+    client.parse_args(sys.argv[1:])
     client.run()

@@ -105,8 +105,7 @@ def main(args, load_from=False):
         penchy_zip = find_penchy_zip(maven_output)
         Client = load_penchy(penchy_zip)
 
-    client = Client()
-    client.parse_args(args)
+    client = Client(args[1:])
     client.run()
 
 

@@ -17,9 +17,19 @@ class Client(object):
     This class represents a client which executes a job
     and sends the results to the server.
     """
-    def __init__(self):
-        self.args = None
-        self.job = None
+    def __init__(self, args):
+        """
+        :param args: arguments; this would normally be sys.argv
+        :type args: list
+        """
+        self.args = self.parse_args(args)
+        log.info('Loading job from %s' % self.args.job)
+        self.job = imp.load_source('job', self.args.job)
+
+        try:
+            logging.root.setLevel(getattr(logging, self.args.loglevel))
+        except AttributeError:
+            pass
 
     def run(self):
         """
@@ -43,15 +53,8 @@ class Client(object):
         parser.add_argument("port", help="port to use", metavar="port", type=int)
         parser.add_argument("myname", help="my hostname", metavar="myname")
         parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
-        self.args = parser.parse_args(args=args[1:])
-
-        try:
-            logging.root.setLevel(getattr(logging, self.args.loglevel))
-        except AttributeError:
-            pass
-
-        log.info('Loading job from %s' % self.args.job)
-        self.job = imp.load_source('job', self.args.job)
+        args = parser.parse_args(args=args)
+        return args
 
     # XXX: Old method; only here for reference
     def send_data(self, filtered_output, server):
