@@ -1,14 +1,11 @@
-from itertools import chain
-
 from penchy.config import NodeConfiguration
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
-from penchy.jobs.jvms import JVM
-from penchy.jobs.workloads import ScalaBench
-from penchy.jobs.tools import HProf
 from penchy.jobs.filters import Print
-from penchy.node import Node
+from penchy.jobs.jvms import JVM
+from penchy.jobs.tools import HProf
+from penchy.jobs.workloads import ScalaBench
 from penchy.tests.unit import unittest
 from penchy.tests.util import MockPipelineElement
 
