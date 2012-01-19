@@ -34,6 +34,6 @@ if __name__ == "__main__":
         args = parser.parse_args()
         logging.root.setLevel(args.loglevel)
 
-        config, _ = load_config(args.config)
+        config = load_config(args.config)
         job = load_job(args.job, config)
         job.job.run(job.jconfig)

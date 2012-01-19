@@ -10,7 +10,7 @@ jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
 # receiver = filters.Receive(jconfig)
 receiver = filters.Receive()
 
-w = workloads.Dacapo('fop')
+w = workloads.Dacapo('dummy')
 jvm.workload = w
 
 f1 = filters.DacapoHarness()

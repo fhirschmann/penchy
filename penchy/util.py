@@ -199,18 +199,12 @@ def load_config(filename):
 
     :param filename: filename of the config file
     :type filename: string
-    :returns: tuple of (config object, config filename)
-    :rtype: tuple
+    :returns: config object
     """
     try:
         config = imp.load_source('config', filename)
-        actual_filename = filename
     except IOError:
-        try:
-            config = imp.load_source('config', 'penchyrc')
-            actual_filename = 'penchyrc'
-        except IOError:
-            raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
+        raise IOError("Config file could not be loaded from: %s or ./penchyrc" % filename)
 
-    log.info("Loaded configuration from %s" % actual_filename)
-    return (config, actual_filename)
+    log.info("Loaded configuration from %s" % filename)
+    return config

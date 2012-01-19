@@ -45,14 +45,14 @@ class Server:
         :type jobfile: string
         """
         self.bootstrap_args = []
-        self.config, config_filename = load_config(configfile)
+        self.config = load_config(configfile)
         self.job = load_job(jobfile, self.config)
 
         self.nodes = [Node(n, self.job) for n in self.config.NODES]
         self.uploads = (
                 (jobfile,),
                 (find_bootstrap_client(),),
-                (config_filename, 'config.py'))
+                (configfile, 'config.py'))
         self.listener = ThreadedServer(Service,
                 hostname=self.config.SERVER_HOST,
                 port=self.config.SERVER_PORT)

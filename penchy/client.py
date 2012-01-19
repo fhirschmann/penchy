@@ -25,7 +25,7 @@ class Client(object):
         :type args: list
         """
         self.args = self.parse_args(args)
-        self.config, _ = load_config(self.args.config)
+        self.config = load_config(self.args.config)
         self.job = load_job(self.args.job, self.config)
 
         try:
