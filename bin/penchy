@@ -43,6 +43,8 @@ if __name__ == "__main__":
         except IOError:
             raise IOError("Config file could not be loaded from: %s or ./penchyrc" % args.config)
 
+    sys.modules['config'] = config
+
     log.info('Using %s config module' % config.__file__)
 
     server = Server(config, args.job)

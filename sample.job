@@ -1,7 +1,7 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from penchy.config import LOCALNODE
+from config import *
 
 node = LOCALNODE
 jvm = jvms.JVM('java')
