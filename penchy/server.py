@@ -80,11 +80,7 @@ class Server(object):
                 (configfile, 'config.py'))
 
         # Set up the listener
-        self.listener = ThreadedServer(Service,
-                hostname=config.SERVER_HOST,
-                port=config.SERVER_PORT)
-        self.listener.service.load(config, job)
-        self.listener.service.waiting_for = self.nodes.copy()
+        self.listener = self._setup_service(config, job)
 
         # Set up the thread which is deploying the job
         self.client_thread = self._setup_client_thread([
@@ -102,6 +98,17 @@ class Server(object):
         thread = threading.Thread(target=self.run_clients, args=args)
         thread.daemon = True
         return thread
+
+    def _setup_service(self, config, job):
+        """
+        Sets up the Service which answers to nodes.
+        """
+        listener = ThreadedServer(Service,
+                hostname=config.SERVER_HOST,
+                port=config.SERVER_PORT)
+        listener.service.load(config, job)
+        listener.service.waiting_for = self.nodes.copy()
+        return listener
 
     def run_clients(self, jobfile, configfile):
         """
