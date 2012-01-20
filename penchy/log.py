@@ -17,6 +17,8 @@ def configure(level=logging.INFO):
     logging.root.addHandler(ch)
     logging.root.addHandler(ch2)
 
+    logging.getLogger('paramiko.transport').setLevel(logging.ERROR)
+
 
 def configure_for_tests():
     """
