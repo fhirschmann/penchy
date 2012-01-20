@@ -7,7 +7,7 @@ from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
 from penchy.tests.unit import unittest
-from penchy.tests.util import MockPipelineElement
+from penchy.tests.util import MockPipelineElement, make_jvmnode_config
 
 
 class JobClientElementsTest(unittest.TestCase):
@@ -136,26 +136,10 @@ class CheckArgsTest(unittest.TestCase):
 
 
 class JVMNodeConfigurationsTest(unittest.TestCase):
-
     def setUp(self):
-        self.single_host = [job.makeJVMNodeConfiguration(JVM('foo'),
-                                                        NodeConfiguration('192.168.1.10',
-                                                                          22,
-                                                                          'foo',
-                                                                          'path',
-                                                                          'base'))]
-        self.multi_host = [job.makeJVMNodeConfiguration(JVM('foz'),
-                                                        NodeConfiguration('192.168.1.11',
-                                                                          22,
-                                                                          'foo',
-                                                                          'path',
-                                                                          'base')),
-                           job.makeJVMNodeConfiguration(JVM('for'),
-                                                        NodeConfiguration('192.168.1.11',
-                                                                          22,
-                                                                          'foo',
-                                                                          'path',
-                                                                          'base'))]
+        self.single_host = [make_jvmnode_config('192.168.1.10')]
+        self.multi_host = [make_jvmnode_config('192.168.1.11'),
+                           make_jvmnode_config('192.168.1.11')]
         self.job = job.Job(self.single_host + self.multi_host, [], [])
 
     def test_wrong_identifier(self):
