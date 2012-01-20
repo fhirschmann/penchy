@@ -166,7 +166,13 @@ def _check_kwargs(instance, kwargs):
     Check if ``kwargs`` satisfies the restrictions of ``instance.inputs``.
     That is:
         - All required names are found and
-        - have the right type (and subtype)
+        - have the right type (and subtypes)
+
+    #FIXME: Move format here from PipelineElement
+
+    Checking the subtype of :class:`dict` tests the values of this Dictionary.
+
+    Checking can be disabled by setting ``instance.inputs`` to ``None``.
 
     Raises a :class:`ValueError` if a name is missing or has the wrong type.
     Raises a :class:`AssertError` if ``instance.inputs`` has a wrong format.
@@ -180,6 +186,8 @@ def _check_kwargs(instance, kwargs):
     :returns: count of unused inputs
     :rtype: int
     """
+    if instance.inputs is None:
+        return 0
 
     for t in instance.inputs:
         msg = 'Malformed type description: '
@@ -201,7 +209,9 @@ def _check_kwargs(instance, kwargs):
             if any(not isinstance(v, type_) for v in value):
                 raise ValueError('Argument {0} is not of type {1}'.format(name,
                                                                           types))
-            if len(value) > 1:
+            if type_ == dict:
+                value = value.values()
+            elif len(value) > 1:
                 value = chain(subvalue for subvalue in value)
             else:
                 value = value[0]
