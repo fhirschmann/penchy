@@ -38,8 +38,9 @@ class JobClientElementsTest(unittest.TestCase):
                             ScalaBench.DEPENDENCIES)
 
     def test_empty_workload(self):
-        self.config.jvm.workload = None
-        self.assertSetEqual(self.job._get_client_dependencies(self.config),
+        config = make_jvmnode_config()
+        config.jvm.tool = HProf('')
+        self.assertSetEqual(job.Job(config, [], [])._get_client_dependencies(config),
                             HProf.DEPENDENCIES)
 
     def test_wrong_config(self):

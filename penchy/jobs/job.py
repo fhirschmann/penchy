@@ -5,6 +5,7 @@ from itertools import groupby, ifilter, chain
 from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
+from penchy.jobs.elements import PipelineElement
 from penchy.util import tempdir
 from penchy.maven import get_classpath, setup_dependencies
 
@@ -97,27 +98,34 @@ class Job(object):
         if configuration not in self.configurations:
             raise ValueError('configuration not part of this job')
 
-        deps = (element.DEPENDENCIES for element
-                in chain((e.sink for e in self.client_flow),
-                        # only include set workloads & tools
-                        ifilter(bool, (configuration.jvm.workload,
-                                       configuration.jvm.tool)))
-                if element.DEPENDENCIES)
-
+        deps = (e.DEPENDENCIES for e in self._get_client_elements(configuration))
         return set(chain.from_iterable(deps))
+
+    def _get_client_elements(self, configuration=None):
+        """
+        Return the clientside element of this job.
+
+        :param configuration: configuration to collect elements for, None for all
+        :type configuration: None or :class:`JVMNodeConfiguration`
+        :returns: all elements that are part of the clientside job.
+        :rtype: set
+        """
+        configs = self.configurations if configuration is None else [configuration]
+        elements = chain((e.source for e in self.client_flow),
+                         (e.sink for e in self.client_flow),
+                         ifilter(bool, (c.jvm.workload for c in configs)),
+                         ifilter(bool, (c.jvm.tool for c in configs)),
+                         (c.jvm for c in configs))
+
+        return set(ifilter(lambda e: isinstance(e, PipelineElement),
+                           elements))
 
     def _reset_client_pipeline(self):
         """
         Reset the clientside pipeline.
         """
-        for config in self.configurations:
-            if config.jvm.workload:
-                config.jvm.workload.reset()
-            if config.jvm.tool:
-                config.jvm.tool.reset()
-
-        for edge in self.client_flow:
-            edge.sink.reset()
+        for e in self._get_client_elements():
+            e.reset()
 
     def _get_server_dependencies(self):
         """
