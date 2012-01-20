@@ -23,14 +23,33 @@ log = logging.getLogger(__name__)
 
 
 class Service(rpyc.Service):
+    config = None
+    job = None
+    waiting_for = set()
+    results = set()
+
     def exposed_rcv_data(self, output):
         """
         Receive client data.
 
         :param output: benchmark output that has been filtered by the client.
         """
-        # XXX: testing stub
         log.info("Received: " + str(output))
+        self.results.add(output)
+
+        # TODO: Check if we have received data from all nodes
+
+    def finish(self):
+        """
+        Called when we have received data from all nodes.
+        """
+        # TODO: Implement me
+        pass
+
+    @classmethod
+    def load(cls, config, job):
+        cls.config = config
+        cls.job = job
 
 
 class Server(object):
@@ -48,17 +67,26 @@ class Server(object):
         self.bootstrap_args = []
 
         config = load_config(configfile)
-        self.job = load_job(jobfile)
+        job = load_job(jobfile)
 
-        self.nodes = set((Node(nc.node, self.job) for nc in
-                self.job.job.configurations))
+        # List of nodes to upload to
+        self.nodes = set((Node(nc.node, job) for nc in
+                job.job.configurations))
+
+        # Files to upload
         self.uploads = (
                 (jobfile,),
                 (find_bootstrap_client(),),
                 (configfile, 'config.py'))
+
+        # Set up the listener
         self.listener = ThreadedServer(Service,
                 hostname=config.SERVER_HOST,
                 port=config.SERVER_PORT)
+        self.listener.service.load(config, job)
+        self.listener.service.waiting_for = self.nodes.copy()
+
+        # Set up the thread which is deploying the job
         self.client_thread = self._setup_client_thread([
             os.path.basename(jobfile), 'config.py'])
 
