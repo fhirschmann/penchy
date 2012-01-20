@@ -21,10 +21,10 @@ class NodeError(Exception):
     """
 
 
-class Node(object):
+class Node(object):  # pragma: no cover
     """
     This class represents a node (=a machine on which the benchmark
-    will be run on).
+    will be run on) and provides basic ssh/sftp functionality.
     """
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
