@@ -48,7 +48,7 @@ class Server:
         self.bootstrap_args = []
 
         self.config = load_config(configfile)
-        self.job = load_job(jobfile, self.config)
+        self.job = load_job(jobfile)
 
         self.nodes = set((Node(nc.node, self.job) for nc in
                 self.job.job.configurations))

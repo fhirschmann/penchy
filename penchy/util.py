@@ -166,7 +166,7 @@ def find_bootstrap_client():
             os.path.join('../', 'bin', 'penchy_bootstrap'))
 
 
-def load_job(filename, config):
+def load_job(filename):
     """
     Loads a job.
 
@@ -174,17 +174,8 @@ def load_job(filename, config):
     :type filename: string
     :param config: config file to export to job namespace
     """
-    # XXX: This is bad voodoo.
-    #
-    # This will insert the "config" module into the namespace
-    # so that you can do
-    #
-    #   import config
-    #
-    # in the job file without knowing where the configuration
-    # file is actually located.
 
-    sys.modules['config'] = config
+    assert 'config' in sys.modules, "You have to load the penchyrc before a job"
 
     with disable_write_bytecode():
         job = imp.load_source('job', filename)

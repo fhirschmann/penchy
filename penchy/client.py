@@ -26,7 +26,7 @@ class Client(object):
         """
         self.args = self.parse_args(args)
         self.config = load_config(self.args.config)
-        self.job = load_job(self.args.job, self.config)
+        self.job = load_job(self.args.job)
         self.identifier = args.identifier
 
         try:
