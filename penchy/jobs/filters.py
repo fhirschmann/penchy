@@ -65,10 +65,14 @@ class DacapoHarness(Filter):
 
 
 class Send(SystemFilter):
+    inputs = [('environment', dict),
+              ('payload', object)]
     pass
 
 
 class Receive(SystemFilter):
+    inputs = [('environment', dict)]
+    outputs = [('results', dict, list)]
     pass
 
 
@@ -76,6 +80,8 @@ class Print(Filter):
     """
     Prints everything fed to it on stdout.
     """
+    inputs = None
+
     def run(self, **kwargs):  # pragma: no cover
         pprint(kwargs)
 
