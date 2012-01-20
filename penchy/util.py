@@ -200,6 +200,7 @@ def load_config(filename):
     :type filename: string
     :returns: config object
     """
+    # TODO: search for a way to _not_ compile the source
     try:
         config = imp.load_source('config', filename)
     except IOError:
