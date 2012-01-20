@@ -214,9 +214,9 @@ def _check_kwargs(instance, kwargs):
                 raise ValueError('Argument {0} is not of type {1}'.format(name,
                                                                           types))
             if type_ == dict:
-                value = value.values()
+                value = list(chain.from_iterable(subvalue.values() for subvalue in value))
             elif len(value) > 1:
-                value = chain(subvalue for subvalue in value)
+                value = [subvalue for subvalue in value]
             else:
                 value = value[0]
 
