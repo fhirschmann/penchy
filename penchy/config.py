@@ -50,6 +50,13 @@ class NodeConfiguration(object):
         """
         return self.host
 
-    def __str__(self):
+    def __eq__(self, other):
+        return isinstance(other, NodeConfiguration) and \
+                self.identifier == other.identifier
+
+    def __hash__(self):
+        return hash(self.identifier)
+
+    def __str__(self):  # pragma: no cover
         return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, ['host', 'ssh_port']))
