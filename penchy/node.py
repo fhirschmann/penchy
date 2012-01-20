@@ -27,7 +27,7 @@ class Node(object):  # pragma: no cover
     will be run on) and provides basic ssh/sftp functionality.
     """
 
-    _LOGFILES = set(('penchy_bootstrap.log', 'penchy_client.log'))
+    _LOGFILES = set(('penchy_bootstrap.log', 'penchy.log'))
 
     def __init__(self, configuration, job):
         """
@@ -174,6 +174,7 @@ class Node(object):  # pragma: no cover
         @atexit.register
         def kill():
             self.connect()
+            self.get_logs()
             self.kill()
             self.disconnect()
 
