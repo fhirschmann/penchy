@@ -35,7 +35,7 @@ if __name__ == "__main__":
         logging.root.setLevel(args.loglevel)
 
         config = load_config(args.config)
-        job = load_job(args.job, config)
+        job = load_job(args.job)
 
         for configuration in job.job.configurations_for_node("localhost"):
             job.job.run(configuration)
