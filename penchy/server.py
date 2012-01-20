@@ -47,8 +47,7 @@ class Server(object):
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
 
-        # TODO: maybe use ``config`` instead of ``self.config``
-        self.config = load_config(configfile)
+        config = load_config(configfile)
         self.job = load_job(jobfile)
 
         self.nodes = set((Node(nc.node, self.job) for nc in
@@ -58,8 +57,8 @@ class Server(object):
                 (find_bootstrap_client(),),
                 (configfile, 'config.py'))
         self.listener = ThreadedServer(Service,
-                hostname=self.config.SERVER_HOST,
-                port=self.config.SERVER_PORT)
+                hostname=config.SERVER_HOST,
+                port=config.SERVER_PORT)
         self.client_thread = self._setup_client_thread([
             os.path.basename(jobfile), 'config.py'])
 
