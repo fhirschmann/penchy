@@ -51,6 +51,13 @@ class Node(object):  # pragma: no cover
     def __str__(self):
         return "<Node %s>" % self.config.host
 
+    def __eq__(self, other):
+        return isinstance(other, Node) and \
+                self.config.identifier == other.config.identifier
+
+    def __hash__(self):
+        return hash(self.config.identifier)
+
     def _setup_timer(self):
         """
         Sets up the Timer from the current job.
