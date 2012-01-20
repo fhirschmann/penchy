@@ -17,10 +17,8 @@ class PipelineElement(object):
     A PipelineElement must have the following attributes:
 
     - `out`, a dictionary that maps logical names for output to actual.
-    - `inputs`, a list of tuples that describe the name and type of the inputs
-                for ``run`` and have the form
-    - ``(name, type, *types)`` that is: a argument with the name ``name``
-                               and type ``type`` and possible subtypes ``types``
+    - `inputs`, a list of tuples that describe the name and types of the inputs
+                for ``run`` (see :func:`_check_kwargs` for the format)
 
     - ``outputs`, a list of tuples that describe the logical name of an output
                  and its type it is built alike ``inputs`` for all output of the
@@ -168,7 +166,13 @@ def _check_kwargs(instance, kwargs):
         - All required names are found and
         - have the right type (and subtypes)
 
-    #FIXME: Move format here from PipelineElement
+    The format of those restrictions is this:
+
+        (name, type, *types)
+
+    - ``name`` is the name of the argument
+    - ``type`` is the type of the argument
+    - ``types`` are zero or more subtypes
 
     Checking the subtype of :class:`dict` tests the values of this Dictionary.
 
