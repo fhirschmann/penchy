@@ -7,6 +7,8 @@ Tool for Java Virtual Machines.
 .. toctree::
    :maxdepth: 2
 
+   quickstart
+   arch
    maven
    api
 
