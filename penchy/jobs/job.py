@@ -5,7 +5,7 @@ from itertools import groupby, ifilter, chain
 from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
-from penchy.jobs.elements import PipelineElement
+from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.util import tempdir
 from penchy.maven import get_classpath, setup_dependencies
 
@@ -33,6 +33,10 @@ JVMNodeConfiguration = namedtuple('JVMNodeConfiguration',
 class Job(object):
     """
     Represents a job.
+
+    #TODO: include spec of those funs (atm see _build_environment)
+    ``job.send`` has to be set on client
+    ``job.receive`` has to be set on server
     """
 
     def __init__(self, configurations,
@@ -54,6 +58,8 @@ class Job(object):
         self.client_flow = client_flow
         self.server_flow = server_flow
         self.invocations = invocations
+        self.send = None
+        self.receive = None
 
     def run(self, configuration):
         """
@@ -78,6 +84,8 @@ class Job(object):
                 configuration.jvm.run()
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
+            if isinstance(sink, SystemFilter):
+                kwargs['environment'] = self._build_environment()
             sink.run(**kwargs)
 
         # reset state of filters for running multiple configurations
@@ -135,6 +143,26 @@ class Job(object):
         :rtype: set
         """
         return set((element.DEPENDENCIES for element in self.server_flow))
+
+    def _build_environment(self):
+        """
+        Return the environment for a :class:`SystemFilter`.
+
+        Contains:
+        - ``receive``: to get all data that has been received, takes no arguments
+                       returns a dict with :class:`JVMNodeConfiguration` as keys
+        - ``send``: to send data to the server, takes one datum as argument
+
+        :returns: environment for a SystemFilter
+        :rtype: dict
+        """
+        # replace receive and send with dummy functions if not set to avoid
+        # corner cases in pipeline
+        receive = self.receive if self.receive is not None else lambda: {}
+        send = self.send if self.send is not None else lambda data: None
+
+        return dict(receive=receive,
+                    send=send)
 
     def configurations_for_node(self, identifier):
         """
