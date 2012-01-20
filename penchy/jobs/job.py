@@ -110,6 +110,12 @@ class Job(object):
         """
         Reset the clientside pipeline.
         """
+        for config in self.configurations:
+            if config.jvm.workload:
+                config.jvm.workload.reset()
+            if config.jvm.tool:
+                config.jvm.tool.reset()
+
         for edge in self.client_flow:
             edge.sink.reset()
 
