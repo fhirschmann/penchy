@@ -60,8 +60,8 @@ class Server(object):
         self.listener = ThreadedServer(Service,
                 hostname=self.config.SERVER_HOST,
                 port=self.config.SERVER_PORT)
-        self.client_thread = self._setup_client_thread([jobfile,
-            'config.py'])
+        self.client_thread = self._setup_client_thread([
+            os.path.basename(jobfile), 'config.py'])
 
     def _setup_client_thread(self, args):
         """
