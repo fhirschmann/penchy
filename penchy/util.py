@@ -186,7 +186,8 @@ def load_job(filename, config):
 
     sys.modules['config'] = config
 
-    job = dont_write_bytecode(imp.load_source, ['job', filename])
+    with disable_write_bytecode():
+        job = imp.load_source('job', filename)
     log.info("Loaded job from %s" % filename)
     return job
 
@@ -201,7 +202,8 @@ def load_config(filename):
     :returns: config object
     """
     try:
-        config = dont_write_bytecode(imp.load_source, ['config', filename])
+        with disable_write_bytecode():
+            config = imp.load_source('config', filename)
     except IOError:
         raise IOError("Config file could not be loaded from: %s" % filename)
 
@@ -209,20 +211,12 @@ def load_config(filename):
     return config
 
 
-def dont_write_bytecode(function, args=[], kwargs={}):
+@contextmanager
+def disable_write_bytecode():
     """
-    Temporarily disables writing bytecode while executing
-    a function.
-
-    :param function: function to execute
-    :param args: arguments to pass
-    :type args: list
-    :param kwargs: keyword arguments to pass
-    :type kwargs: dict
-    :returns: the function's return value
+    Temporarily disables writing bytecode while executing.
     """
     old_state = sys.dont_write_bytecode
     sys.dont_write_bytecode = True
-    func_ret = function(*args, **kwargs)
+    yield
     sys.dont_write_bytecode = old_state
-    return func_ret
