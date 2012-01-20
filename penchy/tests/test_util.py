@@ -1,4 +1,5 @@
 import os
+import sys
 
 from tempfile import NamedTemporaryFile
 from random import randint
@@ -78,8 +79,9 @@ class MiscTest(unittest.TestCase):
 
 
 class ImportTest(unittest.TestCase):
-    def test_load_job(self):
+    def test_load_config(self):
         i = 5
+        self.assertFalse('config' in sys.modules)
         with NamedTemporaryFile() as tf:
             # save for writing after close, assures file does not exist
             fname = tf.name
@@ -89,5 +91,22 @@ class ImportTest(unittest.TestCase):
             config = util.load_config(tf.name)
             self.assertEquals(config.foo, i)
 
+        self.assertTrue('config' in sys.modules)
         with self.assertRaises(IOError):
             util.load_config(fname)
+
+    def test_load_job(self):
+        j = 'world dominance'
+        with NamedTemporaryFile() as tf:
+            tf.write('job = "%s"' % j)
+            tf.write(os.linesep)
+            tf.flush()
+            job = util.load_job(tf.name)
+            self.assertEquals(job.job, j)
+
+    def test_load_job_without_config(self):
+        if 'config' in sys.modules:
+            del sys.modules['config']
+
+        with self.assertRaises(AssertionError):
+            self.test_load_job()
