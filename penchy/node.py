@@ -81,13 +81,13 @@ class Node(object):  # pragma: no cover
         """
         Prepends the name of this node to a (log)message.
         """
-        return " ".join([str(self), msg])
+        return " ".join([str(self.config.identifier), msg])
 
     def connect(self):
         """
         Connect to the node.
         """
-        log.info(self.logformat("Connecting"))
+        log.debug(self.logformat("Connecting"))
         self.ssh.connect(self.config.host, username=self.config.username,
                 port=self.config.ssh_port, password=self.config.password,
                 key_filename=self.config.keyfile)
@@ -98,7 +98,7 @@ class Node(object):  # pragma: no cover
         """
         Disconnect from the node.
         """
-        log.info(self.logformat("Disconnecting"))
+        log.debug(self.logformat("Disconnecting"))
         self.sftp.close()
         self.ssh.close()
 
@@ -137,8 +137,9 @@ class Node(object):  # pragma: no cover
             try:
                 filename = os.path.join(self.config.path, filename)
                 logfile = self.sftp.open(filename)
-                log.info("".join(["Replaying logfile for",
-                    str(self), os.linesep, logfile.read()]))
+                log.info("".join(["Replaying logfile for ",
+                    self.config.identifier, os.linesep, logfile.read()]))
+                log.info("End log for " + self.config.identifier)
                 logfile.close()
             except IOError:
                 log.error("Logfile %s could not be received from %s" % \
