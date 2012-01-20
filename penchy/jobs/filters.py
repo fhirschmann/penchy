@@ -6,7 +6,7 @@ import re
 from itertools import izip
 from pprint import pprint
 
-from penchy.jobs.elements import Filter
+from penchy.jobs.elements import Filter, SystemFilter
 
 
 class Tamiflex(Filter):
@@ -64,11 +64,11 @@ class DacapoHarness(Filter):
             self.out['valid'].append(exit_code == 0 and failures == 0)
 
 
-class Send(Filter):
+class Send(SystemFilter):
     pass
 
 
-class Receive(Filter):
+class Receive(SystemFilter):
     pass
 
 
