@@ -25,6 +25,7 @@ class Client(object):
         :type args: list
         """
         self.args = self.parse_args(args)
+        # TODO: needed to save config module?
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job)
         self.identifier = args.identifier

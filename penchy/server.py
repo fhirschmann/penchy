@@ -47,6 +47,7 @@ class Server(object):
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
 
+        # TODO: maybe use ``config`` instead of ``self.config``
         self.config = load_config(configfile)
         self.job = load_job(jobfile)
 
