@@ -75,3 +75,14 @@ class MiscTest(unittest.TestCase):
 
     def test_find_bootstrap_client(self):
         self.assertTrue(util.find_bootstrap_client().endswith('penchy_bootstrap'))
+
+
+class ImportTest(unittest.TestCase):
+    def test_load_job(self):
+        i = randint(0, 100)
+        with NamedTemporaryFile() as tf:
+            tf.write('foo = %s' % i)
+            tf.write(os.linesep)
+            tf.flush()
+            config = util.load_config(tf.name)
+            self.assertEquals(config.foo, i)
