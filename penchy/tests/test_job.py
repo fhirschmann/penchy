@@ -2,7 +2,7 @@ from penchy.config import NodeConfiguration
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
-from penchy.jobs.filters import Print
+from penchy.jobs.filters import Print, DacapoHarness
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -152,3 +152,29 @@ class JVMNodeConfigurationsTest(unittest.TestCase):
     def test_multi_host_identifier(self):
         self.assertListEqual(self.job.configurations_for_node('192.168.1.11'),
                              self.multi_host)
+
+
+class ResetPipelineTest(unittest.TestCase):
+    def setUp(self):
+        self.workload = ScalaBench('dummy')
+        self.workload.out['test'].append(42)
+        self.tool = HProf('')
+        self.tool.out['test'].append(23)
+        self.filter = DacapoHarness()
+        self.filter.out['test'].append(5)
+        config = make_jvmnode_config()
+        config.jvm.workload = self.workload
+        config.jvm.tool = self.tool
+        self.job = job.Job(config, [Edge(self.workload, self.filter)], [])
+
+    def test_reset_jvm_part(self):
+        self.assertDictEqual(self.workload.out, {'test' : [42]})
+        self.assertDictEqual(self.tool.out, {'test' : [23]})
+        self.job._reset_client_pipeline()
+        self.assertDictEqual(self.workload.out, {})
+        self.assertDictEqual(self.tool.out, {})
+
+    def test_reset_filter(self):
+        self.assertDictEqual(self.filter.out, {'test' : [5]})
+        self.job._reset_client_pipeline()
+        self.assertDictEqual(self.filter.out, {})
