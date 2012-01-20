@@ -102,6 +102,21 @@ class CheckArgsTest(unittest.TestCase):
     def test_fully_used_input_count(self):
         self.assertEqual(_check_kwargs(self.p, self.d), 0)
 
+    def test_disabled_checking(self):
+        self.p.inputs = None
+        # d contains 2 unused inputs
+        self.assertEqual(_check_kwargs(self.p, self.d), 0)
+
+    def test_subtype_of_dict(self):
+        self.p.inputs = [('foo', dict, int),
+                         ('bar', dict, list)]
+        self.assertEqual(_check_kwargs(self.p, {'foo' : dict(a=1, b=2),
+                                                'bar' : dict(a=[1], b=[2])})
+                         , 0)
+        with self.assertRaises(ValueError):
+            _check_kwargs(self.p, {'foo' : dict(a=1, b=2),
+                                   'bar' : dict(a=1, b=2)})
+
     def _raising_error_on_deletion(self, error, deletions):
         for del_ in deletions:
             with self.assertRaises(error):
