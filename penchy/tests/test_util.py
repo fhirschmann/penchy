@@ -79,10 +79,15 @@ class MiscTest(unittest.TestCase):
 
 class ImportTest(unittest.TestCase):
     def test_load_job(self):
-        i = randint(0, 100)
+        i = 5
         with NamedTemporaryFile() as tf:
+            # save for writing after close, assures file does not exist
+            fname = tf.name
             tf.write('foo = %s' % i)
             tf.write(os.linesep)
             tf.flush()
             config = util.load_config(tf.name)
             self.assertEquals(config.foo, i)
+
+        with self.assertRaises(IOError):
+            util.load_config(fname)
