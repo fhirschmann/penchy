@@ -60,13 +60,6 @@ class Node(object):
             if timeout_after:
                 return Timer(timeout_after, self.timeout)
 
-    @property
-    def identifier(self):
-        """
-        A unique identifier for this node.
-        """
-        return self.config.host
-
     def _setup_ssh(self):
         """
         Sets up the SSH objects.
