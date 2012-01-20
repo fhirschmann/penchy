@@ -33,7 +33,7 @@ class Service(rpyc.Service):
         log.info("Received: " + str(output))
 
 
-class Server:
+class Server(object):
     """
     This class represents the server.
     """
