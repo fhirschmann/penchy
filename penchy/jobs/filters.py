@@ -78,3 +78,11 @@ class Print(Filter):
     """
     def run(self, **kwargs):  # pragma: no cover
         pprint(kwargs)
+
+
+class Plot(Filter):
+    pass
+
+
+class Upload(Filter):
+    pass
