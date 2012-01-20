@@ -28,7 +28,7 @@ class Client(object):
         # TODO: needed to save config module?
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job)
-        self.identifier = args.identifier
+        self.identifier = self.args.identifier
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
@@ -40,7 +40,7 @@ class Client(object):
         Runs the client.
         """
 
-        for configuration in job.job.configurations_for_node(self.identifier):
+        for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
 
         self.send_data("Job finished!", (self.config.SERVER_HOST,
