@@ -89,7 +89,7 @@ class Server(object):
 
                 node.execute_penchy(" ".join(
                     self.bootstrap_args + \
-                    [jobfile, configfile, node.identifier]))
+                    [jobfile, configfile, node.config.identifier]))
                 node.disconnect()
 
     def run(self):
