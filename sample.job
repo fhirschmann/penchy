@@ -6,13 +6,15 @@ import config
 node = config.LOCALNODE
 jvm = jvms.JVM('java')
 jconfig = makeJVMNodeConfiguration(jvm, node, name="Hello, Node!")
-jconfig2 = makeJVMNodeConfiguration(jvm, node, name="Hello, Node2!")
 
-# receiver = filters.Receive(jconfig)
+server_vm = jvms.JVM('java', '-server')
+jconfig2 = makeJVMNodeConfiguration(server_vm, node, name="Hello, Node2!")
+
 receiver = filters.Receive()
 
-w = workloads.Dacapo('dummy')
+w = workloads.ScalaBench('dummy')
 jvm.workload = w
+server_vm.workload = w
 
 f1 = filters.DacapoHarness()
 # f2 = filters.Send()
@@ -23,7 +25,7 @@ job = Job(configurations=[jconfig, jconfig2],
               Edge(w, f1, [('stderr', 'stderr'),
                            ('exit_code', 'exit_code')]),
               Edge(w, f2, [('stderr', 'workload_stderr'),
-                          ('exit_code', 'workload_exit_code')]),
+                           ('exit_code', 'workload_exit_code')]),
               Edge(f1, f2)
           ],
           server_flow=[
