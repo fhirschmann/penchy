@@ -19,8 +19,9 @@ def main(additional=None, human=False):
              '--exclude', '.git,.ropeproject,*pyc,*pyo',
              '--filename=*.py',
              '--ignore=E201,E202,E203,E501',
+             '--repeat',
              '--count']
-            + (['--show-source', '--show-pep8', '--repeat', 'penchy'] if human
+            + (['--show-source', '--show-pep8', 'penchy'] if human
                else ['penchy']),
             ['pychecker', 'penchy'],
             ['unit2', 'discover', '-s', 'penchy/tests', '-t', '.']
