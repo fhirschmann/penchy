@@ -161,6 +161,31 @@ class JVM(object):
                                     workload_posthooks)
         return prehooks, posthooks
 
+    def __eq__(self, other):
+        try:
+            return all((
+                # executing the equal jvm
+                self._path == other._path,
+                # with equal options
+                self._user_options == other._user_options,
+                # check if both workloads or none is set
+                # XXX: maybe implement __eq__ for workload
+                (self.workload is None and other.workload is None
+                 or self.workload and other.workload),
+                # check if both tools or none is set
+                # XXX: maybe implement __eq__ for tool
+                (self.tool is None and other.tool is None
+                 or self.tool and other.tool)))
+        except AttributeError:
+            log.exception('Comparing JVM to non-JVM: ')
+            return False
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(hash(self._path) + hash(self._user_options))
+
 
 class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
     """
