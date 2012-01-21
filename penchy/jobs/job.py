@@ -6,11 +6,79 @@ from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
-from penchy.util import tempdir
+from penchy.util import tempdir, dict2string
 from penchy.maven import get_classpath, setup_dependencies
 
 
 log = logging.getLogger(__name__)
+
+
+class NodeConfiguration(object):
+    """
+    This class represents a configuration of a node.
+    """
+
+    def __init__(self, host, ssh_port, username, path,
+                 basepath, description="", password=None,
+                 keyfile=None):
+        """
+        :param host: hostname (or IP) of node
+        :type host: string
+        :param ssh_port: port number of ssh server on node
+        :type ssh_port: int
+        :param username: login name for penchy on node
+        :type username: string
+        :param path: working directory on the node (this is where
+                     the job will be uploaded to and where the
+                     temporary files and directories will be created)
+        :type path: string
+        :param basepath: basepath for JVMs on this node
+        :type basepath: string
+        :param description: Textual description of node
+        :type description: string
+        :param password: this is either the password for a given username
+                         or the passphrase to unlock the keyfile
+        :type password: string
+        :param keyfile: path to the ssh keyfile to use
+        :type keyfile: string
+        """
+        self.host = host
+        self.ssh_port = ssh_port
+        self.username = username
+        self.path = path
+        self.basepath = basepath
+        self.description = description
+        self.password = password
+        self.keyfile = keyfile
+
+    @property
+    def identifier(self):
+        """
+        A unique identifier for this node.
+        """
+        return self.host
+
+    def __eq__(self, other):
+        return isinstance(other, NodeConfiguration) and \
+                self.identifier == other.identifier
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash(self.identifier)
+
+    def __str__(self):  # pragma: no cover
+        return "<%s: %s>" % (self.__class__.__name__,
+                dict2string(self.__dict__, ['host', 'ssh_port']))
+
+
+JVMNodeConfiguration = namedtuple('JVMNodeConfiguration', ['jvm', 'node', 'name'])
+
+# TODO: Replace JVMNodeConfiguration with own class to avoid monkey patching?
+JVMNodeConfiguration.__eq__ = lambda self, other: (self.jvm == other.jvm and
+                                                   self.node == other.node)
+JVMNodeConfiguration.__hash__ = lambda self: hash(hash(self.jvm) + hash(self.node))
 
 
 def makeJVMNodeConfiguration(jvm, node, name=None):
@@ -25,14 +93,6 @@ def makeJVMNodeConfiguration(jvm, node, name=None):
     name = name or "{0} @ {1}".format(jvm, node)
 
     return JVMNodeConfiguration(jvm, node, name)
-
-JVMNodeConfiguration = namedtuple('JVMNodeConfiguration',
-                                  ['jvm', 'node', 'name'])
-
-# TODO: Replace JVMNodeConfiguration with own class to avoid monkey patching?
-JVMNodeConfiguration.__eq__ = lambda self, other: (self.jvm == other.jvm and
-                                                   self.node == other.node)
-JVMNodeConfiguration.__hash__ = lambda self: hash(hash(self.jvm) + hash(self.node))
 
 
 class Job(object):

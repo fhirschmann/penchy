@@ -3,9 +3,8 @@ import json
 
 from penchy.jobs.elements import PipelineElement
 from penchy.jobs.dependency import Edge
-from penchy.jobs.job import makeJVMNodeConfiguration
+from penchy.jobs.job import makeJVMNodeConfiguration, NodeConfiguration
 from penchy.jobs.jvms import JVM
-from penchy.config import NodeConfiguration
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
 

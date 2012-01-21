@@ -1,6 +1,6 @@
 from penchy.compat import unittest
-from penchy.config import *
-from penchy.node import *
+from penchy.jobs.job import NodeConfiguration
+from penchy.node import Node
 
 
 class NodeConfigurationTest(unittest.TestCase):

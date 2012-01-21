@@ -1,7 +1,6 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from penchy.config import *
 import config
 
 node1 = NodeConfiguration('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')

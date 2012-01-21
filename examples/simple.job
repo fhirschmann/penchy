@@ -1,7 +1,6 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from penchy.config import *
 
 node = NodeConfiguration('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
