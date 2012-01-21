@@ -159,6 +159,7 @@ class Workload(NotRunnable, PipelineElement):
         raise NotImplementedError("Workloads must implement this")
 
 
+# FIXME: There are type errors with python3
 def _check_kwargs(instance, kwargs):
     """
     Check if ``kwargs`` satisfies the restrictions of ``instance.inputs``.
