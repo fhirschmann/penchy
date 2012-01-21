@@ -41,7 +41,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'JVM Reporting & Benchmarking'
+project = u'PenchY'
 copyright = u'2011-2012, Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller'
 
 # The version info for the project you're documenting, acts as replacement for
