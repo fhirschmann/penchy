@@ -6,12 +6,20 @@ Write me!
 .. graphviz::
 
     digraph Classes {
-        JVM -> WrappedJVM;
-        PipelineElement -> Tool;
-        PipelineElement -> Workload;
-        PipelineElement -> Filter;
-        Filter -> SystemFilter;
-        PipelineElement -> WrappedJVM;
-        NotRunnable -> Workload;
-        NotRunnable -> Tool;
+        rankdir = BT
+        node [shape=box]
+        edge [arrowhead = empty]
+
+        Tool -> NotRunnable
+        Tool -> PipelineElement
+
+        Filter -> PipelineElement
+        SystemFilter -> Filter
+
+        Workload -> NotRunnable
+        Workload -> PipelineElement
+
+        WrappedJVM -> JVM
+        WrappedJVM -> PipelineElement
+
     }
