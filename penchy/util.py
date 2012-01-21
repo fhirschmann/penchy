@@ -84,7 +84,7 @@ def extract_classpath(options):
                 # take abs to avoid referencing from end
                 cp_index = abs(i - 1)
                 classpath = options[cp_index]
-            except IndexError, e:
+            except IndexError as e:
                 classpath = ''
             break
     return classpath
