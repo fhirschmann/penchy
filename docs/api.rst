@@ -6,11 +6,6 @@ Client
 .. automodule:: penchy.client
    :members:
 
-Config
-------
-.. automodule:: penchy.config
-   :members:
-
 Dependency
 ----------
 .. automodule:: penchy.jobs.dependency
