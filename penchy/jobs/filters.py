@@ -3,7 +3,6 @@ This module provides filters.
 """
 
 import re
-from itertools import izip
 from pprint import pprint
 
 from penchy.jobs.elements import Filter, SystemFilter
@@ -48,7 +47,7 @@ class DacapoHarness(Filter):
         exit_codes = kwargs['exit_code']
         stderror = kwargs['stderr']
 
-        for f, exit_code in izip(stderror, exit_codes):
+        for f, exit_code in zip(stderror, exit_codes):
             failures = 0
             times = []
             with open(f) as fobj:

@@ -1,7 +1,7 @@
 import logging
 import os
 from collections import namedtuple
-from itertools import groupby, ifilter, chain
+from itertools import groupby, chain
 from operator import attrgetter
 
 from penchy.jobs.dependency import build_keys, edgesort
@@ -139,8 +139,8 @@ class Job(object):
 
         configuration.jvm.basepath = configuration.node.basepath
 
-        starts = ifilter(bool, (configuration.jvm.workload,
-                                configuration.jvm.tool))
+        starts = filter(bool, (configuration.jvm.workload,
+                               configuration.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
 
         for i in range(1, self.invocations + 1):
@@ -186,12 +186,12 @@ class Job(object):
         configs = self.configurations if configuration is None else [configuration]
         elements = chain((e.source for e in self.client_flow),
                          (e.sink for e in self.client_flow),
-                         ifilter(bool, (c.jvm.workload for c in configs)),
-                         ifilter(bool, (c.jvm.tool for c in configs)),
+                         filter(bool, (c.jvm.workload for c in configs)),
+                         filter(bool, (c.jvm.tool for c in configs)),
                          (c.jvm for c in configs))
 
-        return set(ifilter(lambda e: isinstance(e, PipelineElement),
-                           elements))
+        return set(filter(lambda e: isinstance(e, PipelineElement),
+                          elements))
 
     def _reset_client_pipeline(self):
         """
