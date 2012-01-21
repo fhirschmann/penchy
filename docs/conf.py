@@ -42,7 +42,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'JVM Reporting & Benchmarking'
-copyright = u'2011, Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller'
+copyright = u'2011-2012, Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -125,7 +125,7 @@ html_static_path = ['_static']
 
 # If not '', a 'Last updated on:' timestamp is inserted at every page bottom,
 # using the given strftime format.
-#html_last_updated_fmt = '%b %d, %Y'
+html_last_updated_fmt = '%b %d, %Y'
 
 # If true, SmartyPants will be used to convert quotes and dashes to
 # typographically correct entities.
@@ -165,7 +165,7 @@ html_static_path = ['_static']
 #html_file_suffix = None
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'JVMReportingBenchmarkingdoc'
+htmlhelp_basename = 'penchy-doc'
 
 
 # -- Options for LaTeX output --------------------------------------------------
@@ -184,7 +184,7 @@ latex_elements = {
 # Grouping the document tree into LaTeX files. List of tuples
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
-  ('index', 'JVMReportingBenchmarking.tex', u'JVM Reporting \\& Benchmarking Documentation',
+  ('index', 'penchy.tex', u'PenchY -- JVM Provisioning \\& Reporting Documentation',
    u'Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller', 'manual'),
 ]
 
@@ -214,7 +214,7 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('index', 'jvmreportingbenchmarking', u'JVM Reporting & Benchmarking Documentation',
+    ('index', 'penchy', u'PenchY -- JVM Provisioning & Reporting Documentation',
      [u'Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller'], 1)
 ]
 
@@ -228,8 +228,9 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-  ('index', 'JVMReportingBenchmarking', u'JVM Reporting & Benchmarking Documentation',
-   u'Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller', 'JVMReportingBenchmarking', 'One line description of project.',
+  ('index', 'PenchY', u'PenchY -- JVM Provisioning & Reporting Documentation',
+   u'Fabian Hirschmann, Michael Markert, Pascal Wittmann, Felix Müller',
+   'PenchY', 'JVM Provisioning & Reporting',
    'Miscellaneous'),
 ]
 

@@ -1,6 +1,6 @@
-﻿============================
-JVM Reporting & Benchmarking
-============================
+﻿====================================================
+PenchY -- JVM Provisioning & Reporting Documentation
+====================================================
 
 This is the documentation for PenchY, the Python Benchmarking Automation
 Tool for Java Virtual Machines.
