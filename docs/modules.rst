@@ -1,4 +1,5 @@
-penchy
+======
+PenchY
 ======
 
 .. toctree::

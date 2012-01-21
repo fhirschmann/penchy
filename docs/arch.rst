@@ -1,7 +1,9 @@
+============
 Architecture
 ============
 
-Write me!
+Pipeline
+========
 
 .. graphviz::
 

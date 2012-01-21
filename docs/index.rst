@@ -1,4 +1,5 @@
-﻿JVM Reporting & Benchmarking
+﻿============================
+JVM Reporting & Benchmarking
 ============================
 
 This is the documentation for PenchY, the Python Benchmarking Automation
