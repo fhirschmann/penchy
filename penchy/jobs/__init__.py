@@ -9,7 +9,7 @@ JVM = jvms.JVM
 __all__ = [
     # job
     'Job',
-    'NodeConfiguration'
+    'NodeConfiguration',
     'makeJVMNodeConfiguration',
     # dependencies
     'Edge',
