@@ -11,3 +11,4 @@
 /PYSMELLTAGS*
 /htmlcov
 /.coverage
+/docs/_build
