@@ -22,34 +22,40 @@ from penchy.maven import makeBootstrapPOM
 log = logging.getLogger(__name__)
 
 
+class NodeSet(set):
+    """
+    This represents a set of nodes.
+    """
+    def get_node(self, identifier):
+        for node in self:
+            if node.config.identifier == identifier:
+                return node
+
+
 class Service(rpyc.Service):
     config = None
     job = None
     waiting_for = set()
     results = set()
 
-    def exposed_rcv_data(self, output):
+    def exposed_rcv_data(self, identifier, output):
         """
         Receive client data.
 
         :param output: benchmark output that has been filtered by the client.
         """
         log.info("Received: " + str(output))
-        self.results.add(output)
-
-        # TODO: Check if we have received data from all nodes
+        node = Service.waiting_for.get_node(identifier)
+        Service.waiting_for.remove(node)
+        if len(Service.waiting_for) == 0:
+            self.finish()
 
     def finish(self):
         """
         Called when we have received data from all nodes.
         """
         # TODO: Implement me
-        pass
-
-    @classmethod
-    def load(cls, config, job):
-        cls.config = config
-        cls.job = job
+        log.info("Ready to do real work!")
 
 
 class Server(object):
@@ -70,7 +76,7 @@ class Server(object):
         job = load_job(jobfile)
 
         # List of nodes to upload to
-        self.nodes = set((Node(nc.node, job) for nc in
+        self.nodes = NodeSet((Node(nc.node, job) for nc in
                 job.job.configurations))
 
         # Files to upload
@@ -106,7 +112,8 @@ class Server(object):
         listener = ThreadedServer(Service,
                 hostname=config.SERVER_HOST,
                 port=config.SERVER_PORT)
-        listener.service.load(config, job)
+        listener.service.config = config
+        listener.service.job = job
         listener.service.waiting_for = self.nodes.copy()
         return listener
 

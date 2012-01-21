@@ -73,4 +73,4 @@ class Client(object):
         """
         host, port = server
         conn = rpyc.connect(host, port)
-        conn.root.rcv_data(filtered_output)
+        conn.root.rcv_data(self.args.identifier, filtered_output)
