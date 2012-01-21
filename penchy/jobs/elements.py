@@ -16,11 +16,11 @@ class PipelineElement(object):
 
     A PipelineElement must have the following attributes:
 
-    - `out`, a dictionary that maps logical names for output to actual.
-    - `inputs`, a list of tuples that describe the name and types of the inputs
-                for ``run`` (see :func:`_check_kwargs` for the format)
+    - ``out``, a dictionary that maps logical names for output to actual.
+    - ``inputs``, a list of tuples that describe the name and types of the
+                inputs for ``run`` (see :func:`_check_kwargs` for the format)
 
-    - ``outputs`, a list of tuples that describe the logical name of an output
+    - ``outputs``, a list of tuples that describe the logical name of an output
                  and its type it is built alike ``inputs`` for all output of the
                  element
 
@@ -28,9 +28,10 @@ class PipelineElement(object):
 
     - ``_run(**kwargs)``, to run the element on kwargs, kwargs has to have the
                           types that ``input`` describes
-    - `check`, to check the element configuration for plausibility.
+    - ``check``, to check the element configuration for plausibility.
 
-    A PipelineElement must call PipelineElement.__init__ on its initialization.
+    A :class:`PipelineElement` must call ``PipelineElement.__init__`` on its
+    initialization.
     """
     DEPENDENCIES = set()
     inputs = []

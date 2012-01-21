@@ -15,7 +15,7 @@ log = logging.getLogger(__name__)
 class Dacapo(Workload):
     """
     This class represents the workload for the `DaCapo Benchmark-Suite
-    <http://dacapobench.org/>_.
+    <http://dacapobench.org/>`_.
     """
     DEPENDENCIES = set((
         MavenDependency(
@@ -88,7 +88,7 @@ class Dacapo(Workload):
 class ScalaBench(Dacapo):
     """
     This class represents the workload for the `Scalabench Benchmark-Suite
-    <http://scalabench.org/>_.
+    <http://scalabench.org/>`_.
     """
     BENCHMARKS = set((
         # dacapo
