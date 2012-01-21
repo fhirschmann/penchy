@@ -32,6 +32,7 @@ JVMNodeConfiguration = namedtuple('JVMNodeConfiguration',
 # TODO: Replace JVMNodeConfiguration with own class to avoid monkey patching?
 JVMNodeConfiguration.__eq__ = lambda self, other: (self.jvm == other.jvm and
                                                    self.node == other.node)
+JVMNodeConfiguration.__hash__ = lambda self: hash(hash(self.jvm) + hash(self.node))
 
 
 class Job(object):
