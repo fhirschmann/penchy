@@ -22,21 +22,11 @@ from penchy.maven import makeBootstrapPOM
 log = logging.getLogger(__name__)
 
 
-class NodeSet(set):
-    """
-    This represents a set of nodes.
-    """
-    def get_node(self, identifier):
-        for node in self:
-            if node.config.identifier == identifier:
-                return node
-
-
 class Service(rpyc.Service):
     config = None
     job = None
-    waiting_for = set()
-    results = set()
+    waiting_for = {}
+    results = {}
 
     def exposed_rcv_data(self, identifier, output):
         """
@@ -45,8 +35,8 @@ class Service(rpyc.Service):
         :param output: benchmark output that has been filtered by the client.
         """
         log.info("Received: " + str(output))
-        node = Service.waiting_for.get_node(identifier)
-        Service.waiting_for.remove(node)
+        Service.results[identifier] = output
+        del Service.waiting_for[identifier]
         if len(Service.waiting_for) == 0:
             self.finish()
 
@@ -56,6 +46,7 @@ class Service(rpyc.Service):
         """
         # TODO: Implement me
         log.info("Ready to do real work!")
+        log.info(Service.results)
 
 
 class Server(object):
@@ -76,8 +67,8 @@ class Server(object):
         job = load_job(jobfile)
 
         # List of nodes to upload to
-        self.nodes = NodeSet((Node(nc.node, job) for nc in
-                job.job.configurations))
+        self.nodes = dict((n.node.identifier, Node(n.node, job)) for \
+                n in job.job.configurations)
 
         # Files to upload
         self.uploads = (
@@ -122,7 +113,7 @@ class Server(object):
         This method will run the clients on all nodes.
         """
         with makeBootstrapPOM() as pom:
-            for node in self.nodes:
+            for node in self.nodes.values():
                 node.connect()
                 for upload in self.uploads:
                     node.put(*upload)
