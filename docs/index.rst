@@ -11,6 +11,8 @@ Tool for Java Virtual Machines.
    arch
    maven
    api
+   job
+   modules
 
 Indices and tables
 ==================
