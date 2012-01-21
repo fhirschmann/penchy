@@ -84,8 +84,8 @@ class ImportTest(unittest.TestCase):
         with NamedTemporaryFile() as tf:
             # save for writing after close, assures file does not exist
             fname = tf.name
-            tf.write('foo = %s' % i)
-            tf.write(os.linesep)
+            write(tf, 'foo = %s' % i)
+            write(tf, os.linesep)
             tf.flush()
             config = util.load_config(tf.name)
             self.assertEquals(config.foo, i)
@@ -97,8 +97,8 @@ class ImportTest(unittest.TestCase):
     def test_load_job(self):
         j = 'world dominance'
         with NamedTemporaryFile() as tf:
-            tf.write('job = "%s"' % j)
-            tf.write(os.linesep)
+            write(tf, 'job = "%s"' % j)
+            write(tf, os.linesep)
             tf.flush()
             job = util.load_job(tf.name)
             self.assertEquals(job.job, j)

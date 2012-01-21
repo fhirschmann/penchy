@@ -10,6 +10,11 @@ import sys
 from contextlib import contextmanager
 
 
+on_python3 = sys.version_info[0] == 3
+
+if on_python3:
+    unicode = str
+    str = bytes
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
 else:
@@ -63,3 +68,19 @@ def nested(*managers):
             # the right information. Another exception may
             # have been raised and caught by an exit method
             raise exception
+
+
+def write(file, string, codec='utf8'):
+    """
+    Write ``string`` to ``file`` encoding with codec.
+
+    :param file: file object to write to
+    :type file: file
+    :param string: string to write
+    :type string: str, unicode, bytes
+    :param codec: how to encode unicode types
+    """
+    if isinstance(string, str):
+        file.write(string)
+    elif isinstance(string, unicode):
+        file.write(string.encode(codec))

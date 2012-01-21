@@ -2,7 +2,7 @@ import itertools
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import unittest
+from penchy.compat import unittest, write
 from penchy.jobs.filters import DacapoHarness
 from penchy.tests.util import get_json_data
 
@@ -62,7 +62,7 @@ def write_to_tempfiles(data):
     for d in data:
         # itentially not closing, do in tearDown
         f = NamedTemporaryFile(prefix='penchy')
-        f.write(d)
+        write(f, d)
         f.seek(0)
         files.append(f)
 
