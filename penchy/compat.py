@@ -7,14 +7,15 @@ encouraged.
 """
 
 import sys
+import hashlib
 from contextlib import contextmanager
-
 
 on_python3 = sys.version_info[0] == 3
 
 if on_python3:
     unicode = str
     str = bytes
+
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
 else:
@@ -84,3 +85,20 @@ def write(file, string, codec='utf8'):
         file.write(string)
     elif isinstance(string, unicode):
         file.write(string.encode(codec))
+
+
+def update_hasher(hasher, string, codec='utf8'):
+    """
+    Update ``hasher`` with ``string``.
+
+    :param string: string to hash
+    :type string: str, unicode, bytes
+    :param codec: how to encode unicode types
+    :returns: updated hasher
+    """
+    if isinstance(string, str):
+        hasher.update(string)
+    elif isinstance(string, unicode):
+        hasher.update(string.encode(codec))
+
+    return hasher

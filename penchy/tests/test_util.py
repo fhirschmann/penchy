@@ -1,10 +1,11 @@
 import os
 import sys
+import hashlib
 from random import randint
 from tempfile import NamedTemporaryFile
 
 from penchy import util
-from penchy.compat import unittest
+from penchy.compat import unittest, write, update_hasher
 
 
 class ClasspathTest(unittest.TestCase):
@@ -15,7 +16,7 @@ class ClasspathTest(unittest.TestCase):
         self.assertEquals(util.extract_classpath(options), expected)
         expected = 'foo:bar:baz'
         options = ['-classpath', expected]
-        self.assertEquals(util.extract_classpath(options), expected)
+        self.assertEqual(util.extract_classpath(options), expected)
 
     def test_multiple_classpaths(self):
         expected = 'foo:bar:baz'
@@ -24,7 +25,7 @@ class ClasspathTest(unittest.TestCase):
 
     def test_only_option(self):
         options = ['-cp']
-        self.assertEquals(util.extract_classpath(options), '')
+        self.assertEqual(util.extract_classpath(options), '')
 
 
 class TempdirTest(unittest.TestCase):
@@ -37,11 +38,13 @@ class TempdirTest(unittest.TestCase):
 
 class HashTest(unittest.TestCase):
     def test_sha1sum(self):
+        text = 'sha1 checksum test'
+        hasher = hashlib.sha1()
         with NamedTemporaryFile(delete=False) as tf:
-            tf.write('sha1 checksum test')
+            write(tf, text)
             tf.flush()
-            self.assertEquals(util.sha1sum(tf.name),
-                    '14eb73d6e6e404471f7c71dc2ad114609c51c579')
+            self.assertEqual(util.sha1sum(tf.name),
+                             update_hasher(hasher, text).hexdigest())
 
 
 class MemoizedTest(unittest.TestCase):

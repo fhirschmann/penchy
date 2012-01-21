@@ -15,6 +15,8 @@ import pkg_resources
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
 
+from penchy.compat import update_hasher
+
 
 log = logging.getLogger(__name__)
 
@@ -137,7 +139,7 @@ def sha1sum(filename, blocksize=65536):
     with open(filename, 'r') as afile:
         buf = afile.read(blocksize)
         while len(buf) > 0:
-            hasher.update(buf)
+            update_hasher(hasher, buf)
             buf = afile.read(blocksize)
 
     return hasher.hexdigest()
