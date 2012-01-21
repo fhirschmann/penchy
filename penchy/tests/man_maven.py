@@ -1,7 +1,7 @@
 from tempfile import NamedTemporaryFile
 
+from penchy.compat import unittest
 from penchy.maven import *
-from penchy.tests.unit import unittest
 
 
 class MavenTest(unittest.TestCase):

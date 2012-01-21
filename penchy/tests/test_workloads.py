@@ -1,5 +1,5 @@
+from penchy.compat import unittest
 from penchy.jobs.workloads import Dacapo, ScalaBench
-from penchy.tests.unit import unittest
 
 
 class DacapoWorkloadTest(unittest.TestCase):

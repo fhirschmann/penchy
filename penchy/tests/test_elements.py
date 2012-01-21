@@ -1,6 +1,6 @@
+from penchy.compat import unittest
 from penchy.jobs.elements import Workload, Tool
 from penchy.tests.util import MockPipelineElement
-from penchy.tests.unit import unittest
 
 
 class PipelineElementHookTest(unittest.TestCase):

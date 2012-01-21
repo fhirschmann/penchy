@@ -1,6 +1,6 @@
+from penchy.compat import unittest
 from penchy.jobs.dependency import Edge, edgesort, build_keys
 from penchy.tests.util import make_edge
-from penchy.tests.unit import unittest
 
 
 class EdgeSortTest(unittest.TestCase):

@@ -1,4 +1,4 @@
-from penchy.config import NodeConfiguration
+from penchy.compat import unittest
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
@@ -6,7 +6,6 @@ from penchy.jobs.filters import Print, DacapoHarness
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
-from penchy.tests.unit import unittest
 from penchy.tests.util import MockPipelineElement, make_jvmnode_config
 
 

@@ -1,11 +1,10 @@
 import os
 import sys
-
-from tempfile import NamedTemporaryFile
 from random import randint
+from tempfile import NamedTemporaryFile
 
 from penchy import util
-from penchy.tests.unit import unittest
+from penchy.compat import unittest
 
 
 class ClasspathTest(unittest.TestCase):

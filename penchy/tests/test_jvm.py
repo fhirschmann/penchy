@@ -1,9 +1,7 @@
-from itertools import chain
-
+from penchy.compat import unittest
 from penchy.jobs.jvms import JVM, JVMNotConfiguredError
-from penchy.jobs.workloads import ScalaBench
 from penchy.jobs.tools import HProf
-from penchy.tests.unit import unittest
+from penchy.jobs.workloads import ScalaBench
 from penchy.tests.util import MockPipelineElement
 
 

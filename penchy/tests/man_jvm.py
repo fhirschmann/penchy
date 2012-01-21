@@ -1,8 +1,8 @@
+from penchy.compat import unittest
 from penchy.jobs.jvms import JVM
 from penchy.jobs.workloads import ScalaBench
 from penchy.maven import BootstrapPOM, get_classpath
 from penchy.util import tempdir
-from penchy.tests.unit import unittest
 
 
 class JVMTest(unittest.TestCase):

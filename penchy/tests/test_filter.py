@@ -2,9 +2,9 @@ import itertools
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
-from penchy.tests.util import get_json_data
+from penchy.compat import unittest
 from penchy.jobs.filters import DacapoHarness
-from penchy.tests.unit import unittest
+from penchy.tests.util import get_json_data
 
 
 class DacapoHarnessTest(unittest.TestCase):
