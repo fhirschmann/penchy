@@ -10,6 +10,7 @@ Write me!
         PipelineElement -> Tool;
         PipelineElement -> Workload;
         PipelineElement -> Filter;
+        Filter -> SystemFilter;
         PipelineElement -> WrappedJVM;
         NotRunnable -> Workload;
         NotRunnable -> Tool;
