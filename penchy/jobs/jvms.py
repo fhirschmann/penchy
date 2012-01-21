@@ -8,8 +8,8 @@ import shlex
 import subprocess
 import logging
 from tempfile import NamedTemporaryFile
-from contextlib import nested
 
+from penchy.compat import nested
 from penchy.jobs.elements import PipelineElement
 from penchy.util import extract_classpath
 
