@@ -46,18 +46,20 @@ def nested(*managers):
             vars.append(enter())
             exits.append(exit)
         yield vars
-    except:
+    except Exception as e:
         exc = sys.exc_info()
+        exception = e
     finally:
         while exits:
             exit = exits.pop()
             try:
                 if exit(*exc):
                     exc = (None, None, None)
-            except:
+            except Exception as e:
                 exc = sys.exc_info()
+                exception = e
         if exc != (None, None, None):
             # Don't rely on sys.exc_info() still containing
             # the right information. Another exception may
             # have been raised and caught by an exit method
-            raise exc[0], exc[1], exc[2]
+            raise exception
