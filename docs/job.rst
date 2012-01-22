@@ -20,7 +20,7 @@ The second is the flow.
 Defining the flow
 =================
 
-Every :class:`penchy.jobs.elements.PipelineElement` has the attribute ``inputs``
+Every :class:`penchy.jobs.elements.PipelineElement` has the attributes ``inputs``
 and ``outputs``.
 They describe how inputs (and outputs) are named and of which type they are.
 
