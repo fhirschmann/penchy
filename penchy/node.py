@@ -133,17 +133,21 @@ class Node(object):  # pragma: no cover
         This method will read the client's log file
         and log it using the server's logging facilities.
         """
+        client_log = []
+
         for filename in self.__class__._LOGFILES:
             try:
                 filename = os.path.join(self.config.path, filename)
                 logfile = self.sftp.open(filename)
-                log.info("".join(["Replaying logfile for ",
-                    self.config.identifier, os.linesep, logfile.read()]))
-                log.info("End log for " + self.config.identifier)
+                client_log.append(logfile.read())
                 logfile.close()
             except IOError:
                 log.error("Logfile %s could not be received from %s" % \
                         (filename, self))
+
+        log.info("".join(["Replaying logfile for ",
+            self.config.identifier, os.linesep, "".join(client_log)]))
+        log.info("End log for " + self.config.identifier)
 
     def execute(self, cmd):
         """
