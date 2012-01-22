@@ -2,6 +2,9 @@
 Architecture
 ============
 
+Job
+===
+
 Pipeline
 ========
 
@@ -25,3 +28,10 @@ Pipeline
         WrappedJVM -> PipelineElement
 
     }
+
+
+Client
+======
+
+Server
+======
