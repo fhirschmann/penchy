@@ -25,6 +25,9 @@ class Server(object):
     """
     This class represents the server.
     """
+    expected = []
+    results = []
+
     def __init__(self, configfile, jobfile):
         """
         :param configfile: config file to use
@@ -41,6 +44,12 @@ class Server(object):
         # List of nodes to upload to
         self.nodes = dict((n.node.identifier, Node(n.node, self.job)) for \
                 n in self.job.job.configurations)
+
+        # List of JVMNodeConfigurations we expect to receive
+        Server.expected = self.job.job.configurations[:]
+
+        # List of results
+        Server.results = []
 
         # Files to upload
         self.uploads = (
@@ -73,7 +82,12 @@ class Server(object):
 
     def rcv_data(self, hashcode, result):
         hashcode = int(hashcode)
-        print hashcode in [n.__hash__() for n in self.job.job.configurations]
+
+        node = [jnc for jnc in self.job.job.configurations \
+                if jnc.__hash__() == hashcode][0]
+
+        Server.expected.remove(node)
+        Server.results.append((node, result))
 
     def run_clients(self, jobfile, configfile):
         """
@@ -96,5 +110,7 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        #self.listener.start()
-        self.server.serve_forever()
+        while len(Server.expected) > 0:
+            self.server.handle_request()
+
+        log.info("Received results from all nodes. Excellent.")
