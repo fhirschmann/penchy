@@ -9,11 +9,11 @@ Tool for Java Virtual Machines.
    :maxdepth: 2
 
    quickstart
-   arch
-   maven
-   api
    job
+   maven
+   arch
    modules
+   api
 
 Indices and tables
 ==================
