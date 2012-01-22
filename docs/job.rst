@@ -24,11 +24,11 @@ Every :class:`penchy.jobs.elements.PipelineElement` has the attributes ``inputs`
 and ``outputs``.
 They describe how inputs (and outputs) are named and of which type they are.
 
-The flow is a description how the data flows from outputs to inputs. With other
+The flow is a description how the data flows from outputs to inputs. In other
 words: How Elements depend on data.
 
 The flow is expressed in terms of a list of :class:`penchy.jobs.dependency.Edge`.
-Each :class:`Edge` has a ``source``, a ``sink`` and a description how to map the
+Each :class:`Edge` has a ``source``, a ``sink`` and a description of how to map the
 output of the ``source`` to the input of the ``sink``.
 This description can be missing (or set to ``None``) to implicitly pipe all ``source``
 output to ``sink``.
