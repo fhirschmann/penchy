@@ -36,7 +36,7 @@ class DacapoHarness(Filter):
                ('times', list, list, int),
                ('valid', list, bool)]
 
-    TIME_RE = re.compile(
+    _TIME_RE = re.compile(
         r"""
         (?:completed\ warmup\ \d+|        # for iterations
         (?P<success>FAILED|PASSED))       # check if run failed or passed
@@ -52,7 +52,7 @@ class DacapoHarness(Filter):
             times = []
             with open(f) as fobj:
                 buf = fobj.read()
-            for match in DacapoHarness.TIME_RE.finditer(buf):
+            for match in DacapoHarness._TIME_RE.finditer(buf):
                 success, time = match.groups()
                 if success is not None and success == 'FAILED':
                     failures += 1
