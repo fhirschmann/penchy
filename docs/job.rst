@@ -73,21 +73,29 @@ Here is a simple Job::
     if __name__ == '__main__':
         job.check()
 
+Defining the flow
+=================
+
+Survey of the elements
+======================
+
+NodeConfiguration
+-----------------
 
 JVM
-===
+---
 
 Workloads
-=========
+---------
 
 Tools
-=====
-
-Agent
 -----
 
+Agent
+~~~~~
+
 WrappedJVM
-----------
+~~~~~~~~~~
 
 Filter
-======
+------
