@@ -56,7 +56,19 @@ Here the example from above, that won't show any warnings::
   Edge(w, f, [('stderr', 'stderr),
               ('exit_code', 'exit_code')])
 
-TODO: include description how differenct sources can fill a sink
+With ``Edge`` you specify a 1:1 relation but within the whole flow an
+``PipelineElement`` can pass its output to many ``PipelineElement`` and also
+receive from many.
+For Example::
+
+  w = workloads.ScalaBench('dummy')
+  f1 = filters.DacapoHarness()
+  f2 = filters.Print()
+
+  flow = [Edge(w, f1),  # w passes output to two elements
+          Edge(w, f2),  # f2 receives input from two inputs
+          Edge(f1, f2)
+         ]
 
 Survey of the elements
 ======================
