@@ -2,25 +2,8 @@
 API
 ===
 
-Client
-------
-.. automodule:: penchy.client
-   :members:
-
-Dependency
-----------
-.. automodule:: penchy.jobs.dependency
-   :members:
-
-Elements
---------
-.. automodule:: penchy.jobs.elements
-   :members:
-
-Filters
--------
-.. automodule:: penchy.jobs.filters
-   :members:
+Job Description
+===============
 
 Jobs
 ----
@@ -30,6 +13,30 @@ Jobs
 JVMs
 ----
 .. automodule:: penchy.jobs.jvms
+   :members:
+
+Workloads
+---------
+.. automodule:: penchy.jobs.workloads
+   :members:
+
+Tools
+-----
+.. automodule:: penchy.jobs.tools
+   :members:
+
+Filters
+-------
+.. automodule:: penchy.jobs.filters
+   :members:
+
+Uncategorized
+=============
+TODO: CATEGORIZE ME
+
+Client
+------
+.. automodule:: penchy.client
    :members:
 
 Maven
@@ -47,17 +54,21 @@ Server
 .. automodule:: penchy.server
    :members:
 
-Tools
------
-.. automodule:: penchy.jobs.tools
-   :members:
+Internal
+========
 
 Utilities
 ---------
 .. automodule:: penchy.util
    :members:
 
-Workloads
----------
-.. automodule:: penchy.jobs.workloads
+
+Elements of the Pipeline
+------------------------
+.. automodule:: penchy.jobs.elements
+   :members:
+
+Pipeline-Dependencies
+---------------------
+.. automodule:: penchy.jobs.dependency
    :members:
