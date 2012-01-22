@@ -73,8 +73,53 @@ Here is a simple Job::
     if __name__ == '__main__':
         job.check()
 
+
+The two main responsibilities of a job are
+
+    1. describe what should be executed by the JVMs and on which nodes
+    2. describe what to do with the results of the execution
+
+The second is the flow.
+
 Defining the flow
 =================
+
+Every :class:`penchy.jobs.elements.PipelineElement` has the attribute ``inputs``
+and ``outputs``.
+They describe how inputs (and outputs) are named and of which type they are.
+
+The flow is a description how the data flows from outputs to inputs.
+
+The flow is expressed in terms of a list of :class:`penchy.jobs.dependency.Edge`.
+Each :class:`Edge` has a ``source``, a ``sink`` and a description how to map the
+output of the ``source`` to the input of the ``sink``.
+This description can be missing (or set to ``None``) to implicitly pipe all ``source``
+output to ``sink``.
+That means that ``sink`` must have a ``inputs`` that is compatible with
+``outputs`` of ``source``.
+Here is an example::
+
+  w = workloads.ScalaBench('dummy')  # all workloads have stderr, stdout
+                                     # and exit_code as output
+  f = filters.DacapoHarness()  # This filter only expects stderr and exit_code
+
+  Edge(w, f)  # this works because w and f are compatible, but there will be a
+                warning because stdout output of workload will not be used
+
+
+This description can also be explicitly provided.
+A reason can be that ``sink`` and ``source`` are incompatible in the expected
+named and their types or to provide only a subset of the outputs.
+Here the example from above, that won't show any warnings::
+
+  w = workloads.ScalaBench('dummy')  # all workloads have stderr, stdout
+                                     # and exit_code as output
+  f = filters.DacapoHarness()  # This filter only expects stderr and exit_code
+
+  Edge(w, f, [('stderr', 'stderr),
+              ('exit_code', 'exit_code')])
+
+TODO: include description how differenct sources can fill a sink
 
 Survey of the elements
 ======================
