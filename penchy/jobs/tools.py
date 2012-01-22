@@ -31,7 +31,7 @@ class Tamiflex(Tool):
                ('classfolder', list, str)]
 
     def __init__(self):
-        super(Tool, self).__init__()
+        super(Tamiflex, self).__init__()
         self.posthooks.append(self._after_execution)
 
     def _after_execution(self):
