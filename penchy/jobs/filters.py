@@ -8,6 +8,13 @@ from pprint import pprint
 from penchy.jobs.elements import Filter, SystemFilter
 
 
+class WrongInputError(Exception):
+    """
+    Filter received input it was not expecting and cannot process.
+    """
+    pass
+
+
 class Tamiflex(Filter):
     pass
 
