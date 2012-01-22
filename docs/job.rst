@@ -1,6 +1,6 @@
-=======================
-Job Desciption Language
-=======================
+========================
+Job Description Language
+========================
 
 Here is a simple Job::
 
