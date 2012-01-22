@@ -178,3 +178,22 @@ class ResetPipelineTest(unittest.TestCase):
         self.assertDictEqual(self.filter.out, {'test' : [5]})
         self.job._reset_client_pipeline()
         self.assertDictEqual(self.filter.out, {})
+
+
+class BuildEnvTest(unittest.TestCase):
+    def setUp(self):
+        self.job = job.Job(make_jvmnode_config(), [], [])
+
+    def test_empty_send_rcv(self):
+        env = self.job._build_environment()
+        self.assertDictEqual(env['receive'](), {})
+        self.assertEqual(env['send']('data'), None)
+
+    def test_set_send_rcv(self):
+        receive = lambda: {'x' : 23}
+        send = lambda data: 42
+        self.job.receive = receive
+        self.job.send = send
+        env = self.job._build_environment()
+        self.assertDictEqual(env['receive'](), {'x' : 23})
+        self.assertEqual(env['send']('data'), 42)
