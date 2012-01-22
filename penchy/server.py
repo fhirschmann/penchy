@@ -25,7 +25,10 @@ class Server(object):
     """
     This class represents the server.
     """
+    # The JVMNodeConfigurations we expect results for
     expected = []
+
+    # The list of results we will receive
     results = []
 
     def __init__(self, configfile, jobfile):
@@ -81,6 +84,14 @@ class Server(object):
         return thread
 
     def rcv_data(self, hashcode, result):
+        """
+        This is the method exposed to the nodes.
+
+        :param hashcode: the hashcode to identify the
+                         :class:`JVMNodeConfiguration` by
+        :type hashcode: string
+        :param result: the result of the job
+        """
         hashcode = int(hashcode)
 
         node = [jnc for jnc in self.job.job.configurations \
@@ -115,3 +126,11 @@ class Server(object):
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
+        self.continue_pipeline()
+
+    def continue_pipeline(self):
+        """
+        This method is called when we have received results
+        from all nodes.
+        """
+        log.info(Server.results)
