@@ -2,6 +2,33 @@
 Job Desciption Language
 =======================
 
+Here is a simple Job::
+
+    from penchy.jobs import *
+
+    node = NodeConfiguration('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+    jvm = jvms.JVM('java')
+    jconfig = makeJVMNodeConfiguration(jvm, node, name="Simple Example!")
+
+    w = workloads.ScalaBench('dummy')
+    jvm.workload = w
+
+    f1 = filters.DacapoHarness()
+    f2 = filters.Print()
+
+    job = Job(configurations=jconfig,
+              client_flow=[
+                  Edge(w, f1, [('stderr', 'stderr'),
+                               ('exit_code', 'exit_code')]),
+                  Edge(w, f2, [('stderr', 'workload_stderr'),
+                               ('exit_code', 'workload_exit_code')]),
+                  Edge(f1, f2)
+              ],
+              server_flow=[],
+              invocations = 2
+              )
+
 JVM
 ===
 
