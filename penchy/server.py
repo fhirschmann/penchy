@@ -86,8 +86,9 @@ class Server(object):
         node = [jnc for jnc in self.job.job.configurations \
                 if jnc.__hash__() == hashcode][0]
 
-        Server.expected.remove(node)
-        Server.results.append((node, result))
+        with threading.Lock() as lock:
+            Server.expected.remove(node)
+            Server.results.append((node, result))
 
     def run_clients(self, jobfile, configfile):
         """
