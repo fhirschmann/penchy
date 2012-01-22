@@ -99,3 +99,34 @@ class JVMHooksTest(unittest.TestCase):
         jvm.tool = t
         self.assertListEqual(list(map(list, jvm._get_hooks())), [t.prehooks,
                                                                  t.posthooks])
+
+
+class JVMTest(unittest.TestCase):
+    def test_eq(self):
+        i = JVM('foo')
+        j = JVM('foo')
+        self.assertEqual(i, j)
+        i.workload = ScalaBench('dummy')
+        j.workload = ScalaBench('dummy')
+        self.assertEqual(i, j)
+        i.workload = None
+        j.workload = None
+        self.assertEqual(i, j)
+        i._user_options = '-server'
+        self.assertNotEqual(i, j)
+        j._user_options = '-server'
+        self.assertEqual(i, j)
+
+    def test_ne(self):
+        i = JVM('foo')
+        j = JVM('bar')
+        self.assertNotEqual(i, j)
+
+    def test_hash(self):
+        i = JVM('foo')
+        s = set((i,))
+        self.assertIn(i, s)
+
+    def test_wrong_comparison(self):
+        i = JVM('foo')
+        self.assertNotEqual(i, 2)
