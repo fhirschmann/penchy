@@ -53,7 +53,6 @@ class Client(object):
         :param args: arguments; this would normally be sys.argv
         :type args: list
         """
-        # TODO: This could be imported from the config file
         parser = argparse.ArgumentParser(description=__doc__, prog=args)
         parser.add_argument("job", help="job to execute", metavar="job")
         parser.add_argument("config", help="config file to use", metavar="config")
