@@ -21,10 +21,12 @@ class DacapoHarness(Filter):
     Filters output of a DaCapo Harness.
 
     Inputs:
+
     - ``stderr``:  List of Paths to stderror output files
     - ``exit_code``: List of program exit codes
 
     Outputs:
+
     - ``failures``: failure count per invocation ([int])
     - ``times``: execution time per itertion per invocation ([[int]])
     - ``valid``: flag that indicates if execution was valid
