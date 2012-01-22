@@ -36,11 +36,11 @@ class Server(object):
         self.bootstrap_args = []
 
         config = load_config(configfile)
-        job = load_job(jobfile)
+        self.job = load_job(jobfile)
 
         # List of nodes to upload to
-        self.nodes = dict((n.node.identifier, Node(n.node, job)) for \
-                n in job.job.configurations)
+        self.nodes = dict((n.node.identifier, Node(n.node, self.job)) for \
+                n in self.job.job.configurations)
 
         # Files to upload
         self.uploads = (
@@ -71,8 +71,9 @@ class Server(object):
         thread.daemon = True
         return thread
 
-    def rcv_data(self, result):
-        print result
+    def rcv_data(self, hashcode, result):
+        hashcode = int(hashcode)
+        print hashcode in [n.__hash__() for n in self.job.job.configurations]
 
     def run_clients(self, jobfile, configfile):
         """
