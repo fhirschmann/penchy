@@ -2,10 +2,14 @@
 This module provides filters.
 """
 
+import logging
 import re
 from pprint import pprint
 
 from penchy.jobs.elements import Filter, SystemFilter
+
+
+log = logging.getLogger(__name__)
 
 
 class WrongInputError(Exception):
@@ -52,6 +56,8 @@ class DacapoHarness(Filter):
         \ in\ (?P<time>\d+)\ msec         # time of execution
         """, re.VERBOSE)
 
+    _VALIDITY_RE = re.compile(r'^\n?===== DaCapo')
+
     def _run(self, **kwargs):
         exit_codes = kwargs['exit_code']
         stderror = kwargs['stderr']
@@ -61,6 +67,11 @@ class DacapoHarness(Filter):
             times = []
             with open(f) as fobj:
                 buf = fobj.read()
+
+            if not self._VALIDITY_RE.search(buf):
+                log.error('Received invalid input:\n{0}'.format(buf))
+                raise WrongInputError('Received invalid input')
+
             for match in DacapoHarness._TIME_RE.finditer(buf):
                 success, time = match.groups()
                 if success is not None and success == 'FAILED':
