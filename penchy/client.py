@@ -25,7 +25,6 @@ class Client(object):
         :type args: list
         """
         self.args = self.parse_args(args)
-        # TODO: needed to save config module?
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job)
         self.identifier = self.args.identifier
@@ -43,8 +42,7 @@ class Client(object):
         for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
 
-        self.send_data("Job finished!", (self.config.SERVER_HOST,
-            self.config.SERVER_PORT))
+        self.send_data("Job finished!")
 
     def parse_args(self, args):
         """
@@ -62,7 +60,7 @@ class Client(object):
         return args
 
     # XXX: Old method; only here for reference
-    def send_data(self, filtered_output, server):
+    def send_data(self, filtered_output):
         """
         Send filtered benchmark output to server.
 
@@ -70,6 +68,5 @@ class Client(object):
         :param server: server identifier, tuple of (Host, Port), if Port is None
                        default will be used
         """
-        host, port = server
-        conn = rpyc.connect(host, port)
+        conn = rpyc.connect(self.config.SERVER_HOST, self.config.SERVER_PORT)
         conn.root.rcv_data(self.args.identifier, filtered_output)
