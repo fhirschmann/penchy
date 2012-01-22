@@ -4,9 +4,9 @@ import time
 import sys
 import logging
 import imp
+import xmlrpclib
 
 import argparse
-import rpyc
 
 from penchy.util import load_config, load_job
 
@@ -28,6 +28,8 @@ class Client(object):
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job)
         self.identifier = self.args.identifier
+        self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % (self.config.SERVER_HOST,
+            self.config.SERVER_PORT))
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
@@ -38,11 +40,9 @@ class Client(object):
         """
         Runs the client.
         """
-
         for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
-
-        self.send_data("Job finished!")
+            self.proxy.rcv_data((str(configuration.__hash__()), 'results!'))
 
     def parse_args(self, args):
         """
@@ -58,15 +58,3 @@ class Client(object):
         parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
         args = parser.parse_args(args=args)
         return args
-
-    # XXX: Old method; only here for reference
-    def send_data(self, filtered_output):
-        """
-        Send filtered benchmark output to server.
-
-        :param filtered_output: relevant benchmark output
-        :param server: server identifier, tuple of (Host, Port), if Port is None
-                       default will be used
-        """
-        conn = rpyc.connect(self.config.SERVER_HOST, self.config.SERVER_PORT)
-        conn.root.rcv_data(self.args.identifier, filtered_output)

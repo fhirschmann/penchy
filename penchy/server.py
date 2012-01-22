@@ -8,45 +8,17 @@ import imp
 import atexit
 import logging
 import threading
+from SimpleXMLRPCServer import SimpleXMLRPCServer
 from tempfile import NamedTemporaryFile
 from time import sleep
 
 import argparse
-import rpyc
-from rpyc.utils.server import ThreadedServer
 
 from penchy.node import Node
 from penchy.util import find_bootstrap_client, load_job, load_config
 from penchy.maven import makeBootstrapPOM
 
 log = logging.getLogger(__name__)
-
-
-class Service(rpyc.Service):
-    config = None
-    job = None
-    waiting_for = {}
-    results = {}
-
-    def exposed_rcv_data(self, identifier, output):
-        """
-        Receive client data.
-
-        :param output: benchmark output that has been filtered by the client.
-        """
-        log.info("Received: " + str(output))
-        Service.results[identifier] = output
-        del Service.waiting_for[identifier]
-        if len(Service.waiting_for) == 0:
-            self.finish()
-
-    def finish(self):
-        """
-        Called when we have received data from all nodes.
-        """
-        # TODO: Implement me
-        log.info("Ready to do real work!")
-        log.info(Service.results)
 
 
 class Server(object):
@@ -77,7 +49,10 @@ class Server(object):
                 (configfile, 'config.py'))
 
         # Set up the listener
-        self.listener = self._setup_service(config, job)
+        self.server = SimpleXMLRPCServer(
+                (config.SERVER_HOST, config.SERVER_PORT),
+                allow_none=True)
+        self.server.register_function(self.rcv_data, "rcv_data")
 
         # Set up the thread which is deploying the job
         self.client_thread = self._setup_client_thread([
@@ -96,17 +71,8 @@ class Server(object):
         thread.daemon = True
         return thread
 
-    def _setup_service(self, config, job):
-        """
-        Sets up the Service which answers to nodes.
-        """
-        listener = ThreadedServer(Service,
-                hostname=config.SERVER_HOST,
-                port=config.SERVER_PORT)
-        listener.service.config = config
-        listener.service.job = job
-        listener.service.waiting_for = self.nodes.copy()
-        return listener
+    def rcv_data(self, result):
+        print result
 
     def run_clients(self, jobfile, configfile):
         """
@@ -129,4 +95,5 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        self.listener.start()
+        #self.listener.start()
+        self.server.serve_forever()
