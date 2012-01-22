@@ -1,5 +1,8 @@
 """
 This module provides filters.
+
+Inputs are fed to filters via keywords in the ``run`` method.
+Outputs are available via the ``out`` attribute.
 """
 
 import logging
