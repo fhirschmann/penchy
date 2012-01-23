@@ -5,9 +5,6 @@
 # setup job environment
 from penchy.jobs import *
 
-# import the configuration file (if needed)
-import config
-
 # define a node
 node = NodeConfiguration(
     # that is the localhost
@@ -65,3 +62,7 @@ job = Job(
     # jvms will be run twice
     invocations = 2
 )
+
+# a nice trick: check the job for plausibility if run as ``python <jobname>``
+if __name__ == '__main__':
+    job.check()
