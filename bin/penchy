@@ -11,10 +11,12 @@ import sys
 import imp
 import logging
 import os
+import imp
 
 import argparse
 
 from penchy.server import Server
+from penchy.util import load_job, load_config
 
 
 if __name__ == "__main__":
@@ -42,11 +44,21 @@ if __name__ == "__main__":
             metavar="job")
     args = parser.parse_args()
 
-    server = Server(args.config, args.job)
+    config = load_config(args.config)
+    job = load_job(args.job)
 
-    logging.root.setLevel(args.loglevel)
+    if args.check:
+        for configuration in job.job.configurations:
+            job.job.check()
+    elif args.test:
+        # TODO: implement me
+        pass
+    else:
+        server = Server(args.config, args.job)
 
-    if args.load_from:
-        server.bootstrap_args.extend(['--load-from', args.load_from])
+        logging.root.setLevel(args.loglevel)
 
-    server.run()
+        if args.load_from:
+            server.bootstrap_args.extend(['--load-from', args.load_from])
+
+        server.run()
