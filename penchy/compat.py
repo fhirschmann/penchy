@@ -11,7 +11,7 @@ from contextlib import contextmanager
 
 on_python3 = sys.version_info[0] == 3
 
-if on_python3:
+if on_python3:  # pragma: no cover
     unicode = str
     str = bytes
 
@@ -22,7 +22,7 @@ else:
         import unittest2 as unittest
     # allow that python2.6 nodes don't depend on unittest2
     # will lead to errors on running tests if except triggers
-    except ImportError:
+    except ImportError:  # pragma: no cover
         import unittest
 
 
