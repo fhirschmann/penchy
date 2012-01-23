@@ -23,10 +23,10 @@ job = Job(configurations=[jconfig1, jconfig2],
           client_flow=[
               Edge(w, f1, [('stderr', 'stderr'),
                            ('exit_code', 'exit_code')]),
-              Edge(f1, f2, ('times', 'payload'))
+              Edge(f1, f2, [('times', 'payload')])
           ],
           server_flow=[
-              Edge(receiver, filters.Print(), ('results', 'times'))
+              Edge(receiver, filters.Print(), [('results', 'times')])
                       ],
           invocations = 2
           )
