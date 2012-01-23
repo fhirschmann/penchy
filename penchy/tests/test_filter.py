@@ -68,7 +68,7 @@ class DacapoHarnessTest(unittest.TestCase):
 def write_to_tempfiles(data):
     files = []
     for d in data:
-        # itentially not closing, do in tearDown
+        # itentionally not closing, do in tearDown
         f = NamedTemporaryFile(prefix='penchy')
         write(f, d)
         f.seek(0)
