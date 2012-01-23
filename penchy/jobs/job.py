@@ -73,26 +73,28 @@ class NodeConfiguration(object):
                 dict2string(self.__dict__, ['host', 'ssh_port']))
 
 
-JVMNodeConfiguration = namedtuple('JVMNodeConfiguration', ['jvm', 'node', 'name'])
-
-# TODO: Replace JVMNodeConfiguration with own class to avoid monkey patching?
-JVMNodeConfiguration.__eq__ = lambda self, other: (self.jvm == other.jvm and
-                                                   self.node == other.node)
-JVMNodeConfiguration.__hash__ = lambda self: hash(hash(self.jvm) + hash(self.node))
-
-
-def makeJVMNodeConfiguration(jvm, node, name=None):
+class JVMNodeConfiguration(object):
     """
-    Return a JVMNodeConfiguration.
+    This class represents a combination of a :class:`JVM` and a
+    :class:`NodeConfiguration`.
 
-    :param jvm: :class:`JVM` to execute the job
-    :param node: :class:`NodeConfiguration` to execute on
-    :param name: decorative name of the configuration
+    A :class:`JVMNodeConfiguration` is a unique identifier that groups the
+    results of its execution for server consumation.
     """
 
-    name = name or "{0} @ {1}".format(jvm, node)
+    # TODO: Add hash method for sha1 hashing,
+    def __init__(self, jvm, node, name=None):
+        """
+        """
+        self.name = name if name is not None else "{0} @ {1}".format(jvm, node)
+        self.jvm = jvm
+        self.node = node
 
-    return JVMNodeConfiguration(jvm, node, name)
+    def __eq__(self, other):
+        return self.jvm == other.jvm and self.node == other.node
+
+    def __hash__(self, other):
+        return hash(hash(self.jvm) + hash(self.node))
 
 
 class Job(object):

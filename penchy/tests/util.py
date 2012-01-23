@@ -3,7 +3,7 @@ import json
 
 from penchy.jobs.elements import PipelineElement
 from penchy.jobs.dependency import Edge
-from penchy.jobs.job import makeJVMNodeConfiguration, NodeConfiguration
+from penchy.jobs.job import NodeConfiguration, JVMNodeConfiguration
 from penchy.jobs.jvms import JVM
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -46,4 +46,4 @@ class MockPipelineElement(PipelineElement):
 def make_jvmnode_config(host=''):
     jvm = JVM('dummy')
     node = NodeConfiguration(host, 22, 'this', 'is', 'a dummy')
-    return makeJVMNodeConfiguration(jvm, node)
+    return JVMNodeConfiguration(jvm, node)

@@ -19,7 +19,7 @@ class JobClientElementsTest(unittest.TestCase):
         t = HProf('')
         self.jvm.tool = t
         f = Print()
-        self.config = job.makeJVMNodeConfiguration(self.jvm, 'pseudo_node')
+        self.config = job.JVMNodeConfiguration(self.jvm, 'pseudo_node')
         self.job = job.Job(self.config, [Edge(w, f)], [])
 
     def test_empty_elements(self):
@@ -44,14 +44,14 @@ class JobClientElementsTest(unittest.TestCase):
 
     def test_wrong_config(self):
         with self.assertRaises(ValueError):
-            self.job._get_client_dependencies(job.makeJVMNodeConfiguration(JVM('java'),
+            self.job._get_client_dependencies(job.JVMNodeConfiguration(JVM('java'),
                                                                            'pseudo'))
 
 
 class JobServerElementsTest(unittest.TestCase):
     def setUp(self):
         super(JobServerElementsTest, self).setUp()
-        self.config = job.makeJVMNodeConfiguration(JVM('foo'), 'pseudo_node')
+        self.config = job.JVMNodeConfiguration(JVM('foo'), 'pseudo_node')
         self.job = job.Job([self.config], [], [])
 
     def test_empty_elements(self):
