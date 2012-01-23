@@ -124,4 +124,5 @@ class Server(object):
         starts the serverside pipeline.
         """
         log.info(Server.results)
+        self.job.job.receive = lambda: Server.results
         self.job.job.run_server_pipeline()
