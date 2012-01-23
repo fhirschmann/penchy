@@ -1,15 +1,15 @@
 """
 Initiates multiple JVM Benchmarks and accumulates the results.
 """
-
-import os
 import logging
+import os
 import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
-from penchy.node import Node
-from penchy.util import find_bootstrap_client, load_job, load_config
 from penchy.maven import makeBootstrapPOM
+from penchy.node import Node
+from penchy.util import find_bootstrap_client
+
 
 log = logging.getLogger(__name__)
 
