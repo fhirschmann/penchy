@@ -3,16 +3,9 @@ Initiates multiple JVM Benchmarks and accumulates the results.
 """
 
 import os
-import sys
-import imp
-import atexit
 import logging
 import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
-from tempfile import NamedTemporaryFile
-from time import sleep
-
-import argparse
 
 from penchy.node import Node
 from penchy.util import find_bootstrap_client, load_job, load_config
