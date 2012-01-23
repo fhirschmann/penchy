@@ -3,10 +3,10 @@
 import os
 from penchy.jobs import *
 
-node = NodeConfiguration('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
 jvm = jvms.JVM('java')
-jconfig = JVMNodeConfiguration(jvm, node, name="Simple Example!")
+composition = SystemComposition(jvm, node, name="Simple Example!")
 
 w = workloads.ScalaBench('dummy')
 jvm.workload = w
@@ -14,7 +14,7 @@ jvm.workload = w
 f1 = filters.DacapoHarness()
 f2 = filters.Print()
 
-job = Job(configurations=jconfig,
+job = Job(compositions=composition,
           client_flow=[
               Edge(w, f1, [('stderr', 'stderr'),
                            ('exit_code', 'exit_code')]),
@@ -23,5 +23,5 @@ job = Job(configurations=jconfig,
               Edge(f1, f2)
           ],
           server_flow=[],
-          invocations = 2
+          invocations = 1
           )
