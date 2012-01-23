@@ -3,12 +3,9 @@
 import os
 import logging
 import atexit
-import imp
 from threading import Timer
 
 import paramiko
-
-from penchy.util import dict2string
 
 
 log = logging.getLogger(__name__)
