@@ -284,6 +284,7 @@ class Job(object):
         - ``receive``: to get all data that has been received, takes no arguments
                        returns a dict with :class:`JVMNodeConfiguration` as keys
         - ``send``: to send data to the server, takes one datum as argument
+        - ``job``: this job
 
         :returns: environment for a SystemFilter
         :rtype: dict
@@ -294,7 +295,8 @@ class Job(object):
         send = self.send if self.send is not None else lambda data: None
 
         return dict(receive=receive,
-                    send=send)
+                    send=send,
+                    job=self)
 
     def configurations_for_node(self, identifier):
         """
