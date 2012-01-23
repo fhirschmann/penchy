@@ -87,14 +87,13 @@ class Server(object):
         """
         for composition in self.job.compositions:
             if hashcode == composition.hash():
-                node = composition
                 break
         else:
-            raise ValueError('Node not expected')
+            raise ValueError('Composition not expected')
 
         with Server._rcv_lock:
-            Server.expected.remove(node)
-            Server.results[node] = result
+            Server.expected.remove(composition)
+            Server.results[composition] = result
 
     def run_clients(self):
         """
