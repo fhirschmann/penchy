@@ -93,9 +93,23 @@ class Send(SystemFilter):
 
 
 class Receive(SystemFilter):
+    """
+    Makes received Data available for the serverside pipeline.
+
+    Inputs:
+
+    - ``environment``: see :meth:`Job._build_environment`
+
+    Outputs:
+
+    - ``results``: dict that maps :class:`JVMNodeConfiguration` to their results.
+    """
     inputs = [('environment', dict)]
-    outputs = [('results', dict, list)]
-    pass
+    outputs = [('results', dict)]
+
+    def _run(self, **kwargs):
+        receive = kwargs['environment']['receive']
+        self.out['results'] = receive()
 
 
 class Print(Filter):
