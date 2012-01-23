@@ -34,6 +34,10 @@ if __name__ == "__main__":
     parser.add_argument("-f", "--load-from",
             action="store", dest="load_from",
             help="load penchy from this path on the node")
+    parser.add_argument("--check", action="store_true",
+            dest="check", help="check a job for validity and exit")
+    parser.add_argument("--test", action="store_true",
+            dest="test", help="test a job by running it locally")
     parser.add_argument("job", help="job to execute",
             metavar="job")
     args = parser.parse_args()
