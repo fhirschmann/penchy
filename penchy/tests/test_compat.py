@@ -1,7 +1,8 @@
+from hashlib import sha1
 from tempfile import TemporaryFile
 from contextlib import contextmanager
 
-from penchy.compat import unittest, nested
+from penchy.compat import unittest, nested, update_hasher
 
 
 class NestedTest(unittest.TestCase):
@@ -24,3 +25,23 @@ class NestedTest(unittest.TestCase):
             with nested(raising_cm(on_exit)):
                 pass
         self.assertEqual(raised.exception, on_exit)
+
+
+class HasherTest(unittest.TestCase):
+    def setUp(self):
+        self.control = sha1()
+        self.h = sha1()
+
+    def test_str_hash(self):
+        s = 'foo'
+        self.control.update(s)
+        update_hasher(self.h, s)
+        self.assertEqual(self.control.hexdigest(),
+                         self.h.hexdigest())
+
+    def test_unicode_hash(self):
+        u = u'foo'
+        self.control.update(u.encode('utf8'))
+        update_hasher(self.h, u)
+        self.assertEqual(self.control.hexdigest(),
+                         self.h.hexdigest())
