@@ -126,11 +126,12 @@ class Server(object):
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
-        self.continue_pipeline()
+        self.run_pipeline()
 
-    def continue_pipeline(self):
+    def run_pipeline(self):
         """
-        This method is called when we have received results
-        from all nodes.
+        This method is called when we have received results from all nodes and
+        starts the serverside pipeline.
         """
         log.info(Server.results)
+        self.job.run_server_pipeline()
