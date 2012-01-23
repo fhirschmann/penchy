@@ -43,10 +43,10 @@ class Server(object):
 
         # List of nodes to upload to
         self.nodes = dict((n.node.identifier, Node(n.node, job)) for
-                          n in self.job.configurations)
+                          n in self.job.compositions)
 
         # List of SystemCompositions we expect to receive
-        Server.expected = list(self.job.configurations)
+        Server.expected = list(self.job.compositions)
 
         # Files to upload
         self.uploads = (
@@ -109,7 +109,7 @@ class Server(object):
 
                 node.execute_penchy(" ".join(
                     self.bootstrap_args + [os.path.basename(self.job_file),
-                        'config.py', node.config.identifier]))
+                        'config.py', node.setting.identifier]))
                 node.disconnect()
 
     def run(self):
