@@ -80,8 +80,8 @@ job.
 This chapter tries to give what they are and how they are used.
 For a in-depth treatment see the :ref:`Job API <job-api>`.
 
-NodeConfiguration
------------------
+NodeSetting
+-----------
 
 JVM
 ---
