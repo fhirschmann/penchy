@@ -40,7 +40,7 @@ class Client(object):
         """
         Runs the client.
         """
-        job.send = self.proxy.rcv_data
+        self.job.send = self.proxy.rcv_data
 
         for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
