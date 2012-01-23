@@ -8,8 +8,8 @@ node2 = NodeConfiguration('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin
 
 
 jvm = jvms.JVM('java')
-jconfig1 = makeJVMNodeConfiguration(jvm, node1, name="Hello, Node!")
-jconfig2 = makeJVMNodeConfiguration(jvm, node2, name="Hello, Node2!")
+jconfig1 = JVMNodeConfiguration(jvm, node1, name="Hello, Node!")
+jconfig2 = JVMNodeConfiguration(jvm, node2, name="Hello, Node2!")
 
 receiver = filters.Receive()
 
