@@ -1,4 +1,6 @@
-from penchy.compat import unittest
+from hashlib import sha1
+
+from penchy.compat import unittest, update_hasher
 from penchy.jobs.jvms import JVM, JVMNotConfiguredError
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -126,6 +128,15 @@ class JVMTest(unittest.TestCase):
         i = JVM('foo')
         s = set((i,))
         self.assertIn(i, s)
+
+    def test_sha1hash(self):
+        path = 'foo'
+        options = 'option'
+        i = JVM(path, options)
+        h = sha1()
+        update_hasher(h, path)
+        update_hasher(h, options)
+        self.assertEqual(i.hash(), h.hexdigest())
 
     def test_wrong_comparison(self):
         i = JVM('foo')

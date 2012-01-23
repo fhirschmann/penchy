@@ -1,4 +1,6 @@
-from penchy.compat import unittest
+from hashlib import sha1
+
+from penchy.compat import unittest, update_hasher
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
@@ -152,6 +154,18 @@ class JVMNodeConfigurationsTest(unittest.TestCase):
     def test_multi_host_identifier(self):
         self.assertListEqual(self.job.configurations_for_node('192.168.1.11'),
                              self.multi_host)
+
+    def test_hash(self):
+        c = make_jvmnode_config()
+        self.assertIn(c, set((c,)))
+
+    def test_sha1hash(self):
+        c = make_jvmnode_config('localhost')
+        c.jvm = JVM('path', 'options')
+        h = sha1()
+        update_hasher(h, c.jvm.hash())
+        update_hasher(h, c.node.hash())
+        self.assertEqual(c.hash(), h.hexdigest())
 
 
 class ResetPipelineTest(unittest.TestCase):
