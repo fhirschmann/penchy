@@ -3,7 +3,7 @@ from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
-from penchy.jobs.filters import DacapoHarness
+from penchy.jobs.filters import DacapoHarness, WrongInputError
 from penchy.tests.util import get_json_data
 
 
@@ -15,6 +15,7 @@ class DacapoHarnessTest(unittest.TestCase):
         cls.multiple_iterations = d['multiple_iterations']
         cls.single_iterations = d['single_iterations']
         cls.failed_single = d['failed_single']
+        cls.wrong_input = d['wrong_input']
 
     def setUp(self):
         super(DacapoHarnessTest, self).setUp()
@@ -23,9 +24,10 @@ class DacapoHarnessTest(unittest.TestCase):
         self.mi = write_to_tempfiles(DacapoHarnessTest.multiple_iterations)
         self.si = write_to_tempfiles(DacapoHarnessTest.single_iterations)
         self.failed = write_to_tempfiles(DacapoHarnessTest.failed_single)
+        self.wrong_input = write_to_tempfiles(DacapoHarnessTest.wrong_input)
 
     def tearDown(self):
-        for f in itertools.chain(self.mi, self.si, self.failed):
+        for f in itertools.chain(self.mi, self.si, self.failed, self.wrong_input):
             f.close()
 
     def test_multi_iteration_path(self):
@@ -49,6 +51,12 @@ class DacapoHarnessTest(unittest.TestCase):
         stderr = map(attrgetter('name'), self.failed)
         self.d.run(exit_code=exit_codes, stderr=stderr)
         self.assertListEqual(self.d.out['failures'], [1] * invocations)
+
+    def test_wrong_input(self):
+        stderr = map(attrgetter('name'), self.wrong_input)
+        for e in stderr:
+            with self.assertRaises(WrongInputError):
+                self.d.run(exit_code=[0], stderr=[e])
 
     def _assert_correct_out(self, invocations):
         self.assertSetEqual(set(self.d.out), self.d._output_names)
