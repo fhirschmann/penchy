@@ -7,6 +7,7 @@ API
 Job Description
 ===============
 
+TODO: Replace jobs with more finegrained inclusion
 Jobs
 ----
 .. automodule:: penchy.jobs
