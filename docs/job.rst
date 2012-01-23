@@ -20,16 +20,17 @@ The second is the flow.
 Defining the flow
 =================
 
-Every :class:`penchy.jobs.elements.PipelineElement` has the attributes ``inputs``
+Every :class:`~penchy.jobs.elements.PipelineElement` has the attributes ``inputs``
 and ``outputs``.
 They describe how inputs (and outputs) are named and of which type they are.
 
 The flow is a description how the data flows from outputs to inputs. In other
 words: How Elements depend on data.
 
-The flow is expressed in terms of a list of :class:`penchy.jobs.dependency.Edge`.
-Each :class:`Edge` has a ``source``, a ``sink`` and a description of how to map the
-output of the ``source`` to the input of the ``sink``.
+The flow is expressed in terms of a list of :class:`~penchy.jobs.dependency.Edge`.
+Each :class:`~penchy.jobs.dependency.Edge` has a ``source``, a ``sink`` and a
+description of how to map the output of the ``source`` to the input of the
+``sink``.
 This description can be missing (or set to ``None``) to implicitly pipe all ``source``
 output to ``sink``.
 That means that ``sink`` must have a ``inputs`` that is compatible with
@@ -56,9 +57,10 @@ Here the example from above, that won't show any warnings::
   Edge(w, f, [('stderr', 'stderr),
               ('exit_code', 'exit_code')])
 
-With ``Edge`` you specify a 1:1 relation but within the whole flow an
-``PipelineElement`` can pass its output to many ``PipelineElement`` and also
-receive from many.
+With :class:`~penchy.jobs.dependency.Edge` you specify a 1:1 relation but within
+the whole flow an :class:`~penchy.jobs.elements.PipelineElement` can pass its
+output to many :class:`~penchy.jobs.elements.PipelineElement` and also receive
+from many.
 For Example::
 
   w = workloads.ScalaBench('dummy')
