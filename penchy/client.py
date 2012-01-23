@@ -40,9 +40,11 @@ class Client(object):
         """
         Runs the client.
         """
+        job.send = self.proxy.rcv_data
+
         for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
-            self.proxy.rcv_data(str(configuration.hash()), 'results!')
+            #self.proxy.rcv_data(str(configuration.hash()), 'results!')
 
     def parse_args(self, args):
         """
