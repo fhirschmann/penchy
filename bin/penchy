@@ -46,7 +46,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = load_config(args.config)
-    job = load_job(args.job).job
+    job = load_job(args.job)
 
     if args.check:
         for composition in job.compositions:
