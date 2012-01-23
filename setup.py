@@ -15,6 +15,5 @@ setup(name='penchy',
             'argparse',
             'paramiko',
             'pycrypto',
-            'rpyc',
             'unittest2']
         )
