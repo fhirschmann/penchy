@@ -139,3 +139,7 @@ class Plot(Filter):
 
 class Upload(Filter):
     pass
+
+
+class Dump(SystemFilter):
+    pass
