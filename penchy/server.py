@@ -127,4 +127,4 @@ class Server(object):
         starts the serverside pipeline.
         """
         log.info(Server.results)
-        self.job.run_server_pipeline()
+        self.job.job.run_server_pipeline()
