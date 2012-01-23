@@ -44,7 +44,8 @@ class Node(object):  # pragma: no cover
         self.client_has_finished = False
         self.client_timed_out = False
 
-        self._setup_ssh()
+        self.ssh = self._setup_ssh()
+        self.sftp = None
 
     def __str__(self):
         return "<Node %s>" % self.setting.host
@@ -67,13 +68,13 @@ class Node(object):  # pragma: no cover
 
     def _setup_ssh(self):
         """
-        Sets up the SSH objects.
+        Initializes the SSH Connection.
         """
-        self.ssh = paramiko.SSHClient()
-        self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+        ssh = paramiko.SSHClient()
+        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
         if not self.setting.keyfile:
-            self.ssh.load_system_host_keys()
-        self.sftp = None
+            ssh.load_system_host_keys()
+        return ssh
 
     def logformat(self, msg):
         """
