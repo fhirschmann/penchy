@@ -1,5 +1,6 @@
 import logging
 import os
+from functools import partial
 from hashlib import sha1
 from itertools import groupby, chain
 from operator import attrgetter
@@ -170,6 +171,11 @@ class Job(object):
         setup_dependencies(pomfile, self._get_client_dependencies(configuration))
         configuration.jvm.add_to_cp(get_classpath(pomfile))
 
+        # save send for restoring
+        send = self.send
+        # replace with one that knows how to identify the configuration
+        self.send = partial(self.send, configuration.hash())
+
         configuration.jvm.basepath = configuration.node.basepath
 
         starts = filter(bool, (configuration.jvm.workload,
@@ -188,6 +194,8 @@ class Job(object):
 
         # reset state of filters for running multiple configurations
         self._reset_client_pipeline()
+        # restore send
+        self.send = send
 
     def _get_client_dependencies(self, configuration):
         """
