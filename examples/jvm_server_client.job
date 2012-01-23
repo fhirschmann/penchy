@@ -21,7 +21,7 @@ job = Job(compositions=[x32, x64],
           client_flow=[
               Edge(w, f1, [('stderr', 'stderr'),
                            ('exit_code', 'exit_code')]),
-              Edge(f1, filters.Send())
+              Edge(f1, filters.Send(), [('times', 'payload')])
           ],
           server_flow=[Edge(filters.Receive(), filters.Print())],
           invocations = 1
