@@ -132,7 +132,8 @@ class Job(object):
         """
         Run clientside Job.
 
-        :param configuration: :class:`JVMNodeConfiguration` to run.
+        :param configuration: configuration to run.
+        :type configuration: :class:`JVMNodeConfiguration`
         """
         # setup
         pomfile = os.path.join(configuration.node.path, 'pom.xml')
