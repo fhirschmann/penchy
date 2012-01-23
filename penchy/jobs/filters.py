@@ -59,7 +59,7 @@ class DacapoHarness(Filter):
         \ in\ (?P<time>\d+)\ msec         # time of execution
         """, re.VERBOSE)
 
-    _VALIDITY_RE = re.compile(r'^\n?===== DaCapo')
+    _VALIDITY_RE = re.compile(r'^\n?={5} DaCapo .*?={5}\n={5} DaCapo')
 
     def _run(self, **kwargs):
         exit_codes = kwargs['exit_code']
