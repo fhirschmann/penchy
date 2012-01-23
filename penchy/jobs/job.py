@@ -173,8 +173,9 @@ class Job(object):
 
         # save send for restoring
         send = self.send
-        # replace with one that knows how to identify the composition
-        self.send = partial(self.send, composition.hash())
+        # replace with one that knows how to identify the composition if it is set
+        if self.send is not None:
+            self.send = partial(self.send, composition.hash())
 
         composition.jvm.basepath = composition.node.basepath
 
