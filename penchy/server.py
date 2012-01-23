@@ -24,6 +24,8 @@ class Server(object):
     # The list of results we will receive
     results = []
 
+    _rcv_lock = threading.Lock()
+
     def __init__(self, config, job):
         """
         :param config: config  to use
@@ -87,7 +89,7 @@ class Server(object):
         node = [jnc for jnc in self.job.job.configurations \
                 if jnc.hash() == hashcode][0]
 
-        with threading.Lock() as lock:
+        with Server._rcv_lock:
             Server.expected.remove(node)
             Server.results.append((node, result))
 
