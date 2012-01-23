@@ -21,7 +21,7 @@ class Server(object):
     # The JVMNodeConfigurations we expect results for
     expected = []
 
-    # The list of results we will receive
+    # The dict of results we will receive (JVMNodeConfiguration : result)
     results = []
 
     _rcv_lock = threading.Lock()
@@ -85,14 +85,16 @@ class Server(object):
         :type hashcode: string
         :param result: the result of the job
         """
-        hashcode = hashcode
-
-        node = [jnc for jnc in self.job.job.configurations \
-                if jnc.hash() == hashcode][0]
+        for config in self.job.job.configurations:
+            if hashcode == config.hash():
+                node = config
+                break
+        else:
+            raise ValueError('Node not expected')
 
         with Server._rcv_lock:
             Server.expected.remove(node)
-            Server.results.append((node, result))
+            Server.results[node] = result
 
     def run_clients(self):
         """
