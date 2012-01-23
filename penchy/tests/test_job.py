@@ -4,7 +4,7 @@ from penchy.compat import unittest, update_hasher
 from penchy.jobs import job
 from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
-from penchy.jobs.filters import Print, DacapoHarness
+from penchy.jobs.filters import Print, DacapoHarness, Receive
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -211,3 +211,22 @@ class BuildEnvTest(unittest.TestCase):
         env = self.job._build_environment()
         self.assertDictEqual(env['receive'](), {'x' : 23})
         self.assertEqual(env['send']('data'), 42)
+
+
+class RunServerPipelineTest(unittest.TestCase):
+    def setUp(self):
+        self.receive = Receive()
+        self.print_ = Print()
+        self.j = job.Job([], [], [Edge(self.receive, self.print_)])
+        self.data = {'a': 1, 'b' : 2}
+        self.j.receive = lambda: self.data
+
+    def test_receive(self):
+        self.assertDictEqual(self.receive.out, {})
+        self.j.run_server_pipeline()
+        self.assertDictEqual(self.receive.out, {'results' : self.data})
+
+    def test_no_receivers(self):
+        j = job.Job([], [], [])
+        with self.assertRaises(ValueError):
+            j.run_server_pipeline()
