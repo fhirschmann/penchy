@@ -16,7 +16,7 @@ from penchy.util import tempdir, dict2string
 log = logging.getLogger(__name__)
 
 
-class NodeConfiguration(object):
+class NodeSetting(object):
     """
     This class represents a configuration of a node.
     """
@@ -62,7 +62,7 @@ class NodeConfiguration(object):
         return self.host
 
     def __eq__(self, other):
-        return isinstance(other, NodeConfiguration) and \
+        return isinstance(other, NodeSetting) and \
                 self.identifier == other.identifier
 
     def __ne__(self, other):
@@ -93,7 +93,7 @@ class NodeConfiguration(object):
 class SystemComposition(object):
     """
     This class represents a combination of a :class:`JVM` and a
-    :class:`NodeConfiguration`.
+    :class:`NodeSetting`.
 
     A :class:`SystemComposition` is a unique identifier that groups the
     results of its execution for server consumation.

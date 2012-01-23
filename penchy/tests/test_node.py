@@ -1,12 +1,12 @@
 from penchy.compat import unittest
-from penchy.jobs.job import NodeConfiguration
+from penchy.jobs.job import NodeSetting
 from penchy.node import Node
 
 
-class NodeConfigurationTest(unittest.TestCase):
+class NodeSettingTest(unittest.TestCase):
     def setUp(self):
-        self.nc1 = NodeConfiguration('localhost', 22, 'foo', '/tmp', '/usr/bin')
-        self.nc2 = NodeConfiguration('localhost', 22, 'foo', '/tmp', '/usr/bin')
+        self.nc1 = NodeSetting('localhost', 22, 'foo', '/tmp', '/usr/bin')
+        self.nc2 = NodeSetting('localhost', 22, 'foo', '/tmp', '/usr/bin')
         self.n1 = Node(self.nc1, None)
         self.n2 = Node(self.nc2, None)
 

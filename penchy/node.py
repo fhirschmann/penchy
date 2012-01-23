@@ -26,15 +26,16 @@ class Node(object):  # pragma: no cover
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy.log'))
 
-    def __init__(self, configuration, job):
+    def __init__(self, setting, job):
         """
         Initialize the node.
 
-        :param node: the node configuration
-        :type node: :class:`NodeConfiguration`
+        :param setting: the node setting
+        :type setting: :class:`NodeSetting`
         :param job: the job to execute
+        :type job: module
         """
-        self.config = configuration
+        self.setting = setting
 
         self.job = job
         self.timer = self._setup_timer()
@@ -46,14 +47,14 @@ class Node(object):  # pragma: no cover
         self._setup_ssh()
 
     def __str__(self):
-        return "<Node %s>" % self.config.host
+        return "<Node %s>" % self.setting.host
 
     def __eq__(self, other):
         return isinstance(other, Node) and \
-                self.config.identifier == other.config.identifier
+                self.setting.identifier == other.setting.identifier
 
     def __hash__(self):
-        return hash(self.config.identifier)
+        return hash(self.setting.identifier)
 
     def _setup_timer(self):
         """
@@ -70,7 +71,7 @@ class Node(object):  # pragma: no cover
         """
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        if not self.config.keyfile:
+        if not self.setting.keyfile:
             self.ssh.load_system_host_keys()
         self.sftp = None
 
@@ -78,16 +79,16 @@ class Node(object):  # pragma: no cover
         """
         Prepends the name of this node to a (log)message.
         """
-        return " ".join([str(self.config.identifier), msg])
+        return " ".join([str(self.setting.identifier), msg])
 
     def connect(self):
         """
         Connect to the node.
         """
         log.debug(self.logformat("Connecting"))
-        self.ssh.connect(self.config.host, username=self.config.username,
-                port=self.config.ssh_port, password=self.config.password,
-                key_filename=self.config.keyfile)
+        self.ssh.connect(self.setting.host, username=self.setting.username,
+                port=self.setting.ssh_port, password=self.setting.password,
+                key_filename=self.setting.keyfile)
 
         self.sftp = self.ssh.open_sftp()
 
@@ -115,7 +116,7 @@ class Node(object):  # pragma: no cover
             remote = os.path.basename(local)
 
         if not os.path.isabs(remote):
-            remote = os.path.join(self.config.path, remote)
+            remote = os.path.join(self.setting.path, remote)
 
         try:
             self.sftp.mkdir(os.path.dirname(remote))
@@ -134,7 +135,7 @@ class Node(object):  # pragma: no cover
 
         for filename in self.__class__._LOGFILES:
             try:
-                filename = os.path.join(self.config.path, filename)
+                filename = os.path.join(self.setting.path, filename)
                 logfile = self.sftp.open(filename)
                 client_log.append(logfile.read())
                 logfile.close()
@@ -143,8 +144,8 @@ class Node(object):  # pragma: no cover
                         (filename, self))
 
         log.info("".join(["Replaying logfile for ",
-            self.config.identifier, os.linesep, "".join(client_log)]))
-        log.info("End log for " + self.config.identifier)
+            self.setting.identifier, os.linesep, "".join(client_log)]))
+        log.info("End log for " + self.setting.identifier)
 
     def execute(self, cmd):
         """
@@ -167,7 +168,7 @@ class Node(object):  # pragma: no cover
             raise NodeError("You may not start penchy twice!")
 
         self.execute('cd %s && python penchy_bootstrap %s' % (
-            self.config.path, args))
+            self.setting.path, args))
         self.client_is_running = True
 
         if self.timer:
@@ -192,7 +193,7 @@ class Node(object):  # pragma: no cover
 
         An existing pidfile named `penchy.pid` must exist on the node.
         """
-        pidfile_name = os.path.join(self.config.path, 'penchy.pid')
+        pidfile_name = os.path.join(self.setting.path, 'penchy.pid')
         pidfile = self.sftp.open(pidfile_name)
         pid = pidfile.read()
         pidfile.close()

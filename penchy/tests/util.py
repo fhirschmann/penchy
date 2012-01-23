@@ -3,7 +3,7 @@ import json
 
 from penchy.jobs.elements import PipelineElement
 from penchy.jobs.dependency import Edge
-from penchy.jobs.job import NodeConfiguration, SystemComposition
+from penchy.jobs.job import NodeSetting, SystemComposition
 from penchy.jobs.jvms import JVM
 
 TEST_DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
@@ -45,5 +45,5 @@ class MockPipelineElement(PipelineElement):
 
 def make_system_composition(host=''):
     jvm = JVM('dummy')
-    node = NodeConfiguration(host, 22, 'this', 'is', 'a dummy')
+    node = NodeSetting(host, 22, 'this', 'is', 'a dummy')
     return SystemComposition(jvm, node)

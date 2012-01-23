@@ -1,5 +1,5 @@
 from penchy.jobs import jvms, tools, filters, workloads
-from penchy.jobs.job import Job, SystemComposition, NodeConfiguration
+from penchy.jobs.job import Job, SystemComposition, NodeSetting
 from penchy.jobs.dependency import Edge
 
 
@@ -9,7 +9,7 @@ JVM = jvms.JVM
 __all__ = [
     # job
     'Job',
-    'NodeConfiguration',
+    'NodeSetting',
     'SystemComposition',
     # dependencies
     'Edge',
