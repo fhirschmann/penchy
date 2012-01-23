@@ -34,18 +34,19 @@ class Server(object):
         :type job: module
         """
         self.config = config
-        self.job = job
+        self.job = job.job
+        self.job_file = job.__file__
         # XXX: DEBUG
         print config.__file__
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
 
         # List of nodes to upload to
-        self.nodes = dict((n.node.identifier, Node(n.node, self.job)) for \
-                n in self.job.job.configurations)
+        self.nodes = dict((n.node.identifier, Node(n.node, job)) for
+                          n in self.job.configurations)
 
         # List of JVMNodeConfigurations we expect to receive
-        Server.expected = self.job.job.configurations[:]
+        Server.expected = list(self.job.configurations)
 
         # List of results
         Server.results = []
@@ -87,7 +88,7 @@ class Server(object):
         :type hashcode: string
         :param result: the result of the job
         """
-        for config in self.job.job.configurations:
+        for config in self.job.configurations:
             if hashcode == config.hash():
                 node = config
                 break
@@ -110,7 +111,7 @@ class Server(object):
                 node.put(pom.name, 'bootstrap.pom')
 
                 node.execute_penchy(" ".join(
-                    self.bootstrap_args + [os.path.basename(self.job.__file__),
+                    self.bootstrap_args + [os.path.basename(self.job_file),
                         'config.py', node.config.identifier]))
                 node.disconnect()
 
@@ -131,5 +132,5 @@ class Server(object):
         starts the serverside pipeline.
         """
         log.info(Server.results)
-        self.job.job.receive = lambda: Server.results
-        self.job.job.run_server_pipeline()
+        self.job.receive = lambda: Server.results
+        self.job.run_server_pipeline()
