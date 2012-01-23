@@ -85,10 +85,10 @@ class Server(object):
         :type hashcode: string
         :param result: the result of the job
         """
-        hashcode = int(hashcode)
+        hashcode = hashcode
 
         node = [jnc for jnc in self.job.job.configurations \
-                if jnc.__hash__() == hashcode][0]
+                if jnc.hash() == hashcode][0]
 
         with threading.Lock() as lock:
             Server.expected.remove(node)

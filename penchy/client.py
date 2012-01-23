@@ -42,7 +42,7 @@ class Client(object):
         """
         for configuration in self.job.job.configurations_for_node(self.identifier):
             self.job.job.run(configuration)
-            self.proxy.rcv_data(str(configuration.__hash__()), 'results!')
+            self.proxy.rcv_data(str(configuration.hash()), 'results!')
 
     def parse_args(self, args):
         """
