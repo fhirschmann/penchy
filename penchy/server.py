@@ -33,6 +33,7 @@ class Server(object):
         """
         self.config = config
         self.job = job
+        # XXX: DEBUG
         print config.__file__
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
