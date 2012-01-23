@@ -36,7 +36,7 @@ class MockPipelineElement(PipelineElement):
     def __repr__(self):
         return "MockPipelineElement({0}, {1})".format(self.outputs, self.out)
 
-    def _run(self):
+    def _run(self, *args, **kwargs):
         pass
 
     def check(self):
