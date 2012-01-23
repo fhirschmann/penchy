@@ -46,7 +46,8 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     config = load_config(args.config)
-    job = load_job(args.job)
+    job_module = load_job(args.job)
+    job = job_module.job
 
     if args.check:
         for composition in job.compositions:
@@ -58,7 +59,7 @@ if __name__ == "__main__":
         for composition in compositions:
             job.run(composition)
     else:
-        server = Server(config, job)
+        server = Server(config, job_module)
 
         logging.root.setLevel(args.loglevel)
 
