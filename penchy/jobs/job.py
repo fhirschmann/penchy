@@ -1,13 +1,14 @@
 import logging
 import os
-from collections import namedtuple
+from hashlib import sha1
 from itertools import groupby, chain
 from operator import attrgetter
 
+from penchy.compat import update_hasher
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
-from penchy.util import tempdir, dict2string
 from penchy.maven import get_classpath, setup_dependencies
+from penchy.util import tempdir, dict2string
 
 
 log = logging.getLogger(__name__)
@@ -72,6 +73,20 @@ class NodeConfiguration(object):
         return "<%s: %s>" % (self.__class__.__name__,
                 dict2string(self.__dict__, ['host', 'ssh_port']))
 
+    def hash(self):
+        """
+        Return the sha1 hexdigest.
+
+        Used for identifying :class:`JVMNodeConfiguration` across server and
+        client.
+
+        :returns: sha1 hexdigest of instance
+        :rtype: str
+        """
+        hasher = sha1()
+        update_hasher(hasher, self.identifier)
+        return hasher.hexdigest()
+
 
 class JVMNodeConfiguration(object):
     """
@@ -82,7 +97,6 @@ class JVMNodeConfiguration(object):
     results of its execution for server consumation.
     """
 
-    # TODO: Add hash method for sha1 hashing,
     def __init__(self, jvm, node, name=None):
         """
         """
@@ -95,6 +109,21 @@ class JVMNodeConfiguration(object):
 
     def __hash__(self):
         return hash(hash(self.jvm) + hash(self.node))
+
+    def hash(self):
+        """
+        Return the sha1 hexdigest.
+
+        Used for identifying :class:`JVMNodeConfiguration` across server and
+        client.
+
+        :returns: sha1 hexdigest of instance
+        :rtype: str
+        """
+        hasher = sha1()
+        update_hasher(hasher, self.jvm.hash())
+        update_hasher(hasher, self.node.hash())
+        return hasher.hexdigest()
 
 
 class Job(object):

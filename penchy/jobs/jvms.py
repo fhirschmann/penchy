@@ -1,17 +1,18 @@
 """
 This module provides JVMs to run programs.
 """
-
 import itertools
+import logging
 import os
 import shlex
 import subprocess
-import logging
+from hashlib import sha1
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import nested
+from penchy.compat import update_hasher, nested
 from penchy.jobs.elements import PipelineElement
 from penchy.util import extract_classpath
+
 
 log = logging.getLogger(__name__)
 
@@ -185,6 +186,21 @@ class JVM(object):
 
     def __hash__(self):
         return hash(hash(self._path) + hash(self._user_options))
+
+    def hash(self):
+        """
+        Return the sha1 hexdigest.
+
+        Used for identifying :class:`JVMNodeConfiguration` across server and
+        client.
+
+        :returns: sha1 hexdigest of instance
+        :rtype: str
+        """
+        hasher = sha1()
+        update_hasher(hasher, self._path)
+        update_hasher(hasher, self._user_options)
+        return hasher.hexdigest()
 
 
 class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
