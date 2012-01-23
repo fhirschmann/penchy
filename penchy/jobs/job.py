@@ -79,7 +79,7 @@ class NodeConfiguration(object):
         """
         Return the sha1 hexdigest.
 
-        Used for identifying :class:`JVMNodeConfiguration` across server and
+        Used for identifying :class:`SystemComposition` across server and
         client.
 
         :returns: sha1 hexdigest of instance
@@ -90,12 +90,12 @@ class NodeConfiguration(object):
         return hasher.hexdigest()
 
 
-class JVMNodeConfiguration(object):
+class SystemComposition(object):
     """
     This class represents a combination of a :class:`JVM` and a
     :class:`NodeConfiguration`.
 
-    A :class:`JVMNodeConfiguration` is a unique identifier that groups the
+    A :class:`SystemComposition` is a unique identifier that groups the
     results of its execution for server consumation.
     """
 
@@ -116,7 +116,7 @@ class JVMNodeConfiguration(object):
         """
         Return the sha1 hexdigest.
 
-        Used for identifying :class:`JVMNodeConfiguration` across server and
+        Used for identifying :class:`SystemComposition` across server and
         client.
 
         :returns: sha1 hexdigest of instance
@@ -137,13 +137,13 @@ class Job(object):
     ``job.receive`` has to be set on server
     """
 
-    def __init__(self, configurations,
+    def __init__(self, compositions,
                  client_flow, server_flow,
                  invocations=1):
         """
-        :param configurations: :class:`JVMNodeConfiguration` to execute jobs on
-        :type configurations: List of :class:`JVMNodeConfiguration`
-                              or :class:`JVMNodeConfiguration`
+        :param compositions: :class:`SystemComposition` to execute jobs on
+        :type compositions: List of :class:`SystemComposition`
+                              or :class:`SystemComposition`
         :param client_flow: describes execution of the job on nodes
         :type client_flow: sequence of :class:`Edge`
         :param server_flow: describes the execution of the job on the server
@@ -151,41 +151,41 @@ class Job(object):
         :param invocations: number of times to run job on each configuration
         :type invocations: int
         """
-        self.configurations = configurations if isinstance(configurations, list) \
-                              else [configurations]
+        self.compositions = compositions if isinstance(compositions, list) \
+                              else [compositions]
         self.client_flow = client_flow
         self.server_flow = server_flow
         self.invocations = invocations
         self.send = None
         self.receive = None
 
-    def run(self, configuration):
+    def run(self, composition):
         """
         Run clientside Job.
 
-        :param configuration: configuration to run.
-        :type configuration: :class:`JVMNodeConfiguration`
+        :param composition: composition to run.
+        :type composition: :class:`SystemComposition`
         """
         # setup
-        pomfile = os.path.join(configuration.node.path, 'pom.xml')
-        setup_dependencies(pomfile, self._get_client_dependencies(configuration))
-        configuration.jvm.add_to_cp(get_classpath(pomfile))
+        pomfile = os.path.join(composition.node.path, 'pom.xml')
+        setup_dependencies(pomfile, self._get_client_dependencies(composition))
+        composition.jvm.add_to_cp(get_classpath(pomfile))
 
         # save send for restoring
         send = self.send
-        # replace with one that knows how to identify the configuration
-        self.send = partial(self.send, configuration.hash())
+        # replace with one that knows how to identify the composition
+        self.send = partial(self.send, composition.hash())
 
-        configuration.jvm.basepath = configuration.node.basepath
+        composition.jvm.basepath = composition.node.basepath
 
-        starts = filter(bool, (configuration.jvm.workload,
-                               configuration.jvm.tool))
+        starts = filter(bool, (composition.jvm.workload,
+                               composition.jvm.tool))
         _, edge_order = edgesort(starts, self.client_flow)
 
         for i in range(1, self.invocations + 1):
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
-                configuration.jvm.run()
+                composition.jvm.run()
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
@@ -197,39 +197,39 @@ class Job(object):
         # restore send
         self.send = send
 
-    def _get_client_dependencies(self, configuration):
+    def _get_client_dependencies(self, composition):
         """
         Return all clientside :class:`MavenDependency` of this job for a given
-        :class:`JVMNodeConfiguration`.
+        :class:`SystemComposition`.
 
-        :raises: :exc:`ValueError` if ``configuration`` is not part of this job
+        :raises: :exc:`ValueError` if ``composition`` is not part of this job
 
-        :param configuration: configuration to analyze.
-        :type configuration::class:`JVMNodeConfiguration`
+        :param composition: composition to analyze.
+        :type composition::class:`SystemComposition`
         :returns: Set of :class:`MavenDependency`.
         :rtype: set
         """
-        if configuration not in self.configurations:
-            raise ValueError('configuration not part of this job')
+        if composition not in self.compositions:
+            raise ValueError('composition not part of this job')
 
-        deps = (e.DEPENDENCIES for e in self._get_client_elements(configuration))
+        deps = (e.DEPENDENCIES for e in self._get_client_elements(composition))
         return set(chain.from_iterable(deps))
 
-    def _get_client_elements(self, configuration=None):
+    def _get_client_elements(self, composition=None):
         """
         Return the clientside element of this job.
 
-        :param configuration: configuration to collect elements for, None for all
-        :type configuration: None or :class:`JVMNodeConfiguration`
+        :param composition: composition to collect elements for, None for all
+        :type composition: None or :class:`SystemComposition`
         :returns: all elements that are part of the clientside job.
         :rtype: set
         """
-        configs = self.configurations if configuration is None else [configuration]
+        compositions = self.compositions if composition is None else [composition]
         elements = chain((e.source for e in self.client_flow),
                          (e.sink for e in self.client_flow),
-                         filter(bool, (c.jvm.workload for c in configs)),
-                         filter(bool, (c.jvm.tool for c in configs)),
-                         (c.jvm for c in configs))
+                         filter(bool, (c.jvm.workload for c in compositions)),
+                         filter(bool, (c.jvm.tool for c in compositions)),
+                         (c.jvm for c in compositions))
 
         return set(filter(lambda e: isinstance(e, PipelineElement),
                           elements))
@@ -282,7 +282,7 @@ class Job(object):
 
         Contains:
         - ``receive``: to get all data that has been received, takes no arguments
-                       returns a dict with :class:`JVMNodeConfiguration` as keys
+                       returns a dict with :class:`SystemComposition` as keys
         - ``send``: to send data to the server, takes one datum as argument
         - ``job``: this job
 
@@ -298,18 +298,17 @@ class Job(object):
                     send=send,
                     job=self)
 
-    def configurations_for_node(self, identifier):
+    def compositions_for_node(self, identifier):
         """
-        Return the configurations of this job that are to be run on the node
+        Return the compositions of this job that are to be run on the node
         that corresponds to ``identifier``.
 
         :param identifier: identifier for node.
         :type host: str
-        :returns: :class:`JVMNodeConfiguration` of job that run on host
+        :returns: :class:`SystemComposition` of job that run on host
         :rtype: list
         """
-        return [config for config in self.configurations if
-                config.node.identifier == identifier]
+        return [c for c in self.compositions if c.node.identifier == identifier]
 
     def check(self):
         """

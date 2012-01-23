@@ -113,7 +113,7 @@ class Receive(SystemFilter):
 
     Outputs:
 
-    - ``results``: dict that maps :class:`JVMNodeConfiguration` to their results.
+    - ``results``: dict that maps :class:`SystemComposition` to their results.
     """
     inputs = [('environment', dict)]
     outputs = [('results', dict)]

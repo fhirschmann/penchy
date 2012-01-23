@@ -8,7 +8,7 @@ from penchy.jobs.filters import Print, DacapoHarness, Receive
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
-from penchy.tests.util import MockPipelineElement, make_jvmnode_config
+from penchy.tests.util import MockPipelineElement, make_system_composition
 
 
 class JobClientElementsTest(unittest.TestCase):
@@ -21,7 +21,7 @@ class JobClientElementsTest(unittest.TestCase):
         t = HProf('')
         self.jvm.tool = t
         f = Print()
-        self.config = job.JVMNodeConfiguration(self.jvm, 'pseudo_node')
+        self.config = job.SystemComposition(self.jvm, 'pseudo_node')
         self.job = job.Job(self.config, [Edge(w, f)], [])
 
     def test_empty_elements(self):
@@ -39,21 +39,21 @@ class JobClientElementsTest(unittest.TestCase):
                             ScalaBench.DEPENDENCIES)
 
     def test_empty_workload(self):
-        config = make_jvmnode_config()
+        config = make_system_composition()
         config.jvm.tool = HProf('')
         self.assertSetEqual(job.Job(config, [], [])._get_client_dependencies(config),
                             HProf.DEPENDENCIES)
 
     def test_wrong_config(self):
         with self.assertRaises(ValueError):
-            self.job._get_client_dependencies(job.JVMNodeConfiguration(JVM('java'),
+            self.job._get_client_dependencies(job.SystemComposition(JVM('java'),
                                                                            'pseudo'))
 
 
 class JobServerElementsTest(unittest.TestCase):
     def setUp(self):
         super(JobServerElementsTest, self).setUp()
-        self.config = job.JVMNodeConfiguration(JVM('foo'), 'pseudo_node')
+        self.config = job.SystemComposition(JVM('foo'), 'pseudo_node')
         self.job = job.Job([self.config], [], [])
 
     def test_empty_elements(self):
@@ -137,30 +137,30 @@ class CheckArgsTest(unittest.TestCase):
                 _check_kwargs(self.p, d)
 
 
-class JVMNodeConfigurationsTest(unittest.TestCase):
+class SystemCompositionsTest(unittest.TestCase):
     def setUp(self):
-        self.single_host = [make_jvmnode_config('192.168.1.10')]
-        self.multi_host = [make_jvmnode_config('192.168.1.11'),
-                           make_jvmnode_config('192.168.1.11')]
+        self.single_host = [make_system_composition('192.168.1.10')]
+        self.multi_host = [make_system_composition('192.168.1.11'),
+                           make_system_composition('192.168.1.11')]
         self.job = job.Job(self.single_host + self.multi_host, [], [])
 
     def test_wrong_identifier(self):
-        self.assertListEqual(self.job.configurations_for_node('baz'), [])
+        self.assertListEqual(self.job.compositions_for_node('baz'), [])
 
     def test_single_host_identifier(self):
-        self.assertListEqual(self.job.configurations_for_node('192.168.1.10'),
+        self.assertListEqual(self.job.compositions_for_node('192.168.1.10'),
                              self.single_host)
 
     def test_multi_host_identifier(self):
-        self.assertListEqual(self.job.configurations_for_node('192.168.1.11'),
+        self.assertListEqual(self.job.compositions_for_node('192.168.1.11'),
                              self.multi_host)
 
     def test_hash(self):
-        c = make_jvmnode_config()
+        c = make_system_composition()
         self.assertIn(c, set((c,)))
 
     def test_sha1hash(self):
-        c = make_jvmnode_config('localhost')
+        c = make_system_composition('localhost')
         c.jvm = JVM('path', 'options')
         h = sha1()
         update_hasher(h, c.jvm.hash())
@@ -176,7 +176,7 @@ class ResetPipelineTest(unittest.TestCase):
         self.tool.out['test'].append(23)
         self.filter = DacapoHarness()
         self.filter.out['test'].append(5)
-        config = make_jvmnode_config()
+        config = make_system_composition()
         config.jvm.workload = self.workload
         config.jvm.tool = self.tool
         self.job = job.Job(config, [Edge(self.workload, self.filter)], [])
@@ -196,7 +196,7 @@ class ResetPipelineTest(unittest.TestCase):
 
 class BuildEnvTest(unittest.TestCase):
     def setUp(self):
-        self.job = job.Job(make_jvmnode_config(), [], [])
+        self.job = job.Job(make_system_composition(), [], [])
 
     def test_empty_send_rcv(self):
         env = self.job._build_environment()
@@ -216,8 +216,7 @@ class BuildEnvTest(unittest.TestCase):
 class RunServerPipelineTest(unittest.TestCase):
     def setUp(self):
         self.receive = Receive()
-        self.print_ = Print()
-        self.j = job.Job([], [], [Edge(self.receive, self.print_)])
+        self.j = job.Job([], [], [Edge(self.receive, MockPipelineElement())])
         self.data = {'a': 1, 'b' : 2}
         self.j.receive = lambda: self.data
 

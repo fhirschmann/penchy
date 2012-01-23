@@ -18,10 +18,10 @@ class Server(object):
     """
     This class represents the server.
     """
-    # The JVMNodeConfigurations we expect results for
+    # The SystemCompositions we expect results for
     expected = []
 
-    # The dict of results we will receive (JVMNodeConfiguration : result)
+    # The dict of results we will receive (SystemComposition : result)
     results = {}
 
     _rcv_lock = threading.Lock()
@@ -45,7 +45,7 @@ class Server(object):
         self.nodes = dict((n.node.identifier, Node(n.node, job)) for
                           n in self.job.configurations)
 
-        # List of JVMNodeConfigurations we expect to receive
+        # List of SystemCompositions we expect to receive
         Server.expected = list(self.job.configurations)
 
         # Files to upload
@@ -81,13 +81,13 @@ class Server(object):
         This is the method exposed to the nodes.
 
         :param hashcode: the hashcode to identify the
-                         :class:`JVMNodeConfiguration` by
+                         :class:`SystemComposition` by
         :type hashcode: string
         :param result: the result of the job
         """
-        for config in self.job.configurations:
-            if hashcode == config.hash():
-                node = config
+        for composition in self.job.compositions:
+            if hashcode == composition.hash():
+                node = composition
                 break
         else:
             raise ValueError('Node not expected')

@@ -42,8 +42,8 @@ class Client(object):
         """
         self.job.job.send = self.proxy.rcv_data
 
-        for configuration in self.job.job.configurations_for_node(self.identifier):
-            self.job.job.run(configuration)
+        for composition in self.job.job.compositions_for_node(self.identifier):
+            self.job.job.run(composition)
             #self.proxy.rcv_data(str(configuration.hash()), 'results!')
 
     def parse_args(self, args):

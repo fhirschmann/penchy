@@ -190,7 +190,7 @@ class JVM(object):
         """
         Return the sha1 hexdigest.
 
-        Used for identifying :class:`JVMNodeConfiguration` across server and
+        Used for identifying :class:`SystemComposition` across server and
         client.
 
         :returns: sha1 hexdigest of instance
