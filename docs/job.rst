@@ -15,7 +15,7 @@ The two main responsibilities of a job are
     1. describe what should be executed by the JVMs and on which nodes
     2. describe what to do with the results of the execution
 
-The second is the flow.
+The second is the flow (or sometimes called the pipeline).
 
 Defining the flow
 =================
