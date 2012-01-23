@@ -28,8 +28,10 @@ class Server(object):
 
     def __init__(self, config, job):
         """
-        :param config: config  to use
-        :param job: job to execute
+        :param config: config module to use
+        :type config: module
+        :param job: module of job to execute
+        :type job: module
         """
         self.config = config
         self.job = job
