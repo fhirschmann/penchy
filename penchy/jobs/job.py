@@ -203,6 +203,29 @@ class Job(object):
         for e in self._get_client_elements():
             e.reset()
 
+    def run_server_pipeline(self):
+        """
+        Run the serverside pipeline
+        """
+        starts = filter(lambda e: ininstance(e, Receive),
+                        self.server_flow)
+
+        if not starts:
+            log.error('There is no Receiver in the serverside flow. Aborting.')
+            return
+
+        _, edge_order = edgesort(starts, self.server_flow)
+
+        # all starts are receivers, run them with the environment
+        for start in starts:
+            start.run(environment=self._build_environment())
+
+        # run other filters, here should be no system filters
+        # TODO: maybe check for them and log?
+        for sink, group in groupby(edge_order, attrgetter('sink')):
+            kwargs = build_keys(group)
+            sink.run(**kwargs)
+
     def _get_server_dependencies(self):
         """
         Return the serverside dependencies of the job.
