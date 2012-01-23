@@ -93,3 +93,16 @@ WrappedJVM
 
 Filter
 ------
+
+Using penchyrc: Stop repeating yourself
+=======================================
+
+
+Testing Jobs
+============
+
+Checking for plausibility
+-------------------------
+
+Running the job
+---------------
