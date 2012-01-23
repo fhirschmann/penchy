@@ -87,14 +87,25 @@ class DacapoHarness(Filter):
 
 
 class Send(SystemFilter):
+    """
+    Send data to the server.
+
+    Inputs:
+
+    - ``environment``: see :meth:`Job._build_environment`
+    - ``payload``: data to send
+    """
     inputs = [('environment', dict),
               ('payload', object)]
-    pass
+
+    def _run(self, **kwargs):
+        send = kwargs['environment']['send']
+        send(kwargs['payload'])
 
 
 class Receive(SystemFilter):
     """
-    Makes received Data available for the serverside pipeline.
+    Makes received data available for the serverside pipeline.
 
     Inputs:
 
