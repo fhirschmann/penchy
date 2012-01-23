@@ -93,7 +93,7 @@ class JVMNodeConfiguration(object):
     def __eq__(self, other):
         return self.jvm == other.jvm and self.node == other.node
 
-    def __hash__(self, other):
+    def __hash__(self):
         return hash(hash(self.jvm) + hash(self.node))
 
 
