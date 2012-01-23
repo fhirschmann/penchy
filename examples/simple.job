@@ -6,7 +6,7 @@ from penchy.jobs import *
 node = NodeConfiguration('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
 jvm = jvms.JVM('java')
-jconfig = makeJVMNodeConfiguration(jvm, node, name="Simple Example!")
+jconfig = JVMNodeConfiguration(jvm, node, name="Simple Example!")
 
 w = workloads.ScalaBench('dummy')
 jvm.workload = w
