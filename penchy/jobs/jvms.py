@@ -88,10 +88,9 @@ class JVM(object):
 
     def run(self):
         """
-        Run the jvm with the current configuration.
+        Run the JVM in the current configuration.
 
-        Raises :class:`JVMNotConfiguredError` if no workload or classpath is
-        set.
+        :raises: :exc:`JVMNotConfiguredError` if no workload or classpath is set
         """
         prehooks, posthooks = self._get_hooks()
 

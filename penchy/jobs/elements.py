@@ -180,10 +180,11 @@ def _check_kwargs(instance, kwargs):
 
     Checking can be disabled by setting ``instance.inputs`` to ``None``.
 
-    Raises a :class:`ValueError` if a name is missing or has the wrong type.
-    Raises a :class:`AssertError` if ``instance.inputs`` has a wrong format.
 
     Logs warnings if there are more arguments than the required.
+
+    :raises: :class:`ValueError` if a name is missing or has the wrong type.
+    :raises: :class:`AssertError` if ``instance.inputs`` has a wrong format.
 
     :param instance: :PipelineElement: for which to check kwargs
     :type instance: PipelineElement

@@ -194,7 +194,7 @@ class Job(object):
         Return all clientside :class:`MavenDependency` of this job for a given
         :class:`JVMNodeConfiguration`.
 
-        Raises :class:`ValueError` if ``configuration`` is not part of this job.
+        :raises: :exc:`ValueError` if ``configuration`` is not part of this job
 
         :param configuration: configuration to analyze.
         :type configuration::class:`JVMNodeConfiguration`
