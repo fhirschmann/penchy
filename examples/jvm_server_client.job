@@ -1,0 +1,28 @@
+# -*- mode: python -*-
+
+import os
+
+from penchy.jobs import *
+import config
+
+
+client = jvms.JVM('java')
+server = jvms.JVM('java', '-server')
+x32 = SystemComposition(client, x86NODE, name="x86")
+x64 = SystemComposition(server, x64NODE, name="x64")
+
+w = workloads.ScalaBench('fop')
+client.workload = w
+server.workload = w
+
+f1 = filters.DacapoHarness()
+
+job = Job(compositions=[x32, x64],
+          client_flow=[
+              Edge(w, f1, [('stderr', 'stderr'),
+                           ('exit_code', 'exit_code')]),
+              Edge(f1, filters.Send())
+          ],
+          server_flow=[Edge(filters.Receive(), filters.Print())],
+          invocations = 1
+          )
