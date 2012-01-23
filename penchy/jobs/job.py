@@ -7,6 +7,7 @@ from operator import attrgetter
 from penchy.compat import update_hasher
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
+from penchy.jobs.filters import Receive
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string
 
@@ -234,14 +235,17 @@ class Job(object):
 
     def run_server_pipeline(self):
         """
-        Run the serverside pipeline
+        Run the serverside pipeline.
+
+        :raise: :exc:`ValueError` if there is no
+                :class:`~penchy.jobs.filters.Receive` in the serverside pipeline
         """
-        starts = filter(lambda e: ininstance(e, Receive),
-                        self.server_flow)
+        starts = filter(lambda e: isinstance(e, Receive),
+                        (e.source for e in self.server_flow))
 
         if not starts:
             log.error('There is no Receiver in the serverside flow. Aborting.')
-            return
+            raise ValueError('There is no Receiver in the serverside flow')
 
         _, edge_order = edgesort(starts, self.server_flow)
 
