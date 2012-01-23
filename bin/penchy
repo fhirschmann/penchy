@@ -38,8 +38,8 @@ if __name__ == "__main__":
             help="load penchy from this path on the node")
     parser.add_argument("--check", action="store_true",
             dest="check", help="check a job for validity and exit")
-    parser.add_argument("--test", action="store_true",
-            dest="test", help="test a job by running it locally")
+    parser.add_argument("--run-locally", action="store_true",
+            dest="local", help="test a job by running it locally")
     parser.add_argument("job", help="job to execute",
             metavar="job")
     args = parser.parse_args()
@@ -50,9 +50,12 @@ if __name__ == "__main__":
     if args.check:
         for configuration in job.job.configurations:
             job.job.check()
-    elif args.test:
-        # TODO: implement me
-        pass
+    elif args.local:
+        configurations = job.job.configurations_for_node("localhost")
+        if len(configurations) == 0:
+            raise ValueError("Job has no JVMNodeConfiguration for \"localhost\"")
+        for configuration in configurations:
+            job.job.run(configuration)
     else:
         server = Server(args.config, args.job)
 
