@@ -22,7 +22,7 @@ class Server(object):
     expected = []
 
     # The dict of results we will receive (JVMNodeConfiguration : result)
-    results = []
+    results = {}
 
     _rcv_lock = threading.Lock()
 
@@ -47,9 +47,6 @@ class Server(object):
 
         # List of JVMNodeConfigurations we expect to receive
         Server.expected = list(self.job.configurations)
-
-        # List of results
-        Server.results = []
 
         # Files to upload
         self.uploads = (
