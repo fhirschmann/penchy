@@ -58,7 +58,7 @@ if __name__ == "__main__":
         for configuration in configurations:
             job.job.run(configuration)
     else:
-        server = Server(args.config, args.job)
+        server = Server(config, job)
 
         logging.root.setLevel(args.loglevel)
 

@@ -24,18 +24,16 @@ class Server(object):
     # The list of results we will receive
     results = []
 
-    def __init__(self, configfile, jobfile):
+    def __init__(self, config, job):
         """
-        :param configfile: config file to use
-        :type configfile: string
-        :param jobfile: job file to execute
-        :type jobfile: string
+        :param config: config  to use
+        :param job: job to execute
         """
+        self.config = config
+        self.job = job
+        print config.__file__
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
-
-        config = load_config(configfile)
-        self.job = load_job(jobfile)
 
         # List of nodes to upload to
         self.nodes = dict((n.node.identifier, Node(n.node, self.job)) for \
@@ -49,9 +47,9 @@ class Server(object):
 
         # Files to upload
         self.uploads = (
-                (jobfile,),
+                (job.__file__,),
                 (find_bootstrap_client(),),
-                (configfile, 'config.py'))
+                (self.config.__file__, 'config.py'))
 
         # Set up the listener
         self.server = SimpleXMLRPCServer(
@@ -60,10 +58,9 @@ class Server(object):
         self.server.register_function(self.rcv_data, "rcv_data")
 
         # Set up the thread which is deploying the job
-        self.client_thread = self._setup_client_thread([
-            os.path.basename(jobfile), 'config.py'])
+        self.client_thread = self._setup_client_thread()
 
-    def _setup_client_thread(self, args):
+    def _setup_client_thread(self):
         """
         Sets up the client threads.
 
@@ -72,7 +69,7 @@ class Server(object):
         :returns: the thread object
         :rtype: :class:`threading.Thread`
         """
-        thread = threading.Thread(target=self.run_clients, args=args)
+        thread = threading.Thread(target=self.run_clients)
         thread.daemon = True
         return thread
 
@@ -94,7 +91,7 @@ class Server(object):
             Server.expected.remove(node)
             Server.results.append((node, result))
 
-    def run_clients(self, jobfile, configfile):
+    def run_clients(self):
         """
         This method will run the clients on all nodes.
         """
@@ -106,8 +103,8 @@ class Server(object):
                 node.put(pom.name, 'bootstrap.pom')
 
                 node.execute_penchy(" ".join(
-                    self.bootstrap_args + \
-                    [jobfile, configfile, node.config.identifier]))
+                    self.bootstrap_args + [os.path.basename(self.job.__file__),
+                        'config.py', node.config.identifier]))
                 node.disconnect()
 
     def run(self):
