@@ -20,7 +20,7 @@ f1 = filters.DacapoHarness()
 # f2 = filters.Send()
 f2 = filters.Print()
 
-job = Job(configurations=[jconfig1],
+job = Job(configurations=[jconfig1, jconfig2],
           client_flow=[
               Edge(w, f1, [('stderr', 'stderr'),
                            ('exit_code', 'exit_code')]),
