@@ -63,6 +63,7 @@ job = Job(
     invocations = 2
 )
 
+# TODO: After rewrite/merge of bin/penchy delete this
 # a nice trick: check the job for plausibility if run as ``python <jobname>``
 if __name__ == '__main__':
     job.check()
