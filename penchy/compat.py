@@ -5,10 +5,9 @@ python3.x.
 If python2 support is no longer needed, the removal of this module is strongly
 encouraged.
 """
-
 import sys
-import hashlib
 from contextlib import contextmanager
+
 
 on_python3 = sys.version_info[0] == 3
 
