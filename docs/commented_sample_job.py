@@ -3,10 +3,11 @@
 
 # part 1: introduce the elements
 # setup job environment
+import os
 from penchy.jobs import *
 
 # define a node
-node = NodeConfiguration(
+node = NodeSetting(
     # that is the localhost
     'localhost',
     # ssh port is 22
@@ -23,10 +24,10 @@ jvm = jvms.JVM('java')
 # you can also specify an absolute path:
 # jvm = jvms.JVM('/usr/java')
 
-# fuse jvm and node
-jconfig = makeJVMNodeConfiguration(jvm, node,
-                                   # and give it a decorative name (optional)
-                                   name="Simple Example!")
+# composite jvm and node
+composition = SystemComposition(jvm, node,
+                                # and give it a decorative name (optional)
+                                name="Simple Example!")
 
 # setup a workload
 w = workloads.ScalaBench('dummy')
@@ -41,7 +42,7 @@ f2 = filters.Print()
 job = Job(
     # setup the JVMNodeConfigurations that are included, can be a single one or
     # a list of configurations
-    configurations=jconfig,
+    compositions=composition,
     # specify the flow of data on clients
     client_flow=[
         # flow from Scalabench workload to DacapoHarness filter

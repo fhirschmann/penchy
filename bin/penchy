@@ -49,14 +49,14 @@ if __name__ == "__main__":
     job = load_job(args.job)
 
     if args.check:
-        for configuration in job.job.configurations:
+        for composition in job.job.compositions:
             job.job.check()
     elif args.local:
-        configurations = job.job.configurations_for_node("localhost")
-        if len(configurations) == 0:
+        compositions = job.job.compositions_for_node("localhost")
+        if len(compositions) == 0:
             raise ValueError("Job has no JVMNodeConfiguration for \"localhost\"")
-        for configuration in configurations:
-            job.job.run(configuration)
+        for composition in compositions:
+            job.job.run(composition)
     else:
         server = Server(config, job)
 
