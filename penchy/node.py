@@ -38,13 +38,12 @@ class Node(object):  # pragma: no cover
         self.setting = setting
 
         self.job = job
+        self.expected = list(job.job.compositions_for_node(self.setting.identifier))
         self.timer = self._setup_timer()
+        self.ssh = self._setup_ssh()
 
         self.client_is_running = False
-        self.client_has_finished = False
         self.client_timed_out = False
-
-        self.ssh = self._setup_ssh()
         self.sftp = None
 
     def __str__(self):
@@ -75,6 +74,10 @@ class Node(object):  # pragma: no cover
         if not self.setting.keyfile:
             ssh.load_system_host_keys()
         return ssh
+
+    @property
+    def received_all_results(self):
+        return len(self.expected) == 0
 
     def logformat(self, msg):
         """

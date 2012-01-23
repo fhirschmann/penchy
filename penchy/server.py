@@ -18,9 +18,6 @@ class Server(object):
     """
     This class represents the server.
     """
-    # The SystemCompositions we expect results for
-    expected = []
-
     # The dict of results we will receive (SystemComposition : result)
     results = {}
 
@@ -44,9 +41,6 @@ class Server(object):
         # List of nodes to upload to
         self.nodes = dict((n.node.identifier, Node(n.node, job)) for
                           n in self.job.compositions)
-
-        # List of SystemCompositions we expect to receive
-        Server.expected = list(self.job.compositions)
 
         # Files to upload
         self.uploads = (
@@ -76,6 +70,17 @@ class Server(object):
         thread.daemon = True
         return thread
 
+    def node_for(self, setting):
+        """
+        Find the Node for a given :class:`NodeSetting`.
+
+        :param setting: setting to receive Node for
+        :type setting: :class:`NodeSetting`
+        :returns: the Node
+        :rtype: :class:`Node`
+        """
+        return self.nodes[setting.identifier]
+
     def rcv_data(self, hashcode, result):
         """
         This is the method exposed to the nodes.
@@ -92,8 +97,12 @@ class Server(object):
             raise ValueError('Composition not expected')
 
         with Server._rcv_lock:
-            Server.expected.remove(composition)
+            self.node_for(composition.node).expected.remove(composition)
             Server.results[composition] = result
+
+    @property
+    def received_all_results(self):
+        return all([n.received_all_results for n in self.nodes.values()])
 
     def run_clients(self):
         """
@@ -116,7 +125,7 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        while len(Server.expected) > 0:
+        while not self.received_all_results > 0:
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
