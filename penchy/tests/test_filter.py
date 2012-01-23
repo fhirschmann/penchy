@@ -3,7 +3,7 @@ from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
-from penchy.jobs.filters import DacapoHarness, WrongInputError
+from penchy.jobs.filters import DacapoHarness, WrongInputError, Send
 from penchy.tests.util import get_json_data
 
 
@@ -75,3 +75,12 @@ def write_to_tempfiles(data):
         files.append(f)
 
     return files
+
+
+class SendTest(unittest.TestCase):
+    def test_send(self):
+        a = [1]
+        f = Send()
+        f._run(environment={'send' : lambda data: a.__setitem__(0, data)},
+               payload=42)
+        self.assertListEqual(a, [42])
