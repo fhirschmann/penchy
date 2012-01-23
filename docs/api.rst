@@ -2,6 +2,8 @@
 API
 ===
 
+.. _job-api:
+
 Job Description
 ===============
 

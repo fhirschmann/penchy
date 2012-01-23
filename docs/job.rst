@@ -75,6 +75,11 @@ For Example::
 Survey of the elements
 ======================
 
+Besides :class:`~penchy.jobs.dependency.Edge` there are other elements of a
+job.
+This chapter tries to give what they are and how they are used.
+For a in-depth treatment see the :ref:`Job API <job-api>`.
+
 NodeConfiguration
 -----------------
 
