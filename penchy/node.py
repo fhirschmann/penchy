@@ -147,9 +147,14 @@ class Node(object):  # pragma: no cover
                 log.error("Logfile %s could not be received from %s" % \
                         (filename, self))
 
-        log.info("".join(["Replaying logfile for ",
-            self.setting.identifier, os.linesep, "".join(client_log)]))
-        log.info("End log for " + self.setting.identifier)
+        log.info("""
+%(separator)s Start log for %(identifier)s %(separator)s
+%(client_log)s
+%(separator)s End log for %(identifier)s %(separator)s
+        """ % {
+            'separator': '-' * 10,
+            'identifier': self.setting.identifier,
+            'client_log': "".join(client_log)})
 
     def execute(self, cmd):
         """
