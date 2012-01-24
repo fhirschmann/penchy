@@ -53,6 +53,10 @@ class Server(object):
                 (config.SERVER_HOST, config.SERVER_PORT),
                 allow_none=True)
         self.server.register_function(self.rcv_data, "rcv_data")
+        # XXX: I don't yet know if this will work. With no timeout set,
+        # handle_request will wait forever and timeouts caused by Timer()
+        # will not cause the server to stop waiting. I think this should work!
+        self.server.timeout = 2
 
         # Set up the thread which is deploying the job
         self.client_thread = self._setup_client_thread()
@@ -137,7 +141,7 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        while not self.received_all_results:
+        while not self.received_all_results and not self.nodes_timed_out:
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
