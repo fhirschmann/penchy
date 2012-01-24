@@ -182,6 +182,57 @@ class Evaluation(Filter):
         self.out = self.evaluator(**args)
 
 
+class StatisticRuntimeEvaluation(Evaluation):
+    """
+    Filter to evaluate runtime statistically.
+    """
+    inputs = [('times', list, list, int)]
+    outputs = [('averages', list, int),
+               ('maximals', list, int),
+               ('minimals', list, int),
+               ('positive_deviations', list, int),
+               ('negative_deviations', list, int)]
+
+    def __init__(self):
+        super(StatisticRuntimeEvaluation, self).__init__(evaluate_runtimes,
+                                                         self.inputs,
+                                                         self.outputs)
+
+
+def evaluate_runtimes(times):
+    """
+    Return the
+
+    - averages: average times of iteration
+    - maximals: the max times
+    - positive_deviations: greatest positive deviation
+    - minimals: the min times
+    - negative_deviations: greatest negative deviations
+
+    per iteration of all times.
+
+    :param times: runtimes of all iterations of all iterations
+    :type invocation: n*m 2D list
+    :returns: the metrics described above in their order
+    :rtype: dict
+    """
+    grouped_by_iteration = [[invocation[i] for invocation in times]
+                            for i in range(len(times[0]))]
+
+    maxs = list(map(max, grouped_by_iteration))
+    mins = list(map(min, grouped_by_iteration))
+    avgs = list(map(lambda invocation: float(sum(invocation)) / len(invocation),
+                    grouped_by_iteration))
+    pos_deviations = [abs(max - avg) / avg for max, avg in zip(maxs, avgs)]
+    neg_deviations = [abs(min - avg) / avg for min, avg in zip(mins, avgs)]
+
+    return {'averages' : avgs,
+            'maximals' : maxs,
+            'minimals' : mins,
+            'positive_deviations' : pos_deviations,
+            'negative_deviations' : neg_deviations}
+
+
 class Plot(Filter):
     pass
 
