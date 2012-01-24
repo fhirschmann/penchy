@@ -1,0 +1,28 @@
+# -*- mode: python -*-
+
+import os
+from penchy.jobs import *
+
+node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+jvm = jvms.JVM('java', '-server')
+composition = SystemComposition(jvm, node, name='fop on OpenJVM server')
+
+w = workloads.ScalaBench('fop', iterations=10)
+jvm.workload = w
+
+f1 = filters.DacapoHarness()
+f2 = filters.StatisticRuntimeEvaluation()
+f = open('/tmp/times', 'a')
+f3 = filters.Print(f)
+
+job = Job(compositions=composition,
+          client_flow=[
+              Edge(w, f1, [('stderr', 'stderr'),
+                           ('exit_code', 'exit_code')]),
+              Edge(f1, f2, [('times', 'times')]),
+              Edge(f2, f3)
+          ],
+          server_flow=[],
+          invocations = 20
+          )
