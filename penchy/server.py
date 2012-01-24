@@ -77,6 +77,11 @@ class Server(object):
         thread.daemon = True
         return thread
 
+    def signal_sigterm(self, num, frame):
+        for node in self.nodes.values():
+            node.close()
+        self.server.server_close()
+
     def node_for(self, setting):
         """
         Find the Node for a given :class:`NodeSetting`.
@@ -109,10 +114,17 @@ class Server(object):
 
     @property
     def received_all_results(self):
+        """
+        This indicates wheter we have received results for *all*
+        :class:`SystemComposition`.
+        """
         return all([n.received_all_results for n in self.nodes.values()])
 
     @property
     def nodes_timed_out(self):
+        """
+        This indicates wheter *all* nodes have timed out.
+        """
         return all([n.timed_out for n in self.nodes.values()])
 
     def run_clients(self):

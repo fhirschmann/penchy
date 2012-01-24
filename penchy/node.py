@@ -1,5 +1,10 @@
 #!/usr/bin/env python
 
+"""
+This module contains classes which deal with nodes
+(that is, connecting via ssh, uploading the job, starting it...).
+"""
+
 import os
 import logging
 import atexit
@@ -80,6 +85,11 @@ class Node(object):  # pragma: no cover
 
     @property
     def received_all_results(self):
+        """
+        Indicates wheter we are received all results. In other words,
+        this is False if we are still waiting for a job which is
+        running on a :class:`SystemComposition`.
+        """
         return len(self.expected) == 0
 
     def logformat(self, msg):
