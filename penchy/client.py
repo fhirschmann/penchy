@@ -1,9 +1,6 @@
 """ Executes benchmarks and filters generated data. """
 
-import time
-import sys
 import logging
-import imp
 import xmlrpclib
 
 import argparse
@@ -28,8 +25,8 @@ class Client(object):
         self.config = load_config(self.args.config)
         self.job = load_job(self.args.job).job
         self.identifier = self.args.identifier
-        self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % (self.config.SERVER_HOST,
-            self.config.SERVER_PORT))
+        self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
+                (self.config.SERVER_HOST, self.config.SERVER_PORT))
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
