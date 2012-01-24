@@ -148,11 +148,6 @@ class Server(object):
                         'config.py', node.setting.identifier]))
                 node.disconnect()
 
-    def signal_handler_shutdown(self, num, frame):
-        for node in self.nodes.values():
-            node.close()
-        self.server.server_close()
-
     def run(self):
         """
         Runs the server component.
