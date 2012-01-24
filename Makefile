@@ -14,7 +14,7 @@ hooks:
 
 coverage: .coverage
 	coverage report -i --include='penchy/*'
-	coverage html --include='penchy/jobs/*,penchy/log.py,penchy/util.py,penchy/maven.py'
+	coverage html --include='penchy/jobs/*,penchy/log.py,penchy/util.py,penchy/maven.py,penchy/compat.py'
 	coverage erase
 
 full-coverage: .coverage
