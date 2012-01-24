@@ -112,6 +112,9 @@ class SystemComposition(object):
     def __hash__(self):
         return hash(hash(self.jvm) + hash(self.node_setting))
 
+    def __str__(self):
+        return self.name
+
     def hash(self):
         """
         Return the sha1 hexdigest.
