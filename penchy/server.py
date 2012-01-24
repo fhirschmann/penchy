@@ -62,7 +62,7 @@ class Server(object):
         self.client_thread = self._setup_client_thread()
 
         # Signal handler
-        signal.signal(signal.SIGTERM, self.signal_handler_shutdown)
+        signal.signal(signal.SIGTERM, self._signal_handler)
 
     def _setup_client_thread(self):
         """
@@ -77,10 +77,15 @@ class Server(object):
         thread.daemon = True
         return thread
 
-    def signal_sigterm(self, num, frame):
-        for node in self.nodes.values():
-            node.close()
-        self.server.server_close()
+    def _signal_handler(self, signum, frame):
+        """
+        This handles signals sent to this process.
+        """
+        log.info("Received signal %s " % signum)
+        if signum == signal.SIGTERM:
+            for node in self.nodes.values():
+                node.close()
+            self.server.server_close()
 
     def node_for(self, setting):
         """
