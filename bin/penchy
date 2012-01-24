@@ -7,16 +7,14 @@ Execute this if you want to run the full PenchY
 cycle (deploying jobs, executing jobs, accumulating results).
 """
 
-import sys
-import imp
 import logging
 import os
-import imp
 
 import argparse
 
 from penchy.server import Server
 from penchy.util import load_job, load_config
+from penchy.log import configure_logging
 
 
 if __name__ == "__main__":
@@ -49,6 +47,8 @@ if __name__ == "__main__":
     job_module = load_job(args.job)
     job = job_module.job
 
+    configure_logging(args.loglevel)
+
     if args.check:
         for composition in job.compositions:
             job.check()
@@ -60,8 +60,6 @@ if __name__ == "__main__":
             job.run(composition)
     else:
         server = Server(config, job_module)
-
-        logging.root.setLevel(args.loglevel)
 
         if args.load_from:
             server.bootstrap_args.extend(['--load-from', args.load_from])

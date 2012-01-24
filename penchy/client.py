@@ -6,6 +6,7 @@ import xmlrpclib
 import argparse
 
 from penchy.util import load_config, load_job
+from penchy.log import configure_logging
 
 
 log = logging.getLogger(__name__)
@@ -27,6 +28,8 @@ class Client(object):
         self.identifier = self.args.identifier
         self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
+
+        configure_logging(self.args.loglevel)
 
         try:
             logging.root.setLevel(getattr(logging, self.args.loglevel))
