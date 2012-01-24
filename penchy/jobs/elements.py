@@ -208,18 +208,23 @@ def _check_kwargs(instance, kwargs):
 
     for t in instance.inputs:
         name, types = t[0], t[1:]
+        count = len(types)
         if name not in kwargs:
             raise ValueError('Argument {0} is missing'.format(name))
 
         value = [kwargs[name]]  # pack start value in list to reuse loop
-        for type_ in types:
+        for i, type_ in enumerate(types):
             if any(not isinstance(v, type_) for v in value):
                 raise ValueError('Argument {0} is not of type {1}'.format(name,
                                                                           types))
-            if type_ == dict:
+            # don't reinitialize for last type
+            if i == count - 1:
+                break
+
+            if issubclass(type_, dict):
                 value = list(chain.from_iterable(subvalue.values() for subvalue in value))
             elif len(value) > 1:
-                value = [subvalue for subvalue in value]
+                value = list(chain.from_iterable(value))
             else:
                 value = value[0]
 
