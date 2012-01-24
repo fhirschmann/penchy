@@ -99,18 +99,18 @@ class SystemComposition(object):
     results of its execution for server consumation.
     """
 
-    def __init__(self, jvm, node, name=None):
+    def __init__(self, jvm, node_setting, name=None):
         """
         """
-        self.name = name if name is not None else "{0} @ {1}".format(jvm, node)
+        self.name = name if name is not None else "{0} @ {1}".format(jvm, node_setting)
         self.jvm = jvm
-        self.node = node
+        self.node_setting = node_setting
 
     def __eq__(self, other):
-        return self.jvm == other.jvm and self.node == other.node
+        return self.jvm == other.jvm and self.node_setting == other.node_setting
 
     def __hash__(self):
-        return hash(hash(self.jvm) + hash(self.node))
+        return hash(hash(self.jvm) + hash(self.node_setting))
 
     def hash(self):
         """
@@ -124,7 +124,7 @@ class SystemComposition(object):
         """
         hasher = sha1()
         update_hasher(hasher, self.jvm.hash())
-        update_hasher(hasher, self.node.hash())
+        update_hasher(hasher, self.node_setting.hash())
         return hasher.hexdigest()
 
 
@@ -167,7 +167,7 @@ class Job(object):
         :type composition: :class:`SystemComposition`
         """
         # setup
-        pomfile = os.path.join(composition.node.path, 'pom.xml')
+        pomfile = os.path.join(composition.node_setting.path, 'pom.xml')
         setup_dependencies(pomfile, self._get_client_dependencies(composition))
         composition.jvm.add_to_cp(get_classpath(pomfile))
 
@@ -177,7 +177,7 @@ class Job(object):
         if self.send is not None:
             self.send = partial(self.send, composition.hash())
 
-        composition.jvm.basepath = composition.node.basepath
+        composition.jvm.basepath = composition.node_setting.basepath
 
         starts = filter(bool, (composition.jvm.workload,
                                composition.jvm.tool))
@@ -309,7 +309,7 @@ class Job(object):
         :returns: :class:`SystemComposition` of job that run on host
         :rtype: list
         """
-        return [c for c in self.compositions if c.node.identifier == identifier]
+        return [c for c in self.compositions if c.node_setting.identifier == identifier]
 
     def check(self):
         """

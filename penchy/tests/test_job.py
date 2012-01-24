@@ -164,7 +164,7 @@ class SystemCompositionsTest(unittest.TestCase):
         c.jvm = JVM('path', 'options')
         h = sha1()
         update_hasher(h, c.jvm.hash())
-        update_hasher(h, c.node.hash())
+        update_hasher(h, c.node_setting.hash())
         self.assertEqual(c.hash(), h.hexdigest())
 
 

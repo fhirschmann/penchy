@@ -39,8 +39,8 @@ class Server(object):
         self.bootstrap_args = []
 
         # List of nodes to upload to
-        self.nodes = dict((n.node.identifier, Node(n.node, job)) for
-                          n in self.job.compositions)
+        self.nodes = dict((n.node_setting.identifier,
+            Node(n.node_setting, job)) for n in self.job.compositions)
 
         # Files to upload
         self.uploads = (
@@ -97,7 +97,7 @@ class Server(object):
             raise ValueError('Composition not expected')
 
         with Server._rcv_lock:
-            self.node_for(composition.node).expected.remove(composition)
+            self.node_for(composition.node_setting).expected.remove(composition)
             Server.results[composition] = result
 
     @property
