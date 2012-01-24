@@ -3,6 +3,7 @@ Initiates multiple JVM Benchmarks and accumulates the results.
 """
 import logging
 import os
+import signal
 import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
@@ -56,6 +57,9 @@ class Server(object):
 
         # Set up the thread which is deploying the job
         self.client_thread = self._setup_client_thread()
+
+        # Signal handler
+        signal.signal(signal.SIGTERM, self.signal_handler_shutdown)
 
     def _setup_client_thread(self):
         """
@@ -124,10 +128,16 @@ class Server(object):
                         'config.py', node.setting.identifier]))
                 node.disconnect()
 
+    def signal_handler_shutdown(self, num, frame):
+        for node in self.nodes.values():
+            node.close()
+        self.server.server_close()
+
     def run(self):
         """
         Runs the server component.
         """
+        print dir(self.server)
         self.client_thread.start()
         while not self.received_all_results:
             self.server.handle_request()
