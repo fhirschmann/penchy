@@ -43,7 +43,8 @@ class Node(object):  # pragma: no cover
         self.ssh = self._setup_ssh()
 
         self.client_is_running = False
-        self.client_timed_out = False
+        self.timed_out = False
+        self.was_closed = False
         self.sftp = None
 
     def __str__(self):
@@ -103,6 +104,27 @@ class Node(object):  # pragma: no cover
         log.debug(self.logformat("Disconnecting"))
         self.sftp.close()
         self.ssh.close()
+
+    def close(self):
+        """
+        Close the node (disconnect, receive the logs and kill the
+        client if neccessary).
+
+        If we have not received all results from this node, the PenchY
+        client will be killed on this node.
+        """
+        if self.was_closed:
+            return
+
+        self.connect()
+
+        if not self.received_all_results:
+            self.kill()
+            self.expected = []
+
+        self.get_logs()
+        self.disconnect()
+        self.was_closed = True
 
     def put(self, local, remote=None):
         """
@@ -183,18 +205,16 @@ class Node(object):  # pragma: no cover
         if self.timer:
             self.timer.start()
 
-        @atexit.register
-        def kill():
-            self.connect()
-            self.get_logs()
-            self.kill()
-            self.disconnect()
+        atexit.register(self.close)
+        atexit.register(self.close)
 
     def timeout(self):
         """
         Executed when this node times out.
         """
         log.error(self.logformat("Timed out"))
+        self.close()
+        self.timed_out = True
 
     def kill(self):
         """

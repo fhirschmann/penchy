@@ -104,6 +104,10 @@ class Server(object):
     def received_all_results(self):
         return all([n.received_all_results for n in self.nodes.values()])
 
+    @property
+    def nodes_timed_out(self):
+        return all([n.timed_out for n in self.nodes.values()])
+
     def run_clients(self):
         """
         This method will run the clients on all nodes.
@@ -125,7 +129,7 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        while not self.received_all_results > 0:
+        while not self.nodes_timed_out:
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
