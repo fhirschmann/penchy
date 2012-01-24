@@ -206,7 +206,6 @@ class Node(object):  # pragma: no cover
             self.timer.start()
 
         atexit.register(self.close)
-        atexit.register(self.close)
 
     def timeout(self):
         """
