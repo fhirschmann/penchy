@@ -172,7 +172,7 @@ class Evaluation(Filter):
                 args = {'input' : kwargs['input']}
         else:
             try:
-                args = dict([(input_[0], kwargs[input_[0]]) for input_ in inputs])
+                args = dict([(input_[0], kwargs[input_[0]]) for input_ in self.inputs])
             except KeyError:
                 log.exception('Evaluator: expected arguments "{0}"'
                               ', got "{1}"'.format(', '.join(i[0] for i in self.inputs),
