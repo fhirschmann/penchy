@@ -111,7 +111,7 @@ class CheckArgsTest(unittest.TestCase):
 
     def test_subtype_of_dict(self):
         self.p.inputs = [('foo', dict, int),
-                         ('bar', dict, list)]
+                         ('bar', dict, list, int)]
         self.assertEqual(_check_kwargs(self.p, {'foo' : dict(a=1, b=2),
                                                 'bar' : dict(a=[1], b=[2])})
                          , 0)
