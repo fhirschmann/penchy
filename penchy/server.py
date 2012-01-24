@@ -34,8 +34,7 @@ class Server(object):
         self.config = config
         self.job = job.job
         self.job_file = job.__file__
-        # XXX: DEBUG
-        print config.__file__
+
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
 
@@ -137,7 +136,6 @@ class Server(object):
         """
         Runs the server component.
         """
-        print dir(self.server)
         self.client_thread.start()
         while not self.received_all_results:
             self.server.handle_request()
