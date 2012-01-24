@@ -394,7 +394,7 @@ class PenchyPOM(POM):
         POM.__init__(self, **PenchyPOM.ATTRIBS)
 
 
-def makeBootstrapPOM():
+def make_bootstrap_pom():
     """
     Creates a Bootstrap POM and returns the temporary
     file it has been written to.

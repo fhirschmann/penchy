@@ -7,7 +7,7 @@ import signal
 import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
-from penchy.maven import makeBootstrapPOM
+from penchy.maven import make_bootstrap_pom
 from penchy.node import Node
 from penchy.util import find_bootstrap_client
 
@@ -136,7 +136,7 @@ class Server(object):
         """
         This method will run the clients on all nodes.
         """
-        with makeBootstrapPOM() as pom:
+        with make_bootstrap_pom() as pom:
             for node in self.nodes.values():
                 node.connect()
                 for upload in self.uploads:
