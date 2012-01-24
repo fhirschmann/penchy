@@ -142,6 +142,46 @@ class Print(Filter):
         pprint(kwargs, stream=self.stream)
 
 
+class Evaluation(Filter):
+    """
+    Filter to evaluate values with an evaluation function.
+
+    You should set ``inputs`` and ``outputs`` or no checking will take place.
+    If ``inputs`` is set to ``None``, will run evaluator on ``input``.
+    """
+
+    def __init__(self, evaluator, inputs=None, outputs=None):
+        """
+        :param evaluator: function that evaluates
+        :type evaluator: function
+        :param inputs: input type specification
+        :type inputs: list
+        :param outnputs: output type specification
+        :type outnputs: list
+        """
+        super(Evaluation, self).__init__()
+        self.evaluator = evaluator
+        self.inputs = inputs
+        self.outputs = outputs
+
+    def _run(self, **kwargs):
+        if self.inputs is None:
+            if 'input' not in kwargs:
+                raise ValueError('Evaluation inputs not set, expected input in arguments')
+            else:
+                args = {'input' : kwargs['input']}
+        else:
+            try:
+                args = dict([(input_[0], kwargs[input_[0]]) for input_ in inputs])
+            except KeyError:
+                log.exception('Evaluator: expected arguments "{0}"'
+                              ', got "{1}"'.format(', '.join(i[0] for i in self.inputs),
+                                                   ', '.join(k for k in kwargs)))
+                raise ValueError('Missing input')
+
+        self.out = self.evaluator(**args)
+
+
 class Plot(Filter):
     pass
 
