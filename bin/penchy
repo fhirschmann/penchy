@@ -60,6 +60,7 @@ if __name__ == "__main__":
             job.run(composition)
     else:
         server = Server(config, job_module)
+        server.bootstrap_args.extend(['--loglevel', str(args.loglevel)])
 
         if args.load_from:
             server.bootstrap_args.extend(['--load-from', args.load_from])

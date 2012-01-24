@@ -29,12 +29,7 @@ class Client(object):
         self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
 
-        configure_logging(self.args.loglevel)
-
-        try:
-            logging.root.setLevel(getattr(logging, self.args.loglevel))
-        except AttributeError:
-            pass
+        configure_logging(int(self.args.loglevel))
 
     def run(self):
         """
@@ -56,6 +51,6 @@ class Client(object):
         parser.add_argument("job", help="job to execute", metavar="job")
         parser.add_argument("config", help="config file to use", metavar="config")
         parser.add_argument("identifier", help="my identifier", metavar="identifier")
-        parser.add_argument("-l", "--loglevel", dest="loglevel", default='INFO')
+        parser.add_argument("--loglevel", dest="loglevel", default='20')
         args = parser.parse_args(args=args)
         return args
