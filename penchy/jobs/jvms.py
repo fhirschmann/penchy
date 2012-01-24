@@ -186,6 +186,9 @@ class JVM(object):
     def __hash__(self):
         return hash(hash(self._path) + hash(self._user_options))
 
+    def __repr__(self):
+        return 'JVM({0}, {1})'.format(self._path, self._user_options)
+
     def hash(self):
         """
         Return the sha1 hexdigest.
