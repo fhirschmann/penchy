@@ -5,6 +5,8 @@ import os
 from penchy.jobs import *
 import config
 
+x64NODE = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
+x86NODE = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 client = jvms.JVM('java')
 server = jvms.JVM('java', '-server')
