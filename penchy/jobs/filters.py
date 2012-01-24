@@ -129,8 +129,17 @@ class Print(Filter):
     """
     inputs = None
 
-    def run(self, **kwargs):  # pragma: no cover
-        pprint(kwargs)
+    def __init__(self, stream=None):
+        """
+        :param stream: stream to print to, defaults to sys.stdout
+        :type stream: open :class:`file`
+        """
+        super(Print, self).__init__()
+
+        self.stream = stream
+
+    def _run(self, **kwargs):
+        pprint(kwargs, stream=self.stream)
 
 
 class Plot(Filter):
