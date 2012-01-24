@@ -26,19 +26,20 @@ class Node(object):  # pragma: no cover
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy.log'))
 
-    def __init__(self, setting, job):
+    def __init__(self, setting, job_module):
         """
         Initialize the node.
 
         :param setting: the node setting
         :type setting: :class:`NodeSetting`
-        :param job: the job to execute
-        :type job: module
+        :param job_module: the job module to execute
+        :type job_module: module
         """
         self.setting = setting
 
-        self.job = job
-        self.expected = list(job.job.compositions_for_node(self.setting.identifier))
+        self.job_module = job_module
+        self.expected = list(job_module.job.compositions_for_node(
+            self.setting.identifier))
         self.timer = self._setup_timer()
         self.ssh = self._setup_ssh()
 
@@ -59,10 +60,11 @@ class Node(object):  # pragma: no cover
 
     def _setup_timer(self):
         """
-        Sets up the Timer from the current job.
+        Sets up the Timer using the timer attribute of the
+        current job module.
         """
-        if hasattr(self.job, 'timeout'):
-            timeout_after = getattr(self.job, 'timeout')
+        if hasattr(self.job_module, 'timeout'):
+            timeout_after = getattr(self.job_module, 'timeout')
             if timeout_after:
                 return Timer(timeout_after, self.timeout)
 
@@ -88,7 +90,7 @@ class Node(object):  # pragma: no cover
 
     def connect(self):
         """
-        Connect to the node.
+        Connect to node.
         """
         log.debug(self.logformat("Connecting"))
         self.ssh.connect(self.setting.host, username=self.setting.username,
@@ -99,7 +101,7 @@ class Node(object):  # pragma: no cover
 
     def disconnect(self):
         """
-        Disconnect from the node.
+        Disconnect from node.
         """
         log.debug(self.logformat("Disconnecting"))
         self.sftp.close()
@@ -107,7 +109,7 @@ class Node(object):  # pragma: no cover
 
     def close(self):
         """
-        Close the node (disconnect, receive the logs and kill the
+        Close node (disconnect, receive the logs and kill the
         client if neccessary).
 
         If we have not received all results from this node, the PenchY
@@ -180,7 +182,7 @@ class Node(object):  # pragma: no cover
 
     def execute(self, cmd):
         """
-        Executes command on the node
+        Executes command on the node.
 
         :param cmd: command to execute
         :type cmd: string
