@@ -161,7 +161,11 @@ class Server(object):
         while not self.received_all_results and not self.nodes_timed_out:
             self.server.handle_request()
 
-        log.info("Received results from all nodes. Excellent.")
+        if self.received_all_results:
+            log.info("Received results from all nodes. Excellent.")
+        if self.nodes_timed_out:
+            log.error("All nodes have timed out. That's not good!")
+
         self.run_pipeline()
 
     def run_pipeline(self):
