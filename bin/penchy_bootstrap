@@ -60,7 +60,7 @@ def install_penchy():
     :returns: maven output
     :rtype: string
     """
-    log.debug("Installing/updating PenchY using Maven")
+    log.debug("Installing/updating PenchY using maven")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
     stdout, _ = proc.communicate()
     log.debug(stdout)
@@ -74,7 +74,7 @@ def build_classpath():
     :returns: maven output
     :rtype: string
     """
-    log.debug("Building the Maven classpath")
+    log.debug("Building maven classpath")
     proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
             stdout=PIPE)
     stdout, _ = proc2.communicate()
