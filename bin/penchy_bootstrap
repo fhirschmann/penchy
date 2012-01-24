@@ -119,6 +119,9 @@ if __name__ == "__main__":
                 raise ValueError("Argument to --load-from must be a directory")
             args.remove('--load-from')
             args.remove(load_from)
+        if '--loglevel' in args:
+            loglevel = args[args.index('--loglevel') + 1]
+            log.setLevel(int(loglevel))
         else:
             load_from = None
 
