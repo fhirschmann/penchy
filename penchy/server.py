@@ -129,7 +129,7 @@ class Server(object):
         Runs the server component.
         """
         self.client_thread.start()
-        while not self.nodes_timed_out:
+        while not self.received_all_results:
             self.server.handle_request()
 
         log.info("Received results from all nodes. Excellent.")
