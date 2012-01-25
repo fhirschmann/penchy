@@ -56,6 +56,11 @@ class HProf(Tool):
 
        java -agentlib:hprof=help
 
+    For example: The call `t = tools.HProf('heap=dump')`
+    extends the commandline of the jvm about
+
+       -agentlib:hprof=heap=dump
+
     After execution a file with the full hprof output
     is exported.
     """
