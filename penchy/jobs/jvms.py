@@ -28,18 +28,24 @@ class JVMNotConfiguredError(Exception):
 class JVM(object):
     """
     This class represents a JVM.
+
+    :attr:`jvm.prehooks` callables (e.g. functions or methods) that are executed
+                         before execution
+    :attr:`jvm.posthooks` callables (e.g. functions or methods) that are executed
+                         after execution
     """
 
     def __init__(self, path, options=""):
         """
-        :param path: path to jvm executable relative to basepath
-        :param options: string of options that will be passed to jvm
-        :type options: string
+        :param path: path to jvm executable relative to node's basepath
+                     (can also be absolute)
+        :param options: string of options that will be passed to JVM needs to be
+                        properly escaped for a shell
+        :type options: str
         """
-
         self.basepath = '/'
         self._path = path
-        # keep user_options for user messages around
+        # keep user_options for log messages and comparisons around
         self._user_options = options
 
         self._options = shlex.split(options)
@@ -140,6 +146,9 @@ class JVM(object):
     def _get_hooks(self):
         """
         Return hooks of jvm together with possible workload and tool hooks.
+
+        :returns: hooks of configuration grouped as pre- and posthooks
+        :rtype: tuple of :func:`itertools.chain`
         """
         if self.workload is None:
             workload_prehooks = []
@@ -169,11 +178,9 @@ class JVM(object):
                 # with equal options
                 self._user_options == other._user_options,
                 # check if both workloads or none is set
-                # XXX: maybe implement __eq__ for workload
                 (self.workload is None and other.workload is None
                  or self.workload and other.workload),
                 # check if both tools or none is set
-                # XXX: maybe implement __eq__ for tool
                 (self.tool is None and other.tool is None
                  or self.tool and other.tool)))
         except AttributeError:
