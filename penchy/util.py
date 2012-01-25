@@ -111,23 +111,32 @@ def tree_pp(elem, level=0):
             elem.tail = i
 
 
-def dict2tree(elem, dictionary):
-    for k, v in dictionary.items():
-        if v:
-            e = SubElement(elem, k)
-            e.text = v
+def dict2tree(elem, dict_):
+    """
+    Add the content of ``dict_`` to ``elem`` aus subelements.
+
+    :param elem: parent element
+    :type elem: :class:`xml.etree.ElementTree.Element`
+    :param dict_: dict to add to ``elem``
+    :type dict_: dict
+    """
+    for key in dict_:
+        if dict_[key]:
+            e = SubElement(elem, key)
+            e.text = dict_[key]
 
 
-def dict2string(d, attribs=None):
+def dict2string(dict_, attribs=None):
     """
     PrettyPrints a dictionary as string.
+
+    :param dict_: dict to print
+    :type dict_: dict
+    :returns: dict_ as string
+    :rtype: str
     """
-    s = []
-    for k, v in d.items():
-        if not attribs or k in attribs:
-            if v:
-                s.append("%s=%s" % (k, v))
-    return ", ".join(s)
+    return ", ".join("{0}={1}".format(key, dict_[key]) for key in dict_
+                     if attribs is None or key in attribs)
 
 
 def sha1sum(filename, blocksize=65536):
@@ -162,6 +171,9 @@ def tempdir(prefix='penchy-invocation', delete=False):
 def find_bootstrap_client():
     """
     Returns the path of the penchy bootstrap client.
+
+    :returns: path of bootstrap client
+    :rtype: str
     """
     import penchy
     return pkg_resources.resource_filename('penchy',
@@ -173,8 +185,7 @@ def load_job(filename):
     Loads a job.
 
     :param filename: filename of the job
-    :type filename: string
-    :param config: config file to export to job namespace
+    :type filename: str
     """
 
     assert 'config' in sys.modules, "You have to load the penchyrc before a job"
@@ -191,8 +202,7 @@ def load_config(filename):
     in the current working directory as well.
 
     :param filename: filename of the config file
-    :type filename: string
-    :returns: config object
+    :type filename: str
     """
     try:
         with disable_write_bytecode():
