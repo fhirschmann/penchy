@@ -8,26 +8,6 @@ from penchy import util
 from penchy.compat import unittest, write, update_hasher
 
 
-class ClasspathTest(unittest.TestCase):
-
-    def test_valid_options(self):
-        expected = 'foo:bar:baz'
-        options = ['-cp', expected]
-        self.assertEquals(util.extract_classpath(options), expected)
-        expected = 'foo:bar:baz'
-        options = ['-classpath', expected]
-        self.assertEqual(util.extract_classpath(options), expected)
-
-    def test_multiple_classpaths(self):
-        expected = 'foo:bar:baz'
-        options = ['-cp', 'com:org:de', '-cp', expected]
-        self.assertEquals(util.extract_classpath(options), expected)
-
-    def test_only_option(self):
-        options = ['-cp']
-        self.assertEqual(util.extract_classpath(options), '')
-
-
 class TempdirTest(unittest.TestCase):
     def test_change(self):
         cwd = os.getcwd()

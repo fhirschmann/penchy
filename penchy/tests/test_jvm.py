@@ -1,7 +1,7 @@
 from hashlib import sha1
 
 from penchy.compat import unittest, update_hasher
-from penchy.jobs.jvms import JVM, JVMNotConfiguredError
+from penchy.jobs.jvms import JVM, JVMNotConfiguredError, extract_classpath
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
 from penchy.tests.util import MockPipelineElement
@@ -139,3 +139,23 @@ class JVMTest(unittest.TestCase):
     def test_wrong_comparison(self):
         i = JVM('foo')
         self.assertNotEqual(i, 2)
+
+
+class ExtractClasspathTest(unittest.TestCase):
+
+    def test_valid_options(self):
+        expected = 'foo:bar:baz'
+        options = ['-cp', expected]
+        self.assertEquals(extract_classpath(options), expected)
+        expected = 'foo:bar:baz'
+        options = ['-classpath', expected]
+        self.assertEqual(extract_classpath(options), expected)
+
+    def test_multiple_classpaths(self):
+        expected = 'foo:bar:baz'
+        options = ['-cp', 'com:org:de', '-cp', expected]
+        self.assertEquals(extract_classpath(options), expected)
+
+    def test_only_option(self):
+        options = ['-cp']
+        self.assertEqual(extract_classpath(options), '')
