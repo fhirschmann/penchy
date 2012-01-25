@@ -187,9 +187,21 @@ class Job(object):
         _, edge_order = edgesort(starts, self.client_flow)
 
         for i in range(1, self.invocations + 1):
+            # measure cputime before
+            with open('/proc/self/stat') as f:
+                before = f.read().split()[13]  # utime is field 14
+            log.debug('CPU time before invocation: {0}'.format(before))
+
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
                 composition.jvm.run()
+
+            # measure cputime after
+            with open('/proc/self/stat') as f:
+                after = f.read().split()[13]
+            log.debug('CPU time after invocation: {0}, difference: '
+                      '{1}'.format(after, int(after) - int(before)))
+
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
