@@ -36,9 +36,9 @@ class Tamiflex(Tool):
 
     def _after_execution(self):
         # provides info/log about reflective calls
-        out['reflection log'].append(os.path.abspath("out/refl.log"))
+        self.out['reflection log'].append(os.path.abspath("out/refl.log"))
         # contains all classes of which objects were created (?)
-        out['classfolder'].append(os.path.abspath("out"))
+        self.out['classfolder'].append(os.path.abspath("out"))
 
     def check(self):
         # some jmv's might not support java.lang.instrument
