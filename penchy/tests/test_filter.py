@@ -3,7 +3,10 @@ from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
-from penchy.jobs.filters import DacapoHarness, WrongInputError, Send
+from penchy.jobs.filters import (WrongInputError,
+                                 DacapoHarness,
+                                 Send,
+                                 StatisticRuntimeEvaluation)
 from penchy.tests.util import get_json_data
 
 
@@ -84,3 +87,28 @@ class SendTest(unittest.TestCase):
         f._run(environment={'send' : lambda data: a.__setitem__(0, data)},
                payload=42)
         self.assertListEqual(a, [42])
+
+
+class StatisticRuntimeEvaluationTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        t = get_json_data('StatisticRuntimeEvaluationFilter')
+        cls.times = t['times']
+        cls.expected = t['expected']
+
+    def test_statistics(self):
+        f = StatisticRuntimeEvaluation()
+        keys = ['averages', 'maximals', 'minimals',
+                'positive_deviations', 'negative_deviations']
+        for times, results in zip(StatisticRuntimeEvaluationTest.times,
+                                 StatisticRuntimeEvaluationTest.expected):
+            # output is correctly cleaned up?
+            self.assertDictEqual(f.out, {})
+            f._run(times=times)
+            # contains the right keys?
+            self.assertItemsEqual(f.out.keys(), keys)
+            for key in keys:
+                for actual, expected in zip(f.out[key], results[key]):
+                    self.assertAlmostEqual(actual, expected)
+            f.reset()
