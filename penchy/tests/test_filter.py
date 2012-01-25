@@ -6,6 +6,7 @@ from penchy.compat import unittest, write
 from penchy.jobs.filters import (WrongInputError,
                                  DacapoHarness,
                                  Send,
+                                 Evaluation,
                                  StatisticRuntimeEvaluation)
 from penchy.tests.util import get_json_data
 
@@ -112,3 +113,21 @@ class StatisticRuntimeEvaluationTest(unittest.TestCase):
                 for actual, expected in zip(f.out[key], results[key]):
                     self.assertAlmostEqual(actual, expected)
             f.reset()
+
+
+class EvaluationTest(unittest.TestCase):
+
+    def test_default_input(self):
+        e = Evaluation(lambda input: {'result' : input})
+        e._run(input=42)
+        self.assertDictEqual(e.out, {'result' : 42})
+
+    def test_missing_default_input(self):
+        e = Evaluation(lambda x: None)
+        with self.assertRaises(ValueError):
+            e._run()
+
+    def test_missing_input(self):
+        e = Evaluation(lambda x: x, [('value', int)], [('value', int)])
+        with self.assertRaises(ValueError):
+            e._run()
