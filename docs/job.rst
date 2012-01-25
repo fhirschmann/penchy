@@ -82,6 +82,17 @@ For a in-depth treatment see the :ref:`Job API <job-api>`.
 
 NodeSetting
 -----------
+A :class:`~penchy.jobs.job.NodeSetting` describes how to access a node and its
+properties.
+
+For details on accessing see the API documentation of :class:`~penchy.jobs.job.NodeSetting`.
+
+There are two kinds of properties:
+The first are used to check a job for plausibility (see below).
+The second are descriptive and for human eyes.
+
+They may contain such things as a textual description of the Node's features
+such as CPU type and performance or amount of RAM or whatever you deem helpful.
 
 JVM
 ---
