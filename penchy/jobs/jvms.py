@@ -74,7 +74,7 @@ class JVM(object):
 
     @tool.setter
     def tool(self, tool):
-        if not self._tool:  # pragma: no cover
+        if self._tool is not None:  # pragma: no cover
             log.warn("Overwriting Tool!")
 
         self._tool = tool
