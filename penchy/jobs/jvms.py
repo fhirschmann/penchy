@@ -102,11 +102,11 @@ class JVM(object):
             log.error('No workload configured')
             raise JVMNotConfiguredError('no workload configured')
 
-        log.info("executing prehooks")
+        log.debug("executing prehooks")
         for hook in prehooks:
             hook()
 
-        log.info("executing {0}".format(self.cmdline))
+        log.debug("executing {0}".format(self.cmdline))
         with nested(NamedTemporaryFile(delete=False, dir='.'),
                     NamedTemporaryFile(delete=False, dir='.')) \
             as (stderr, stdout):
@@ -118,7 +118,7 @@ class JVM(object):
             self.workload.out['stdout'].append(stdout.name)
             self.workload.out['stderr'].append(stderr.name)
 
-        log.info("executing posthooks")
+        log.debug("executing posthooks")
         for hook in posthooks:
             hook()
 
