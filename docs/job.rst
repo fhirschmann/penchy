@@ -92,11 +92,33 @@ Workloads
 Tools
 -----
 
+Tools are programs that collect data about the executed workload.
+They come in two flavors: Agent and WrappedJVM.
+
 Agent
 ~~~~~
 
+An Agent is a Tool that is invoked via the JVM's agent parameters (e.g.
+``-agentlib``).
+It is used as an attribute for a JVM and collects data about the workload also
+set for this JVM. For example in::
+
+  j = JVM('java')
+  j.workload = Dacapo('fop')
+  j.tool = HProf('')
+
+will :class:`~penchy.jobs.tools.HProf` collect data about the ``fop`` benchmark of the
+:class:`~penchy.jobs.workloads.Dacapo` benchmark suite.
+
+
 WrappedJVM
 ~~~~~~~~~~
+
+A WrappedJVM on the other side is itself a program that calls the desired JVM.
+It is used instead of a JVM but accepts the same arguments (if not more).
+
+Currently there is no implementation of a WrappedJVM but an example would be to
+use Valgrind to analyze the execution of the JVM.
 
 Filter
 ------
