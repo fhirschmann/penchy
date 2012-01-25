@@ -81,6 +81,8 @@ class HProf(Tool):
 
     def _after_execution(self):
         # Provides the full hprof output
+        # Note: This is always the right file, because every job
+        # is started in a new directory.
         self.out['hprof'].append(os.path.abspath("java.hprof.txt"))
 
     def check(self):
