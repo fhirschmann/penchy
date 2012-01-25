@@ -1,7 +1,8 @@
 from hashlib import sha1
+import os
 
 from penchy.compat import unittest, update_hasher
-from penchy.jobs.jvms import JVM, JVMNotConfiguredError, extract_classpath
+from penchy.jobs.jvms import JVM, JVMNotConfiguredError, _extract_classpath
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
 from penchy.tests.util import MockPipelineElement
@@ -20,20 +21,20 @@ class JVMClasspathTest(unittest.TestCase):
     setUp = setup_jvm
 
     def test_add_to_existing_classpath(self):
-        self.jvm._classpath = 'bar'
-        self.assertEqual(self.jvm._classpath, 'bar')
+        self.jvm._classpath = ['bar']
+        self.assertListEqual(self.jvm._classpath, ['bar'])
         self.jvm.add_to_cp('foo')
-        self.assertEqual(self.jvm._classpath, 'bar:foo')
+        self.assertListEqual(self.jvm._classpath, ['bar', 'foo'])
         self.jvm.add_to_cp('baz')
-        self.assertEqual(self.jvm._classpath, 'bar:foo:baz')
+        self.assertListEqual(self.jvm._classpath, ['bar', 'foo', 'baz'])
 
     def test_add_to_empty_classpath(self):
-        self.jvm._classpath = None
+        self.jvm._classpath = []
 
         self.jvm.add_to_cp('foo')
-        self.assertEqual(self.jvm._classpath, 'foo')
+        self.assertListEqual(self.jvm._classpath, ['foo'])
         self.jvm.add_to_cp('baz')
-        self.assertEqual(self.jvm._classpath, 'foo:baz')
+        self.assertListEqual(self.jvm._classpath, ['foo', 'baz'])
 
     def test_raise_nonconfigured_workload(self):
         self.jvm.workload = None
@@ -41,7 +42,7 @@ class JVMClasspathTest(unittest.TestCase):
             self.jvm.run()
 
     def test_raise_nonconfigured_classpath(self):
-        self.jvm._classpath = None
+        self.jvm._classpath = []
         with self.assertRaises(JVMNotConfiguredError):
             self.jvm.run()
 
@@ -144,18 +145,17 @@ class JVMTest(unittest.TestCase):
 class ExtractClasspathTest(unittest.TestCase):
 
     def test_valid_options(self):
-        expected = 'foo:bar:baz'
-        options = ['-cp', expected]
-        self.assertEquals(extract_classpath(options), expected)
-        expected = 'foo:bar:baz'
-        options = ['-classpath', expected]
-        self.assertEqual(extract_classpath(options), expected)
+        expected = ['foo', 'bar', 'baz']
+        options = ['-cp', os.pathsep.join(expected)]
+        self.assertListEqual(_extract_classpath(options), expected)
+        options = ['-classpath', os.pathsep.join(expected)]
+        self.assertListEqual(_extract_classpath(options), expected)
 
     def test_multiple_classpaths(self):
-        expected = 'foo:bar:baz'
-        options = ['-cp', 'com:org:de', '-cp', expected]
-        self.assertEquals(extract_classpath(options), expected)
+        expected = ['foo', 'bar', 'baz']
+        options = ['-cp', 'com:org:de', '-cp', os.pathsep.join(expected)]
+        self.assertListEqual(_extract_classpath(options), expected)
 
     def test_only_option(self):
         options = ['-cp']
-        self.assertEqual(extract_classpath(options), '')
+        self.assertListEqual(_extract_classpath(options), [])

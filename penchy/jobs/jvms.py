@@ -48,7 +48,7 @@ class JVM(object):
         self._user_options = options
 
         self._options = shlex.split(options)
-        self._classpath = extract_classpath(self._options)
+        self._classpath = _extract_classpath(self._options)
 
         self.prehooks = []
         self.posthooks = []
@@ -86,10 +86,7 @@ class JVM(object):
         :param path: classpath to add
         :type path: string
         """
-        if self._classpath:
-            self._classpath += ":" + path
-        else:
-            self._classpath = path
+        self._classpath.extend(path.split(os.pathsep))
 
     def run(self):
         """
@@ -134,7 +131,8 @@ class JVM(object):
         configuration.
         """
         executable = os.path.join(self.basepath, self._path)
-        cp = ['-classpath', self._classpath] if self._classpath else []
+        cp = ['-classpath', os.pathsep.join(self._classpath)] if self._classpath \
+             else []
         if self.tool:
             options = self._options + self.tool.arguments
         else:
@@ -247,26 +245,23 @@ class ValgrindJVM(WrappedJVM):
     pass
 
 
-def extract_classpath(options):
+def _extract_classpath(options):
     """
     Return the jvm classpath from a sequence of option strings.
 
     :param options: sequence of jvm options to search
-    :returns: classpath in options
-    :rtype: string
+    :type options: list
+    :returns: classpath as list of parts
+    :rtype: list
     """
+    classpath = ''
+    prev = ''
     # a later classpath overwrites previous definitions so we have to search
     # from the end
-    options = options[::-1]
-    classpath = ''
-    for i, x in enumerate(options):
+    for i, x in enumerate(reversed(options)):
         if x in ('-cp', '-classpath'):
-            try:
-                # cp is positioned before option because order is reversed,
-                # take abs to avoid referencing from end
-                cp_index = abs(i - 1)
-                classpath = options[cp_index]
-            except IndexError:
-                classpath = ''
+            classpath = prev
             break
-    return classpath
+        prev = x
+
+    return classpath.split(os.pathsep) if classpath else []
