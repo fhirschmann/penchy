@@ -207,7 +207,7 @@ This also means that its applicability is limited to jobs that are executed on
 Checking for plausibility
 -------------------------
 
-To check for plausibility you can use :command:`penchy --check <jobname>`.
+To check for plausibility you can use ``penchy --check <jobname>``.
 As outlined above it checks for each :class:`~penchy.jobs.job.SystemComposition` if
 
 - the JVMs are present on the nodes (if configured)
@@ -222,6 +222,6 @@ and for the pipeline if
 Running the job locally
 -----------------------
 
-To run the job locally you can use :command:`penchy --run-locally <jobname>`.
+To run the job locally you can use ``penchy --run-locally <jobname>``.
 It will run all :class:`~penchy.jobs.job.SystemComposition` on the ``localhost``
 node directly and not via deployment and SSH.
