@@ -137,8 +137,38 @@ given a :file:`penchyrc` that looks like this::
 Testing Jobs
 ============
 
+To avoid bad surprises we offer two methods to test a job without running it
+fullscale.
+
+The first is plausibility checking which does a static analysis if a job can run
+on the given nodes (availability of JVMs and Tools) and if the pipeline is
+saturated and the expected types are delivered.
+A successful check does not guarantee that the job will execute fine but
+increases the likelihood and catches mistakes early on.
+
+The second is running it locally which actually executes the job but does not
+use the network or other nodes.
+This also means that its applicability is limited to jobs that are executed on
+``localhost`` but can be used as a test balloon for larger jobs.
+
 Checking for plausibility
 -------------------------
 
-Running the job
----------------
+To check for plausibility you can use :command:`penchy --check <jobname>`.
+As outlined above it checks for each :class:`~penchy.jobs.job.SystemComposition` if
+
+- the JVMs are present on the nodes (if configured)
+- all JVMs have a workload
+- components are runable on the node's OS
+
+and for the pipeline if
+
+- each :class:`~penchy.jobs.element.PipelineElement` receives the expected input
+  (correct names and types)
+
+Running the job locally
+-----------------------
+
+To run the job locally you can use :command:`penchy --run-locally <jobname>`.
+It will run all :class:`~penchy.jobs.job.SystemComposition` on the ``localhost``
+node directly and not via deployment and SSH.
