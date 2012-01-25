@@ -82,7 +82,6 @@ class JVMHooksTest(unittest.TestCase):
 
     def test_get_hooks_tool(self):
         a = [0]
-        b = [0]
         jvm = JVM('foo')
         w = MockPipelineElement()
         w.prehooks = [lambda: a.__setitem__(0, 23)]
@@ -93,7 +92,6 @@ class JVMHooksTest(unittest.TestCase):
 
     def test_get_hooks_workload(self):
         a = [0]
-        b = [0]
         jvm = JVM('foo')
         t = MockPipelineElement()
         t.prehooks = [lambda: a.__setitem__(0, 23)]
