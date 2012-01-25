@@ -7,10 +7,9 @@ API
 Job Description
 ===============
 
-TODO: Replace jobs with more finegrained inclusion
 Jobs
 ----
-.. automodule:: penchy.jobs
+.. automodule:: penchy.jobs.job
    :members:
 
 JVMs
@@ -31,6 +30,11 @@ Tools
 Filters
 -------
 .. automodule:: penchy.jobs.filters
+   :members:
+
+Pipeline-Dependencies
+---------------------
+.. automodule:: penchy.jobs.dependency
    :members:
 
 Uncategorized
@@ -69,9 +73,4 @@ Utilities
 Elements of the Pipeline
 ------------------------
 .. automodule:: penchy.jobs.elements
-   :members:
-
-Pipeline-Dependencies
----------------------
-.. automodule:: penchy.jobs.dependency
    :members:
