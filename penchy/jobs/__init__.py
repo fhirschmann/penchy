@@ -1,6 +1,5 @@
 from penchy.jobs import jvms, tools, filters, workloads
-from penchy.jobs.job import Job, SystemComposition, NodeSetting
-from penchy.jobs.dependency import Edge
+from penchy.jobs.job import Job, SystemComposition, NodeSetting, Edge
 
 
 JVM = jvms.JVM

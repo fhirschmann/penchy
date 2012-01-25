@@ -1,10 +1,9 @@
 from hashlib import sha1
 
 from penchy.compat import unittest, update_hasher
-from penchy.jobs import job
-from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
 from penchy.jobs.filters import Print, DacapoHarness, Receive
+from penchy.jobs.job import Edge, Job, SystemComposition
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -21,8 +20,8 @@ class JobClientElementsTest(unittest.TestCase):
         t = HProf('')
         self.jvm.tool = t
         f = Print()
-        self.config = job.SystemComposition(self.jvm, 'pseudo_node')
-        self.job = job.Job(self.config, [Edge(w, f)], [])
+        self.config = SystemComposition(self.jvm, 'pseudo_node')
+        self.job = Job(self.config, [Edge(w, f)], [])
 
     def test_empty_elements(self):
         self.job.client_flow = []
@@ -41,20 +40,20 @@ class JobClientElementsTest(unittest.TestCase):
     def test_empty_workload(self):
         config = make_system_composition()
         config.jvm.tool = HProf('')
-        self.assertSetEqual(job.Job(config, [], [])._get_client_dependencies(config),
+        self.assertSetEqual(Job(config, [], [])._get_client_dependencies(config),
                             HProf.DEPENDENCIES)
 
     def test_wrong_config(self):
         with self.assertRaises(ValueError):
-            self.job._get_client_dependencies(job.SystemComposition(JVM('java'),
+            self.job._get_client_dependencies(SystemComposition(JVM('java'),
                                                                            'pseudo'))
 
 
 class JobServerElementsTest(unittest.TestCase):
     def setUp(self):
         super(JobServerElementsTest, self).setUp()
-        self.config = job.SystemComposition(JVM('foo'), 'pseudo_node')
-        self.job = job.Job([self.config], [], [])
+        self.config = SystemComposition(JVM('foo'), 'pseudo_node')
+        self.job = Job([self.config], [], [])
 
     def test_empty_elements(self):
         self.assertSetEqual(self.job._get_server_dependencies(), set())
@@ -142,7 +141,7 @@ class SystemCompositionsTest(unittest.TestCase):
         self.single_host = [make_system_composition('192.168.1.10')]
         self.multi_host = [make_system_composition('192.168.1.11'),
                            make_system_composition('192.168.1.11')]
-        self.job = job.Job(self.single_host + self.multi_host, [], [])
+        self.job = Job(self.single_host + self.multi_host, [], [])
 
     def test_wrong_identifier(self):
         self.assertListEqual(self.job.compositions_for_node('baz'), [])
@@ -179,7 +178,7 @@ class ResetPipelineTest(unittest.TestCase):
         config = make_system_composition()
         config.jvm.workload = self.workload
         config.jvm.tool = self.tool
-        self.job = job.Job(config, [Edge(self.workload, self.filter)], [])
+        self.job = Job(config, [Edge(self.workload, self.filter)], [])
 
     def test_reset_jvm_part(self):
         self.assertDictEqual(self.workload.out, {'test' : [42]})
@@ -196,7 +195,7 @@ class ResetPipelineTest(unittest.TestCase):
 
 class BuildEnvTest(unittest.TestCase):
     def setUp(self):
-        self.job = job.Job(make_system_composition(), [], [])
+        self.job = Job(make_system_composition(), [], [])
 
     def test_empty_send_rcv(self):
         env = self.job._build_environment()
@@ -216,7 +215,7 @@ class BuildEnvTest(unittest.TestCase):
 class RunServerPipelineTest(unittest.TestCase):
     def setUp(self):
         self.receive = Receive()
-        self.j = job.Job([], [], [Edge(self.receive, MockPipelineElement())])
+        self.j = Job([], [], [Edge(self.receive, MockPipelineElement())])
         self.data = {'a': 1, 'b' : 2}
         self.j.receive = lambda: self.data
 
@@ -226,6 +225,6 @@ class RunServerPipelineTest(unittest.TestCase):
         self.assertDictEqual(self.receive.out, {'results' : self.data})
 
     def test_no_receivers(self):
-        j = job.Job([], [], [])
+        j = Job([], [], [])
         with self.assertRaises(ValueError):
             j.run_server_pipeline()

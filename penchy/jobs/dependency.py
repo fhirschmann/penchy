@@ -1,27 +1,6 @@
 """
-This module provides the parts to model and resolve dependencies in the flow of
-execution.
+This module provides the parts to resolve dependencies in the pipeline.
 """
-
-
-class Edge(object):
-    """
-    This class represents edges in the dependency graph.
-    """
-
-    def __init__(self, source, sink, map_=None):
-        """
-        :param source: source of data
-        :param sink: sink of data
-        :param map: sequence of name pairs that map source exits to sink
-                    entrances
-        """
-        self.source = source
-        self.sink = sink
-        self.map_ = map_
-
-    def __repr__(self):  # pragma: no cover
-        return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
 
 
 def edgesort(starts, edges):
@@ -30,10 +9,13 @@ def edgesort(starts, edges):
 
     ``starts`` won't be included.
 
-    :param starts: Sequence of :class:`PipelineElement` that have no deps
-    :param edges: Sequence of :class:`Edge`
-    :returns: pair of topological sorted :class:`PipelineElement` and
-              sorted list of corresponding :class:`Edge`
+    :raises ValueError: if no topological sort is possible
+    :param starts: Sequence of :class:`~penchy.jobs.elements.PipelineElement`
+                   that have no dependencies
+    :param edges: Sequence of :class:`~penchy.jobs.job.Edge`
+    :returns: pair of topological sorted
+              :class:`~penchy.jobs.elements.PipelineElement` and sorted list of
+              corresponding :class:`~penchy.jobs.job.Edge`
     """
     resolved = set(starts)
     order = []
@@ -65,7 +47,7 @@ def build_keys(edges):
 
     All ``edges`` must have the identical sink.
 
-    :param edges: iterable of :class:`Edge`
+    :param edges: iterable of :class:`~penchy.jobs.job.Edge`
     :returns: dictionary that contains the mapping of sink arguments to all
               wired sources' output
     :rtype: dict of strings to values

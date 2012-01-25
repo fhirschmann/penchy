@@ -1,5 +1,6 @@
 from penchy.compat import unittest
-from penchy.jobs.dependency import Edge, edgesort, build_keys
+from penchy.jobs.dependency import edgesort, build_keys
+from penchy.jobs.job import Edge
 from penchy.tests.util import make_edge
 
 
