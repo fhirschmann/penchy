@@ -164,7 +164,7 @@ often used settings there.
 The configuration is a Python module and you can use any Python Code there to
 configure.
 If you don't specify where :file:`penchyrc` is (in the penchy invocation:
-:command:`penchy --config <file>`) it will be searched in :file:`$HOME/.penchyrc`
+``penchy --config <file>``) it will be searched in :file:`$HOME/.penchyrc`
 
 To use :file:`penchyrc` you have to import the ``config`` module, the header of
 above sample job::
