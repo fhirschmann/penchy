@@ -99,6 +99,7 @@ JVM
 
 A JVM is a Java Virtual Machine and executes its Workload.
 It may contain an Agent.
+
 You can specify options like you would on a shell (including a classpath) those
 will be passed to the JVM. Here is an example with several options::
 
