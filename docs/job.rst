@@ -110,11 +110,17 @@ after they are run.
 Workloads
 ---------
 
+Workloads may contain pre-hooks and post-hooks which are executed before respective
+after they are run.
+
 Tools
 -----
 
 Tools are programs that collect data about the executed workload.
 They come in two flavors: Agent and WrappedJVM.
+
+Tools may contain pre-hooks and post-hooks which are executed before respective
+after they are run.
 
 Agent
 ~~~~~
@@ -143,6 +149,9 @@ use Valgrind to analyze the execution of the JVM.
 
 Filter
 ------
+
+Filter may contain pre-hooks and post-hooks which are executed before respective
+after they are run.
 
 Using penchyrc: Stop repeating yourself
 =======================================
