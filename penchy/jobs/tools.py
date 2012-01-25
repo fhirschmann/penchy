@@ -56,8 +56,11 @@ class HProf(Tool):
 
        java -agentlib:hprof=help
 
-    For example: The call `t = tools.HProf('heap=dump')`
-    extends the commandline of the jvm about
+    For example: The instruction::
+
+       t = tools.HProf('heap=dump')
+
+    extends the commandline of the jvm about::
 
        -agentlib:hprof=heap=dump
 
