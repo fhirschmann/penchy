@@ -97,6 +97,16 @@ such as CPU type and performance or amount of RAM or whatever you deem helpful.
 JVM
 ---
 
+A JVM is a Java Virtual Machine and executes its Workload.
+It may contain an Agent.
+You can specify options like you would on a shell (including a classpath) those
+will be passed to the JVM. Here is an example with several options::
+
+  j = JVM('java', '-verbose:gc -Xmx800m -Xms42m')
+
+JVMs may contain pre-hooks and post-hooks which are executed before respective
+after they are run.
+
 Workloads
 ---------
 
