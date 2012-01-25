@@ -64,7 +64,7 @@ class HProf(Tool):
     # in the hotspot jvm.
     DEPENDENCIES = set()
 
-    outputs = [('java_hprof_txt', list, str)]
+    outputs = [('hprof', list, str)]
 
     def __init__(self, option):
         """
@@ -76,7 +76,7 @@ class HProf(Tool):
 
     def _after_execution(self):
         # Provides the full hprof output
-        self.out['java_hprof_txt'].append(os.path.abspath("java.hprof.txt"))
+        self.out['hprof'].append(os.path.abspath("java.hprof.txt"))
 
     def check(self):
         # Only Hotspot supports/includes hprof
