@@ -78,7 +78,7 @@ class JVMHooksTest(unittest.TestCase):
 
     def test_get_hooks_empty(self):
         jvm = JVM('foo')
-        self.assertListEqual(list(map(list, jvm._get_hooks())), [[], []])
+        self.assertSequenceEqual(map(list, jvm._get_hooks()), [[], []])
 
     def test_get_hooks_tool(self):
         a = [0]
@@ -88,8 +88,8 @@ class JVMHooksTest(unittest.TestCase):
         w.prehooks = [lambda: a.__setitem__(0, 23)]
         w.posthooks = [lambda: a.__setitem__(0, 42)]
         jvm.workload = w
-        self.assertListEqual(list(map(list, jvm._get_hooks())), [w.prehooks,
-                                                                 w.posthooks])
+        self.assertSequenceEqual(map(list, jvm._get_hooks()), [w.prehooks,
+                                                               w.posthooks])
 
     def test_get_hooks_workload(self):
         a = [0]
@@ -99,8 +99,8 @@ class JVMHooksTest(unittest.TestCase):
         t.prehooks = [lambda: a.__setitem__(0, 23)]
         t.posthooks = [lambda: a.__setitem__(0, 42)]
         jvm.tool = t
-        self.assertListEqual(list(map(list, jvm._get_hooks())), [t.prehooks,
-                                                                 t.posthooks])
+        self.assertSequenceEqual(map(list, jvm._get_hooks()), [t.prehooks,
+                                                               t.posthooks])
 
 
 class JVMTest(unittest.TestCase):
