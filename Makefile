@@ -1,4 +1,4 @@
-.PHONY: tests help hooks coverage full-coverage dev
+.PHONY: tests help hooks coverage full-coverage dev doc static-analysis
 
 help:
 	@echo "Please use \`make <target>', target in {tests,hooks,coverage}"
@@ -31,3 +31,9 @@ coverage-upload: coverage
 dev:
 	pip install coverage pep8 pyflakes pylint sphinx
 	pip install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download
+
+doc:
+	make -C docs html
+
+static-analysis:
+	hooks/pre-commit --all
