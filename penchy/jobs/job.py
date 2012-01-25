@@ -190,6 +190,7 @@ class Job(object):
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
                 composition.jvm.run()
+        log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
