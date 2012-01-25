@@ -104,6 +104,35 @@ Filter
 Using penchyrc: Stop repeating yourself
 =======================================
 
+To avoid duplication of settings (such as :class:`NodeSetting` or user names)
+there is a possibility to use a configuration file (:file:`penchyrc`) and put
+often used settings there.
+
+The configuration is a Python module and you can use any Python Code there to
+configure.
+If you don't specify where :file:`penchyrc` is (in the penchy invocation:
+:command:`penchy --config <file>`) it will be searched in :file:`$HOME/.penchyrc`
+
+To use :file:`penchyrc` you have to import the ``config`` module, the header of
+above sample job::
+
+  import os
+  from penchy.jobs import *
+
+  node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+would become this::
+
+  from penchy.jobs import *
+  import config
+
+  node = config.LOCALNODE
+
+given a :file:`penchyrc` that looks like this::
+
+  import os
+  from penchy.jobs import NodeSetting
+  LOCALNODE = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
 Testing Jobs
 ============
