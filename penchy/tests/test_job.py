@@ -1,9 +1,10 @@
 from hashlib import sha1
 
 from penchy.compat import unittest, update_hasher
+from penchy.jobs.dependency import Edge
 from penchy.jobs.elements import _check_kwargs
 from penchy.jobs.filters import Print, DacapoHarness, Receive
-from penchy.jobs.job import Edge, Job, SystemComposition, NodeSetting
+from penchy.jobs.job import Job, SystemComposition, NodeSetting
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench

@@ -341,23 +341,3 @@ class Job(object):
         """
         # FIXME: implement me!
         pass
-
-
-class Edge(object):
-    """
-    This class represents edges in the dependency graph.
-    """
-
-    def __init__(self, source, sink, map_=None):
-        """
-        :param source: source of data
-        :param sink: sink of data
-        :param map: sequence of name pairs that map source exits to sink
-                    entrances
-        """
-        self.source = source
-        self.sink = sink
-        self.map_ = map_
-
-    def __repr__(self):  # pragma: no cover
-        return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
