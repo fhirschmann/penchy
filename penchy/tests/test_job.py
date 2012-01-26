@@ -3,7 +3,7 @@ from hashlib import sha1
 from penchy.compat import unittest, update_hasher
 from penchy.jobs.elements import _check_kwargs
 from penchy.jobs.filters import Print, DacapoHarness, Receive
-from penchy.jobs.job import Edge, Job, SystemComposition
+from penchy.jobs.job import Edge, Job, SystemComposition, NodeSetting
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -165,6 +165,23 @@ class SystemCompositionsTest(unittest.TestCase):
         update_hasher(h, c.jvm.hash())
         update_hasher(h, c.node_setting.hash())
         self.assertEqual(c.hash(), h.hexdigest())
+
+    def test_equal(self):
+        s1 = SystemComposition(JVM('java'),
+                               NodeSetting('localhost', 22, 'dummy', '/', '/'))
+        s2 = SystemComposition(JVM('java'),
+                               NodeSetting('localhost', 22, 'dummy', '/', '/'))
+        self.assertEqual(s1, s2)
+
+    def test_not_equal(self):
+        s1 = SystemComposition(JVM('java'),
+                               NodeSetting('localhost', 22, 'dummy', '/', '/'))
+        s2 = SystemComposition(JVM('java'),
+                               NodeSetting('192.168.1.1', 22, 'dummy', '/',
+        '/'))
+        self.assertNotEqual(s1, s2)
+
+        self.assertNotEqual(s1, SystemComposition(JVM('java'), 'no_setting'))
 
 
 class ResetPipelineTest(unittest.TestCase):
