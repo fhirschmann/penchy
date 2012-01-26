@@ -24,7 +24,7 @@ Every :class:`~penchy.jobs.elements.PipelineElement` has the attributes ``inputs
 and ``outputs``.
 They describe how inputs (and outputs) are named and of which type they are.
 
-The flow is a description how the data flows from outputs to inputs. In other
+The flow is a description of how the data flows from outputs to inputs. In other
 words: How Elements depend on data.
 
 The flow is expressed in terms of a list of :class:`~penchy.jobs.dependency.Edge`.
@@ -58,7 +58,7 @@ Here the example from above, that won't show any warnings::
               ('exit_code', 'exit_code')])
 
 With :class:`~penchy.jobs.dependency.Edge` you specify a 1:1 relation but within
-the whole flow an :class:`~penchy.jobs.elements.PipelineElement` can pass its
+the whole flow a :class:`~penchy.jobs.elements.PipelineElement` can pass its
 output to many :class:`~penchy.jobs.elements.PipelineElement` and also receive
 from many.
 For Example::
@@ -77,8 +77,8 @@ Survey of the elements
 
 Besides :class:`~penchy.jobs.dependency.Edge` there are other elements of a
 job.
-This chapter tries to give what they are and how they are used.
-For a in-depth treatment see the :ref:`Job API <job-api>`.
+This chapter tries to describe what they are and how they are used.
+For an in-depth treatment see the :ref:`Job API <job-api>`.
 
 NodeSetting
 -----------
@@ -88,11 +88,11 @@ properties.
 For details on accessing see the API documentation of :class:`~penchy.jobs.job.NodeSetting`.
 
 There are two kinds of properties:
-The first are used to check a job for plausibility (see below).
-The second are descriptive and for human eyes.
+ * The first is used to check a job for plausibility (see below).
+ * The second is descriptive and for human eyes.
 
-They may contain such things as a textual description of the Node's features
-such as CPU type and performance or amount of RAM or whatever you deem helpful.
+They may contain attributes such as a textual description of the Node's features,
+CPU type, performance or amount of RAM, or whatever you deem helpful.
 
 JVM
 ---
@@ -100,8 +100,8 @@ JVM
 A JVM is a Java Virtual Machine and executes its Workload.
 It may contain an Agent.
 
-You can specify options like you would on a shell (including a classpath) those
-will be passed to the JVM. Here is an example with several options::
+You can specify options like you would on a shell (including a classpath). These
+will be passed to the JVM. Here's an example with several options::
 
   j = JVM('java', '-verbose:gc -Xmx800m -Xms42m')
 
@@ -117,8 +117,8 @@ after they are run.
 Tools
 -----
 
-Tools are programs that collect data about the executed workload.
-They come in two flavors: Agent and WrappedJVM.
+Tools are programs that collect data about the executed workload and come in two
+flavors: Agent and WrappedJVM.
 
 Tools may contain pre-hooks and post-hooks which are executed before respective
 after they are run.
@@ -129,21 +129,21 @@ Agent
 An Agent is a Tool that is invoked via the JVM's agent parameters (e.g.
 ``-agentlib``).
 It is used as an attribute for a JVM and collects data about the workload also
-set for this JVM. For example in::
+set for this JVM. For example, in::
 
   j = JVM('java')
   j.workload = Dacapo('fop')
   j.tool = HProf('')
 
-will :class:`~penchy.jobs.tools.HProf` collect data about the ``fop`` benchmark of the
+:class:`~penchy.jobs.tools.HProf` will collect data about the ``fop`` benchmark of the
 :class:`~penchy.jobs.workloads.Dacapo` benchmark suite.
 
 
 WrappedJVM
 ~~~~~~~~~~
 
-A WrappedJVM on the other side is itself a program that calls the desired JVM.
-It is used instead of a JVM but accepts the same arguments (if not more).
+A WrappedJVM on the other hand is itself a program that calls the desired JVM
+and is used instead of a JVM but accepts the same arguments (if not more).
 
 Currently there is no implementation of a WrappedJVM but an example would be to
 use Valgrind to analyze the execution of the JVM.
@@ -159,14 +159,14 @@ Using penchyrc: Stop repeating yourself
 
 To avoid duplication of settings (such as :class:`NodeSetting` or user names)
 there is a possibility to use a configuration file (:file:`penchyrc`) and put
-often used settings there.
+frequently used settings there.
 
 The configuration is a Python module and you can use any Python Code there to
 configure.
 If you don't specify where :file:`penchyrc` is (in the penchy invocation:
 ``penchy --config <file>``) it will be searched in :file:`$HOME/.penchyrc`
 
-To use :file:`penchyrc` you have to import the ``config`` module, the header of
+To use :file:`penchyrc`, you have to import the ``config`` module, the header of
 above sample job::
 
   import os
