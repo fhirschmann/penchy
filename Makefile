@@ -21,6 +21,7 @@ full-coverage: .coverage
 	coverage html --include='penchy/*'
 	coverage erase
 
+.DELETE_ON_ERROR:
 .coverage:
 	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
 	coverage run --append bin/penchy -c penchyrc.example --run-locally examples/simple.job
