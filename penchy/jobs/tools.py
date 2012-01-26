@@ -47,7 +47,7 @@ class Tamiflex(Tool):
 
     @property
     def arguments(self):
-        return ["-javaagent:%s" % self._POA.filename]
+        return ["-javaagent:%s" % Tamiflex._POA.filename]
 
 
 class HProf(Tool):
