@@ -53,6 +53,7 @@ class Server(object):
                 (config.SERVER_HOST, config.SERVER_PORT),
                 allow_none=True)
         self.server.register_function(self.rcv_data, "rcv_data")
+        self.server.register_function(self.node_error, "node_error")
         # XXX: I don't yet know if this will work. With no timeout set,
         # handle_request will wait forever and timeouts caused by Timer()
         # will not cause the server to stop waiting. I think this should work!
@@ -117,7 +118,7 @@ class Server(object):
 
     def rcv_data(self, hashcode, result):
         """
-        This is the method exposed to the nodes.
+        This is a method exposed to the nodes.
 
         :param hashcode: the hashcode to identify the
                          :class:`SystemComposition` by
@@ -129,6 +130,17 @@ class Server(object):
         with Server._rcv_lock:
             self.node_for(composition.node_setting).expected.remove(composition)
             Server.results[composition] = result
+
+    def node_error(self, hashcode, reason=None):
+        """
+        This is a method exposed to the nodes.
+
+        It should be called by a node in case of errors.
+        """
+        composition = self.composition_for(hashcode)
+
+        with Server._rcv_lock:
+            self.node_for(composition.node_setting).expected.remove(composition)
 
     @property
     def received_all_results(self):

@@ -38,7 +38,11 @@ class Client(object):
         self.job.send = self.proxy.rcv_data
 
         for composition in self.job.compositions_for_node(self.identifier):
-            self.job.run(composition)
+            try:
+                self.job.run(composition)
+            except Exception, err:
+                log.exception('Exception occured while executing PenchY:')
+                self.proxy.node_error(composition.hash(), err)
 
     def parse_args(self, args):
         """
