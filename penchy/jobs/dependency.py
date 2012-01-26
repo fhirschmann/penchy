@@ -36,7 +36,7 @@ class Edge(object):
         return p >> other
 
     @property
-    def edges(self,):
+    def edges(self):
         """
         Return the edges.
 
