@@ -10,7 +10,8 @@ from penchy.maven import MavenDependency
 
 class Tamiflex(Tool):
     """
-    Currently only the play-out-agent is supported.
+    The Hotspot in at least version 1.6.0_29-b11 for 64-bit is currently
+    unsupported.
 
     The argument "-javaagent:poa-2.0.0.0.jar" effects that the following gets
     created during the execution of the workload:
@@ -46,7 +47,7 @@ class Tamiflex(Tool):
 
     @property
     def arguments(self):
-        return ["-javaagent:%s" % __class__._POA.filename]
+        return ["-javaagent:%s" % self._POA.filename]
 
 
 class HProf(Tool):
