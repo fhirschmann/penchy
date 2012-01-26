@@ -69,6 +69,7 @@ class Pipeline(object):
             edge = Edge(self.current_source, other, self.pending)
             self._edges.append(edge)
             self.current_source = other
+            self.pending = None
 
         return self
 
