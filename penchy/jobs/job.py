@@ -159,8 +159,8 @@ class Job(object):
         """
         self.compositions = compositions if isinstance(compositions, list) \
                               else [compositions]
-        self.client_flow = client_flow
-        self.server_flow = server_flow
+        self.client_flow = list(chain.from_iterable(dep.edges for dep in client_flow))
+        self.server_flow = list(chain.from_iterable(dep.edges for dep in server_flow))
         self.invocations = invocations
         self.send = None
         self.receive = None

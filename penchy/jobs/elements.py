@@ -6,6 +6,8 @@ import logging
 from collections import defaultdict
 from itertools import chain
 
+from penchy.jobs.dependency import Pipeline
+
 log = logging.getLogger(__name__)
 
 
@@ -64,6 +66,10 @@ class PipelineElement(object):
           - element.out
         """
         self.out = defaultdict(list)
+
+    def __rshift__(self, other):
+        p = Pipeline(self)
+        return p >> other
 
     def _run(self, **kwargs):  # pragma: no cover
         """

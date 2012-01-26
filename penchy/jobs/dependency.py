@@ -23,6 +23,59 @@ class Edge(object):
     def __repr__(self):  # pragma: no cover
         return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
 
+    def __rshift__(self, other):
+        p = Pipeline(self.source)
+        if self.map_:
+            p >> self.map_
+        p >> self.sink
+        return p >> other
+
+    @property
+    def edges(self,):
+        """
+        Return the edges.
+
+        Provides uniform access to :class:`Edge` and :class:`Pipeline`.
+        """
+        return [self]
+
+
+class Pipeline(object):
+    """
+    This class represents a whole pipeline in the flow and is used to provide
+    the ``Element >> Element >> [('a', 'b')] >> Element`` syntax.
+
+    It is not meant to be used directly but via PipelineElement.__rshift__
+    """
+
+    def __init__(self, element):
+        """
+        :param element: Start element of pipeline
+        :type element: :class:`~penchy.jobs.elements.PipelineElement`
+        """
+        self._edges = []
+        self.current_source = element
+        self.pending = None
+
+    def __rshift__(self, other):
+        if isinstance(other, list):
+            self.pending = other
+        else:
+            edge = Edge(self.current_source, other, self.pending)
+            self._edges.append(edge)
+            self.current_source = other
+
+        return self
+
+    @property
+    def edges(self):
+        """
+        Return the edges.
+
+        Provides uniform access to :class:`Edge` and :class:`Pipeline`.
+        """
+        return self._edges
+
 
 def edgesort(starts, edges):
     """
