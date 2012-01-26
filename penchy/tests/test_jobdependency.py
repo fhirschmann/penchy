@@ -1,6 +1,6 @@
 from penchy.compat import unittest
 from penchy.jobs.dependency import edgesort, build_keys, Edge
-from penchy.tests.util import make_edge
+from penchy.tests.util import make_edge, MockPipelineElement
 
 
 class EdgeSortTest(unittest.TestCase):
@@ -68,3 +68,38 @@ class BuildKeysTest(unittest.TestCase):
                               'baz' : 42,
                               'foz' : 42,
                               'boz' : 42})
+
+
+class SugaredPipelineTest(unittest.TestCase):
+    def setUp(self):
+        self.elem1 = MockPipelineElement('a')
+        self.elem2 = MockPipelineElement('b')
+        self.elem3 = MockPipelineElement('c')
+        self.elem4 = MockPipelineElement('d')
+
+    def test_pipeline_building(self):
+        pipe = self.elem1 >> self.elem2 >> self.elem3 >> self.elem4
+        self.assertListEqual(pipe.edges, [Edge(self.elem1, self.elem2),
+                                          Edge(self.elem2, self.elem3),
+                                          Edge(self.elem3, self.elem4)])
+
+    def test_edge_to_pipeline(self):
+        e = Edge(self.elem1, self.elem2)
+        pipe = e >> self.elem3 >> self.elem4
+        self.assertListEqual(pipe.edges, [e,
+                                          Edge(self.elem2, self.elem3),
+                                          Edge(self.elem3, self.elem4)])
+
+    def test_edge_edges(self):
+        e = Edge(self.elem1, self.elem2)
+        self.assertItemsEqual(e.edges, [e])
+
+    def test_explicit_mapping(self):
+        map_ = [('a', 'b')]
+        pipe = self.elem1 >> map_ >> self.elem2
+        e = Edge(self.elem1, self.elem2, map_)
+        self.assertListEqual(pipe.edges, [e])
+
+        pipe = e >> self.elem3
+        self.assertListEqual(pipe.edges, [e,
+                                          Edge(self.elem2, self.elem3)])
