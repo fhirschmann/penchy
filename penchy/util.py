@@ -204,6 +204,22 @@ def load_config(filename):
     return config
 
 
+def get_config_attribute(config, name, default):
+    """
+    Returns an attribute of a config module or the
+    default value.
+
+    :param config: config module to use
+    :param name: attribute name
+    :type name: str
+    :param default: default value
+    """
+    if hasattr(config, name):
+        return getattr(config, name)
+    else:
+        return default
+
+
 @contextmanager
 def disable_write_bytecode():
     """

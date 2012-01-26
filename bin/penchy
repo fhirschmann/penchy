@@ -9,11 +9,12 @@ cycle (deploying jobs, executing jobs, accumulating results).
 
 import logging
 import os
+from functools import partial
 
 import argparse
 
 from penchy.server import Server
-from penchy.util import load_job, load_config
+from penchy.util import load_job, load_config, get_config_attribute
 from penchy.log import configure_logging
 
 
@@ -26,6 +27,7 @@ if __name__ == "__main__":
             help="config module to use")
     args, _ = conf_parser.parse_known_args()
     config = load_config(args.config)
+    ca = partial(get_config_attribute, config)
 
     # Parse all other options
     parser = argparse.ArgumentParser(description=__doc__,
@@ -42,7 +44,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--logfile",
             action="store", dest="logfile", help="log file to log to",
-            default=(config.LOGFILE if hasattr(config, 'LOGFILE') else 'penchy.log'))
+            default=ca('LOGFILE', 'penchy.log'))
 
     parser.add_argument("-f", "--load-from",
             action="store", dest="load_from",
