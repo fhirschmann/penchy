@@ -89,14 +89,31 @@ class Server(object):
 
     def node_for(self, setting):
         """
-        Find the Node for a given :class:`NodeSetting`.
+        Find the Node for a given :class:`NodeSetting`
+        or hashcode.
 
-        :param setting: setting to receive Node for
-        :type setting: :class:`NodeSetting`
+        :param setting: setting or hashcode to receive Node for
+        :type setting: :class:`NodeSetting` or string
         :returns: the Node
         :rtype: :class:`Node`
         """
         return self.nodes[setting.identifier]
+
+    def composition_for(self, hashcode):
+        """
+        Find the :class:`SystemComposition` for a given
+        hashcode.
+
+        :param hashcode: hashcode of the wanted composition
+        :type hashcode: string
+        :returns: the system composition
+        :rtype: :class:`SystemComposition`
+        """
+        for composition in self.job.compositions:
+            if hashcode == composition.hash():
+                return composition
+
+        raise ValueError('Composition not found')
 
     def rcv_data(self, hashcode, result):
         """
@@ -107,11 +124,7 @@ class Server(object):
         :type hashcode: string
         :param result: the result of the job
         """
-        for composition in self.job.compositions:
-            if hashcode == composition.hash():
-                break
-        else:
-            raise ValueError('Composition not expected')
+        composition = self.composition_for(hashcode)
 
         with Server._rcv_lock:
             self.node_for(composition.node_setting).expected.remove(composition)
