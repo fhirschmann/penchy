@@ -41,6 +41,7 @@ class Node(object):  # pragma: no cover
         :type job_module: module
         """
         self.setting = setting
+        self.log = log.getChild(self.setting.identifier)
 
         self.job_module = job_module
         self.expected = list(job_module.job.compositions_for_node(
@@ -92,17 +93,11 @@ class Node(object):  # pragma: no cover
         """
         return len(self.expected) == 0
 
-    def logformat(self, msg):
-        """
-        Prepends the name of this node to a (log)message.
-        """
-        return " ".join([str(self.setting.identifier), msg])
-
     def connect(self):
         """
         Connect to node.
         """
-        log.debug(self.logformat("Connecting"))
+        self.log.debug("Connecting")
         self.ssh.connect(self.setting.host, username=self.setting.username,
                 port=self.setting.ssh_port, password=self.setting.password,
                 key_filename=self.setting.keyfile)
@@ -113,7 +108,7 @@ class Node(object):  # pragma: no cover
         """
         Disconnect from node.
         """
-        log.debug(self.logformat("Disconnecting"))
+        self.log.debug("Disconnecting")
         self.sftp.close()
         self.ssh.close()
 
@@ -161,7 +156,7 @@ class Node(object):  # pragma: no cover
         except IOError:
             pass
 
-        log.debug(self.logformat("Copying file %s to %s" % (local, remote)))
+        self.log.debug("Copying file %s to %s" % (local, remote))
         self.sftp.put(local, remote)
 
     def get_logs(self):
@@ -197,7 +192,7 @@ class Node(object):  # pragma: no cover
         :param cmd: command to execute
         :type cmd: string
         """
-        log.info(self.logformat("Executing %s" % cmd))
+        self.log.info("Executing %s" % cmd)
         return self.ssh.exec_command(cmd)
 
     def execute_penchy(self, args):
@@ -223,7 +218,7 @@ class Node(object):  # pragma: no cover
         """
         Executed when this node times out.
         """
-        log.error(self.logformat("Timed out"))
+        self.log.error("Timed out")
         self.close()
         self.timed_out = True
 
@@ -238,4 +233,4 @@ class Node(object):  # pragma: no cover
         pid = pidfile.read()
         pidfile.close()
         self.execute('kill ' + pid)
-        log.warn(self.logformat("Client was terminated"))
+        self.log.warn("Client was terminated")
