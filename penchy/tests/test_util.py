@@ -11,12 +11,19 @@ from penchy.compat import unittest, write, update_hasher
 class TempdirTest(unittest.TestCase):
     def test_change(self):
         cwd = os.getcwd()
-        with util.tempdir():
+        with util.tempdir(delete=True):
             self.assertNotEquals(cwd, os.getcwd())
         self.assertEquals(cwd, os.getcwd())
 
 
 class HashTest(unittest.TestCase):
+    def setUp(self):
+        self.paths_to_delete = []
+
+    def tearDown(self):
+        for f in self.paths_to_delete:
+            os.remove(f)
+
     def test_sha1sum(self):
         text = 'sha1 checksum test'
         hasher = hashlib.sha1()
@@ -25,6 +32,7 @@ class HashTest(unittest.TestCase):
             tf.flush()
             self.assertEqual(util.sha1sum(tf.name),
                              update_hasher(hasher, text).hexdigest())
+            self.paths_to_delete.append(tf.name)
 
 
 class MemoizedTest(unittest.TestCase):
