@@ -109,6 +109,9 @@ class SystemComposition(object):
     def __eq__(self, other):
         return self.jvm == other.jvm and self.node_setting == other.node_setting
 
+    def __ne__(self, other):
+        return self.jvm != other.jvm or self.node_setting != other.node_setting
+
     def __hash__(self):
         return hash(hash(self.jvm) + hash(self.node_setting))
 
