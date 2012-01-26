@@ -181,6 +181,9 @@ class Server(object):
         while not self.received_all_results and not self.nodes_timed_out:
             self.server.handle_request()
 
+        for node in self.nodes.values():
+            node.close()
+
         if self.received_all_results:
             log.info("Received results from all nodes. Excellent.")
         if self.nodes_timed_out:
