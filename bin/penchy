@@ -18,7 +18,19 @@ from penchy.log import configure_logging
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__)
+    # Parse the config file
+    conf_parser = argparse.ArgumentParser(add_help=False)
+    conf_parser.add_argument("-c", "--config",
+            action="store", dest="config",
+            default=os.path.expanduser("~/.penchyrc"),
+            help="config module to use")
+    args, _ = conf_parser.parse_known_args()
+    config = load_config(args.config)
+
+    # Parse all other options
+    parser = argparse.ArgumentParser(description=__doc__,
+            parents=[conf_parser])
+
     log_group = parser.add_mutually_exclusive_group()
     log_group.add_argument("-d", "--debug",
             action="store_const", const=logging.DEBUG,
@@ -27,26 +39,25 @@ if __name__ == "__main__":
     log_group.add_argument("-q", "--quiet",
             action="store_const", const=logging.WARNING,
             dest="loglevel", help="suppress most messages")
+
     parser.add_argument("--logfile",
-            action="store", dest="logfile", default="penchy.log",
-            help="log file to log to")
-    parser.add_argument("-c", "--config",
-            action="store", dest="config",
-            default=os.path.expanduser("~/.penchyrc"),
-            help="config module to use")
+            action="store", dest="logfile", help="log file to log to",
+            default=(config.LOGFILE if hasattr(config, 'LOGFILE') else 'penchy.log'))
+
     parser.add_argument("-f", "--load-from",
             action="store", dest="load_from",
             help="path or zip to load penchy from on the node")
+
     mode_group = parser.add_mutually_exclusive_group()
     mode_group.add_argument("--check", action="store_true",
             dest="check", help="check a job for validity and exit")
     mode_group.add_argument("--run-locally", action="store_true",
             dest="local", help="test a job by running it locally")
+
     parser.add_argument("job", help="job to execute",
             metavar="job")
     args = parser.parse_args()
 
-    config = load_config(args.config)
     job_module = load_job(args.job)
     job = job_module.job
 
