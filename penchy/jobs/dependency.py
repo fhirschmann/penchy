@@ -23,6 +23,11 @@ class Edge(object):
     def __repr__(self):  # pragma: no cover
         return "Edge({0}, {1}, {2})".format(self.source, self.sink, self.map_)
 
+    def __eq__(self, other):
+        return (self.source == other.source and
+                self.sink == other.sink and
+                self.map_ == other.map_)
+
     def __rshift__(self, other):
         p = Pipeline(self.source)
         if self.map_:

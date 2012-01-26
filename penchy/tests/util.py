@@ -36,6 +36,9 @@ class MockPipelineElement(PipelineElement):
     def __repr__(self):
         return "MockPipelineElement({0}, {1})".format(self.outputs, self.out)
 
+    def __eq__(self, other):
+        return self.outputs == other.outputs and self.out == other.out
+
     def _run(self, *args, **kwargs):
         pass
 
