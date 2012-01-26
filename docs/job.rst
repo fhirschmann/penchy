@@ -91,8 +91,8 @@ There are two kinds of properties:
  * The first is used to check a job for plausibility (see below).
  * The second is descriptive and for human eyes.
 
-They may contain attributes such as a textual description of the Node's features,
-CPU type, performance or amount of RAM, or whatever you deem helpful.
+The second may contain attributes such as a textual description of the Node's
+features, CPU type, performance or amount of RAM, or whatever you deem helpful.
 
 JVM
 ---
