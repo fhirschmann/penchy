@@ -57,6 +57,11 @@ def memoized(f):
     """
     Wraps the _memoized decorator using functools so that,
     for example, the correct docstring will be used.
+
+    :param f: function to memoize
+    :type f: function
+    :return: memoized function
+    :rtype: function
     """
     memoize = _memoized(f)
 
@@ -70,6 +75,11 @@ def memoized(f):
 def tree_pp(elem, level=0):
     """
     Pretty-prints an ElementTree.
+
+    :param elem: root node
+    :type elem: :class:`~xml.etree.ElementTree.Element`
+    :param level: current level in tree
+    :type level: int
     """
     i = "\n" + level * "  "
     if len(elem):
@@ -132,7 +142,12 @@ def sha1sum(filename, blocksize=65536):
 @contextmanager
 def tempdir(prefix='penchy-invocation', delete=False):
     """
-    Execute in new created temporary directory.
+    Contextmanager to execute in new created temporary directory.
+
+    :param prefix: prefix of the temporary directory
+    :type prefix: str
+    :param delete: delete the temporary directory afterwards
+    :type delete: bool
     """
     fwd = os.getcwd()
     cwd = tempfile.mkdtemp(prefix=prefix)
@@ -192,7 +207,7 @@ def load_config(filename):
 @contextmanager
 def disable_write_bytecode():
     """
-    Temporarily disables writing bytecode while executing.
+    Contextmanager to temporarily disable writing bytecode while executing.
     """
     old_state = sys.dont_write_bytecode
     sys.dont_write_bytecode = True
