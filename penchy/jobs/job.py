@@ -187,9 +187,7 @@ class Job(object):
         _, edge_order = edgesort(starts, self.client_flow)
 
         for i in range(1, self.invocations + 1):
-            # TODO: Put this in penchy.utils and make it
-            # not raise exceptions when there is no /proc/self/stat
-            # like on BSD or Mac (or use psutil)
+            # TODO: Use os.time() or resource.getrusage()
 
             # measure cputime before
             with open('/proc/self/stat') as f:
