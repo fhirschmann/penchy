@@ -13,7 +13,7 @@ Jobs
 
 JVMs
 ----
-.. automodule:: penchy.jobs.jvms
+.. autoclass:: penchy.jobs.jvms.JVM
 
 Workloads
 ---------
@@ -26,6 +26,17 @@ Tools
 Filters
 -------
 .. automodule:: penchy.jobs.filters
+
+Pipeline dependency specification
+---------------------------------
+
+.. autoclass:: penchy.jobs.dependency.Edge
+.. autoclass:: penchy.jobs.dependency.Pipeline
+
+Elements of the Pipeline
+------------------------
+.. automodule:: penchy.jobs.elements
+.. autoclass:: penchy.jobs.jvms.WrappedJVM
 
 Uncategorized
 =============
@@ -53,11 +64,6 @@ Internal
 Utilities
 ---------
 .. automodule:: penchy.util
-
-
-Elements of the Pipeline
-------------------------
-.. automodule:: penchy.jobs.elements
 
 Pipeline dependency resolution
 ------------------------------
