@@ -40,7 +40,7 @@ class Edge(object):
         """
         Return the edges.
 
-        Provides uniform access to :class:`Edge` and :class:`Pipeline`.
+        Provides uniform access to edges of :class:`Edge` and :class:`Pipeline`.
         """
         return [self]
 
@@ -78,7 +78,7 @@ class Pipeline(object):
         """
         Return the edges.
 
-        Provides uniform access to :class:`Edge` and :class:`Pipeline`.
+        Provides uniform access to edges of :class:`Edge` and :class:`Pipeline`.
         """
         return self._edges
 
