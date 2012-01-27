@@ -339,5 +339,38 @@ class Job(object):
         :returns: if job is plausible, i.e. no failure is expected.
         :rtype: bool
         """
-        # FIXME: implement me!
-        pass
+        valid = True
+        for composition in self.compositions:
+            # check if workload is set
+            if composition.jvm.workload is None:
+                log.error('Check: composition {0} has no workload'.format(composition))
+                valid = False
+
+            # check if there are cycles in client pipelines
+            starts = filter(bool, (composition.jvm.workload,
+                                   composition.jvm.tool))
+            try:
+                edgesort(starts, self.client_flow)
+            except ValueError:
+                log.exception('Check: cycle on composition {0}'.format(composition))
+                valid = False
+
+            if not any(isinstance(e, Send) for e in self._get_client_elements(composition)):
+                log.error('Check: there is no Send in composition {0}'.format(composition))
+                valid = False
+
+        # check if there are cycles in server pipeline
+        try:
+            starts = filter(lambda e: isinstance(e, Receive),
+                            (e.source for e in self.server_flow))
+            if not starts:
+                # if there are no receivers, edgesort will fail, just signal it
+                log.error('Check: There is no Receiver in server pipeline')
+            edgesort(starts, self.server_flow)
+        except ValueError:
+            log.exception('Check: cycle in server pipeline')
+            valid = False
+
+        # TODO: check elements
+
+        return valid
