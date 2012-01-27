@@ -111,7 +111,8 @@ class Filter(PipelineElement):
 
     A Filter receives and processes data.
     """
-    pass
+    def check(self):
+        return True
 
 
 class SystemFilter(Filter):
