@@ -43,6 +43,31 @@ class Dacapo(Workload):
                       , 'tradesoap'
                       , 'xalan'))
 
+    OPTIONS = set(('-c',
+                   '--callback',
+                   '-C',
+                   '--converge',
+                   '--ignore-validation',
+                   '-k',
+                   '--thread-factor',
+                   '--max-iterations',
+                   '--no-digest-output',
+                   '--no-pre-iteration-gc',
+                   '--no-validation',
+                   '--preserve',
+                   '-r',
+                   '--release-notes Print the release notes',
+                   '-s',
+                   '--size',
+                   '--scratch-directory',
+                   '-t',
+                   '--thread-count',
+                   '-v',
+                   '--verbose',
+                   '--validation-report',
+                   '--variance',
+                   '--window'))
+
     def __init__(self, benchmark, iterations=1, args=''):
         """
         :param benchmark: benchmark to execute
@@ -83,9 +108,15 @@ class Dacapo(Workload):
             log.critical("{0} is not a valid benchmark for {1}".format(
                 self.benchmark, self.__class__.__name__))
 
-        # TODO: check for valid harness args
+        valid_arguments = True
+        for arg in shlex.split(self.args):
+            if arg.startswith('-'):
+                if arg not in self.__class__.OPTIONS:
+                    valid_arguments = False
+                    log.critical("{0} is not a valid option for {1}"
+                                 .format(arg, self.__class__.__name__))
 
-        return all((valid_benchmark, ))
+        return all((valid_benchmark, valid_arguments))
 
 
 class ScalaBench(Dacapo):
