@@ -1,6 +1,9 @@
 """
 This module provides the parts to define and resolve dependencies in the
 pipeline.
+
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+ .. license:: MIT License, see LICENSE
 """
 
 
