@@ -10,6 +10,7 @@ This is the bootstrap client.
 import os
 import sys
 import logging
+import signal
 from logging.handlers import RotatingFileHandler
 
 from subprocess import Popen, PIPE
@@ -69,6 +70,7 @@ def install_penchy():
     """
     log.debug("Installing/updating PenchY using maven")
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
+    signal.signal(signal.SIGTERM, lambda num, frame: proc.send_signal(num))
     stdout, _ = proc.communicate()
     log.debug(stdout)
     return stdout

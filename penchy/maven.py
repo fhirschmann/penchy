@@ -14,6 +14,7 @@ from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
 from penchy.util import memoized, tree_pp, dict2tree, dict2string, sha1sum
+from penchy.util import pass_signal_to_child
 
 
 log = logging.getLogger(__name__)
@@ -57,6 +58,7 @@ def get_classpath(path=None):
     cmd = ['mvn', '-f', path, 'dependency:build-classpath']
     log.info("Executing maven. This may take a while")
     proc = Popen(cmd, stdout=PIPE)
+    pass_signal_to_child(proc)
     stdout, _ = proc.communicate()
 
     if proc.returncode is not 0:  # pragma: no cover
