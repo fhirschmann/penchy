@@ -63,6 +63,9 @@ class Dacapo(Workload):
     def arguments(self):
         """
         The arguments to call the workload in the current configuration.
+
+        :returns: the arguments for executing
+        :rtype: list
         """
         return ['Harness'] + \
                ['-n', str(self.iterations)] + shlex.split(self.args) + \
