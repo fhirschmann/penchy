@@ -73,7 +73,9 @@ class Pipeline(object):
         elif isinstance(other, tuple):
             self.pending = [other]
         elif isinstance(other, list):
-            self.pending = other
+            mapping = [(map_, map_) if isinstance(map_, str) else map_
+                       for map_ in other]
+            self.pending = mapping
         else:
             edge = Edge(self.current_source, other, self.pending)
             self._edges.append(edge)
