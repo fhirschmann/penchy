@@ -8,7 +8,7 @@ Tool for Java Virtual Machines.
 .. toctree::
    :maxdepth: 2
 
-   quickstart
+   usage
    job
    maven
    arch
