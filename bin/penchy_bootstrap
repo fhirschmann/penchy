@@ -90,7 +90,7 @@ def build_classpath():
     return stdout
 
 
-def main(args, load_from=False):
+def main(args, load_from=None):
     """
     This method starts the bootstrap client. All arguments will be
     passed to the real client.
@@ -128,6 +128,8 @@ if __name__ == "__main__":
                 raise ValueError("Argument to --load-from must be a directory")
             args.remove('--load-from')
             args.remove(load_from)
+        else:
+            load_from = None
         if '--loglevel' in args:
             loglevel = args[args.index('--loglevel') + 1]
             log.setLevel(int(loglevel))
