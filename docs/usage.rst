@@ -29,7 +29,7 @@ The command line parameters of ``penchy`` explained:
    communication. This requires the ``hostname`` passed to
    :class:`penchy.jobs.job.NodeSetting` to be ``localhost``.
  * ``-f`` or ``--load-from`` will load PenchY from the path supplied
-   instead of acquiring using maven. This is a pretty nifty feature
+   instead of acquiring it using maven. This is a pretty nifty feature
    if you are working on the client code and don't want to deploy
    the changes using maven as you write it. A simple scenario might
    be copying your PenchY version to the nodes using rsync and then
