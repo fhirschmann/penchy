@@ -3,7 +3,9 @@ This module provides the parts to define and resolve dependencies in the
 pipeline.
 
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
- .. license:: MIT License, see LICENSE
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 
 
