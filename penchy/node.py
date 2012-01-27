@@ -166,8 +166,8 @@ class Node(object):  # pragma: no cover
 
     def get_logs(self):
         """
-        This method will read the client's log file
-        and log it using the server's logging facilities.
+        Read the client's log file and log it using the server's
+        logging capabilities.
         """
         client_log = []
 
@@ -192,7 +192,7 @@ class Node(object):  # pragma: no cover
 
     def execute(self, cmd):
         """
-        Executes command on the node.
+        Executes command on node.
 
         :param cmd: command to execute
         :type cmd: string
@@ -202,9 +202,9 @@ class Node(object):  # pragma: no cover
 
     def execute_penchy(self, args):
         """
-        Executes penchy on this node.
+        Executes penchy on node.
 
-        :param args: arguments to pass to penchy
+        :param args: arguments to pass to penchy_bootstrap
         :type args: string
         """
         if self.client_is_running:
@@ -221,7 +221,7 @@ class Node(object):  # pragma: no cover
 
     def timeout(self):
         """
-        Executed when this node times out.
+        Executed when node timeed out.
         """
         self.log.error("Timed out")
         self.close()
@@ -229,9 +229,9 @@ class Node(object):  # pragma: no cover
 
     def kill(self):
         """
-        This kills the PenchY on this node.
+        Kill PenchY on node.
 
-        An existing pidfile named `penchy.pid` must exist on the node.
+        A pidfile named `penchy.pid` must exist on the node.
         """
         pidfile_name = os.path.join(self.setting.path, 'penchy.pid')
         pidfile = self.sftp.open(pidfile_name)
