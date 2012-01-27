@@ -80,6 +80,9 @@ class PipelineElement(object):
     def check(self):  # pragma: no cover
         """
         Check element for plausibility.
+
+        :returns: if element is plausible.
+        :rtype: bool
         """
         raise NotImplementedError("PipelineElements must implement this")
 
