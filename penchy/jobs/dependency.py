@@ -68,7 +68,9 @@ class Pipeline(object):
         self.pending = None
 
     def __rshift__(self, other):
-        if isinstance(other, tuple):
+        if isinstance(other, str):
+            self.pending = [(other, other)]
+        elif isinstance(other, tuple):
             self.pending = [other]
         elif isinstance(other, list):
             self.pending = other

@@ -99,6 +99,11 @@ class SugaredPipelineTest(unittest.TestCase):
         e = Edge(self.elem1, self.elem2, [('a', 'b')])
         self.assertItemsEqual(e.edges, [e])
 
+    def test_string_mapping(self):
+        p = self.elem1 >> 'a' >> self.elem2
+        e = Edge(self.elem1, self.elem2, [('a', 'b')])
+        self.assertItemsEqual(e.edges, [e])
+
     def test_explicit_mapping(self):
         map_ = [('a', 'b')]
         pipe = self.elem1 >> map_ >> self.elem2
