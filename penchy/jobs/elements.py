@@ -49,7 +49,7 @@ class PipelineElement(object):
         """
         Run element with hooks.
         """
-        _check_kwargs(self, kwargs)
+        _check_kwargs(self.inputs, kwargs)
         for hook in self.prehooks:
             hook()
 
@@ -171,9 +171,9 @@ class Workload(NotRunnable, PipelineElement):
 
 
 # FIXME: There are type errors with python3
-def _check_kwargs(instance, kwargs):
+def _check_kwargs(type_descriptions, kwargs):
     """
-    Check if ``kwargs`` satisfies the restrictions of ``instance.inputs``.
+    Check if ``kwargs`` satisfies the restrictions of ``type_descriptions``.
     That is:
         - All required names are found and
         - have the right type (and subtypes)
@@ -188,25 +188,25 @@ def _check_kwargs(instance, kwargs):
 
     Checking the subtype of :class:`dict` tests the values of this Dictionary.
 
-    Checking can be disabled by setting ``instance.inputs`` to ``None``.
+    Checking can be disabled by setting ``type_descriptions`` to ``None``.
 
 
     Logs warnings if there are more arguments than the required.
 
     :raises: :class:`ValueError` if a name is missing or has the wrong type.
-    :raises: :class:`AssertError` if ``instance.inputs`` has a wrong format.
+    :raises: :class:`AssertError` if ``type_descriptions has a wrong format.
 
-    :param instance: :PipelineElement: for which to check kwargs
-    :type instance: PipelineElement
-    :param kwargs: arguments for _run of ``instance``
+    :param type_descriptions: :PipelineElement: for which to check kwargs
+    :type type_descriptions: PipelineElement
+    :param kwargs: arguments for _run of ``type_descriptions``
     :type kwargs: dict
     :returns: count of unused inputs
     :rtype: int
     """
-    if instance.inputs is None:
+    if type_descriptions is None:
         return 0
 
-    for t in instance.inputs:
+    for t in type_descriptions:
         msg = 'Malformed type description: '
         '{0} is not of form (str, *type) [str, *type]'.format(t)
         if not len(t) > 1:
@@ -216,7 +216,7 @@ def _check_kwargs(instance, kwargs):
         if any(not isinstance(type_, type) for type_ in t[1:]):
             raise AssertionError(msg)
 
-    for t in instance.inputs:
+    for t in type_descriptions:
         name, types = t[0], t[1:]
         count = len(types)
         if name not in kwargs:
@@ -239,7 +239,7 @@ def _check_kwargs(instance, kwargs):
                 value = value[0]
 
     unused_inputs = 0
-    for name in set(kwargs) - set(t[0] for t in instance.inputs):
+    for name in set(kwargs) - set(t[0] for t in type_descriptions):
         unused_inputs += 1
         log.warn("Unknown input {0}".format(name))
 
