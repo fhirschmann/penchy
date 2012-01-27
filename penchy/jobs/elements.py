@@ -221,8 +221,8 @@ def _check_kwargs(instance, kwargs):
         value = [kwargs[name]]  # pack start value in list to reuse loop
         for i, type_ in enumerate(types):
             if any(not isinstance(v, type_) for v in value):
-                raise ValueError('Argument {0} is not of type {1}'.format(name,
-                                                                          types))
+                raise ValueError('Argument {0} is not of type {1}'
+                                 .format(name, types))
             # don't reinitialize for last type
             if i == count - 1:
                 break

@@ -352,7 +352,8 @@ class Job(object):
         for composition in self.compositions:
             # check if workload is set
             if composition.jvm.workload is None:
-                log.error('Check: composition {0} has no workload'.format(composition))
+                log.error('Check: composition {0} has no workload'
+                          .format(composition))
                 valid = False
 
             # check if there are cycles in client pipelines
@@ -361,11 +362,13 @@ class Job(object):
             try:
                 edgesort(starts, self.client_flow)
             except ValueError:
-                log.exception('Check: cycle on composition {0}'.format(composition))
+                log.exception('Check: cycle on composition {0}'
+                              .format(composition))
                 valid = False
 
             if not any(isinstance(e, Send) for e in self._get_client_elements(composition)):
-                log.error('Check: there is no Send in composition {0}'.format(composition))
+                log.error('Check: there is no Send in composition {0}'
+                          .format(composition))
                 valid = False
 
         # check if there are cycles in server pipeline

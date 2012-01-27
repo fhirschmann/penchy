@@ -105,8 +105,8 @@ class Dacapo(Workload):
         """
         valid_benchmark = self.benchmark in self.__class__.BENCHMARKS
         if not valid_benchmark:
-            log.critical("{0} is not a valid benchmark for {1}".format(
-                self.benchmark, self.__class__.__name__))
+            log.critical("{0} is not a valid benchmark for {1}"
+                         .format(self.benchmark, self.__class__.__name__))
 
         valid_arguments = True
         for arg in shlex.split(self.args):
