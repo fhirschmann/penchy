@@ -34,7 +34,7 @@ dev:
 	pip install http://sourceforge.net/projects/pychecker/files/pychecker/0.8.19/pychecker-0.8.19.tar.gz/download
 
 doc:
-	make -C docs html
+	PYTHONPATH=${PYTHONPATH}:`pwd` make -C docs html
 
 static-analysis:
 	hooks/pre-commit --all
