@@ -17,8 +17,7 @@ f2 = filters.Print()
 job = Job(compositions=composition,
           client_flow=[
               w >> [('stderr', 'stderr'), ('exit_code', 'exit_code')] >> f1,
-              w >> [('stderr', 'workload_stderr'),
-                    ('exit_code', 'workload_exit_code')] >> f2,
+              w >> ('stderr', 'workload_stderr') >> f2,
               f1 >> f2
           ],
           server_flow=[],
