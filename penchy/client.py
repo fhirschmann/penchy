@@ -1,4 +1,11 @@
-""" Executes benchmarks and filters generated data. """
+"""
+Executes benchmarks and filters generated data.
+
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+"""
 
 import logging
 import xmlrpclib

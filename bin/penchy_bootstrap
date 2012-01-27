@@ -1,5 +1,12 @@
 #!/usr/bin/env python
+"""
+This is the bootstrap client.
 
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+"""
 import os
 import sys
 import logging

@@ -5,6 +5,11 @@ This is the main entry point for PenchY.
 
 Execute this if you want to run the full PenchY
 cycle (deploying jobs, executing jobs, accumulating results).
+
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 
 import logging
