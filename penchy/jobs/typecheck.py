@@ -1,6 +1,11 @@
 """
 This modules contains the code for defining and checking types of inputs and
 outputs in the pipeline.
+
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 import logging
 from itertools import chain

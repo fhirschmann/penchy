@@ -1,5 +1,11 @@
 """
 This module provides tools.
+
+ .. moduleauthor:: Felix Mueller
+ .. moduleauthor:: Pascal Wittmann
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 import os.path
 

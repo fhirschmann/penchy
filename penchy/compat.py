@@ -3,7 +3,14 @@ This module contains code that helps to be compatible to python2.{6,7} and
 python3.x.
 
 If python2 support is no longer needed, the removal of this module is strongly
-encouraged.
+encouraged but may be difficult because it emulates python3 in terms of
+python2.
+
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+ :license: PSF License
 """
 import sys
 from contextlib import contextmanager
@@ -26,7 +33,7 @@ else:
         import unittest
 
 
-# Copied from Python 2.6 contextlib
+# Copied from Python 2.6 contextlib, licensed under terms of PSF license
 # XXX: this is only necessary for python2.6 after dropping support for python2.6
 # you may want to replace this with ``with``-Statements native support for this
 @contextmanager

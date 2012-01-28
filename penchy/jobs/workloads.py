@@ -1,5 +1,10 @@
 """
 This module provides configured workloads.
+
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 
 import logging

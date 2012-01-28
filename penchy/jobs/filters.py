@@ -3,6 +3,11 @@ This module provides filters.
 
 Inputs are fed to filters via keywords in the ``run`` method.
 Outputs are available via the ``out`` attribute.
+
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
 """
 import logging
 import re
