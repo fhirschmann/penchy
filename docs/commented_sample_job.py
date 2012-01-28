@@ -46,17 +46,14 @@ job = Job(
     # specify the flow of data on clients
     client_flow=[
         # flow from Scalabench workload to DacapoHarness filter
-        Edge(w, f1,
-             # and match filter inputs to workload outputs (here with same name)
-             [('stderr', 'stderr'),
-              ('exit_code', 'exit_code')]),
-        # flow from ScalaBench workload to Print filter
-        Edge(w, f2,
-             # and feed stderr and exit_code output prefix with 'workload_' to filter
-             [('stderr', 'workload_stderr'),
-              ('exit_code', 'workload_exit_code')]),
-        # feed whole output of DacapoHarness filter to print filter (with the name of the output)
-        Edge(f1, f2)
+        w >> \
+        # pipe stderr to stderr and exit_code to exit_code (implicit same names)
+        ['stderr', 'exit_code'] >> \
+        # feed whole output of DacapoHarness filter to Print filter (with the name of the output)
+        f1 >> f2,
+        # and feed stderr and exit_code output prefix with 'workload_' to send filter
+        w >> [('stderr', 'workload_stderr'),
+              ('exit_code', 'workload_exit_code')] >> f2
     ],
     # there is no flow on the server side
     server_flow=[],
