@@ -383,10 +383,10 @@ class Job(object):
             log.exception('Check: cycle in server pipeline')
             valid = False
 
-        valid = valid and all(elem.check for elem in self._get_client_elements)
-        valid = valid and all(elem.check for elem in
-                          set(chain.from_iterable((edge.sink, edge.source)
-                                                  for edge in self.server_flow)))
+        valid = valid and all(elem.check() for elem in self._get_client_elements)
+        valid = valid and all(elem.check() for elem in
+                              set(chain.from_iterable((edge.sink, edge.source)
+                                                      for edge in self.server_flow)))
 
         # TODO: checking of inputs & outputs of elements
 
