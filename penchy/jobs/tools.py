@@ -19,10 +19,10 @@ class Tamiflex(Tool):
     The Hotspot in at least version 1.6.0_29-b11 for 64-bit is currently
     unsupported.
 
-    The argument "-javaagent:poa-2.0.0.0.jar" effects that the following gets
-    created during the execution of the workload:
-    * a log file of all uses of the reflection-api
-    * a folder of all classes that were used (including generated classes)
+    Outputs:
+
+    - ``reflection log``: log file of all uses of the reflection API
+    - ``classfolder``: folder of all classes that were used (including generated)
     """
 
     _POA = MavenDependency(
@@ -39,13 +39,10 @@ class Tamiflex(Tool):
 
     def __init__(self):
         super(Tamiflex, self).__init__()
-        self.posthooks.append(self._after_execution)
-
-    def _after_execution(self):
-        # provides info/log about reflective calls
-        self.out['reflection log'].append(os.path.abspath("out/refl.log"))
-        # contains all classes of which objects were created (?)
-        self.out['classfolder'].append(os.path.abspath("out"))
+        self.posthooks.extend([
+            lambda: self.out['reflection log'].append(os.path.abspath('out/refl.log')) ,
+            lambda: self.out['classfolder'].append(os.path.abspath('out/')) ,
+        ])
 
     @property
     def arguments(self):
@@ -67,12 +64,11 @@ class HProf(Tool):
 
        -agentlib:hprof=heap=dump
 
-    After execution a file with the full hprof output
-    is exported.
+    Outputs:
+
+    - ``hprof``: HProf output
     """
 
-    # hprof has no dependencies, because it is included
-    # in the hotspot jvm.
     DEPENDENCIES = set()
 
     outputs = Types(('hprof', list, str))
@@ -82,18 +78,11 @@ class HProf(Tool):
         :param option: the argument for hprof
         """
         super(HProf, self).__init__()
-        self.posthooks.append(self._after_execution)
+        # always the right file because a new dir is generated for each invocation
+        self.posthooks.append(lambda: self.out['hprof']
+                              .append(os.path.abspath('java.hprof.txt')))
         self.option = option
-
-    def _after_execution(self):
-        # Provides the full hprof output
-        # Note: This is always the right file, because every job
-        # is started in a new directory.
-        self.out['hprof'].append(os.path.abspath("java.hprof.txt"))
 
     @property
     def arguments(self):
-        # We use -agentlib:hprof because -Xrunhprof is
-        # deprecated and will be removed in a future release
-        # of the hotspot jvm.
-        return ["-agentlib:hprof=%s" % self.option]
+        return ["-agentlib:hprof={0}".format(self.option)]
