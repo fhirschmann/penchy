@@ -47,8 +47,8 @@ class DacapoHarness(Filter):
 
     Outputs:
 
-    - ``failures``: failure count per invocation ([int])
-    - ``times``: execution time per itertion per invocation ([[int]])
+    - ``failures``: failure count per invocation
+    - ``times``: execution time per itertion per invocation
     - ``valid``: flag that indicates if execution was valid
     """
     inputs = Types(('stderr', list, str),
