@@ -47,10 +47,6 @@ class Tamiflex(Tool):
         # contains all classes of which objects were created (?)
         self.out['classfolder'].append(os.path.abspath("out"))
 
-    def check(self):
-        # some jmv's might not support java.lang.instrument
-        pass
-
     @property
     def arguments(self):
         return ["-javaagent:%s" % Tamiflex._POA.filename]
@@ -94,10 +90,6 @@ class HProf(Tool):
         # Note: This is always the right file, because every job
         # is started in a new directory.
         self.out['hprof'].append(os.path.abspath("java.hprof.txt"))
-
-    def check(self):
-        # TODO: check for arguments
-        pass
 
     @property
     def arguments(self):

@@ -51,9 +51,6 @@ class MockPipelineElement(PipelineElement):
     def _run(self, *args, **kwargs):
         pass
 
-    def check(self):
-        pass
-
 
 def make_system_composition(host=''):
     jvm = JVM('dummy')

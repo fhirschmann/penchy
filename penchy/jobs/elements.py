@@ -32,7 +32,6 @@ class PipelineElement(object):
 
     - ``_run(**kwargs)``, to run the element on kwargs, kwargs has to have the
                           types that ``input`` describes
-    - ``check``, to check the element configuration for plausibility.
 
     A :class:`PipelineElement` must call ``PipelineElement.__init__`` on its
     initialization.
@@ -79,15 +78,6 @@ class PipelineElement(object):
         """
         raise NotImplementedError("PipelineElements must implement this")
 
-    def check(self):  # pragma: no cover
-        """
-        Check element for plausibility.
-
-        :returns: if element is plausible.
-        :rtype: bool
-        """
-        raise NotImplementedError("PipelineElements must implement this")
-
     @property
     def _output_names(self):
         """
@@ -116,8 +106,7 @@ class Filter(PipelineElement):
 
     A Filter receives and processes data.
     """
-    def check(self):
-        return True
+    pass
 
 
 class SystemFilter(Filter):
