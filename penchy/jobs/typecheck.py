@@ -140,16 +140,21 @@ class Types(object):
         if self.descriptions is None or other.descriptions is None:
             return True
 
+        missing_inputs = set(other.descriptions)
+        if mapping == None:
+            mapping = [(name, name) for name in self.descriptions]
+
         for source, sink in mapping:
             if source not in self.descriptions:
                 log.error('Source has no output {0}'.format(source))
                 valid = False
             if sink not in other.descriptions:
-                log.error('Sink has no input {0}'.format(sink))
-                valid = False
+                log.warning('Sink has no input {0}'.format(sink))
+            missing_inputs.discard(sink)
 
-        missing_inputs = set(other.descriptions) - set(self.descriptions)
         for input in missing_inputs:
+            if input == 'environment':
+                continue
             log.error('Sink input {0} not saturated'.format(input))
             valid = False
 

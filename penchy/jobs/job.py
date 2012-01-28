@@ -6,7 +6,6 @@ This module provides the foundation to define jobs.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
-
 import logging
 import os
 from functools import partial
@@ -16,8 +15,9 @@ from operator import attrgetter
 
 from penchy.compat import update_hasher
 from penchy.jobs.dependency import build_keys, edgesort
-from penchy.jobs.elements import PipelineElement, SystemFilter
-from penchy.jobs.filters import Receive
+from penchy.jobs.elements import PipelineElement, SystemFilter, Workload, Tool
+from penchy.jobs.filters import Receive, Send
+from penchy.jobs.jvms import WrappedJVM
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string
 
@@ -383,7 +383,7 @@ class Job(object):
             log.exception('Check: cycle in server pipeline')
             valid = False
 
-        valid = valid and all(elem.check() for elem in self._get_client_elements)
+        valid = valid and all(elem.check() for elem in self._get_client_elements())
         valid = valid and all(elem.check() for elem in
                               set(chain.from_iterable((edge.sink, edge.source)
                                                       for edge in self.server_flow)))
@@ -405,5 +405,5 @@ class Job(object):
 
         return valid
 
-    def _flows():
+    def _flows(self):
         return chain(self.client_flow, self.server_flow)
