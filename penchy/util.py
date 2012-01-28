@@ -248,3 +248,15 @@ def pass_signal_to_child(proc):
     """
     signal_handler = lambda num, frame: proc.send_signal(num)
     signal.signal(signal.SIGTERM, signal_handler)
+
+
+def default(value, replacement):
+    """
+    Check if ``value`` is ``None`` and then return ``replacement`` or else
+    ``value``.
+
+    :param value: value to check
+    :param replacement: default replacement for value
+    :returns: return the value or replacement if value is None
+    """
+    return value if value is not None else replacement
