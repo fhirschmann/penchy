@@ -19,7 +19,7 @@ from penchy.jobs.elements import PipelineElement, SystemFilter, Workload, Tool
 from penchy.jobs.filters import Receive, Send
 from penchy.jobs.jvms import WrappedJVM
 from penchy.maven import get_classpath, setup_dependencies
-from penchy.util import tempdir, dict2string
+from penchy.util import tempdir, dict2string, default
 
 
 log = logging.getLogger(__name__)
@@ -111,7 +111,7 @@ class SystemComposition(object):
     def __init__(self, jvm, node_setting, name=None):
         """
         """
-        self.name = name if name is not None else "{0} @ {1}".format(jvm, node_setting)
+        self.name = default(name, "{0} @ {1}".format(jvm, node_setting))
         self.jvm = jvm
         self.node_setting = node_setting
 
@@ -322,8 +322,8 @@ class Job(object):
         """
         # replace receive and send with dummy functions if not set to avoid
         # corner cases in pipeline
-        receive = self.receive if self.receive is not None else lambda: {}
-        send = self.send if self.send is not None else lambda data: None
+        receive = default(self.receive, lambda: {})
+        send = default(self.send, lambda data: None)
 
         return dict(receive=receive,
                     send=send,
