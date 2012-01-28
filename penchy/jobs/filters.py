@@ -4,12 +4,13 @@ This module provides filters.
 Inputs are fed to filters via keywords in the ``run`` method.
 Outputs are available via the ``out`` attribute.
 """
-
 import logging
 import re
 from pprint import pprint
 
 from penchy.jobs.elements import Filter, SystemFilter
+from penchy.jobs.typecheck import Types
+from penchy.util import default
 
 
 log = logging.getLogger(__name__)
@@ -45,12 +46,12 @@ class DacapoHarness(Filter):
     - ``times``: execution time per itertion per invocation ([[int]])
     - ``valid``: flag that indicates if execution was valid
     """
-    inputs = [('stderr', list, str),
-              ('exit_code', list, int)]
+    inputs = Types(('stderr', list, str),
+                   ('exit_code', list, int))
 
-    outputs = [('failures', list, int, int),
-               ('times', list, list, int),
-               ('valid', list, bool)]
+    outputs = Types(('failures', list, int, int),
+                    ('times', list, list, int),
+                    ('valid', list, bool))
 
     _TIME_RE = re.compile(
         r"""
@@ -95,8 +96,8 @@ class Send(SystemFilter):
     - ``environment``: see :meth:`Job._build_environment`
     - ``payload``: data to send
     """
-    inputs = [('environment', dict),
-              ('payload', object)]
+    inputs = Types(('environment', dict),
+                   ('payload', object))
 
     def _run(self, **kwargs):
         send = kwargs['environment']['send']
@@ -115,8 +116,8 @@ class Receive(SystemFilter):
 
     - ``results``: dict that maps :class:`SystemComposition` to their results.
     """
-    inputs = [('environment', dict)]
-    outputs = [('results', dict)]
+    inputs = Types(('environment', dict))
+    outputs = Types(('results', dict))
 
     def _run(self, **kwargs):
         receive = kwargs['environment']['receive']
@@ -127,7 +128,7 @@ class Print(Filter):
     """
     Prints everything fed to it on stdout.
     """
-    inputs = None
+    inputs = Types()
 
     def __init__(self, stream=None):
         """
@@ -146,6 +147,8 @@ class Evaluation(Filter):
     """
     Filter to evaluate values with an evaluation function.
 
+    .. warning::
+
     You should set ``inputs`` and ``outputs`` or no checking will take place.
     If ``inputs`` is set to ``None``, will run evaluator on ``input``.
     """
@@ -154,28 +157,28 @@ class Evaluation(Filter):
         """
         :param evaluator: function that evaluates
         :type evaluator: function
-        :param inputs: input type specification
-        :type inputs: list
-        :param outnputs: output type specification
-        :type outnputs: list
+        :param inputs: input types
+        :type inputs: :class:`~penchy.jobs.typecheck.Types`
+        :param outputs: output types
+        :type outputs: :class:`~penchy.jobs.typecheck.Types`
         """
         super(Evaluation, self).__init__()
         self.evaluator = evaluator
-        self.inputs = inputs
-        self.outputs = outputs
+        self.inputs = default(inputs, Types())
+        self.outputs = default(outputs, Types())
 
     def _run(self, **kwargs):
-        if self.inputs is None:
+        if self.inputs == Types():
             if 'input' not in kwargs:
                 raise ValueError('Evaluation inputs not set, expected input in arguments')
             else:
                 args = {'input' : kwargs['input']}
         else:
             try:
-                args = dict([(input_[0], kwargs[input_[0]]) for input_ in self.inputs])
+                args = dict([(name, kwargs[name]) for name in self.inputs.names])
             except KeyError:
                 log.exception('Evaluator: expected arguments "{0}", got "{1}"'
-                              .format(', '.join(i[0] for i in self.inputs),
+                              .format(', '.join(i[0] for i in self.inputs.descriptions),
                                       ', '.join(k for k in kwargs)))
                 raise ValueError('Missing input')
 
@@ -186,12 +189,12 @@ class StatisticRuntimeEvaluation(Evaluation):
     """
     Filter to evaluate runtime statistically.
     """
-    inputs = [('times', list, list, int)]
-    outputs = [('averages', list, int),
-               ('maximals', list, int),
-               ('minimals', list, int),
-               ('positive_deviations', list, int),
-               ('negative_deviations', list, int)]
+    inputs = Types(('times', list, list, int))
+    outputs = Types(('averages', list, int),
+                    ('maximals', list, int),
+                    ('minimals', list, int),
+                    ('positive_deviations', list, int),
+                    ('negative_deviations', list, int))
 
     def __init__(self):
         super(StatisticRuntimeEvaluation, self).__init__(evaluate_runtimes,

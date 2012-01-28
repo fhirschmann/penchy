@@ -2,11 +2,11 @@ from hashlib import sha1
 
 from penchy.compat import unittest, update_hasher
 from penchy.jobs.dependency import Edge
-from penchy.jobs.elements import _check_kwargs
 from penchy.jobs.filters import Print, DacapoHarness, Receive
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
 from penchy.jobs.jvms import JVM
 from penchy.jobs.tools import HProf
+from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.jobs.workloads import ScalaBench
 from penchy.tests.util import MockPipelineElement, make_system_composition
 
@@ -65,7 +65,9 @@ class CheckArgsTest(unittest.TestCase):
         super(CheckArgsTest, self).setUp()
 
         self.p = MockPipelineElement()
-        self.inputs = (('foo', str), ('bar', list, int))
+        self.inputs = Types(('foo', str),
+                            ('bar', list, int))
+
         self.d = {'foo' : '23', 'bar' : range(5)}
 
     def test_malformed_types(self):
@@ -75,47 +77,47 @@ class CheckArgsTest(unittest.TestCase):
                  ('baz', 2, list),
                  ()):
             with self.assertRaises(AssertionError):
-                _check_kwargs((t,), {})
+                Types(t)
 
     def test_wrong_type(self):
-        self._raising_error_on_replacement(ValueError,
+        self._raising_error_on_replacement(TypeCheckError,
                                            (('foo', 23),
                                             ('foo', ['23']),
                                             ('bar', 42)))
 
     def test_wrong_subtype(self):
-        self._raising_error_on_replacement(ValueError,
+        self._raising_error_on_replacement(TypeCheckError,
                                            (('bar', ['23']),
                                             ('bar', [(), ()])))
 
     def test_missing_arg(self):
-        self._raising_error_on_deletion(ValueError,
-                                           (('foo'),
-                                            ('bar'),
-                                            (['foo', 'bar']),
-                                            (['foo', 'bar'])))
+        self._raising_error_on_deletion(TypeCheckError,
+                                        (('foo'),
+                                         ('bar'),
+                                         (['foo', 'bar']),
+                                         (['foo', 'bar'])))
 
     def test_unused_input_count(self):
         self.d['baz'] = 42
         self.d['bad'] = 23
-        self.assertEqual(_check_kwargs(self.inputs, self.d), 2)
+        self.assertEqual(self.inputs.check_input(self.d), 2)
 
     def test_fully_used_input_count(self):
-        self.assertEqual(_check_kwargs(self.inputs, self.d), 0)
+        self.assertEqual(self.inputs.check_input(self.d), 0)
 
     def test_disabled_checking(self):
         # d contains 2 unused inputs
-        self.assertEqual(_check_kwargs(None, self.d), 0)
+        self.assertEqual(Types().check_input(self.d), 0)
 
     def test_subtype_of_dict(self):
-        inputs = [('foo', dict, int),
-                  ('bar', dict, list, int)]
-        self.assertEqual(_check_kwargs(inputs, {'foo' : dict(a=1, b=2),
-                                                'bar' : dict(a=[1], b=[2])})
+        inputs = Types(('foo', dict, int),
+                       ('bar', dict, list, int))
+        self.assertEqual(inputs.check_input({'foo' : dict(a=1, b=2),
+                                             'bar' : dict(a=[1], b=[2])})
                          , 0)
-        with self.assertRaises(ValueError):
-            _check_kwargs(self.inputs, {'foo' : dict(a=1, b=2),
-                                        'bar' : dict(a=1, b=2)})
+        with self.assertRaises(TypeCheckError):
+            self.inputs.check_input({'foo' : dict(a=1, b=2),
+                                     'bar' : dict(a=1, b=2)})
 
     def _raising_error_on_deletion(self, error, deletions):
         for del_ in deletions:
@@ -125,14 +127,14 @@ class CheckArgsTest(unittest.TestCase):
                     del_ = [del_]
                 for del__ in del_:
                     d.pop(del__, None)
-                _check_kwargs(self.inputs, d)
+                self.inputs.check_input(d)
 
     def _raising_error_on_replacement(self, error, replacements):
         for k, v in replacements:
             with self.assertRaises(error):
                 d = self.d.copy()
                 d[k] = v
-                _check_kwargs(self.inputs, d)
+                self.inputs.check_input(d)
 
 
 class SystemCompositionsTest(unittest.TestCase):

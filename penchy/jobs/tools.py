@@ -1,10 +1,10 @@
 """
 This module provides tools.
 """
-
 import os.path
 
 from penchy.jobs.elements import Tool
+from penchy.jobs.typecheck import Types
 from penchy.maven import MavenDependency
 
 
@@ -28,8 +28,8 @@ class Tamiflex(Tool):
 
     DEPENDENCIES = set((_POA,))
 
-    outputs = [('reflection_log', list, str),
-               ('classfolder', list, str)]
+    outputs = Types(('reflection_log', list, str),
+                    ('classfolder', list, str))
 
     def __init__(self):
         super(Tamiflex, self).__init__()
@@ -73,7 +73,7 @@ class HProf(Tool):
     # in the hotspot jvm.
     DEPENDENCIES = set()
 
-    outputs = [('hprof', list, str)]
+    outputs = Types(('hprof', list, str))
 
     def __init__(self, option):
         """

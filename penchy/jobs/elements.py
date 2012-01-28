@@ -1,12 +1,11 @@
 """
 This module provides the foundation of job elements.
 """
-
 import logging
 from collections import defaultdict
-from itertools import chain
 
 from penchy.jobs.dependency import Pipeline
+from penchy.jobs.typecheck import Types
 
 log = logging.getLogger(__name__)
 
@@ -19,12 +18,10 @@ class PipelineElement(object):
     A PipelineElement must have the following attributes:
 
     - ``out``, a dictionary that maps logical names for output to actual.
-    - ``inputs``, a list of tuples that describe the name and types of the
-                inputs for ``run`` (see :func:`_check_kwargs` for the format)
-
-    - ``outputs``, a list of tuples that describe the logical name of an output
-                 and its type it is built alike ``inputs`` for all output of the
-                 element
+    - ``inputs`` a :class:`~penchy.jobs.typecheck.Types` that describes the
+                 necessary inputs and their types for the element
+    - ``outputs`` a :class:`~penchy.jobs.typecheck.Types` that describes the
+                  output with a logical name and its types
 
     A PipelineElement must have the following methods:
 
@@ -36,8 +33,8 @@ class PipelineElement(object):
     initialization.
     """
     DEPENDENCIES = set()
-    inputs = []
-    outputs = []
+    inputs = Types()
+    outputs = Types()
 
     def __init__(self):
         self.reset()
@@ -49,7 +46,7 @@ class PipelineElement(object):
         """
         Run element with hooks.
         """
-        _check_kwargs(self.inputs, kwargs)
+        self.inputs.check_input(kwargs)
         for hook in self.prehooks:
             hook()
 
@@ -94,7 +91,7 @@ class PipelineElement(object):
         :returns: the output names
         :rtype: set
         """
-        return set(t[0] for t in self.outputs)
+        return self.outputs.names
 
 
 class NotRunnable(object):
@@ -158,9 +155,9 @@ class Workload(NotRunnable, PipelineElement):
     - `stderr`, the path to the file that contains the output on stderr
     - `exit_code`, the exitcode as int
     """
-    outputs = [('stdout', list, str),
-               ('stderr', list, str),
-               ('exit_code', list, int)]
+    outputs = Types(('stdout', list, str),
+                    ('stderr', list, str),
+                    ('exit_code', list, int))
 
     @property
     def arguments(self):  # pragma: no cover
@@ -168,79 +165,3 @@ class Workload(NotRunnable, PipelineElement):
         The arguments the jvm has to include to execute the workloads.
         """
         raise NotImplementedError("Workloads must implement this")
-
-
-# FIXME: There are type errors with python3
-def _check_kwargs(type_descriptions, kwargs):
-    """
-    Check if ``kwargs`` satisfies the restrictions of ``type_descriptions``.
-    That is:
-        - All required names are found and
-        - have the right type (and subtypes)
-
-    The format of those restrictions is this:
-
-        (name, type, *types)
-
-    - ``name`` is the name of the argument
-    - ``type`` is the type of the argument
-    - ``types`` are zero or more subtypes
-
-    Checking the subtype of :class:`dict` tests the values of this Dictionary.
-
-    Checking can be disabled by setting ``type_descriptions`` to ``None``.
-
-
-    Logs warnings if there are more arguments than the required.
-
-    :raises: :class:`ValueError` if a name is missing or has the wrong type.
-    :raises: :class:`AssertError` if ``type_descriptions has a wrong format.
-
-    :param type_descriptions: :PipelineElement: for which to check kwargs
-    :type type_descriptions: PipelineElement
-    :param kwargs: arguments for _run of ``type_descriptions``
-    :type kwargs: dict
-    :returns: count of unused inputs
-    :rtype: int
-    """
-    if type_descriptions is None:
-        return 0
-
-    for t in type_descriptions:
-        msg = 'Malformed type description: '
-        '{0} is not of form (str, *type) [str, *type]'.format(t)
-        if not len(t) > 1:
-            raise AssertionError(msg)
-        if not isinstance(t, (tuple, list)) or not isinstance(t[0], str):
-            raise AssertionError(msg)
-        if any(not isinstance(type_, type) for type_ in t[1:]):
-            raise AssertionError(msg)
-
-    for t in type_descriptions:
-        name, types = t[0], t[1:]
-        count = len(types)
-        if name not in kwargs:
-            raise ValueError('Argument {0} is missing'.format(name))
-
-        value = [kwargs[name]]  # pack start value in list to reuse loop
-        for i, type_ in enumerate(types):
-            if any(not isinstance(v, type_) for v in value):
-                raise ValueError('Argument {0} is not of type {1}'
-                                 .format(name, types))
-            # don't reinitialize for last type
-            if i == count - 1:
-                break
-
-            if issubclass(type_, dict):
-                value = list(chain.from_iterable(subvalue.values() for subvalue in value))
-            elif len(value) > 1:
-                value = list(chain.from_iterable(value))
-            else:
-                value = value[0]
-
-    unused_inputs = 0
-    for name in set(kwargs) - set(t[0] for t in type_descriptions):
-        unused_inputs += 1
-        log.warn("Unknown input {0}".format(name))
-
-    return unused_inputs

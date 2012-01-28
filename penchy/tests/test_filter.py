@@ -3,6 +3,7 @@ from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
+from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.jobs.filters import (WrongInputError,
                                  DacapoHarness,
                                  Send,
@@ -128,6 +129,6 @@ class EvaluationTest(unittest.TestCase):
             e._run()
 
     def test_missing_input(self):
-        e = Evaluation(lambda x: x, [('value', int)], [('value', int)])
+        e = Evaluation(lambda x: x, Types(('value', int)), Types(('value', int)))
         with self.assertRaises(ValueError):
             e._run()
