@@ -90,8 +90,7 @@ class HProf(Tool):
         self.out['hprof'].append(os.path.abspath("java.hprof.txt"))
 
     def check(self):
-        # Only Hotspot supports/includes hprof
-        # FIXME: Check this in a reliable way.
+        # TODO: check for arguments
         pass
 
     @property
