@@ -22,6 +22,13 @@ class DacapoWorkloadTest(unittest.TestCase):
         self.assertListEqual(w.arguments,
                              'Harness -n 1 --callback foo jython'.split())
 
+    def test_argument_check(self):
+        w = Dacapo('fop', 1, '--foo')
+        self.assertFalse(w.check())
+
+        w = Dacapo('fop', 1, '-s')
+        self.assertTrue(w.check())
+
 
 class ScalabenchWorkloadTest(unittest.TestCase):
     def test_invalid_benchmark(self):
