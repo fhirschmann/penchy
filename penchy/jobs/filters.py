@@ -154,8 +154,8 @@ class Evaluation(Filter):
 
     .. warning::
 
-    You should set ``inputs`` and ``outputs`` or no checking will take place.
-    If ``inputs`` is set to ``None``, will run evaluator on ``input``.
+        You should set ``inputs`` and ``outputs`` or no checking will take place.
+        If ``inputs`` is set to ``None``, will run evaluator on ``input``.
     """
 
     def __init__(self, evaluator, inputs=None, outputs=None):
