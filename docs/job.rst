@@ -1,6 +1,6 @@
-========================
-Job Description Language
-========================
+============
+Writing Jobs
+============
 
 Here is a simple Job:
 
@@ -25,52 +25,101 @@ and ``outputs``.
 They describe how inputs (and outputs) are named and of which type they are.
 
 The flow is a description of how the data flows from outputs to inputs. In other
-words: How Elements depend on data.
+words: How Elements depend on each other for data.
 
-The flow is expressed in terms of a list of :class:`~penchy.jobs.dependency.Edge`.
-Each :class:`~penchy.jobs.dependency.Edge` has a ``source``, a ``sink`` and a
-description of how to map the output of the ``source`` to the input of the
-``sink``.
-This description can be missing (or set to ``None``) to implicitly pipe all ``source``
-output to ``sink``.
-That means that ``sink`` must have a ``inputs`` that is compatible with
-``outputs`` of ``source``.
-Here is an example::
+The inputs of :class:`~penchy.jobs.elements.PipelineElement` have to be
+completely saturated for a valid flow.
 
-  w = workloads.ScalaBench('dummy')  # all workloads have stderr, stdout
-                                     # and exit_code as output
-  f = filters.DacapoHarness()  # This filter only expects stderr and exit_code
+In the following ``e1`` and ``e2`` are just some
+:class:`~penchy.jobs.elements.PipelineElement`.
 
-  Edge(w, f)  # this works because w and f are compatible, but there will be a
-                warning because stdout output of workload will not be used
+The basic syntax
+----------------
 
+In the following there is a short introduction what you can use to define
+dependencies between Elements and what data they comprise.
+It is used to define the ``client_flow`` and ``server_flow`` for a
+:class:`~penchy.jobs.job.Job`.
 
-This description can also be explicitly provided.
-A reason can be that ``sink`` and ``source`` are incompatible in the expected
-named and their types or to provide only a subset of the outputs.
-Here the example from above, that won't show any warnings::
+.. warning::
 
-  w = workloads.ScalaBench('dummy')  # all workloads have stderr, stdout
-                                     # and exit_code as output
-  f = filters.DacapoHarness()  # This filter only expects stderr and exit_code
+   You have to be careful while defining the flow because the types encode the
+   meaning to the pipeline. This is valid::
 
-  Edge(w, f, [('stderr', 'stderr),
-              ('exit_code', 'exit_code')])
+     e1 >> [('a', 'b')] >> e2
 
-With :class:`~penchy.jobs.dependency.Edge` you specify a 1:1 relation but within
-the whole flow a :class:`~penchy.jobs.elements.PipelineElement` can pass its
-output to many :class:`~penchy.jobs.elements.PipelineElement` and also receive
-from many.
-For Example::
+   while this is not::
 
-  w = workloads.ScalaBench('dummy')
-  f1 = filters.DacapoHarness()
-  f2 = filters.Print()
+     e1 >> (('a', 'b')) >> e2
 
-  flow = [Edge(w, f1),  # w passes output to two elements
-          Edge(w, f2),  # f2 receives input from two inputs
-          Edge(f1, f2)
-         ]
+Mapping outputs to inputs
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To pass the output ``a`` of ``e1`` to the ``b`` input of ``e2`` use this::
+
+  e1 >> ('a', 'b') >> e2
+
+to additionally pass ``c`` to ``d`` it becomes this::
+
+  e1 >> [('a', 'b'), ('c', 'd')] >> e2
+
+In case output and input are named the same you can use this::
+
+  e1 >> ['a', 'b'] >> e2
+
+and it will pipe the outputs ``a`` and ``b`` of ``e1`` to the inputs ``a`` and
+``b`` of ``e2``.
+
+The last method is for piping one output to an input with the same name::
+
+  e1 >> 'a' >> e2
+
+this pipes the output ``a`` of ``e1`` to the input ``a`` of ``e2``.
+
+Passing everything
+~~~~~~~~~~~~~~~~~~
+
+To pass everything you can simply use this syntax::
+
+  e1 >> e2
+
+but you have to keep in mind two things:
+Firstly it passes all output of ``e1`` to ``e2`` with the names of the output
+that means ``e1`` and ``e2`` have to have compatible inputs and outputs (names
+and types).
+Secondly if ``e1`` has more output than ``e2`` accepts there will be warnings.
+In this case you maybe want to cut them down.
+
+Cutting outputs down
+~~~~~~~~~~~~~~~~~~~~
+
+If ``e1`` and ``e2`` have compatible inputs and outputs but ``e2`` needs less
+input than ``e1`` offers, you can the following syntax (already introduced
+above)::
+
+  e1 >> ['a', 'b'] >> e2
+
+Assuming ``e1`` had the outputs ``a``, ``b`` and ``c`` and ``e2`` only accepting
+the first two there had been warnings using::
+
+  e1 >> e2
+
+but there are none if you specify the used subset explicitly.
+
+Defining multiple pipelines
+---------------------------
+
+To define multiple pipeline in the flows you just add more.
+Here we define two lines of action in the client flow (analogous for the server
+flow)::
+
+  job = Job(...
+            client_flow=[
+                e1 >> e2 >> e3,
+                e1 >> e4
+            ]
+            ...
+            )
 
 Survey of the elements
 ======================
