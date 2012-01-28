@@ -100,3 +100,11 @@ class ImportTest(unittest.TestCase):
 
         with self.assertRaises(AssertionError):
             self.test_load_job()
+
+    def test_get_config_attrib(self):
+        class Config:
+            def __init__(self):
+                self.foo = 'bar'
+        c = Config()
+        self.assertEquals(util.get_config_attribute(c, 'foo', 'yep'), 'bar')
+        self.assertEquals(util.get_config_attribute(c, 'bar', 'yep'), 'yep')
