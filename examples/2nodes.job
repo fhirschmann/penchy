@@ -20,12 +20,10 @@ f2 = filters.Send()
 
 job = Job(compositions=[jconfig1, jconfig2],
           client_flow=[
-              Edge(w, f1, [('stderr', 'stderr'),
-                           ('exit_code', 'exit_code')]),
-              Edge(f1, f2, [('times', 'payload')])
+              w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2
           ],
           server_flow=[
-              Edge(receiver, filters.Print(), [('results', 'times')])
-                      ],
+              receiver >> ('results', 'times') >> filters.Print()
+          ],
           invocations = 2
           )

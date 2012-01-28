@@ -16,11 +16,9 @@ f2 = filters.Print()
 
 job = Job(compositions=composition,
           client_flow=[
-              Edge(w, f1, [('stderr', 'stderr'),
-                           ('exit_code', 'exit_code')]),
-              Edge(w, f2, [('stderr', 'workload_stderr'),
-                           ('exit_code', 'workload_exit_code')]),
-              Edge(f1, f2)
+              w >> [('stderr', 'stderr'), ('exit_code', 'exit_code')] >> f1,
+              w >> ('stderr', 'workload_stderr') >> f2,
+              f1 >> f2
           ],
           server_flow=[],
           invocations = 1

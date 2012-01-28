@@ -17,7 +17,7 @@ f = filters.Print()
 
 job = Job(compositions=composition,
           client_flow=[
-              Edge(t, f),
+              t >> f
           ],
           server_flow=[],
           invocations = 1
