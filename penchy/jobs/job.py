@@ -388,6 +388,22 @@ class Job(object):
                               set(chain.from_iterable((edge.sink, edge.source)
                                                       for edge in self.server_flow)))
 
-        # TODO: checking of inputs & outputs of elements
+        for e in self._flows():
+            valid = valid and e.check()
+
+        sources = set((e.source for e in self._flows()))
+        sinks = set((e.sink for e in self._flows()))
+
+        # source has to be either a data producer itself or somewhere a sink
+        # XXX: maybe this is already captured by edgesort?
+        for source in sources:
+            valid = valid and (isinstance(source, (Workload,
+                                                   Tool,
+                                                   WrappedJVM,
+                                                   Receive))
+                               or source in sinks)
 
         return valid
+
+    def _flows():
+        return chain(self.client_flow, self.server_flow)

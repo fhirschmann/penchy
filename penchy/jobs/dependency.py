@@ -49,6 +49,12 @@ class Edge(object):
         """
         return [self]
 
+    def check(self):
+        """
+        Check if ``source`` fits on ``sink`` with the given mapping.
+        """
+        self.source.outputs.check_pipe(self.sink.inputs, self.map_)
+
 
 class Pipeline(object):
     """

@@ -114,3 +114,38 @@ class Types(object):
             log.warn("Unknown input {0}".format(name))
 
         return unused_inputs
+
+    def check_pipe(self, other, mapping):
+        """
+        Check the validity of the pipe of ``self`` to ``other`` with given
+        ``mapping``.
+
+        ``self`` is the source :class:`~penchy.jobs.elements.PipelineElement`
+        and other is the sink.
+
+        :param other: the types to which the pipe is checked
+        :type other: :class:`Types`
+        :param mapping: mappings from ``self`` to ``other``
+        :type mapping: list of tuples
+        :returns: if pipe to other is valid
+        :rtype: bool
+        """
+        valid = True
+
+        if self.descriptions is None or other.descriptions is None:
+            return True
+
+        for source, sink in mapping:
+            if source not in self.descriptions:
+                log.error('Source has no output {0}'.format(source))
+                valid = False
+            if sink not in other.descriptions:
+                log.error('Sink has no input {0}'.format(sink))
+                valid = False
+
+        missing_inputs = set(other.descriptions) - set(self.descriptions)
+        for input in missing_inputs:
+            log.error('Sink input {0} not saturated'.format(input))
+            valid = False
+
+        return valid
