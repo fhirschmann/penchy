@@ -30,6 +30,13 @@ class JVMNotConfiguredError(Exception):
     pass
 
 
+class JVMExecutionError(Exception):
+    """
+    Signals that a execution of JVM failed, that is return non zero exit code.
+    """
+    pass
+
+
 class JVM(object):
     """
     This class represents a JVM.
@@ -125,6 +132,12 @@ class JVM(object):
             self.workload.out['exit_code'].append(exit_code)
             self.workload.out['stdout'].append(stdout.name)
             self.workload.out['stderr'].append(stderr.name)
+            if exit_code != 0:
+                log.error('jvm execution failed, stderr:')
+                stderr.seek(0)
+                log.error(stderr.read())
+                raise JVMExecutionError('non zero exit code: {0}'
+                                        .format(exit_code))
 
         log.debug("executing posthooks")
         for hook in posthooks:
