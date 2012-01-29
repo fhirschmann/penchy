@@ -9,10 +9,12 @@ This module provides the foundation to define jobs.
 """
 import logging
 import os
+import subprocess
 from functools import partial
 from hashlib import sha1
 from itertools import groupby, chain
 from operator import attrgetter
+from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher
 from penchy.jobs.dependency import build_keys, edgesort
@@ -422,3 +424,56 @@ class Job(object):
 
     def _flows(self):
         return chain(self.client_flow, self.server_flow)
+
+    def visualize(self, format='png', dot='dot'):
+        """
+        Visualize job via graphviz.
+
+        .. note::
+
+            The ``dot`` executable has to be in the path or passed as ``dot``
+            parameter.
+
+        :param format: output format (has to be supported by dot)
+        :type format: str
+        :param dot: path to dot executable
+        :type dot: str
+        ;returns: the path to the generated file
+        ;rtype: str
+        """
+        cedges, sedges = [['{0} -> {1} [label = "{2}"];'
+                           .format(e.source.__class__.__name__,
+                                   e.sink.__class__.__name__,
+                                   ', '.join('{0} -> {1}'
+                                             .format(m[0], m[1])
+                                             if m[0] != m[1]
+                                             else "{0}".format(m[0])
+                                             for m in e.map_
+                                         )
+                                    if e.map_ else '')
+                           for e in flow]
+                          for flow in (self.client_flow, self.server_flow)]
+
+        client_edges = '\n'.join(cedges)
+        server_edges = '\n'.join(sedges)
+        s = """
+        digraph G {
+            rankdir = LR
+            subgraph cluster_client {
+                color = black;
+                %s
+                label = "Client";
+            }
+            subgraph cluster_server {
+                color = blue;
+                %s
+                label = "Server";
+            }
+        }
+        """ % (client_edges, server_edges)
+        with NamedTemporaryFile(delete=False) as f:
+            delete = f.name
+            f.write(s)
+        subprocess.call(['dot', '-T', format, '-O', delete])
+        os.remove(delete)
+        return delete + '.' + format
