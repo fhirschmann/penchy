@@ -60,6 +60,8 @@ if __name__ == "__main__":
             dest="check", help="check a job for validity and exit")
     mode_group.add_argument("--run-locally", action="store_true",
             dest="local", help="test a job by running it locally")
+    mode_group.add_argument("--visualize", action="store_true",
+            dest="visualize", help="draw a visualization of pipeline dependencies")
 
     parser.add_argument("job", help="job to execute",
             metavar="job")
@@ -79,6 +81,9 @@ if __name__ == "__main__":
             raise ValueError("Job has no JVMNodeConfiguration for \"localhost\"")
         for composition in compositions:
             job.run(composition)
+    elif args.visualize:
+        path = job.visualize()
+        print 'You can view the visualization of the job here: "{0}"'.format(path)
     else:
         server = Server(config, job_module)
         server.bootstrap_args.extend(['--loglevel', str(args.loglevel)])
