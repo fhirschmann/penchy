@@ -238,4 +238,5 @@ class Node(object):  # pragma: no cover
         pid = pidfile.read()
         pidfile.close()
         self.execute('pkill -TERM -P' + pid)
+        self.execute('sleep 5 && pkill -KILL -P' + pid)
         self.log.warn("Client was terminated")
