@@ -1,3 +1,12 @@
+"""
+This module deals with logging in PenchY.
+
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+"""
 import logging
 from logging.handlers import RotatingFileHandler
 
