@@ -159,14 +159,14 @@ will be passed to the JVM. Here's an example with several options::
 
   j = JVM('java', '-verbose:gc -Xmx800m -Xms42m')
 
-JVMs may contain pre-hooks and post-hooks which are executed before respective
-after they are run.
+JVMs may contain pre- and post-hooks, which are executed before
+and after they are run, respectively.
 
 Workloads
 ---------
 
-Workloads may contain pre-hooks and post-hooks which are executed before respective
-after they are run.
+Workloads may contain pre- and post-hooks, which are executed before
+and after they are run, respectively.
 
 Tools
 -----
@@ -174,8 +174,8 @@ Tools
 Tools are programs that collect data about the executed workload and come in two
 flavors: Agent and WrappedJVM.
 
-Tools may contain pre-hooks and post-hooks which are executed before respective
-after they are run.
+Tools may contain pre- and post-hooks, which are executed before
+and after they are run, respectively.
 
 Agent
 ~~~~~
@@ -205,8 +205,8 @@ use Valgrind to analyze the execution of the JVM.
 Filter
 ------
 
-Filter may contain pre-hooks and post-hooks which are executed before respective
-after they are run.
+Filters may contain pre- and post-hooks, which are executed before
+and after they are run, respectively.
 
 Using penchyrc: Stop repeating yourself
 =======================================
