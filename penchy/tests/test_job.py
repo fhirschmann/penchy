@@ -166,10 +166,14 @@ class RunServerPipelineTest(unittest.TestCase):
         self.assertDictEqual(self.receive.out, {'results' : self.data})
 
     def test_no_receivers(self):
-        j = Job([], [], [Print() >> Print()])
+        j = Job([], [], [DacapoHarness() >> Print()])
         with self.assertRaises(ValueError):
             j.run_server_pipeline()
 
+
+    def test_empty_flow(self):
+        j = Job([], [], [])
+        self.assertEqual(j.run_server_pipeline(), None)
 
 class JobCheckTest(unittest.TestCase):
     def test_valid_job(self):
