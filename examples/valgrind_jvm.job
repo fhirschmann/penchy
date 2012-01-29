@@ -1,0 +1,22 @@
+# -*- mode: python -*-
+
+import os
+from penchy.jobs import *
+
+node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+jvm = jvms.ValgrindJVM('java', valgrind_options='--tool=cachegrind')
+composition = SystemComposition(jvm, node, name="Hello, hprof!")
+
+w = workloads.ScalaBench('fop')
+jvm.workload = w
+
+f = filters.Print()
+
+job = Job(compositions=composition,
+          client_flow=[
+              jvm >> f
+          ],
+          server_flow=[],
+          invocations = 1
+          )
