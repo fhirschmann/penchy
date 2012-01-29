@@ -459,18 +459,18 @@ class Job(object):
         s = """
         digraph G {
             rankdir = LR
-            subgraph cluster_client {
-                color = black;
-                %s
-                label = "Client";
-            }
             subgraph cluster_server {
                 color = blue;
                 %s
                 label = "Server";
             }
+            subgraph cluster_client {
+                color = black;
+                %s
+                label = "Client";
+            }
         }
-        """ % (client_edges, server_edges)
+        """ % (server_edges, client_edges)
         with NamedTemporaryFile(delete=False) as f:
             delete = f.name
             f.write(s)
