@@ -2,6 +2,7 @@
 Writing Jobs
 ============
 .. sectionauthor:: Michael Markert <markert.michael@googlemail.com>
+.. sectionauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
 Here is a simple Job:
 
@@ -37,8 +38,8 @@ In the following ``e1`` and ``e2`` are just some
 The basic syntax
 ----------------
 
-In the following there is a short introduction what you can use to define
-dependencies between Elements and what data they comprise.
+In the following section, there is a short introduction on what syntax you
+can use to define dependencies between elements and what data they comprise of.
 It is used to define the ``client_flow`` and ``server_flow`` for a
 :class:`~penchy.jobs.job.Job`.
 
@@ -56,15 +57,15 @@ It is used to define the ``client_flow`` and ``server_flow`` for a
 Mapping outputs to inputs
 ~~~~~~~~~~~~~~~~~~~~~~~~~
 
-To pass the output ``a`` of ``e1`` to the ``b`` input of ``e2`` use this::
+To pass the output ``a`` of ``e1`` to the ``b`` input of ``e2`` use::
 
   e1 >> ('a', 'b') >> e2
 
-to additionally pass ``c`` to ``d`` it becomes this::
+to additionally pass ``c`` to ``d``, it becomes::
 
   e1 >> [('a', 'b'), ('c', 'd')] >> e2
 
-In case output and input are named the same you can use this::
+In case output and input are named the same you can use::
 
   e1 >> ['a', 'b'] >> e2
 
@@ -80,32 +81,37 @@ this pipes the output ``a`` of ``e1`` to the input ``a`` of ``e2``.
 Passing everything
 ~~~~~~~~~~~~~~~~~~
 
-To pass everything you can simply use this syntax::
+To pass everything you can simply use the syntax::
 
   e1 >> e2
 
 but you have to keep in mind two things:
-Firstly it passes all output of ``e1`` to ``e2`` with the names of the output
-that means ``e1`` and ``e2`` have to have compatible inputs and outputs (names
-and types).
-Secondly if ``e1`` has more output than ``e2`` accepts there will be warnings.
-In this case you maybe want to cut them down.
+
+ * All outputs of ``e1`` are passed to ``e2``. Therefore, it is necessary that
+   both, outputs of ``e1`` and inputs of ``e2`` have the same names and types.
+ * If ``e1`` has more outputs than ``e2`` inputs, warnings will occur. In this
+   case, please read on in order to learn how to remove the superfluous
+   outputs.
 
 Cutting outputs down
 ~~~~~~~~~~~~~~~~~~~~
 
-If ``e1`` and ``e2`` have compatible inputs and outputs but ``e2`` needs less
-input than ``e1`` offers, you can the following syntax (already introduced
+If ``e1`` and ``e2`` have compatible inputs and outputs, but ``e2`` needs fewer
+input than ``e1`` offers outputs, you can use the following syntax (already introduced
 above)::
 
   e1 >> ['a', 'b'] >> e2
 
-Assuming ``e1`` had the outputs ``a``, ``b`` and ``c`` and ``e2`` only accepting
-the first two there had been warnings using::
+in order to explicitly name the input and outputs you want to work with.
+
+Let's assume ``e1`` has the outputs ``a``, ``b``, ``c`` and ``e2`` is only
+accepting the first two outputs, then PenchY will produce warnings if you were
+to write::
 
   e1 >> e2
 
-but there are none if you specify the used subset explicitly.
+However, you can omit these warnings by specifying the inputs and outputs
+explicitly as explained above.
 
 Defining multiple pipelines
 ---------------------------
