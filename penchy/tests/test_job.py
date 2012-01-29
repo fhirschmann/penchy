@@ -166,7 +166,7 @@ class RunServerPipelineTest(unittest.TestCase):
         self.assertDictEqual(self.receive.out, {'results' : self.data})
 
     def test_no_receivers(self):
-        j = Job([], [], [])
+        j = Job([], [], [Print() >> Print()])
         with self.assertRaises(ValueError):
             j.run_server_pipeline()
 

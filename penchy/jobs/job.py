@@ -276,6 +276,10 @@ class Job(object):
         :raise: :exc:`ValueError` if there is no
                 :class:`~penchy.jobs.filters.Receive` in the serverside pipeline
         """
+        # Do nothing is server_flow is empty
+        if not self.server_flow:
+            return
+
         starts = filter(lambda e: isinstance(e, Receive),
                         (e.source for e in self.server_flow))
 
