@@ -269,7 +269,9 @@ class ValgrindJVM(WrappedJVM):
         The command line suitable for `subprocess.Popen` based on the current
         configuration.
         """
-        cmd = [self.valgrind_path, '--log-file={0}'.format(self.log_name)]
+        cmd = [self.valgrind_path,
+               '--log-file={0}'.format(self.log_name),
+               '--trace-children=yes']
         cmd.extend(shlex.split(self.valgrind_options))
         return cmd + super(ValgrindJVM, self).cmdline
 
