@@ -24,9 +24,6 @@ class Server(object):
     """
     This class represents the server.
     """
-    # The dict of results we will receive (SystemComposition : result)
-    results = {}
-
     _rcv_lock = threading.Lock()
 
     def __init__(self, config, job):
@@ -39,6 +36,9 @@ class Server(object):
         self.config = config
         self.job = job.job
         self.job_file = job.__file__
+
+        # The dict of results we will receive (SystemComposition : result)
+        self.results = {}
 
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
@@ -134,7 +134,7 @@ class Server(object):
         with Server._rcv_lock:
             node = self.node_for(composition.node_setting)
             node.received(composition)
-            Server.results[composition] = result
+            self.results[composition] = result
 
     def exp_node_error(self, hashcode, reason=None):
         """
@@ -202,6 +202,6 @@ class Server(object):
         Called when we have received results for all compositions; starts
         the server-side pipeline.
         """
-        log.info(Server.results)
-        self.job.receive = lambda: Server.results
+        log.info(self.results)
+        self.job.receive = lambda: self.results
         self.job.run_server_pipeline()
