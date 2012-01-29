@@ -129,9 +129,9 @@ flow)::
 Survey of the elements
 ======================
 
-Besides :class:`~penchy.jobs.dependency.Edge` there are other elements of a
+Besides :class:`~penchy.jobs.dependency.Edge`, there are other elements of a
 job.
-This chapter tries to give an overview what they are and how they are used.
+This chapter tries to give an overview of what they are and how they are used.
 For an in-depth treatment see the :ref:`Job API <job-api>`.
 
 NodeSetting
