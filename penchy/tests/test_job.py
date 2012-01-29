@@ -4,7 +4,7 @@ from penchy.compat import unittest, update_hasher
 from penchy.jobs.dependency import Edge
 from penchy.jobs.filters import Print, DacapoHarness, Receive, Send
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
-from penchy.jobs.jvms import JVM
+from penchy.jobs.jvms import JVM, ValgrindJVM
 from penchy.jobs.tools import HProf
 from penchy.jobs.typecheck import Types
 from penchy.jobs.workloads import ScalaBench
@@ -241,3 +241,16 @@ class JobCheckTest(unittest.TestCase):
                 [w >> 'exit_code' >> f >> s],
                 [r >> p])
         self.assertFalse(j.check())
+
+    def test_wrapped_jvm(self):
+        c = make_system_composition()
+        c.jvm = ValgrindJVM('jvm')
+        w = ScalaBench('jython')
+        s = Send()
+        r = Receive()
+        p = Print()
+        c.jvm.workload = w
+        j = Job(c,
+                [c.jvm >> ('valgrind_log', 'payload') >> s],
+                [r >> p])
+        self.assertTrue(j.check())
