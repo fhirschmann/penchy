@@ -98,6 +98,18 @@ class Node(object):  # pragma: no cover
         """
         return len(self.expected) == 0
 
+    def received(self, composition):
+        """
+        Should be called when a :class:`SystemComposition` was received
+        for this node.
+
+        :param composition: composition which was received
+        :type composition: :class:`SystemComposition`
+        """
+        self.expected.remove(composition)
+        if self.received_all_results:
+            self.timer.cancel()
+
     def connect(self):
         """
         Connect to node.

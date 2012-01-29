@@ -132,7 +132,8 @@ class Server(object):
         composition = self.composition_for(hashcode)
 
         with Server._rcv_lock:
-            self.node_for(composition.node_setting).expected.remove(composition)
+            node = self.node_for(composition.node_setting)
+            node.received(composition)
             Server.results[composition] = result
 
     def exp_node_error(self, hashcode, reason=None):
