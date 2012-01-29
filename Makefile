@@ -1,10 +1,14 @@
 .PHONY: tests help hooks coverage full-coverage dev doc static-analysis
 
 help:
-	@echo "Please use \`make <target>', target in {tests,hooks,coverage}"
+	@echo "Please use \`make <target>', targets:"
 	@echo "    - tests: run unittests"
 	@echo "    - hooks: install git hooks"
-	@echo "    - coverage: run unittests, gather coverage and produce html output"
+	@echo "    - coverage: gather coverage and produce html about relevant parts"
+	@echo "    - full-coverage: gather coverage and produce html output"
+	@echo "    - dev: pip install all developmet dependencies"
+	@echo "    - doc: generate html documentation"
+	@echo "    - static-analysis: static analysis of all code"
 
 tests:
 	unit2 discover -s penchy/tests -t .
