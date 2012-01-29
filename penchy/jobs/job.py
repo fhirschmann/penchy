@@ -2,6 +2,7 @@
 This module provides the foundation to define jobs.
 
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
@@ -27,7 +28,7 @@ log = logging.getLogger(__name__)
 
 class NodeSetting(object):
     """
-    This class represents a configuration of a node.
+    Represents a configuration of a node.
     """
 
     def __init__(self, host, ssh_port, username, path,
@@ -68,7 +69,7 @@ class NodeSetting(object):
         self.description = description
         self.password = password
         self.keyfile = keyfile
-        self.timeout_factor = timeout_factor
+        self._timeout_factor = timeout_factor
 
     @property
     def identifier(self):
@@ -76,6 +77,16 @@ class NodeSetting(object):
         A unique identifier for this node.
         """
         return self.host
+
+    @property
+    def timeout_factor(self):
+        """
+        The factor by which the timeout should get multiplied with.
+        """
+        if callable(self._timeout_factor):
+            return self._timeout_factor()
+
+        return self._timeout_factor
 
     def __eq__(self, other):
         return isinstance(other, NodeSetting) and \

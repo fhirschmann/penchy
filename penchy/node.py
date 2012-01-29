@@ -76,18 +76,8 @@ class Node(object):  # pragma: no cover
         """
         if hasattr(self.job_module, 'timeout'):
             timeout = getattr(self.job_module, 'timeout')
-            if not timeout:
-                return
-        else:
-            return
-
-        if self.setting.timeout_factor is not None:
-            if callable(self.setting.timeout_factor):
-                timeout *= self.setting.timeout_factor()
-            else:
-                timeout *= self.setting.timeout_factor
-
-        return Timer(timeout, self.timeout)
+            if timeout:
+                return Timer(timeout * self.setting.timeout_factor, self.timeout)
 
     def _setup_ssh(self):
         """
