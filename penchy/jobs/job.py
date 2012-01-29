@@ -447,7 +447,7 @@ class Job(object):
                                    ', '.join('{0} -> {1}'
                                              .format(m[0], m[1])
                                              if m[0] != m[1]
-                                             else "{0}".format(m[0])
+                                             else m[0]
                                              for m in e.map_
                                          )
                                     if e.map_ else '')
