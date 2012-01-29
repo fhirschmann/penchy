@@ -222,25 +222,14 @@ class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
 
     Inheriting classes must expose this attributes:
 
-      - ``out``: dictionary that maps logical output names to paths of output
-        files
-      - ``outputs``: set of logical outputs (valid keys for ``out``)
+    - ``out`` a dictionary that maps logical names for output to actual.
+    - ``outputs`` a :class:`~penchy.jobs.typecheck.Types` that describes the
+                  output with a logical name and its types
+    - ``cmdline`` that returns the cmdline suitable for :class:`subprocess.Popen`
     """
 
-    def __init__(self):
-        """
-        Inheriting classes must:
-
-          - have compatible arguments with JVM.__init__
-          - call JVM.__init__
-        """
-        raise NotImplementedError("must be implemented")
-
-    def run(self):
-        """
-        Run with wrapping.
-        """
-        raise NotImplementedError("must be implemented")
+    def _run(self):
+        raise ValueError('This is not your normal element, but a JVM')
 
 
 class ValgrindJVM(WrappedJVM):
