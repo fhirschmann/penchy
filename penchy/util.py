@@ -238,18 +238,6 @@ def disable_write_bytecode():
     sys.dont_write_bytecode = old_state
 
 
-def pass_signal_to_child(proc):
-    """
-    This will register a signal handler for SIGTERM for
-    a givem :class:`subprocess.Popen` object.
-
-    :param proc: Process to register signal for
-    :type proc: :class:`subprocess.Popen`
-    """
-    signal_handler = lambda num, frame: proc.send_signal(num)
-    signal.signal(signal.SIGTERM, signal_handler)
-
-
 def default(value, replacement):
     """
     Check if ``value`` is ``None`` and then return ``replacement`` or else

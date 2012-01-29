@@ -237,5 +237,5 @@ class Node(object):  # pragma: no cover
         pidfile = self.sftp.open(pidfile_name)
         pid = pidfile.read()
         pidfile.close()
-        self.execute('kill ' + pid)
+        self.execute('pkill -TERM -P' + pid)
         self.log.warn("Client was terminated")
