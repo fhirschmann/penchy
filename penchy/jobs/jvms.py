@@ -263,7 +263,7 @@ def _extract_classpath(options):
     prev = ''
     # a later classpath overwrites previous definitions so we have to search
     # from the end
-    for i, x in enumerate(reversed(options)):
+    for x in reversed(options):
         if x in ('-cp', '-classpath'):
             classpath = prev
             break
