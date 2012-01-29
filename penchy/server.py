@@ -144,7 +144,8 @@ class Server(object):
         composition = self.composition_for(hashcode)
 
         with Server._rcv_lock:
-            self.node_for(composition.node_setting).expected.remove(composition)
+            node = self.node_for(composition.node_setting)
+            node.received(composition)
 
     @property
     def received_all_results(self):
