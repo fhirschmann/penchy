@@ -7,8 +7,8 @@ node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
 node2 = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 jvm = jvms.JVM('java')
-jconfig1 = SystemComposition(jvm, node1, name="Hello, Node!")
-jconfig2 = SystemComposition(jvm, node2, name="Hello, Node2!")
+jconfig1 = SystemComposition(jvm, node1)
+jconfig2 = SystemComposition(jvm, node2)
 
 receiver = filters.Receive()
 
