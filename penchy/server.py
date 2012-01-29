@@ -57,8 +57,8 @@ class Server(object):
         self.server = SimpleXMLRPCServer(
                 (config.SERVER_HOST, config.SERVER_PORT),
                 allow_none=True)
-        self.server.register_function(self.rcv_data, "rcv_data")
-        self.server.register_function(self.node_error, "node_error")
+        self.server.register_function(self.exp_rcv_data, "rcv_data")
+        self.server.register_function(self.exp_node_error, "node_error")
         # XXX: I don't yet know if this will work. With no timeout set,
         # handle_request will wait forever and timeouts caused by Timer()
         # will not cause the server to stop waiting. I think this should work!
@@ -85,7 +85,7 @@ class Server(object):
 
     def _signal_handler(self, signum, frame):
         """
-        This handles signals sent to this process.
+        Handles signals sent to this process.
         """
         log.info("Received signal %s " % signum)
         if signum == signal.SIGTERM:
@@ -95,10 +95,9 @@ class Server(object):
 
     def node_for(self, setting):
         """
-        Find the Node for a given :class:`NodeSetting`
-        or hashcode.
+        Find the Node for a given :class:`NodeSetting`.
 
-        :param setting: setting or hashcode to receive Node for
+        :param setting: setting to receive Node for
         :type setting: :class:`NodeSetting` or string
         :returns: the Node
         :rtype: :class:`Node`
@@ -121,9 +120,9 @@ class Server(object):
 
         raise ValueError('Composition not found')
 
-    def rcv_data(self, hashcode, result):
+    def exp_rcv_data(self, hashcode, result):
         """
-        This is a method exposed to the nodes.
+        Receive data from nodes.
 
         :param hashcode: the hashcode to identify the
                          :class:`SystemComposition` by
@@ -136,11 +135,10 @@ class Server(object):
             self.node_for(composition.node_setting).expected.remove(composition)
             Server.results[composition] = result
 
-    def node_error(self, hashcode, reason=None):
+    def exp_node_error(self, hashcode, reason=None):
         """
-        This is a method exposed to the nodes.
-
-        It should be called by a node in case of errors.
+        Deal with client-side errors. Call this for each
+        composition for which a job failed.
         """
         composition = self.composition_for(hashcode)
 
@@ -150,7 +148,7 @@ class Server(object):
     @property
     def received_all_results(self):
         """
-        This indicates wheter we have received results for *all*
+        Indicates wheter we have received results for *all*
         :class:`SystemComposition`.
         """
         return all([n.received_all_results for n in self.nodes.values()])
@@ -158,13 +156,13 @@ class Server(object):
     @property
     def nodes_timed_out(self):
         """
-        This indicates wheter *all* nodes have timed out.
+        Indicates wheter *all* nodes have timed out.
         """
         return all([n.timed_out for n in self.nodes.values()])
 
     def run_clients(self):
         """
-        This method will run the clients on all nodes.
+        Run the client on all nodes.
         """
         with make_bootstrap_pom() as pom:
             for node in self.nodes.values():
@@ -180,7 +178,7 @@ class Server(object):
 
     def run(self):
         """
-        Runs the server component.
+        Run the server component.
         """
         self.client_thread.start()
         while not self.received_all_results and not self.nodes_timed_out:
@@ -199,8 +197,8 @@ class Server(object):
 
     def run_pipeline(self):
         """
-        This method is called when we have received results from all nodes and
-        starts the serverside pipeline.
+        Called when we have received results for all compositions; starts
+        the server-side pipeline.
         """
         log.info(Server.results)
         self.job.receive = lambda: Server.results
