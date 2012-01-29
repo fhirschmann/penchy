@@ -1,7 +1,6 @@
 =====
 Usage
 =====
-.. sectionauthor:: Fabian Hirschmann <fabian@hirschm.net>
 This document explains the basic usage of PenchY.
 
 There is only a single entry point to PenchY, the ``penchy`` command,

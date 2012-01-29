@@ -1,8 +1,6 @@
 ============
 Writing Jobs
 ============
-.. sectionauthor:: Michael Markert <markert.michael@googlemail.com>
-.. sectionauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
 Here is a simple Job:
 
