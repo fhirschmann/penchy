@@ -16,6 +16,7 @@ from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher, nested
 from penchy.jobs.elements import PipelineElement
+from penchy.jobs.typecheck import Types
 
 
 log = logging.getLogger(__name__)
@@ -236,8 +237,41 @@ class ValgrindJVM(WrappedJVM):
     """
     This class represents a JVM which is called by valgrind.
     """
-    #TODO
-    pass
+    outputs = Types(('valgrind_log', list, str))
+
+    def __init__(self, path, options='',
+                 valgrind_path='valgrind', valgrind_options=''):
+        """
+        :param path: path to jvm executable relative to node's basepath
+                     (can also be absolute)
+        :type path: str
+        :param options: options for JVM (needs to be escaped for a shell)
+        :type options: str
+        :param valgrind_path: path to valgrind executable
+        :type valgrind_path: str
+        :param valgrind_options: options for valgrind (needs to be escaped for
+                                 shell)
+        :type valgrind_options: str
+        """
+        super(ValgrindJVM, self).__init__(path, options)
+        PipelineElement.__init__(self)
+
+        self.valgrind_path = valgrind_path
+        self.valgrind_options = valgrind_options
+        self.log_name = 'penchy-valgrind.log'
+
+        self.posthooks.append(lambda: self.out['valgrind_log']
+                              .append(os.path.abspath(self.log_name)))
+
+    @property
+    def cmdline(self):
+        """
+        The command line suitable for `subprocess.Popen` based on the current
+        configuration.
+        """
+        cmd = [self.valgrind_path, '--log-file={0}'.format(self.log_name)]
+        cmd.extend(shlex.split(self.valgrind_options))
+        return cmd + super(ValgrindJVM, self).cmdline
 
 
 def _extract_classpath(options):
