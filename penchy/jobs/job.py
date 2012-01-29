@@ -32,7 +32,7 @@ class NodeSetting(object):
 
     def __init__(self, host, ssh_port, username, path,
                  basepath, description="", password=None,
-                 keyfile=None):
+                 keyfile=None, timeout_factor=1):
         """
         :param host: hostname (or IP) of node
         :type host: string
@@ -53,6 +53,12 @@ class NodeSetting(object):
         :type password: string
         :param keyfile: path to the ssh keyfile to use
         :type keyfile: string
+        :param timeout_factor: this is either an integer or a function
+                               which gets executed client-side and returns
+                               an integer. In either case, the resulting
+                               integer will get multiplied with the timeout
+                               for this node.
+        :type timeout_factor: int or function
         """
         self.host = host
         self.ssh_port = ssh_port
@@ -62,6 +68,7 @@ class NodeSetting(object):
         self.description = description
         self.password = password
         self.keyfile = keyfile
+        self.timeout_factor = timeout_factor
 
     @property
     def identifier(self):
