@@ -1,6 +1,7 @@
 ============
 Writing Jobs
 ============
+.. sectionauthor:: Michael Markert <markert.michael@googlemail.com>
 
 Here is a simple Job:
 

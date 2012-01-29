@@ -1,6 +1,6 @@
-===================
 Maven Documentation
 ===================
+.. sectionauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
 PenchY is using Maven to handle dependencies which Workloads
 might have.
