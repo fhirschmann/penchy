@@ -194,8 +194,9 @@ class Job(object):
 
         composition.jvm.basepath = composition.node_setting.basepath
 
-        starts = filter(bool, (composition.jvm.workload,
-                               composition.jvm.tool))
+        starts = [e for e in (composition.jvm.workload, composition.jvm.tool) if e]
+        if isinstance(composition.jvm, PipelineElement):
+            starts.append(composition.jvm)
         _, edge_order = edgesort(starts, self.client_flow)
 
         for i in range(1, self.invocations + 1):
@@ -353,8 +354,9 @@ class Job(object):
                 valid = False
 
             # check if there are cycles in client pipelines
-            starts = filter(bool, (composition.jvm.workload,
-                                   composition.jvm.tool))
+            starts = [e for e in (composition.jvm.workload, composition.jvm.tool) if e]
+            if isinstance(composition.jvm, PipelineElement):
+                starts.append(composition.jvm)
             try:
                 edgesort(starts, self.client_flow)
             except ValueError:
