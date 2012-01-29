@@ -1,3 +1,4 @@
+import os
 from hashlib import sha1
 
 from penchy.compat import unittest, update_hasher
@@ -170,10 +171,10 @@ class RunServerPipelineTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             j.run_server_pipeline()
 
-
     def test_empty_flow(self):
         j = Job([], [], [])
         self.assertEqual(j.run_server_pipeline(), None)
+
 
 class JobCheckTest(unittest.TestCase):
     def test_valid_job(self):
@@ -258,3 +259,21 @@ class JobCheckTest(unittest.TestCase):
                 [c.jvm >> ('valgrind_log', 'payload') >> s],
                 [r >> p])
         self.assertTrue(j.check())
+
+
+class PipelineVisualizationTest(unittest.TestCase):
+    def test_correct_path(self):
+        j = Job(make_system_composition,
+                [Print() >> Print()],
+                [Receive() >> Print()])
+
+        path = j.visualize()
+        self.assertTrue(os.path.exists(path))
+        path_pdf = j.visualize('pdf')
+        self.assertTrue(os.path.exists(path_pdf))
+        self.assertTrue(path_pdf.endswith('.pdf'))
+
+        self.assertFalse(os.path.exists(os.path.splitext(path)[0]))
+        self.assertFalse(os.path.exists(os.path.splitext(path_pdf)[0]))
+        os.remove(path)
+        os.remove(path_pdf)
