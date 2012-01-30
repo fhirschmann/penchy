@@ -10,6 +10,7 @@ Tool for Java Virtual Machines.
 
    usage
    job
+   extending
    maven
    arch
    modules
