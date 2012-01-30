@@ -293,6 +293,15 @@ class ValgrindJVM(WrappedJVM):
         return cmd + super(ValgrindJVM, self).cmdline
 
 
+class MemcheckJVM(ValgrindJVM):
+    """
+    This is a valgrind JVM that checks memory usage.
+    """
+    outputs = Types(('memcheck', list, str))
+    arguments = ['--tool=memcheck']
+    _logical_name = 'memcheck'
+
+
 class CacheGrindJVM(ValgrindJVM):
     """
     This is a valgrind JVM that checks cache usage.
