@@ -75,7 +75,10 @@ if __name__ == "__main__":
     if not config:
         die("Configuration file not found!")
 
-    job_module = load_job(args.job)
+    try:
+        job_module = load_job(args.job)
+    except Exception, e:
+        die("Error loading job '" + args.job + "': " + str(e))
     job = job_module.job
 
     configure_logging(args.loglevel, args.logfile)
