@@ -11,6 +11,7 @@ cycle (deploying jobs, executing jobs, accumulating results).
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
+# XXX: module docstring is shown badly formatted on --help
 
 import logging
 import os
@@ -31,7 +32,9 @@ if __name__ == "__main__":
             default=os.path.expanduser("~/.penchyrc"),
             help="config module to use")
     args, _ = conf_parser.parse_known_args()
+    # FIXME: breaks down hard with no config file, even for showing help
     config = load_config(args.config)
+
     ca = partial(get_config_attribute, config)
 
     # Parse all other options
@@ -67,6 +70,7 @@ if __name__ == "__main__":
             metavar="job")
     args = parser.parse_args()
 
+    # FIXME: breaks down hard, too .. show usage notice instead of going on
     job_module = load_job(args.job)
     job = job_module.job
 
