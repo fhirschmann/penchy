@@ -79,7 +79,7 @@ if __name__ == "__main__":
     try:
         job_module = load_job(args.job)
     except Exception, e:
-        die("Error loading job '" + args.job + "': " + str(e))
+        die("Error loading job '%s: %s" % (args.job, e))
     job = job_module.job
 
     configure_logging(args.loglevel, args.logfile)
