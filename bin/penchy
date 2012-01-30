@@ -20,7 +20,7 @@ from functools import partial
 import argparse
 
 from penchy.server import Server
-from penchy.util import load_job, load_config, get_config_attribute
+from penchy.util import load_job, load_config, get_config_attribute, die
 from penchy.log import configure_logging
 
 
@@ -32,8 +32,10 @@ if __name__ == "__main__":
             default=os.path.expanduser("~/.penchyrc"),
             help="config module to use")
     args, _ = conf_parser.parse_known_args()
-    # FIXME: breaks down hard with no config file, even for showing help
-    config = load_config(args.config)
+    try:
+        config = load_config(args.config)
+    except IOError:
+        config = None
 
     ca = partial(get_config_attribute, config)
 
@@ -69,6 +71,9 @@ if __name__ == "__main__":
     parser.add_argument("job", help="job to execute",
             metavar="job")
     args = parser.parse_args()
+
+    if not config:
+        die("Configuration file not found!")
 
     # FIXME: breaks down hard, too .. show usage notice instead of going on
     job_module = load_job(args.job)

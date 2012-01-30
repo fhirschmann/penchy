@@ -248,3 +248,14 @@ def default(value, replacement):
     :returns: return the value or replacement if value is None
     """
     return value if value is not None else replacement
+
+
+def die(msg):
+    """
+    Print msg to stdout and exit with exit code 1.
+
+    :param msg: msg to print
+    :type msg: str
+    """
+    print >>sys.stderr, msg
+    sys.exit(1)
