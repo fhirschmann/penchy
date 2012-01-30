@@ -256,7 +256,6 @@ class ValgrindJVM(WrappedJVM):
     """
     outputs = Types(('valgrind_log', list, str))
     arguments = []
-    _logical_name = 'valgrind_log'
 
     def __init__(self, path, options='',
                  valgrind_path='valgrind', valgrind_options=''):
@@ -279,8 +278,12 @@ class ValgrindJVM(WrappedJVM):
         self.valgrind_options = valgrind_options
         self.log_name = 'penchy-valgrind.log'
 
-        self.posthooks.append(lambda: self.out[self.__class__._logical_name]
+        self.posthooks.append(lambda: self.out['valgrind_log']
                               .append(os.path.abspath(self.log_name)))
+        if hasattr(self, '_before_execution'):
+            self.posthooks.append(self._before_execution)
+        if hasattr(self, '_after_execution'):
+            self.posthooks.append(self._after_execution)
 
     @property
     def cmdline(self):
@@ -303,11 +306,9 @@ class MemcheckJVM(ValgrindJVM):
 
     Outputs:
 
-    - ``memcheck``: paths to Memcheck log file.
+    - ``valgrind_log``: paths to Memcheck log file.
     """
-    outputs = Types(('memcheck', list, str))
     arguments = ['--tool=memcheck']
-    _logical_name = 'memcheck'
 
 
 class CacheGrindJVM(ValgrindJVM):
@@ -316,11 +317,17 @@ class CacheGrindJVM(ValgrindJVM):
 
     Outputs:
 
+    - ``valgrind_log``: paths to Valgrind log file.
     - ``cachegrind``: paths to Cachegrind log file.
     """
-    outputs = Types(('cachegrind', list, str))
-    arguments = ['--tool=cachegrind']
-    _logical_name = 'cachegrind'
+    outputs = Types(('valgrind_log', list, str),
+                    ('cachegrind', list, str))
+    _cachegrind_file = 'penchy-cachegrind'
+    arguments = ['--tool=cachegrind',
+                 '--cachegrind-out-file={0}'.format(_cachegrind_file)]
+
+    def _after_execution(self):
+        self.out['cachegrind'] = os.path.abspath(CacheGrindJVM._cachegrind_file)
 
 
 class CallGrindJVM(ValgrindJVM):
@@ -329,11 +336,17 @@ class CallGrindJVM(ValgrindJVM):
 
     Outputs:
 
+    - ``valgrind_log``: paths to Valgrind log file.
     - ``callgrind``: paths to Callgrind log file.
     """
-    outputs = Types(('callgrind', list, str))
-    arguments = ['--tool=callgrind']
-    _logical_name = 'callgrind'
+    outputs = Types(('valgrind_log', list, str),
+                    ('callgrind', list, str))
+    _callgrind_file = 'penchy-callgrind'
+    arguments = ['--tool=callgrind',
+                 '--callgrind-out-file={0}'.format(_callgrind_file)]
+
+    def _after_execution(self):
+        self.out['callgrind'] = os.path.abspath(CallGrindJVM._callgrind_file)
 
 
 class MassifJVM(ValgrindJVM):
@@ -342,24 +355,9 @@ class MassifJVM(ValgrindJVM):
 
     Outputs:
 
-    - ``massif``: paths to Massif log file.
+    - ``valgrind_log``: paths to Valgrind log file.
     """
-    outputs = Types(('massif', list, str))
     arguments = ['--tool=massif']
-    _logical_name = 'massif'
-
-
-class DHTJVM(ValgrindJVM):
-    """
-    This is a valgrind JVM that runs the dynamic heap analysis tool DHT.
-
-    Outputs:
-
-    - ``dht``: paths to DHT log file.
-    """
-    outputs = Types(('dht', list, str))
-    arguments = ['--tool=exp-dht']
-    _logical_name = 'dht'
 
 
 def _extract_classpath(options):
