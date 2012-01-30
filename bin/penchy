@@ -75,7 +75,6 @@ if __name__ == "__main__":
     if not config:
         die("Configuration file not found!")
 
-    # FIXME: breaks down hard, too .. show usage notice instead of going on
     job_module = load_job(args.job)
     job = job_module.job
 
