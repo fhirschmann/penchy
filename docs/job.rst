@@ -199,8 +199,10 @@ WrappedJVM
 A WrappedJVM on the other hand is itself a program that calls the desired JVM
 and is used instead of a JVM but accepts the same arguments (if not more).
 
-Currently there is no implementation of a WrappedJVM but an example would be to
-use Valgrind to analyze the execution of the JVM.
+An example for a WrappedJVM is :class:`~penchy.jobs.jvms.ValgrindJVM` (and its
+subclasses).
+They setup a normal JVM but instead of calling it directly they pass it to
+Valgrind for execution.
 
 Filter
 ------
