@@ -12,7 +12,6 @@ cycle (deploying jobs, executing jobs, accumulating results).
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
-# XXX: module docstring is shown badly formatted on --help
 
 import logging
 import os
