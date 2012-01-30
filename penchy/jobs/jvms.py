@@ -249,6 +249,10 @@ class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
 class ValgrindJVM(WrappedJVM):
     """
     This class represents a JVM which is called by valgrind.
+
+    Outputs:
+
+    - ``valgrind_log``: paths to valgrind log file.
     """
     outputs = Types(('valgrind_log', list, str))
     arguments = []
@@ -296,6 +300,10 @@ class ValgrindJVM(WrappedJVM):
 class MemcheckJVM(ValgrindJVM):
     """
     This is a valgrind JVM that checks memory usage.
+
+    Outputs:
+
+    - ``memcheck``: paths to Memcheck log file.
     """
     outputs = Types(('memcheck', list, str))
     arguments = ['--tool=memcheck']
@@ -305,6 +313,10 @@ class MemcheckJVM(ValgrindJVM):
 class CacheGrindJVM(ValgrindJVM):
     """
     This is a valgrind JVM that checks cache usage.
+
+    Outputs:
+
+    - ``cachegrind``: paths to Cachegrind log file.
     """
     outputs = Types(('cachegrind', list, str))
     arguments = ['--tool=cachegrind']
@@ -314,6 +326,10 @@ class CacheGrindJVM(ValgrindJVM):
 class CallGrindJVM(ValgrindJVM):
     """
     This is a valgrind JVM that generates a call graph.
+
+    Outputs:
+
+    - ``callgrind``: paths to Callgrind log file.
     """
     outputs = Types(('callgrind', list, str))
     arguments = ['--tool=callgrind']
@@ -323,6 +339,10 @@ class CallGrindJVM(ValgrindJVM):
 class MassifJVM(ValgrindJVM):
     """
     This is a valgrind JVM that runs the heap profiler Massif.
+
+    Outputs:
+
+    - ``massif``: paths to Massif log file.
     """
     outputs = Types(('massif', list, str))
     arguments = ['--tool=massif']
@@ -332,6 +352,10 @@ class MassifJVM(ValgrindJVM):
 class DHTJVM(ValgrindJVM):
     """
     This is a valgrind JVM that runs the dynamic heap analysis tool DHT.
+
+    Outputs:
+
+    - ``dht``: paths to DHT log file.
     """
     outputs = Types(('dht', list, str))
     arguments = ['--tool=exp-dht']
