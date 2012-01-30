@@ -201,11 +201,8 @@ def load_config(filename):
     :param filename: filename of the config file
     :type filename: str
     """
-    try:
-        with disable_write_bytecode():
-            config = imp.load_source('config', filename)
-    except IOError:
-        raise IOError("Config file could not be loaded from: %s" % filename)
+    with disable_write_bytecode():
+        config = imp.load_source('config', filename)
 
     log.info("Loaded configuration from %s" % filename)
     return config

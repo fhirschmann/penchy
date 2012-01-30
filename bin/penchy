@@ -34,7 +34,8 @@ if __name__ == "__main__":
     args, _ = conf_parser.parse_known_args()
     try:
         config = load_config(args.config)
-    except IOError:
+    except IOError, e:
+        config_err = str(e)
         config = None
 
     ca = partial(get_config_attribute, config)
@@ -73,7 +74,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     if not config:
-        die("Configuration file not found!")
+        die("Error loading config file from '%s': %s" % (args.config, config_err))
 
     try:
         job_module = load_job(args.job)
