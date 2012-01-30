@@ -251,6 +251,8 @@ class ValgrindJVM(WrappedJVM):
     This class represents a JVM which is called by valgrind.
     """
     outputs = Types(('valgrind_log', list, str))
+    arguments = []
+    _logical_name = 'valgrind_log'
 
     def __init__(self, path, options='',
                  valgrind_path='valgrind', valgrind_options=''):
@@ -273,7 +275,7 @@ class ValgrindJVM(WrappedJVM):
         self.valgrind_options = valgrind_options
         self.log_name = 'penchy-valgrind.log'
 
-        self.posthooks.append(lambda: self.out['valgrind_log']
+        self.posthooks.append(lambda: self.out[self.__class__._logical_name]
                               .append(os.path.abspath(self.log_name)))
 
     @property
@@ -285,8 +287,46 @@ class ValgrindJVM(WrappedJVM):
         cmd = [self.valgrind_path,
                '--log-file={0}'.format(self.log_name),
                '--trace-children=yes']
+        if self.__class__.arguments:
+            cmd.extend(self.__class__.arguments)
         cmd.extend(shlex.split(self.valgrind_options))
         return cmd + super(ValgrindJVM, self).cmdline
+
+
+class CacheGrindJVM(ValgrindJVM):
+    """
+    This is a valgrind JVM that checks cache usage.
+    """
+    outputs = Types(('cachegrind', list, str))
+    arguments = ['--tool=cachegrind']
+    _logical_name = 'cachegrind'
+
+
+class CallGrindJVM(ValgrindJVM):
+    """
+    This is a valgrind JVM that generates a call graph.
+    """
+    outputs = Types(('callgrind', list, str))
+    arguments = ['--tool=callgrind']
+    _logical_name = 'callgrind'
+
+
+class MassifJVM(ValgrindJVM):
+    """
+    This is a valgrind JVM that runs the heap profiler Massif.
+    """
+    outputs = Types(('massif', list, str))
+    arguments = ['--tool=massif']
+    _logical_name = 'massif'
+
+
+class DHTJVM(ValgrindJVM):
+    """
+    This is a valgrind JVM that runs the dynamic heap analysis tool DHT.
+    """
+    outputs = Types(('dht', list, str))
+    arguments = ['--tool=exp-dht']
+    _logical_name = 'dht'
 
 
 def _extract_classpath(options):
