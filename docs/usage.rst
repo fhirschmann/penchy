@@ -25,6 +25,8 @@ The command line parameters of ``penchy`` explained:
    sets the log level to ``WARNING``.
  * ``--check``
    checks a job for validity only.
+ * ``--visualize``
+   visualize the dependencies of the job's pipelines as Graph (needs Graphviz).
  * ``--run-locally``
    runs a job locally without the involvement of client/server
    communication. This requires the ``hostname`` passed to
