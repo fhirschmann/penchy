@@ -150,7 +150,8 @@ class Print(Filter):
 
 class Evaluation(Filter):
     """
-    Filter to evaluate values with an evaluation function.
+    A Filter that allows to use an arbitrary function as a filter (i.e. lifts
+    this function to Filter).
 
     .. warning::
 
