@@ -193,6 +193,7 @@ class Job(object):
         self.invocations = invocations
         self.send = None
         self.receive = None
+        self._composition = None
         self.filename = None
 
     def run(self, composition):
@@ -206,6 +207,7 @@ class Job(object):
         pomfile = os.path.join(composition.node_setting.path, 'pom.xml')
         setup_dependencies(pomfile, self._get_client_dependencies(composition))
         composition.jvm.add_to_cp(get_classpath(pomfile))
+        self._composition = composition
 
         # save send for restoring
         send = self.send
@@ -245,6 +247,7 @@ class Job(object):
         self._reset_client_pipeline()
         # restore send
         self.send = send
+        self._composition = None
 
     def _get_client_dependencies(self, composition):
         """
@@ -337,7 +340,8 @@ class Job(object):
         - ``receive``: to get all data that has been received, takes no arguments
                        returns a dict with :class:`SystemComposition` as keys
         - ``send``: to send data to the server, takes one datum as argument
-        - ``job``: this job
+        - ``job``: the filename this job
+        - ``current_composition``: the current :class:`SystemComposition` or ``None``
 
         :returns: environment for a SystemFilter
         :rtype: dict
@@ -349,7 +353,8 @@ class Job(object):
 
         return dict(receive=receive,
                     send=send,
-                    job=self)
+                    job=self.filename,
+                    current_composition=self._composition)
 
     def compositions_for_node(self, identifier):
         """

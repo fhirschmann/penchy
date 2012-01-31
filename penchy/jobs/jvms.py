@@ -228,6 +228,31 @@ class JVM(object):
         update_hasher(hasher, self._user_options)
         return hasher.hexdigest()
 
+    def information(self):
+        """
+        Collect and return information about the JVM.
+
+        :returns: information about the JVM, the execution and the workload
+        :rtype: dict
+        """
+        executable = os.path.join(self.basepath, self._path)
+        cp = ['-classpath', os.pathsep.join(self._classpath)] if self._classpath  else []
+        call = [executable] + cp
+        p = subprocess.Popen(call + ['-version'], stderr=subprocess.PIPE)
+        _, jvm = p.communicate()
+
+        if self._workload is None or not hasattr(self._workload, 'information_arguments'):
+            workload = ''
+        else:
+            p = subprocess.Popen(call + self._workload.information_arguments,
+                                 stderr=subprocess.PIPE)
+            _, workload = p.communicate()
+        return {
+            'jvm' : jvm,
+            'cmdline' : ' '.join(self.cmdline),
+            'worklaod' : workload
+        }
+
 
 class WrappedJVM(JVM, PipelineElement):  # pragma: no cover
     """

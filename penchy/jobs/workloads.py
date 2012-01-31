@@ -61,6 +61,16 @@ class Dacapo(Workload):
                ['-n', str(self.iterations)] + shlex.split(self.args) + \
                [self.benchmark]
 
+    @property
+    def information_arguments(self):
+        """
+        The arguments to collect information about the benchmark.
+
+        :returns: the arguments for information collection
+        :rtype: list
+        """
+        return ['Harness', '-i', self.benchmark]
+
 
 class ScalaBench(Dacapo):
     """

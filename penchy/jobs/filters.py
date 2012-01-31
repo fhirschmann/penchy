@@ -9,11 +9,14 @@ Outputs are available via the ``out`` attribute.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
+import json
 import logging
+import os
 import re
 import shutil
 from pprint import pprint
 
+from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types
 from penchy.util import default
@@ -252,7 +255,49 @@ class Upload(Filter):
 
 
 class Dump(SystemFilter):
-    pass
+    """
+    Dumps everything sent to it as JSON encoded string.
+
+    No typechecking on inputs takes place. Every input must be JSON encodable
+    and will be included in the dump.
+
+    JSON format consists of one dictionary that includes
+
+    - the dictionary ``system`` which describes the system (JVM, Workload, Tool,
+      PenchY descriptions and versions)
+
+    - the dictionary ``data`` which contains all data sent to :class:`Dump`
+      (with the name of the input as key)
+
+    Outputs:
+
+    - ``dump``: JSON encoded data along job and system information.
+    """
+    inputs = Types()
+    outputs = Types(('dump', str))
+
+    def __init__(self, include_complete_job=False, indent=None):
+        super(Dump, self).__init__()
+        self.include = include_complete_job
+        self.indent = indent
+
+    def _run(self, **kwargs):
+        # collect and include system information
+        env = kwargs.pop('environment')
+        if self.include:
+            with open(env['job'].__file__) as f:
+                job = f.read()
+        else:
+            job = os.path.basename(env['job'])
+        system = {
+            'job' : job,
+            'penchy' : __version__,
+            'composition' : str(env['current_composition']),
+            'jvm' : env['current_composition'].jvm.information()
+        }
+        kwargs['system'] = system
+        s = json.dumps(kwargs, indent=self.indent)
+        self.out['dump'] = s
 
 
 class Save(SystemFilter):
