@@ -285,7 +285,7 @@ class Dump(SystemFilter):
         # collect and include system information
         env = kwargs.pop('environment')
         if self.include:
-            with open(env['job'].__file__) as f:
+            with open(env['job']) as f:
                 job = f.read()
         else:
             job = os.path.basename(env['job'])
