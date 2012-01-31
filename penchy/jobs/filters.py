@@ -356,3 +356,25 @@ class BackupFile(SystemFilter):
         if not os.path.exists(path):
             raise WrongInputError('file {0} does not exist'.format(path))
         shutil.copyfile(path, self.target_path)
+
+
+class Read(Filter):
+    """
+    Reads and returns the content of filepaths.
+
+    Inputs:
+    - ``paths``: the filepaths to read
+
+    Outputs:
+    - ``data``: the content of the filepaths
+    """
+    inputs = Types(('paths', list, str))
+    outputs = Types(('data', list, str))
+
+    def _run(self, **kwargs):
+        paths = kwargs['paths']
+        data = []
+        for p in paths:
+            with open(p) as f:
+                data.append(f.read())
+        self.out['data'] = data
