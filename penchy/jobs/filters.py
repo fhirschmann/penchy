@@ -255,6 +255,33 @@ class Dump(SystemFilter):
     pass
 
 
+class Save(SystemFilter):
+    """
+    Copies content of path to specified location.
+
+    Inputs:
+
+    - ``data``: data to save (encoded)
+    """
+    inputs = Types(('data', str))
+
+    def __init__(self, target_path):
+        """
+        :param target_path: path to destination relative to
+                            :class:`~penchy.jobs.job.NodeSetting`.basepath or
+                            absolute)
+        :type target_path: str
+        """
+        self.target_path = target_path
+
+    def _run(self, **kwargs):
+        if not os.path.isabs(target_path):
+            node_setting = kwargs['environment']['current_composition'].node_setting
+            self.target_path = os.path.join(node_setting.basepath, self.targetpath)
+        with open(self.target_path, 'w') as f:
+            f.write(kwargs['data'])
+
+
 class BackupFile(SystemFilter):
     """
     Copies content of path to specified location.
