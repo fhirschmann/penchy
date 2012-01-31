@@ -108,7 +108,8 @@ class Node(object):  # pragma: no cover
         """
         self.expected.remove(composition)
         if self.received_all_results:
-            self.timer.cancel()
+            if self.timer:
+                self.timer.cancel()
 
     def connect(self):
         """
