@@ -7,7 +7,7 @@
     <version>2.0.0.0</version>
     <packaging>pom</packaging>
 
-    <distributionManagement>
+   <distributionManagement>
         <repository>
             <id>0x0b</id>
             <url>scpexe://mvn.0x0b.de/var/www/mvn.0x0b.de/htdocs</url>
@@ -34,6 +34,25 @@
                                 ${project.artifactId}-${project.version}.jar
                             </file>
                             <url>${project.distributionManagement.repository.url}</url>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>wagon-maven-plugin</artifactId>
+                <version>1.0-beta-3</version>
+                <executions>
+                    <execution>
+                        <id>download-poa</id>
+                        <phase>pre-integration-test</phase>
+                        <goals>
+                            <goal>download-single</goal>
+                        </goals>
+                        <configuration>
+                            <url>http://tamiflex.googlecode.com</url>
+                            <fromFile>files/poa-2.0.0.0.jar</fromFile>
+                            <toDir>${basedir}</toDir>
                         </configuration>
                     </execution>
                 </executions>
