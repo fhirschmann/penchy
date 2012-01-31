@@ -11,6 +11,7 @@ Outputs are available via the ``out`` attribute.
 """
 import logging
 import re
+import shutil
 from pprint import pprint
 
 from penchy.jobs.elements import Filter, SystemFilter
@@ -252,3 +253,32 @@ class Upload(Filter):
 
 class Dump(SystemFilter):
     pass
+
+
+class BackupFile(SystemFilter):
+    """
+    Copies content of path to specified location.
+
+    Inputs:
+
+    - ``filename``: path of file to backup
+    """
+    inputs = Types(('filename', str))
+
+    def __init__(self, target_path):
+        """
+        :param target_path: path to destination relative to
+                            :class:`~penchy.jobs.job.NodeSetting`.basepath or
+                            absolute)
+        :type target_path: str
+        """
+        self.target_path = target_path
+
+    def _run(self, **kwargs):
+        if not os.path.isabs(target_path):
+            node_setting = kwargs['environment']['current_composition'].node_setting
+            self.target_path = os.path.join(node_setting.basepath, self.targetpath)
+        path = kwargs['filename']
+        if not os.path.exists(path):
+            raise WrongInputError('file {0} does not exist'.format(path))
+        shutil.copyfile(path, self.target_path)
