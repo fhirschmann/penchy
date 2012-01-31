@@ -46,7 +46,8 @@ class Node(object):  # pragma: no cover
         :type job_module: module
         """
         self.setting = setting
-        self.log = log.getChild(self.setting.identifier)
+        self.log = logging.getLogger(".".join([__name__,
+            self.setting.identifier]))
 
         self.job_module = job_module
         self.expected = list(job_module.job.compositions_for_node(
