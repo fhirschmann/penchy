@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
+    <groupId>de.tu_darmstadt.penchy</groupId>
     <artifactId>penchy</artifactId>
     <version>0.1</version>
     <packaging>pom</packaging>
@@ -9,11 +9,12 @@
     <name>penchy</name>
     <url>http://www.tu-darmstadt.de</url>
 
-    <parent>
-        <groupId>de.tu_darmstadt.penchy</groupId>
-        <artifactId>penchy-suite</artifactId>
-        <version>0.1</version>
-    </parent>
+    <distributionManagement>
+        <repository>
+            <id>0x0b</id>
+            <url>scpexe://mvn.0x0b.de/var/www/mvn.0x0b.de/htdocs</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
