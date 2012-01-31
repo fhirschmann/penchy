@@ -203,5 +203,6 @@ class Server(object):
         the server-side pipeline.
         """
         log.info(self.results)
+        self.job.filename = self.job_file
         self.job.receive = lambda: self.results
         self.job.run_server_pipeline()

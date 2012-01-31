@@ -31,7 +31,9 @@ class Client(object):
         """
         self.args = self.parse_args(args)
         self.config = load_config(self.args.config)
-        self.job = load_job(self.args.job).job
+        job_module = load_job(self.args.job)
+        self.job = job_module.job
+        self.job_file = job_module.__file__
         self.identifier = self.args.identifier
         self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
@@ -42,6 +44,7 @@ class Client(object):
         """
         Runs the client.
         """
+        self.job.filename = self.job_file
         self.job.send = self.proxy.rcv_data
 
         for composition in self.job.compositions_for_node(self.identifier):
