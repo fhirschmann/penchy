@@ -324,6 +324,19 @@ class ValgrindJVM(WrappedJVM):
         cmd.extend(shlex.split(self.valgrind_options))
         return cmd + super(ValgrindJVM, self).cmdline
 
+    def information(self):
+        """
+        Collect and return information about the JVM and Valgrind.
+
+        :returns: information about the JVM, the execution and the workload
+        :rtype: dict
+        """
+        d = super(ValgrindJVM, self).information()
+        p = subprocess.Popen([self.valgrind_path, '--version'], stdout=subprocess.PIPE)
+        valgrind, _ = p.communicate()
+        d['valgrind'] = valgrind
+        return d
+
 
 class MemcheckJVM(ValgrindJVM):
     """
