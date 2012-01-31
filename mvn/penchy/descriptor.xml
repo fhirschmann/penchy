@@ -14,11 +14,14 @@
             <includes>
                 <include>penchy/*.py</include>
                 <include>penchy/*/*.py</include>
-                <include>penchy/examples/*.job</include>
+                <include>examples/*.job</include>
                 <include>argparse.py</include>
                 <include>setup.py</include>
+                <include>penchy.requirements</include>
+                <include>README</include>
+                <include>AUTHORS</include>
+                <include>LICENSE</include>
                 <include>bin/*</include>
-                <include>rpyc/**</include>
             </includes>
         </fileSet>
     </fileSets>
