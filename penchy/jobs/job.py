@@ -193,6 +193,7 @@ class Job(object):
         self.invocations = invocations
         self.send = None
         self.receive = None
+        self.filename = None
 
     def run(self, composition):
         """

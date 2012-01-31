@@ -268,16 +268,17 @@ class Save(SystemFilter):
     def __init__(self, target_path):
         """
         :param target_path: path to destination relative to
-                            :class:`~penchy.jobs.job.NodeSetting`.basepath or
+                            :class:`~penchy.jobs.job.NodeSetting`.path or
                             absolute)
         :type target_path: str
         """
+        super(Save, self).__init__()
         self.target_path = target_path
 
     def _run(self, **kwargs):
-        if not os.path.isabs(target_path):
+        if not os.path.isabs(self.target_path):
             node_setting = kwargs['environment']['current_composition'].node_setting
-            self.target_path = os.path.join(node_setting.basepath, self.targetpath)
+            self.target_path = os.path.join(node_setting.path, self.target_path)
         with open(self.target_path, 'w') as f:
             f.write(kwargs['data'])
 
@@ -295,16 +296,17 @@ class BackupFile(SystemFilter):
     def __init__(self, target_path):
         """
         :param target_path: path to destination relative to
-                            :class:`~penchy.jobs.job.NodeSetting`.basepath or
+                            :class:`~penchy.jobs.job.NodeSetting`.path or
                             absolute)
         :type target_path: str
         """
+        super(BackupFile, self).__init__()
         self.target_path = target_path
 
     def _run(self, **kwargs):
-        if not os.path.isabs(target_path):
+        if not os.path.isabs(self.target_path):
             node_setting = kwargs['environment']['current_composition'].node_setting
-            self.target_path = os.path.join(node_setting.basepath, self.targetpath)
+            self.target_path = os.path.join(node_setting.path, self.target_path)
         path = kwargs['filename']
         if not os.path.exists(path):
             raise WrongInputError('file {0} does not exist'.format(path))
