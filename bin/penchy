@@ -5,8 +5,7 @@ This is the main entry point for PenchY.
 
 Execute this if you want to run the full PenchY
 cycle (deploying jobs, executing jobs, accumulating results).
-"""
-"""
+
  .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
@@ -41,7 +40,8 @@ if __name__ == "__main__":
     ca = partial(get_config_attribute, config)
 
     # Parse all other options
-    parser = argparse.ArgumentParser(description=__doc__,
+    parser = argparse.ArgumentParser(
+            description=os.linesep.join(__doc__.split(os.linesep)[:-5]),
             parents=[conf_parser])
 
     log_group = parser.add_mutually_exclusive_group()
