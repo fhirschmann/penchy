@@ -13,8 +13,8 @@ class TempdirTest(unittest.TestCase):
     def test_change(self):
         cwd = os.getcwd()
         with util.tempdir(delete=True):
-            self.assertNotEquals(cwd, os.getcwd())
-        self.assertEquals(cwd, os.getcwd())
+            self.assertNotEqual(cwd, os.getcwd())
+        self.assertEqual(cwd, os.getcwd())
 
 
 class HashTest(unittest.TestCase):
@@ -42,7 +42,7 @@ class MemoizedTest(unittest.TestCase):
         def func():
             return randint(0, 1000)
 
-        self.assertEquals(func(), func())
+        self.assertEqual(func(), func())
 
     def test_docstring(self):
         @util.memoized
@@ -50,20 +50,20 @@ class MemoizedTest(unittest.TestCase):
             """this is a docstring"""
             pass
 
-        self.assertEquals(func.__doc__, "this is a docstring")
+        self.assertEqual(func.__doc__, "this is a docstring")
 
     def test_invalid_argument(self):
         @util.memoized
         def func(lst):
             return lst
 
-        self.assertEquals(func([1, 2]), [1, 2])
-        self.assertEquals(func([1, 2]), [1, 2])
+        self.assertEqual(func([1, 2]), [1, 2])
+        self.assertEqual(func([1, 2]), [1, 2])
 
 
 class MiscTest(unittest.TestCase):
     def test_dict2string(self):
-        self.assertEquals(util.dict2string({'foo': 'bar'}), "foo=bar")
+        self.assertEqual(util.dict2string({'foo': 'bar'}), "foo=bar")
 
     def test_find_bootstrap_client(self):
         self.assertTrue(util.find_bootstrap_client().endswith('penchy_bootstrap'))
@@ -80,7 +80,7 @@ class ImportTest(unittest.TestCase):
             write(tf, os.linesep)
             tf.flush()
             config = util.load_config(tf.name)
-            self.assertEquals(config.foo, i)
+            self.assertEqual(config.foo, i)
 
         self.assertTrue('config' in sys.modules)
         with self.assertRaises(IOError):
@@ -93,7 +93,7 @@ class ImportTest(unittest.TestCase):
             write(tf, os.linesep)
             tf.flush()
             job = util.load_job(tf.name)
-            self.assertEquals(job.job, j)
+            self.assertEqual(job.job, j)
 
     def test_load_job_without_config(self):
         if 'config' in sys.modules:
@@ -107,8 +107,8 @@ class ImportTest(unittest.TestCase):
             def __init__(self):
                 self.foo = 'bar'
         c = Config()
-        self.assertEquals(util.get_config_attribute(c, 'foo', 'yep'), 'bar')
-        self.assertEquals(util.get_config_attribute(c, 'bar', 'yep'), 'yep')
+        self.assertEqual(util.get_config_attribute(c, 'foo', 'yep'), 'bar')
+        self.assertEqual(util.get_config_attribute(c, 'bar', 'yep'), 'yep')
 
 
 class DieTest(unittest.TestCase):
