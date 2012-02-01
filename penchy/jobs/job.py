@@ -424,18 +424,6 @@ class Job(object):
         for e in self._flows():
             valid = valid and e.check()
 
-        sources = set((e.source for e in self._flows()))
-        sinks = set((e.sink for e in self._flows()))
-
-        # source has to be either a data producer itself or somewhere a sink
-        # XXX: maybe this is already captured by edgesort?
-        for source in sources:
-            valid = valid and (isinstance(source, (Workload,
-                                                   Tool,
-                                                   WrappedJVM,
-                                                   Receive))
-                               or source in sinks)
-
         return valid
 
     def _flows(self):
