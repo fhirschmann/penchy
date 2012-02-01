@@ -249,7 +249,7 @@ def default(value, replacement):
 
 def die(msg):
     """
-    Print msg to stdout and exit with exit code 1.
+    Print msg to stderr and exit with exit code 1.
 
     :param msg: msg to print
     :type msg: str
