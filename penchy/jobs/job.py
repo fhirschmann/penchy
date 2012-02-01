@@ -327,10 +327,11 @@ class Job(object):
         for start in starts:
             start.run(environment=self._build_environment())
 
-        # run other filters, here should be no system filters
-        # TODO: maybe check for them and log?
+        # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
+            if isinstance(sink, SystemFilter):
+                kwargs['environment'] = self._build_environment()
             sink.run(**kwargs)
 
     def _get_server_dependencies(self):
