@@ -3,7 +3,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Datensätze müssen gleich lang sein
+# equal lenght of datasets is assumed
 openJDK = [21, 42, 32]
 hotspot = [20, 43, 32]
 
