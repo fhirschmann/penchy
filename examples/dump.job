@@ -8,16 +8,17 @@ node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 jvm = jvms.JVM('java')
 composition = SystemComposition(jvm, node)
 
-w = workloads.ScalaBench('fop')
+w = workloads.ScalaBench('dummy')
 jvm.workload = w
 
 read = filters.Read()
 dump = filters.Dump(indent=2)
-save = filters.Save('dump_saved')
+dump2 = filters.Dump(include_complete_job=True, indent=2)
+
 job = Job(compositions=composition,
           client_flow=[
-              w >> ('stderr', 'paths') >> read >> dump,
-              dump >> ('dump', 'data') >> save
+              w >> ('stderr', 'paths') >> read >> dump >> filters.Print(),
+              read >> dump2 >> filters.Print()
           ],
           server_flow=[],
           invocations = 1
