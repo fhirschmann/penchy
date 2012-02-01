@@ -3,12 +3,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-openJDK = (21, 42, 32)
-hotspot = (20, 43, 32)
+# Datensätze müssen gleich lang sein
+openJDK = [21, 42, 32]
+hotspot = [20, 43, 32]
 
-N = len(openJDK)
-
-ind = np.arange(N)
+ind = np.arange(len(openJDK))
 width = 0.35
 
 fig = plt.figure()
