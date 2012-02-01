@@ -3,6 +3,7 @@ import sys
 import hashlib
 from random import randint
 from tempfile import NamedTemporaryFile
+from StringIO import StringIO
 
 from penchy import util
 from penchy.compat import unittest, write, update_hasher
@@ -108,3 +109,15 @@ class ImportTest(unittest.TestCase):
         c = Config()
         self.assertEquals(util.get_config_attribute(c, 'foo', 'yep'), 'bar')
         self.assertEquals(util.get_config_attribute(c, 'bar', 'yep'), 'yep')
+
+
+class DieTest(unittest.TestCase):
+    def test_dying(self):
+        io = StringIO()
+        s = 'Die!'
+        err, sys.stderr = sys.stderr, io
+        with self.assertRaises(SystemExit):
+            util.die(s)
+        io.seek(0)
+        self.assertEqual(io.read(), s + os.linesep)
+        sys.stderr = err
