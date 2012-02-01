@@ -323,6 +323,7 @@ class ValgrindJVM(WrappedJVM):
         """
         cmd = [self.valgrind_path,
                '--log-file={0}'.format(self.log_name),
+               '--smc-check=all',  # to support reflection, really slow
                '--trace-children=yes']
         if self.__class__.arguments:
             cmd.extend(self.__class__.arguments)
