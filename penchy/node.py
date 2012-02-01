@@ -243,7 +243,8 @@ class Node(object):  # pragma: no cover
 
     def kill(self):
         """
-        Kill PenchY on node.
+        Kill PenchY on node. This will kill all processes whose
+        parent id match penchy's id.
 
         A pidfile named `penchy.pid` must exist on the node.
         """
