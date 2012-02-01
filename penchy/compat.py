@@ -20,11 +20,13 @@ on_python3 = sys.version_info[0] == 3
 
 if on_python3:  # pragma: no cover
     unicode = str
+    unicode_ = str
     str = bytes
-
     from io import StringIO
 else:
     from StringIO import StringIO
+    unicode_ = unicode
+
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
 else:
