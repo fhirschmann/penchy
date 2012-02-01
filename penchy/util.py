@@ -7,6 +7,7 @@ This module provides miscellaneous utilities.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
+from __future__ import print_function
 
 import hashlib
 import functools
@@ -254,5 +255,5 @@ def die(msg):
     :param msg: msg to print
     :type msg: str
     """
-    print >>sys.stderr, msg
+    print(msg, file=sys.stderr)
     sys.exit(1)
