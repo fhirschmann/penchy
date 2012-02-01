@@ -29,7 +29,6 @@ full-coverage: .coverage
 .coverage:
 	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
 	coverage run --append bin/penchy -c penchyrc.example --run-locally examples/simple.job
-# 	coverage run --append bin/penchy -c penchyrc.example --run-locally examples/valgrind_jvm.job
 
 coverage-upload: coverage
 	rsync -avz htmlcov bp@0x0b.de:~/docs/
