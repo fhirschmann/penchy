@@ -1,15 +1,13 @@
 import itertools
+import os
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.jobs.filters import (WrongInputError,
-                                 DacapoHarness,
-                                 Send,
-                                 Evaluation,
-                                 StatisticRuntimeEvaluation)
-from penchy.tests.util import get_json_data
+from penchy.jobs.filters import *
+
+from penchy.tests.util import get_json_data, make_system_composition
 
 
 class DacapoHarnessTest(unittest.TestCase):
@@ -132,3 +130,60 @@ class EvaluationTest(unittest.TestCase):
         e = Evaluation(lambda x: x, Types(('value', int)), Types(('value', int)))
         with self.assertRaises(ValueError):
             e._run()
+
+
+class BackupTest(unittest.TestCase):
+    def test_copy(self):
+        s = "'tis a test string"
+        with NamedTemporaryFile(delete=False) as f:
+            path = f.name
+            f.write(s)
+        self.assertTrue(os.path.exists(path))
+        backup_path = '/tmp/penchy-backup-test'
+        b = BackupFile(backup_path)
+        b.run(environment={}, filename=path)
+
+        # did backup?
+        with open(backup_path) as f:
+            self.assertEqual(f.read(), s)
+
+        # did not modify backuped file?
+        with open(path) as f:
+            self.assertEqual(f.read(), s)
+
+        os.remove(path)
+        os.remove(backup_path)
+
+    def test_relative_copy(self):
+        s = "'tis a test string"
+        comp = make_system_composition()
+        comp.node_setting.path = '/tmp'
+
+        with NamedTemporaryFile(delete=False) as f:
+            path = f.name
+            f.write(s)
+        self.assertTrue(os.path.exists(path))
+        backup_file = 'penchy-backup-test'
+        backup_path = os.path.join(comp.node_setting.path, backup_file)
+        b = BackupFile(backup_file)
+        b.run(environment={'current_composition' : comp}, filename=path)
+
+        # did backup?
+        with open(backup_path) as f:
+            self.assertEqual(f.read(), s)
+
+        # did not modify backuped file?
+        with open(path) as f:
+            self.assertEqual(f.read(), s)
+
+        os.remove(path)
+        os.remove(os.path.join(comp.node_setting.path, backup_path))
+
+    def test_not_existing_path(self):
+        # create unique not existing path
+        with NamedTemporaryFile() as f:
+            path = f.name
+
+        b = BackupFile('/tmp/penchy-backup-test')
+        with self.assertRaises(WrongInputError):
+            b.run(environment={}, filename=path)
