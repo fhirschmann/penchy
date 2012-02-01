@@ -241,16 +241,21 @@ class JVM(object):
         p = subprocess.Popen(call + ['-version'], stderr=subprocess.PIPE)
         _, jvm = p.communicate()
 
-        if self._workload is None or not hasattr(self._workload, 'information_arguments'):
+        if self._workload is None:
             workload = ''
+        elif not hasattr(self._workload, 'information_arguments'):
+            workload = str(self._workload)
         else:
             p = subprocess.Popen(call + self._workload.information_arguments,
                                  stderr=subprocess.PIPE)
             _, workload = p.communicate()
+
+        tool = str(self._tool) if self._tool else ''
         return {
             'jvm' : jvm,
             'cmdline' : ' '.join(self.cmdline),
-            'worklaod' : workload
+            'worklaod' : workload,
+            'tool' : tool
         }
 
 
