@@ -412,14 +412,14 @@ def _extract_classpath(options):
     :returns: classpath as list of parts
     :rtype: list
     """
-    classpath = ''
     prev = ''
     # a later classpath overwrites previous definitions so we have to search
     # from the end
-    for x in reversed(options):
-        if x in ('-cp', '-classpath'):
-            classpath = prev
-            break
-        prev = x
+    for option in reversed(options):
+        if option in ('-cp', '-classpath'):
+            # check prev for emptyness to prevent returning [''] if classpath is
+            # only option
+            return prev.split(os.pathsep) if prev else []
+        prev = option
 
-    return classpath.split(os.pathsep) if classpath else []
+    return []
