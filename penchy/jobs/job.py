@@ -16,7 +16,7 @@ from itertools import groupby, chain
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import update_hasher
+from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter, Workload, Tool
 from penchy.jobs.filters import Receive, Send
@@ -478,7 +478,7 @@ class Job(object):
         """ % (server_edges, client_edges)
         with NamedTemporaryFile(delete=False) as f:
             delete = f.name
-            f.write(s)
+            write(f, s)
         subprocess.call(['dot', '-T', format, '-O', delete])
         os.remove(delete)
         return delete + '.' + format

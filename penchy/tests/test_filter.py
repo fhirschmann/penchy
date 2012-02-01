@@ -137,7 +137,7 @@ class BackupTest(unittest.TestCase):
         s = "'tis a test string"
         with NamedTemporaryFile(delete=False) as f:
             path = f.name
-            f.write(s)
+            write(f, s)
         self.assertTrue(os.path.exists(path))
         backup_path = '/tmp/penchy-backup-test'
         b = BackupFile(backup_path)
@@ -161,7 +161,7 @@ class BackupTest(unittest.TestCase):
 
         with NamedTemporaryFile(delete=False) as f:
             path = f.name
-            f.write(s)
+            write(f, s)
         self.assertTrue(os.path.exists(path))
         backup_file = 'penchy-backup-test'
         backup_path = os.path.join(comp.node_setting.path, backup_file)
@@ -219,7 +219,7 @@ class ReadTest(unittest.TestCase):
     def test_read(self):
         s = "'tis a test string"
         with NamedTemporaryFile() as f:
-            f.write(s)
+            write(f, s)
             f.flush()
 
             r = Read()
