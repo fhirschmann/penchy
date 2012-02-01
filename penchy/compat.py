@@ -22,6 +22,9 @@ if on_python3:  # pragma: no cover
     unicode = str
     str = bytes
 
+    from io import StringIO
+else:
+    from StringIO import StringIO
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
 else:

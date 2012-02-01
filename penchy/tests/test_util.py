@@ -3,10 +3,9 @@ import sys
 import hashlib
 from random import randint
 from tempfile import NamedTemporaryFile
-from StringIO import StringIO
 
 from penchy import util
-from penchy.compat import unittest, write, update_hasher
+from penchy.compat import unittest, write, update_hasher, StringIO
 
 
 class TempdirTest(unittest.TestCase):
