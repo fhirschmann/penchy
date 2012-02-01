@@ -17,6 +17,7 @@ rect1 = ax.bar(ind, openJDK, width, color='blue')
 rect2 = ax.bar(ind+width, hotspot, width, color='red')
 
 ax.set_ylabel('Wallclocktime')
+ax.set_xlabel('Benchmarks')
 ax.set_title('openJDK vs. hotspot')
 ax.set_xticks(ind+width)
 ax.set_xticklabels( ('fop', 'batik', 'eclipse') )
