@@ -213,3 +213,15 @@ class SaveTest(unittest.TestCase):
             self.assertEqual(f.read(), s)
 
         os.remove(save_path)
+
+
+class ReadTest(unittest.TestCase):
+    def test_read(self):
+        s = "'tis a test string"
+        with NamedTemporaryFile() as f:
+            f.write(s)
+            f.flush()
+
+            r = Read()
+            r.run(paths=[f.name])
+            self.assertListEqual(r.out['data'], [s])
