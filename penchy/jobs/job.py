@@ -167,9 +167,19 @@ class Job(object):
     """
     Represents a job.
 
-    #TODO: include spec of those funs (atm see _build_environment)
-    ``job.send`` has to be set on client
-    ``job.receive`` has to be set on server
+    Those attributes have to be set from the outside before a :class:`Job`
+    instance is ``run``:
+
+    - ``job.send`` to be set on client to a function with a signature ``(hash,
+                   data)`` where ``hash`` identifies the
+                   :class:`SystemComposition` and ``data`` the data to send
+
+    - ``job.receive`` to be set on server to a function that takes no arguments
+                      and returns the results of all :class:`SystemComposition`
+                      with the :class:`SystemComposition` as key and the results
+                      as value.
+
+    - ``job.filename`` has to be set to the filename of the job
     """
 
     def __init__(self, compositions,
