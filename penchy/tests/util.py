@@ -41,12 +41,16 @@ class MockPipelineElement(PipelineElement):
         names = [x for x in names] if names is not None else ()
         self.outputs = Types(*[(name, int) for name in names])
         self.out = dict((name, 42) for name in names)
+        self.hash_ = hash('42'.join(names))
 
     def __repr__(self):
         return "MockPipelineElement({0}, {1})".format(self.outputs, self.out)
 
     def __eq__(self, other):
         return self.outputs == other.outputs and self.out == other.out
+
+    def __hash__(self):
+        return self.hash_
 
     def _run(self, *args, **kwargs):
         pass
