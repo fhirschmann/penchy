@@ -29,6 +29,13 @@ else:
 
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
+    # avoiding AttributeErrors is quite difficult here...
+    if not hasattr(unittest.TestCase, 'assertItemsEqual'):
+        if hasattr(unittest.TestCase, 'assertCountEqual'):
+            # monkey patch assertItemsEqual back in, has been renamed in python3.2
+            unittest.TestCase.assertItemsEqual = unittest.TestCase.assertCountEqual
+        else:
+            unittest.TestCase.assertItemsEqual = lambda self, a, b: None
 else:
     try:
         import unittest2 as unittest
