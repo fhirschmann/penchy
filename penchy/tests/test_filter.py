@@ -187,3 +187,29 @@ class BackupTest(unittest.TestCase):
         b = BackupFile('/tmp/penchy-backup-test')
         with self.assertRaises(WrongInputError):
             b.run(environment={}, filename=path)
+
+
+class SaveTest(unittest.TestCase):
+    def test_save_relative(self):
+        s = "'tis a test string"
+        save_file = 'penchy-save-test'
+        comp = make_system_composition()
+        comp.node_setting.path = '/tmp'
+        save_path = os.path.join(comp.node_setting.path, save_file)
+
+        save = Save(save_file)
+        save.run(environment={'current_composition': comp}, data=s)
+        with open(save_path) as f:
+            self.assertEqual(f.read(), s)
+
+        os.remove(save_path)
+
+    def test_save_absolute(self):
+        s = "'tis a test string"
+        save_path = '/tmp/penchy-save-test'
+        save = Save(save_path)
+        save.run(environment={}, data=s)
+        with open(save_path) as f:
+            self.assertEqual(f.read(), s)
+
+        os.remove(save_path)
