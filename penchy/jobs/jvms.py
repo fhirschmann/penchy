@@ -254,7 +254,7 @@ class JVM(object):
         return {
             'jvm' : jvm,
             'cmdline' : ' '.join(self.cmdline),
-            'worklaod' : workload,
+            'workload' : workload,
             'tool' : tool
         }
 
