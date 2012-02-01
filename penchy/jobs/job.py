@@ -310,7 +310,7 @@ class Job(object):
         :raise: :exc:`ValueError` if there is no
                 :class:`~penchy.jobs.filters.Receive` in the serverside pipeline
         """
-        # Do nothing is server_flow is empty
+        # Do nothing if server_flow is empty
         if not self.server_flow:
             return
 
