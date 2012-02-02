@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """
 This module contains classes which deal with nodes
 (that is, connecting via ssh, uploading the job, starting it...).
