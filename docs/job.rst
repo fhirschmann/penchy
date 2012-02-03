@@ -4,6 +4,7 @@ Writing Jobs
 
 Here is a simple Job:
 
+.. _sample-job:
   .. literalinclude:: commented_sample_job.py
         :language: python
         :linenos:
@@ -227,11 +228,11 @@ frequently used settings there.
 
 The configuration is a Python module and you can use any Python Code there to
 configure.
-If you don't specify where :file:`penchyrc` is (in the penchy invocation:
-``penchy --config <file>``) it will be searched in :file:`$HOME/.penchyrc`
+If you do not specify where :file:`penchyrc` is (in the penchy invocation:
+``penchy --config <file>``) it will be searched in :file:`$HOME/.penchyrc`.
 
 To use :file:`penchyrc`, you have to import the ``config`` module, the header of
-above sample job::
+above :ref:`sample job <sample-job>`::
 
   import os
   from penchy.jobs import *
@@ -249,6 +250,7 @@ given a :file:`penchyrc` that looks like this::
 
   import os
   from penchy.jobs import NodeSetting
+  
   LOCALNODE = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
 Testing Jobs
