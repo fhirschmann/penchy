@@ -151,8 +151,8 @@ features, CPU type, performance or amount of RAM, or whatever you deem helpful.
 JVM
 ---
 
-:class:`~penchy.jobs.JVM` is an abstraction of Java Virtual Machines and executes its Workload.
-It may contain an Agent.
+:class:`~penchy.jobs.JVM` is an abstraction of Java Virtual Machines and executes its :ref:`Workload <sec-workloads>`.
+It may contain an :ref:`Agent <sec-agent>`.
 
 You can specify options like you would on a shell (including a classpath). These
 will be passed to the JVM. Here's an example with several options::
@@ -162,6 +162,7 @@ will be passed to the JVM. Here's an example with several options::
 JVMs may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
+.. _sec-workloads:
 Workloads
 ---------
 
@@ -177,6 +178,7 @@ flavors: Agent and WrappedJVM.
 Tools may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
+.. _sec-agent:
 Agent
 ~~~~~
 
