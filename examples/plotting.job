@@ -1,0 +1,38 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Example job with 2 nodes. One node executes fop and batik on openJDK
+# the other one on hotspot.
+
+node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
+node2 = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+hotspot_fop = jvms.JVM('java')
+hotspot_batik = jvms.JVM('java')
+
+config_hotspot_fop = SystemComposition(hotspot_fop, node2)
+config_hotspot_batik = SystemComposition(hotspot_batik, node2)
+
+fop = workloads.ScalaBench('dummy')
+batik = workloads.ScalaBench('dummy')
+
+hotspot_fop.workload = fop
+hotspot_batik.workload = batik
+
+f1 = filters.DacapoHarness()
+f2 = filters.Send()
+
+receiver = filters.Receive()
+
+job = Job(compositions=[config_hotspot_fop, config_hotspot_batik],
+          client_flow=[
+              fop >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2,
+              batik >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2
+          ],
+          server_flow=[
+              receiver >> ('results', 'times') >> filters.Print()
+          ],
+          invocations = 2
+          )
