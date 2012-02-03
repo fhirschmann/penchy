@@ -19,7 +19,3 @@ as a class attribute like so::
 Once the dependencies have been declared, they will be collected and
 installed on the nodes via maven pom files which are automatically
 produced on all nodes.
-
-
-.. [#f1] Tamiflex: http://code.google.com/p/tamiflex/
-.. [#f2] ASM: http://asm.ow2.org/
