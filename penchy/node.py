@@ -209,7 +209,7 @@ class Node(object):  # pragma: no cover
         :param cmd: command to execute
         :type cmd: string
         """
-        self.log.info("Executing %s" % cmd)
+        self.log.info("Executing `%s`" % cmd)
         return self.ssh.exec_command(cmd)
 
     def execute_penchy(self, args):
