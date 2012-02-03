@@ -166,6 +166,8 @@ and after they are run, respectively.
 Workloads
 ---------
 
+Workloads are programs (mostly benchmarks) that are executed by a JVM.
+
 Workloads may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
