@@ -165,6 +165,7 @@ JVMs may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
 .. _sec-workloads:
+
 Workloads
 ---------
 
@@ -183,6 +184,7 @@ Tools may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
 .. _sec-agent:
+
 Agent
 ~~~~~
 
