@@ -151,7 +151,7 @@ features, CPU type, performance or amount of RAM, or whatever you deem helpful.
 JVM
 ---
 
-A JVM is a Java Virtual Machine and executes its Workload.
+:class:`~penchy.jobs.JVM` is an abstraction of Java Virtual Machines and executes its Workload.
 It may contain an Agent.
 
 You can specify options like you would on a shell (including a classpath). These
