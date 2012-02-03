@@ -211,6 +211,10 @@ Valgrind for execution.
 Filter
 ------
 
+Filters are used to process the raw output of the tools. They define the
+client and server flow and therefore describe how the raw output of
+(potentially many) Tools is processed into the desired output (e.g. diagrams).
+
 Filters may contain pre- and post-hooks, which are executed before
 and after they are run, respectively.
 
