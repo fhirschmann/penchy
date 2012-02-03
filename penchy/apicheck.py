@@ -14,7 +14,8 @@ log = logging.getLogger(__name__)
 def compare_argspec(func, expected):
     actual = inspect.getargspec(func)
     if not expected == actual:
-        log.warning("Arguments for %s in %s have changed:\nExpected:\n%s\nActual:\n%s" % \
+        log.warning('Arguments for %s in %s have changed:\n'
+                'Expected:\n%s\nActual:\n%s' %
                 (func.__name__, func.__module__, expected, actual))
         return True
     else:
@@ -23,8 +24,8 @@ def compare_argspec(func, expected):
 
 def checkattr(func, attr):
     if not hasattr(func, attr):
-        log.error("%s in %s no longer has a %s attribute" % (func.__name__,
-            func.__module__, attr))
+        log.error('%s in %s no longer has a %s attribute' %
+                (func.__name__, func.__module__, attr))
         return True
     else:
         return False
@@ -34,11 +35,11 @@ def check_paramiko():
     """
     Check for API changes in paramiko.
     """
-    log.debug("Checking for API changes in paramiko")
+    log.debug('Checking for API changes in paramiko')
     try:
         import paramiko
     except ImportError:
-        log.error("Could not import paramiko - did you install it?")
+        log.error('Could not import paramiko - did you install it?')
         raise
 
     checkattr(paramiko, 'SSHClient')
