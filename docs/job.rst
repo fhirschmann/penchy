@@ -151,7 +151,7 @@ features, CPU type, performance or amount of RAM, or whatever you deem helpful.
 JVM
 ---
 
-:class:`~penchy.jobs.JVM` is an abstraction of Java Virtual Machines and executes its :ref:`Workload <sec-workloads>`.
+:class:`~penchy.jobs.jvms.JVM` is an abstraction of Java Virtual Machines and executes its :ref:`Workload <sec-workloads>`.
 It may contain an :ref:`Agent <sec-agent>`.
 
 You can specify options like you would on a shell (including a classpath). These
