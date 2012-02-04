@@ -19,5 +19,5 @@ composition.flow = [w >> ['stderr', 'exit_code'] >> f1 >> 'times' >> f2 >> f3]
 
 job = Job(compositions=composition,
           server_flow=[],
-          invocations = 2
+          invocations = 20
           )
