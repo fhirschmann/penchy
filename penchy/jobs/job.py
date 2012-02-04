@@ -330,20 +330,7 @@ class Job(object):
         if composition not in self.compositions:
             raise ValueError('composition not part of this job')
 
-        deps = (e.DEPENDENCIES for e in self._get_client_elements(composition))
-        return set(chain.from_iterable(deps))
-
-    def _get_client_elements(self, composition=None):
-        """
-        Return the clientside element of this job.
-
-        :param composition: composition to collect elements for, None for all
-        :type composition: None or :class:`SystemComposition`
-        :returns: all elements that are part of the clientside job.
-        :rtype: set
-        """
-        compositions = self.compositions if composition is None else [composition]
-        return set(chain.from_iterable(c.elements for c in compositions))
+        return set(chain.from_iterable(e.DEPENDENCIES for e in composition.elements))
 
     def run_server_pipeline(self):
         """
@@ -444,7 +431,7 @@ class Job(object):
                               .format(composition))
                 valid = False
 
-            if not any(isinstance(e, Send) for e in self._get_client_elements(composition)):
+            if not any(isinstance(e, Send) for e in composition.elements):
                 log.error('Check: there is no Send in composition "{0}"'
                           .format(composition))
                 valid = False
