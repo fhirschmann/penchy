@@ -217,6 +217,13 @@ class SystemComposition(object):
 
         return elements
 
+    def _reset(self):
+        """
+        Reset the elements..
+        """
+        for e in self.elements:
+            e.reset()
+
 
 class Job(object):
     """
@@ -303,7 +310,7 @@ class Job(object):
             sink.run(**kwargs)
 
         # reset state of filters for running multiple configurations
-        self._reset_client_pipeline()
+        composition._reset()
         # restore send
         self.send = send
         self._composition = None
@@ -337,13 +344,6 @@ class Job(object):
         """
         compositions = self.compositions if composition is None else [composition]
         return set(chain.from_iterable(c.elements for c in compositions))
-
-    def _reset_client_pipeline(self):
-        """
-        Reset the clientside pipeline.
-        """
-        for e in self._get_client_elements():
-            e.reset()
 
     def run_server_pipeline(self):
         """

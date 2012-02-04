@@ -118,22 +118,21 @@ class ResetPipelineTest(unittest.TestCase):
         self.tool.out['test'].append(23)
         self.filter = DacapoHarness()
         self.filter.out['test'].append(5)
-        config = make_system_composition()
-        config.jvm.workload = self.workload
-        config.jvm.tool = self.tool
-        config.flow = [Edge(self.workload, self.filter)]
-        self.job = Job(config, [])
+        self.comp = make_system_composition()
+        self.comp.jvm.workload = self.workload
+        self.comp.jvm.tool = self.tool
+        self.comp.flow = [Edge(self.workload, self.filter)]
 
     def test_reset_jvm_part(self):
         self.assertDictEqual(self.workload.out, {'test' : [42]})
         self.assertDictEqual(self.tool.out, {'test' : [23]})
-        self.job._reset_client_pipeline()
+        self.comp._reset()
         self.assertDictEqual(self.workload.out, {})
         self.assertDictEqual(self.tool.out, {})
 
     def test_reset_filter(self):
         self.assertDictEqual(self.filter.out, {'test' : [5]})
-        self.job._reset_client_pipeline()
+        self.comp._reset()
         self.assertDictEqual(self.filter.out, {})
 
 
