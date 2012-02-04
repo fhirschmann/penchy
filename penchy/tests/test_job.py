@@ -23,7 +23,8 @@ class JobClientElementsTest(unittest.TestCase):
         self.jvm.tool = t
         f = Print()
         self.config = SystemComposition(self.jvm, 'pseudo_node')
-        self.job = Job(self.config, [Edge(w, f)], [])
+        self.config.flow = [Edge(w, f)]
+        self.job = Job(self.config, [])
 
     def test_empty_elements(self):
         self.job.client_flow = []
@@ -54,8 +55,8 @@ class JobClientElementsTest(unittest.TestCase):
 class JobServerElementsTest(unittest.TestCase):
     def setUp(self):
         super(JobServerElementsTest, self).setUp()
-        self.config = SystemComposition(JVM('foo'), 'pseudo_node')
-        self.job = Job([self.config], [], [])
+        self.composition = SystemComposition(JVM('foo'), 'pseudo_node')
+        self.job = Job([self.composition], [])
 
     def test_empty_elements(self):
         self.assertSetEqual(self.job._get_server_dependencies(), set())
@@ -66,7 +67,7 @@ class SystemCompositionsTest(unittest.TestCase):
         self.single_host = [make_system_composition('192.168.1.10')]
         self.multi_host = [make_system_composition('192.168.1.11'),
                            make_system_composition('192.168.1.11')]
-        self.job = Job(self.single_host + self.multi_host, [], [])
+        self.job = Job(self.single_host + self.multi_host, [])
 
     def test_wrong_identifier(self):
         self.assertListEqual(self.job.compositions_for_node('baz'), [])
@@ -120,7 +121,8 @@ class ResetPipelineTest(unittest.TestCase):
         config = make_system_composition()
         config.jvm.workload = self.workload
         config.jvm.tool = self.tool
-        self.job = Job(config, [Edge(self.workload, self.filter)], [])
+        config.flow = [Edge(self.workload, self.filter)]
+        self.job = Job(config, [])
 
     def test_reset_jvm_part(self):
         self.assertDictEqual(self.workload.out, {'test' : [42]})
@@ -137,7 +139,7 @@ class ResetPipelineTest(unittest.TestCase):
 
 class BuildEnvTest(unittest.TestCase):
     def setUp(self):
-        self.job = Job(make_system_composition(), [], [])
+        self.job = Job(make_system_composition(), [])
 
     def test_empty_send_rcv(self):
         env = self.job._build_environment()
@@ -157,7 +159,7 @@ class BuildEnvTest(unittest.TestCase):
 class RunServerPipelineTest(unittest.TestCase):
     def setUp(self):
         self.receive = Receive()
-        self.j = Job([], [], [Edge(self.receive, MockPipelineElement())])
+        self.j = Job([], [Edge(self.receive, MockPipelineElement())])
         self.data = {'a': 1, 'b' : 2}
         self.j.receive = lambda: self.data
 
@@ -167,12 +169,12 @@ class RunServerPipelineTest(unittest.TestCase):
         self.assertDictEqual(self.receive.out, {'results' : self.data})
 
     def test_no_receivers(self):
-        j = Job([], [], [DacapoHarness() >> Print()])
+        j = Job([], [DacapoHarness() >> Print()])
         with self.assertRaises(ValueError):
             j.run_server_pipeline()
 
     def test_empty_flow(self):
-        j = Job([], [], [])
+        j = Job([], [])
         self.assertEqual(j.run_server_pipeline(), None)
 
 
@@ -185,8 +187,8 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
+        c.flow = [w >> f >> ('times', 'payload') >> s]
         j = Job(c,
-                [w >> f >> ('times', 'payload') >> s],
                 [r >> p])
 
         self.assertTrue(j.check())
@@ -199,7 +201,8 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
-        j = Job(c, [f >> f >> s], [r >> p])
+        c.flow = [f >> f >> s]
+        j = Job(c, [r >> p])
         self.assertFalse(j.check())
 
     def test_server_cycle(self):
@@ -213,12 +216,13 @@ class JobCheckTest(unittest.TestCase):
         m.inputs = Types(('a', int))
         m.outputs = Types(('a', int))
         c.jvm.workload = w
-        j = Job(c, [w >> f >> s], [r >> m >> m >> p])
+        c.flow = [w >> f >> s]
+        j = Job(c, [r >> m >> m >> p])
         self.assertFalse(j.check())
 
     def test_no_workload(self):
         c = make_system_composition()
-        j = Job(c, [], [])
+        j = Job(c, [])
         self.assertFalse(j.check())
 
     def test_wrong_output(self):
@@ -229,8 +233,8 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
+        c.flow = [w >> [('a', 'stderr'), 'exit_code'] >> f >> s]
         j = Job(c,
-                [w >> [('a', 'stderr'), 'exit_code'] >> f >> s],
                 [r >> p])
         self.assertFalse(j.check())
 
@@ -242,8 +246,8 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
+        c. flwow = [w >> 'exit_code' >> f >> s]
         j = Job(c,
-                [w >> 'exit_code' >> f >> s],
                 [r >> p])
         self.assertFalse(j.check())
 
@@ -255,16 +259,17 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
+        c.flow = [c.jvm >> ('valgrind_log', 'payload') >> s]
         j = Job(c,
-                [c.jvm >> ('valgrind_log', 'payload') >> s],
                 [r >> p])
         self.assertTrue(j.check())
 
 
 class PipelineVisualizationTest(unittest.TestCase):
     def test_correct_path(self):
-        j = Job(make_system_composition,
-                [Print() >> Print()],
+        comp = make_system_composition()
+        comp.flow = [Print() >> Print()]
+        j = Job(comp,
                 [Receive() >> Print()])
 
         path = j.visualize()

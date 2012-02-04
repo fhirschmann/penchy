@@ -126,6 +126,14 @@ class SystemComposition(object):
 
     A :class:`SystemComposition` is a unique identifier that groups the
     results of its execution for server consumation.
+
+    The ``flow`` of the :class:`SystemComposition` has to be set before
+    executing the job::
+
+        composition = SystemComposition(jvm, node)
+        w = Dacapo('fop')
+        jvm.workload = w
+        composition.flow = [w >> Print()]
     """
 
     def __init__(self, jvm, node_setting, name=None):
@@ -134,6 +142,7 @@ class SystemComposition(object):
         self.name = default(name, "{0} @ {1}".format(jvm, node_setting))
         self.jvm = jvm
         self.node_setting = node_setting
+        self._flow = []
 
     def __eq__(self, other):
         return self.jvm == other.jvm and self.node_setting == other.node_setting
@@ -162,6 +171,52 @@ class SystemComposition(object):
         update_hasher(hasher, self.node_setting.hash())
         return hasher.hexdigest()
 
+    @property
+    def flow(self):
+        """
+        The flow of the pipeline.
+        """
+        return self._flow
+
+    @flow.setter
+    def flow(self, flow):
+        """
+        The flow of the pipeline.
+
+        :param flow: flow of execution after JVM
+        :type flow: List of :class:`Edge` or :class:`Pipeline`
+        """
+        self._flow = list(chain.from_iterable(e.edges for e in flow))
+
+    @property
+    def starts(self):
+        """
+        The starts of the pipeline.
+
+        All :class:`PipelineElement` that are executed by the jvm.
+        """
+        return [e for e in (self.jvm.workload, self.jvm.tool, self.jvm)
+                if isinstance(e, PipelineElement)]
+
+    @property
+    def elements(self):
+        """
+        All :class:`PipelineElement` of this composition.
+        """
+        if not self._flow:
+            log.warn('No flow set')
+
+        elements = set(e.source for e in self._flow)
+        elements.update(e.sink for e in self._flow)
+        if self.jvm.workload:
+            elements.add(self.jvm.workload)
+        if self.jvm.tool:
+            elements.add(self.jvm.tool)
+        if isinstance(self.jvm, PipelineElement):
+            elements.add(self.jvm)
+
+        return elements
+
 
 class Job(object):
     """
@@ -183,22 +238,19 @@ class Job(object):
     """
 
     def __init__(self, compositions,
-                 client_flow, server_flow,
+                 server_flow,
                  invocations=1):
         """
         :param compositions: :class:`SystemComposition` to execute jobs on
         :type compositions: List of :class:`SystemComposition`
                               or :class:`SystemComposition`
-        :param client_flow: describes execution of the job on nodes
-        :type client_flow: sequence of :class:`Edge`
         :param server_flow: describes the execution of the job on the server
-        :type client_flow: sequence of :class:`Edge`
+        :type server_flow: List of :class:`Edge` or :class:`Pipeline`
         :param invocations: number of times to run job on each configuration
         :type invocations: int
         """
         self.compositions = compositions if isinstance(compositions, list) \
-                              else [compositions]
-        self.client_flow = list(chain.from_iterable(dep.edges for dep in client_flow))
+                            else [compositions]
         self.server_flow = list(chain.from_iterable(dep.edges for dep in server_flow))
         self.invocations = invocations
         self.send = None
@@ -227,10 +279,7 @@ class Job(object):
 
         composition.jvm.basepath = composition.node_setting.basepath
 
-        starts = [e for e in (composition.jvm.workload, composition.jvm.tool) if e]
-        if isinstance(composition.jvm, PipelineElement):
-            starts.append(composition.jvm)
-        _, edge_order = edgesort(starts, self.client_flow)
+        _, edge_order = edgesort(composition.starts, composition.flow)
 
         for i in range(1, self.invocations + 1):
             # measure usertime before
@@ -287,14 +336,7 @@ class Job(object):
         :rtype: set
         """
         compositions = self.compositions if composition is None else [composition]
-        elements = chain((e.source for e in self.client_flow),
-                         (e.sink for e in self.client_flow),
-                         filter(bool, (c.jvm.workload for c in compositions)),
-                         filter(bool, (c.jvm.tool for c in compositions)),
-                         (c.jvm for c in compositions))
-
-        return set(filter(lambda e: isinstance(e, PipelineElement),
-                          elements))
+        return set(chain.from_iterable(c.elements for c in compositions))
 
     def _reset_client_pipeline(self):
         """
@@ -395,11 +437,8 @@ class Job(object):
                 valid = False
 
             # check if there are cycles in client pipelines
-            starts = [e for e in (composition.jvm.workload, composition.jvm.tool) if e]
-            if isinstance(composition.jvm, PipelineElement):
-                starts.append(composition.jvm)
             try:
-                edgesort(starts, self.client_flow)
+                edgesort(composition.starts, composition.flow)
             except ValueError:
                 log.exception('Check: cycle on composition "{0}"'
                               .format(composition))
@@ -422,13 +461,13 @@ class Job(object):
             log.exception('Check: cycle in server pipeline')
             valid = False
 
-        for e in self._flows():
-            valid = valid and e.check()
+        for edge in chain.from_iterable(c.flow for c in self.compositions):
+            valid = valid and edge.check()
+
+        for edge in self.server_flow:
+            valid = valid and edge.check()
 
         return valid
-
-    def _flows(self):
-        return chain(self.client_flow, self.server_flow)
 
     def visualize(self, format='png', dot='dot'):
         """
@@ -457,8 +496,11 @@ class Job(object):
                                          )
                                     if e.map_ else '')
                            for e in flow]
-                          for flow in (self.client_flow, self.server_flow)]
+                          for flow in (chain.from_iterable(c.flow for c
+                                                          in self.compositions),
+                                      self.server_flow)]
 
+        # TODO: different ranks for server and clients?
         client_edges = '\n'.join(cedges)
         server_edges = '\n'.join(sedges)
         s = """
