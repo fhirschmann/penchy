@@ -38,9 +38,10 @@ In the following ``e1`` and ``e2`` are just some
 The basic syntax
 ----------------
 
-In the following section, there is a short introduction on what syntax you
-can use to define dependencies between elements and what data they comprise of.
-It is used to define the ``client_flow`` and ``server_flow`` for a
+In the following section, there is a short introduction on what syntax you can
+use to define dependencies between elements and what data they comprise of.
+It is used to define the ``flow`` for a
+:class:`~penchy.jobs.job.SystemComposition` and ``server_flow`` for a
 :class:`~penchy.jobs.job.Job`.
 
 .. warning::
@@ -116,23 +117,22 @@ explicitly as explained above.
 Defining multiple pipelines
 ---------------------------
 
-To define multiple pipeline in the flows you just add more.
-Here we define two lines of action in the client flow (analogous for the server
+To define multiple pipelines in the flows you just add more to the list of flow.
+Here we define two lines of action in the
+:class:`~penchy.jobs.job.SystemComposition` flow (analogous for the server
 flow)::
 
-  job = Job(...
-            client_flow=[
+  ...
+  compososition.flow = [
                 e1 >> e2 >> e3,
                 e1 >> e4
             ]
-            ...
-            )
+  ...
 
 Survey of the elements
 ======================
 
-Besides :class:`~penchy.jobs.dependency.Edge`, there are other elements of a
-job.
+Besides the definition of the flow, there are other elements of a job.
 This chapter tries to give an overview of what they are and how they are used.
 For an in-depth treatment see the :ref:`Job API <job-api>`.
 
