@@ -243,9 +243,7 @@ class Job(object):
     - ``job.filename`` has to be set to the filename of the job
     """
 
-    def __init__(self, compositions,
-                 server_flow,
-                 invocations=1):
+    def __init__(self, compositions, server_flow, invocations=1):
         """
         :param compositions: :class:`SystemComposition` to execute jobs on
         :type compositions: List of :class:`SystemComposition`
