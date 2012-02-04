@@ -18,9 +18,8 @@ from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
-from penchy.jobs.elements import PipelineElement, SystemFilter, Workload, Tool
+from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.jobs.filters import Receive, Send
-from penchy.jobs.jvms import WrappedJVM
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string, default
 
