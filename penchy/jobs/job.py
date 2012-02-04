@@ -367,7 +367,8 @@ class Job(object):
         :returns: Set of :class:`MavenDependency`.
         :rtype: set
         """
-        return set((element.DEPENDENCIES for element in self.server_flow))
+        return set(chain.from_iterable(element.DEPENDENCIES for element
+                                       in self.server_flow))
 
     def _build_environment(self):
         """
