@@ -245,7 +245,7 @@ class JobCheckTest(unittest.TestCase):
         r = Receive()
         p = Print()
         c.jvm.workload = w
-        c. flwow = [w >> 'exit_code' >> f >> s]
+        c. flow = [w >> 'exit_code' >> f >> s]
         j = Job(c,
                 [r >> p])
         self.assertFalse(j.check())
