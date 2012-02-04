@@ -13,11 +13,9 @@ jvm.workload = w
 
 f = filters.Print()
 dump = filters.Dump()
+composition.flow = [jvm >> dump >> f]
 
 job = Job(compositions=composition,
-          client_flow=[
-              jvm >> dump >> f
-          ],
           server_flow=[],
           invocations = 1
           )

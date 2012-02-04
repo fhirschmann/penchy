@@ -20,10 +20,11 @@ server.workload = w
 f1 = filters.DacapoHarness()
 f2 = filters.Send()
 
+flow = [w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2]
+x32.flow = flow
+x64.flow = flow
+
 job = Job(compositions=[x32, x64],
-          client_flow=[
-              w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2
-          ],
           server_flow=[
               filters.Receive() >> filters.Print()
           ],

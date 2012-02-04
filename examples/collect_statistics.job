@@ -15,11 +15,9 @@ f1 = filters.DacapoHarness()
 f2 = filters.StatisticRuntimeEvaluation()
 f = open('/tmp/times', 'a')
 f3 = filters.Print(f)
+composition.flow = [w >> ['stderr', 'exit_code'] >> f1 >> 'times' >> f2 >> f3]
 
 job = Job(compositions=composition,
-          client_flow=[
-              w >> ['stderr', 'exit_code'] >> f1 >> 'times' >> f2 >> f3
-          ],
           server_flow=[],
-          invocations = 20
+          invocations = 2
           )

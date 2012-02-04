@@ -14,10 +14,10 @@ jvm.workload = w
 f1 = filters.DacapoHarness()
 f2 = filters.Print()
 
+composition.flow = [w >> ['stderr', 'exit_code'] >> f1 >> f2]
+
+
 job = Job(compositions=composition,
-          client_flow=[
-              w >> ['stderr', 'exit_code'] >> f1 >> f2
-          ],
           server_flow=[],
           invocations = 2
           )

@@ -15,11 +15,12 @@ read = filters.Read()
 dump = filters.Dump(indent=2)
 dump2 = filters.Dump(include_complete_job=True, indent=2)
 
+composition.flow = [
+    w >> ('stderr', 'paths') >> read >> dump >> filters.Print(),
+    read >> dump2 >> filters.Print()
+]
+
 job = Job(compositions=composition,
-          client_flow=[
-              w >> ('stderr', 'paths') >> read >> dump >> filters.Print(),
-              read >> dump2 >> filters.Print()
-          ],
           server_flow=[],
           invocations = 1
           )

@@ -7,8 +7,8 @@ node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
 node2 = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 jvm = jvms.JVM('java')
-jconfig1 = SystemComposition(jvm, node1)
-jconfig2 = SystemComposition(jvm, node2)
+comp1 = SystemComposition(jvm, node1)
+comp2 = SystemComposition(jvm, node2)
 
 receiver = filters.Receive()
 
@@ -18,10 +18,11 @@ jvm.workload = w
 f1 = filters.DacapoHarness()
 f2 = filters.Send()
 
-job = Job(compositions=[jconfig1, jconfig2],
-          client_flow=[
-              w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2
-          ],
+flow = [w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2]
+comp1.flow = flow
+comp2.flow = flow
+
+job = Job(compositions=[comp1, comp2],
           server_flow=[
               receiver >> ('results', 'times') >> filters.Print()
           ],
