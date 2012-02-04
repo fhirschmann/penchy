@@ -39,22 +39,23 @@ f1 = filters.DacapoHarness()
 f2 = filters.Print()
 
 # part 2: form elements to a job
+# specify the flow of data on compositions
+composition.flow = [
+    # flow from Scalabench workload to DacapoHarness filter
+    w >> \
+    # pipe stderr to stderr and exit_code to exit_code (implicit same names)
+    ['stderr', 'exit_code'] >> \
+    # feed whole output of DacapoHarness filter to Print filter (with the name of the output)
+    f1 >> f2,
+    # and feed stderr and exit_code output prefix with 'workload_' to send filter
+    w >> [('stderr', 'workload_stderr'),
+          ('exit_code', 'workload_exit_code')] >> f2
+]
+
 job = Job(
     # setup the JVMNodeConfigurations that are included, can be a single one or
     # a list of configurations
     compositions=composition,
-    # specify the flow of data on clients
-    client_flow=[
-        # flow from Scalabench workload to DacapoHarness filter
-        w >> \
-        # pipe stderr to stderr and exit_code to exit_code (implicit same names)
-        ['stderr', 'exit_code'] >> \
-        # feed whole output of DacapoHarness filter to Print filter (with the name of the output)
-        f1 >> f2,
-        # and feed stderr and exit_code output prefix with 'workload_' to send filter
-        w >> [('stderr', 'workload_stderr'),
-              ('exit_code', 'workload_exit_code')] >> f2
-    ],
     # there is no flow on the server side
     server_flow=[],
     # jvms will be run twice
