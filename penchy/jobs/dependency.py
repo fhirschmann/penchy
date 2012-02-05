@@ -50,7 +50,9 @@ class Edge(object):
         """
         Return the edges.
 
-        Provides uniform access to edges of :class:`Edge` and :class:`Pipeline`.
+        Provides uniform access to edges of
+        :class:`~penchy.jobs.dependency.Edge` and
+        :class:`~penchy.jobs.dependency.Pipeline`.
         """
         return [self]
 
@@ -66,7 +68,7 @@ class Pipeline(object):
     This class represents a whole pipeline in the flow and is used to provide
     the ``Element >> Element >> [('a', 'b')] >> Element`` syntax.
 
-    It is not meant to be used directly but via PipelineElement.__rshift__
+    It is not meant to be used directly but via ``PipelineElement.__rshift__``
     """
 
     def __init__(self, element):
@@ -79,13 +81,6 @@ class Pipeline(object):
         self.pending = None
 
     def __rshift__(self, other):
-        if isinstance(other, str):
-            self.pending = [(other, other)]
-        elif isinstance(other, tuple):
-            self.pending = [other]
-        elif isinstance(other, list):
-            mapping = [(map_, map_) if isinstance(map_, str) else map_
-                       for map_ in other]
         """
         Connect pipeline with ``other`` element.
 
@@ -103,6 +98,13 @@ class Pipeline(object):
         :type other: str, list of str, list of tuple,
                      :class:`~penchy.jobs.element.PipelineElement`
         """
+        if isinstance(other, str):
+            self.pending = [(other, other)]
+        elif isinstance(other, tuple):
+            self.pending = [other]
+        elif isinstance(other, list):
+            mapping = [(map_, map_) if isinstance(map_, str) else map_
+                       for map_ in other]
             self.pending = mapping
         else:
             edge = Edge(self.current_source, other, self.pending)
