@@ -340,8 +340,8 @@ class Job(object):
         if not self.server_flow:
             return
 
-        starts = filter(lambda e: isinstance(e, Receive),
-                        (e.source for e in self.server_flow))
+        starts = [edge.source for edge in self.server_flow
+                  if isinstance(edge.source, Receive)]
 
         if not starts:
             log.error('There is no Receiver in the serverside flow. Aborting.')
@@ -436,8 +436,8 @@ class Job(object):
 
         # check if there are cycles in server pipeline
         try:
-            starts = filter(lambda e: isinstance(e, Receive),
-                            (e.source for e in self.server_flow))
+            starts = [edge.source for edge in self.server_flow
+                      if isinstance(edge.source, Receive)]
             if not starts:
                 # if there are no receivers, edgesort will fail, just signal it
                 log.error('Check: There is no Receiver in server pipeline')
