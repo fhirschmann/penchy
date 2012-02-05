@@ -105,7 +105,8 @@ class Node(object):  # pragma: no cover
         :param composition: composition which was received
         :type composition: :class:`SystemComposition`
         """
-        self.expected.remove(composition)
+        if composition in self.expected:
+            self.expected.remove(composition)
         if self.received_all_results:
             if self.timer:
                 self.timer.cancel()
