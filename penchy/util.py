@@ -176,7 +176,7 @@ def find_bootstrap_client():
     :returns: path of bootstrap client
     :rtype: str
     """
-    import penchy
+    import penchy               # import for side effects
     return pkg_resources.resource_filename('penchy',
             os.path.join('../', 'bin', 'penchy_bootstrap'))
 
