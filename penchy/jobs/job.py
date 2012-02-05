@@ -231,14 +231,13 @@ class Job(object):
     Those attributes have to be set from the outside before a :class:`Job`
     instance is ``run``:
 
-    - ``job.send`` to be set on client to a function with a signature ``(hash,
-                   data)`` where ``hash`` identifies the
-                   :class:`SystemComposition` and ``data`` the data to send
+    - ``job.send`` to be set on client to a function with a signature
+      ``(hash, data)`` where ``hash`` identifies the :class:`SystemComposition`
+      and ``data`` the data to send
 
     - ``job.receive`` to be set on server to a function that takes no arguments
-                      and returns the results of all :class:`SystemComposition`
-                      with the :class:`SystemComposition` as key and the results
-                      as value.
+      and returns the results of all :class:`SystemComposition` with the
+      :class:`SystemComposition` as key and the results as value.
 
     - ``job.filename`` has to be set to the filename of the job
     """
@@ -249,7 +248,8 @@ class Job(object):
         :type compositions: List of :class:`SystemComposition`
                               or :class:`SystemComposition`
         :param server_flow: describes the execution of the job on the server
-        :type server_flow: List of :class:`Edge` or :class:`Pipeline`
+        :type server_flow: List of :class:`~penchy.jobs.dependency.Edge` or
+                           :class:`~penchy.jobs.dependency.Pipeline`
         :param invocations: number of times to run job on each configuration
         :type invocations: int
         """
@@ -467,6 +467,7 @@ class Job(object):
         :type format: str
         :param dot: path to dot executable
         :type dot: str
+
         ;returns: the path to the generated file
         ;rtype: str
         """
