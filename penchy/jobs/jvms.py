@@ -225,6 +225,8 @@ class JVM(object):
         """
         hasher = sha1()
         update_hasher(hasher, self._path)
+        update_hasher(hasher, ' '.join(self.workload.arguments)
+                              if self.workload else '')
         update_hasher(hasher, self._user_options)
         return hasher.hexdigest()
 

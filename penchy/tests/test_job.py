@@ -109,6 +109,20 @@ class SystemCompositionsTest(unittest.TestCase):
 
         self.assertNotEqual(s1, SystemComposition(JVM('java'), 'no_setting'))
 
+    def test_different_hashes(self):
+        j1 = JVM('java')
+        j2 = JVM('java')
+        ns = NodeSetting('localhost', 22, 'dummy', '/', '/')
+        s1 = SystemComposition(j1, ns)
+        s2 = SystemComposition(j2, ns)
+
+        self.assertEqual(s1.hash(), s2.hash())
+
+        j1.workload = ScalaBench('fop')
+        j2.workload = ScalaBench('batik')
+
+        self.assertNotEqual(s1.hash(), s2.hash())
+
 
 class ResetPipelineTest(unittest.TestCase):
     def setUp(self):
