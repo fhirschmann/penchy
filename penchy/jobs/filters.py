@@ -232,10 +232,10 @@ def evaluate_runtimes(times):
     grouped_by_iteration = [[invocation[i] for invocation in times]
                             for i in range(len(times[0]))]
 
-    maxs = list(map(max, grouped_by_iteration))
-    mins = list(map(min, grouped_by_iteration))
-    avgs = list(map(lambda invocation: float(sum(invocation)) / len(invocation),
-                    grouped_by_iteration))
+    maxs = [max(iteration) for iteration in grouped_by_iteration]
+    mins = [min(iteration) for iteration in grouped_by_iteration]
+    avgs = [float(sum(iteration)) / len(iteration)
+            for iteration in grouped_by_iteration]
     pos_deviations = [abs(max_ - avg) / avg for max_, avg in zip(maxs, avgs)]
     neg_deviations = [abs(min_ - avg) / avg for min_, avg in zip(mins, avgs)]
 
