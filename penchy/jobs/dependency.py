@@ -94,6 +94,7 @@ class Pipeline(object):
         - :class:`~penchy.jobs.elements.PipelineElement`: append element to
           pipeline (how data is transferred depends on the previous
           shifted elements)
+
         :param other: element to connect with
         :type other: str, list of str, list of tuple,
                      :class:`~penchy.jobs.element.PipelineElement`
