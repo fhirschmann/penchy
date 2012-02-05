@@ -131,7 +131,7 @@ def edgesort(starts, edges):
 
     ``starts`` won't be included.
 
-    :raises ValueError: if no topological sort is possible
+    :raises: :exc:`ValueError` if no topological sort is possible
     :param starts: Sequence of :class:`~penchy.jobs.elements.PipelineElement`
                    that have no dependencies
     :param edges: Sequence of :class:`~penchy.jobs.job.Edge`
