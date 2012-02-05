@@ -88,6 +88,9 @@ class PipelineElement(object):
         """
         return self.outputs.names
 
+    def __repr__(self):
+        return self.__class__.__name__
+
 
 class NotRunnable(object):
     """
