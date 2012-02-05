@@ -9,19 +9,18 @@ This module provides miscellaneous utilities.
 """
 from __future__ import print_function
 
-import hashlib
 import functools
+import hashlib
+import imp
+import logging
 import os
 import shutil
 import sys
-import imp
-import logging
 import tempfile
-import pkg_resources
-import signal
-
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
+
+import pkg_resources
 
 from penchy.compat import update_hasher
 
