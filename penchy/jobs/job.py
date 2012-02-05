@@ -470,22 +470,25 @@ class Job(object):
         ;returns: the path to the generated file
         ;rtype: str
         """
-        def edges_of_flow(flow):
+        def edges_of_flow(flow, flow_id=0):
             """
             :param flow: flow to visualize
             :type flow: list of :class:`~penchy.jobs.dependency.Edge`
+            :param flow_id: id to differentiate between multiple flows with same elements
+            :type flow_id: int
             :returns: edges in graphviz format
             :rtype: list of str
             """
 
-            return [""" node{source_id} [label = "{source}"];
-                        node{sink_id} [label = "{sink}"];
-                        node{source_id} -> node{sink_id} [label = "{decoration}"];
+            return [""" node{source_id}{id} [label = "{source}"];
+                        node{sink_id}{id} [label = "{sink}"];
+                        node{source_id}{id} -> node{sink_id}{id} [label = "{decoration}"];
                     """
                     .format(source=e.source,
                             source_id=id(e.source),
                             sink=e.sink,
                             sink_id=id(e.sink),
+                            id=flow_id,
                             decoration=', '.join('{0} -> {1}'
                                                  .format(m[0], m[1])
                                                  if m[0] != m[1]
@@ -500,7 +503,7 @@ class Job(object):
                        label = "%s";
                        %s
                    }
-                   """ % (i, c.name, '\n'.join(edges_of_flow(c.flow)))
+                   """ % (i, c.name, '\n'.join(edges_of_flow(c.flow, i)))
                    for i, c in enumerate(self.compositions)]
 
         server_edges = edges_of_flow(self.server_flow)
