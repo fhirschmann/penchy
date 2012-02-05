@@ -189,11 +189,12 @@ class Server(object):
         for node in self.nodes.values():
             node.close()
 
-        if self.received_all_results:
-            log.info("Received results from all nodes. Excellent.")
-        elif self.nodes_timed_out:
+        if self.nodes_timed_out:
             log.error("All nodes have timed out. That's not good!")
             return
+
+        if self.received_all_results:
+            log.info("Received results from all nodes. Excellent.")
 
         self.run_pipeline()
 
