@@ -31,7 +31,10 @@ Pipeline dependency specification
 ---------------------------------
 
 .. autoclass:: penchy.jobs.dependency.Edge
+.. automethod:: penchy.jobs.dependency.Edge.__rshift__
+
 .. autoclass:: penchy.jobs.dependency.Pipeline
+.. automethod:: penchy.jobs.dependency.Pipeline.__rshift__
 
 Elements of the Pipeline
 ------------------------

@@ -34,6 +34,11 @@ class Edge(object):
                 self.map_ == other.map_)
 
     def __rshift__(self, other):
+        """
+        Connect this :class:`Edge` to other pipeline elements.
+
+        :param other: element to connect with
+        """
         p = Pipeline(self.source)
         if self.map_:
             p >> self.map_
@@ -81,6 +86,23 @@ class Pipeline(object):
         elif isinstance(other, list):
             mapping = [(map_, map_) if isinstance(map_, str) else map_
                        for map_ in other]
+        """
+        Connect pipeline with ``other`` element.
+
+        If ``other`` is a
+
+        - String: copy a single output to a single input with this name
+        - List of String: copy all outputs with those names to outputs with
+          those names
+        - List of Tuple of String (``output``, ``input``): copy ``output`` to
+          ``input``
+        - :class:`~penchy.jobs.elements.PipelineElement`: append element to
+          pipeline (how data is transferred depends on the previous
+          shifted elements)
+        :param other: element to connect with
+        :type other: str, list of str, list of tuple,
+                     :class:`~penchy.jobs.element.PipelineElement`
+        """
             self.pending = mapping
         else:
             edge = Edge(self.current_source, other, self.pending)
