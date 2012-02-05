@@ -18,8 +18,8 @@ class Edge(object):
         """
         :param source: source of data
         :param sink: sink of data
-        :param map: sequence of name pairs that map source exits to sink
-                    entrances
+        :param map_: sequence of name pairs that map source exits to sink
+                     entrances
         """
         self.source = source
         self.sink = sink
