@@ -191,7 +191,7 @@ class Server(object):
 
         if self.received_all_results:
             log.info("Received results from all nodes. Excellent.")
-        if self.nodes_timed_out:
+        elif self.nodes_timed_out:
             log.error("All nodes have timed out. That's not good!")
             return
 
