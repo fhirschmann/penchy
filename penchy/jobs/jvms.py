@@ -210,8 +210,8 @@ class JVM(object):
         return hash(hash(self._path) + hash(self._user_options))
 
     def __repr__(self):
-        return '{2}({0}, {1})'.format(self._path, self._user_options,
-                                      self.__class__.__name__)
+        return "{2}({0}, '{1}')".format(self._path, self._user_options,
+                                        self.__class__.__name__)
 
     def hash(self):
         """
