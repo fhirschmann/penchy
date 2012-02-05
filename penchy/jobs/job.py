@@ -525,6 +525,6 @@ class Job(object):
         with NamedTemporaryFile(delete=False) as f:
             fname = f.name
             write(f, s)
-        subprocess.call(['dot', '-T', format, '-O', fname])
+        subprocess.call([dot, '-T', format, '-O', fname])
         os.remove(fname)
         return '{0}.{1}'.format(fname, format)
