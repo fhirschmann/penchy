@@ -36,22 +36,23 @@ Pipeline dependency specification
 .. autoclass:: penchy.jobs.dependency.Pipeline
 .. automethod:: penchy.jobs.dependency.Pipeline.__rshift__
 
+
+Maven Dependencies
+------------------
+
+.. autoclass:: penchy.maven.MavenDependency
+
 Elements of the Pipeline
 ------------------------
 .. automodule:: penchy.jobs.elements
 .. autoclass:: penchy.jobs.jvms.WrappedJVM
 
-Uncategorized
+Communication
 =============
-TODO: CATEGORIZE ME
 
 Client
 ------
 .. automodule:: penchy.client
-
-Maven
------
-.. automodule:: penchy.maven
 
 Nodes
 -----
@@ -60,6 +61,10 @@ Nodes
 Server
 ------
 .. automodule:: penchy.server
+
+Maven
+=====
+.. automodule:: penchy.maven
 
 Internal
 ========
@@ -70,4 +75,18 @@ Utilities
 
 Pipeline dependency resolution
 ------------------------------
-.. automodule:: penchy.jobs.dependency
+.. autofunction:: penchy.jobs.dependency.edgesort
+.. autofunction:: penchy.jobs.dependency.build_keys
+
+Maven
+=====
+.. autofunction:: penchy.maven.get_classpath
+.. autofunction:: penchy.maven.setup_dependencies
+.. autoclass:: penchy.maven.POM
+.. autoclass:: penchy.maven.MavenError
+.. autoclass:: penchy.maven.IntegrityError
+.. autoclass:: penchy.maven.POMError
+.. autoclass:: penchy.maven.BootstrapPOM
+.. autoclass:: penchy.maven.PenchyPOM
+.. autofunction:: penchy.maven.make_bootstrap_pom
+.. autofunction:: penchy.maven.write_penchy_pom
