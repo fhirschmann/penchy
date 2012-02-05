@@ -470,24 +470,40 @@ class Job(object):
         ;returns: the path to the generated file
         ;rtype: str
         """
-        cedges, sedges = [['{0} -> {1} [label = "{2}"];'
-                           .format(e.source.__class__.__name__,
-                                   e.sink.__class__.__name__,
-                                   ', '.join('{0} -> {1}'
-                                             .format(m[0], m[1])
-                                             if m[0] != m[1]
-                                             else m[0]
-                                             for m in e.map_
-                                         )
-                                    if e.map_ else '')
-                           for e in flow]
-                          for flow in (chain.from_iterable(c.flow for c
-                                                          in self.compositions),
-                                      self.server_flow)]
+        def edges_of_flow(flow):
+            """
+            :param flow: flow to visualize
+            :type flow: list of :class:`~penchy.jobs.dependency.Edge`
+            :returns: edges in graphviz format
+            :rtype: list of str
+            """
 
-        # TODO: different ranks for server and clients?
-        client_edges = '\n'.join(cedges)
-        server_edges = '\n'.join(sedges)
+            return [""" node{source_id} [label = "{source}"];
+                        node{sink_id} [label = "{sink}"];
+                        node{source_id} -> node{sink_id} [label = "{decoration}"];
+                    """
+                    .format(source=e.source,
+                            source_id=id(e.source),
+                            sink=e.sink,
+                            sink_id=id(e.sink),
+                            decoration=', '.join('{0} -> {1}'
+                                                 .format(m[0], m[1])
+                                                 if m[0] != m[1]
+                                                 else m[0]
+                                                 for m in e.map_
+                                             )
+                                    if e.map_ else '')
+                    for e in flow]
+
+        clients = ["""
+                   subgraph cluster_client%d {
+                       label = "%s";
+                       %s
+                   }
+                   """ % (i, c.name, '\n'.join(edges_of_flow(c.flow)))
+                   for i, c in enumerate(self.compositions)]
+
+        server_edges = edges_of_flow(self.server_flow)
         s = """
         digraph G {
             rankdir = LR
@@ -498,14 +514,14 @@ class Job(object):
             }
             subgraph cluster_client {
                 color = black;
+                label = "Clients";
                 %s
-                label = "Client";
             }
         }
-        """ % (server_edges, client_edges)
+        """ % ('\n'.join(server_edges), '\n'.join(clients))
         with NamedTemporaryFile(delete=False) as f:
-            delete = f.name
+            fname = f.name
             write(f, s)
-        subprocess.call(['dot', '-T', format, '-O', delete])
-        os.remove(delete)
-        return delete + '.' + format
+        subprocess.call(['dot', '-T', format, '-O', fname])
+        os.remove(fname)
+        return '{0}.{1}'.format(fname, format)
