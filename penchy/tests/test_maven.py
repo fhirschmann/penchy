@@ -123,18 +123,18 @@ class MavenTest(unittest.TestCase):
         p = POM(**_ATTRIBS)
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
-        self.assertEquals(p.dependency_list, set((self.d1,)))
+        self.assertEquals(p.dependencies, set((self.d1,)))
 
     def test_mavendep_repo_duplicates(self):
         p = POM(**_ATTRIBS)
         p.add_repository('foo')
         p.add_repository('foo')
-        self.assertEquals(p.repository_list, set(('foo',)))
+        self.assertEquals(p.repositories, set(('foo',)))
 
         p = POM(**_ATTRIBS)
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
-        self.assertEquals(p.repository_list, set((self.d1.repo,)))
+        self.assertEquals(p.repositories, set((self.d1.repo,)))
 
     def test_required_keywords(self):
         self.assertRaises(POMError, POM)

@@ -282,8 +282,8 @@ class POM(object):
         if not set(kwargs.keys()).issuperset(self.__class__.REQUIRED_ATTRIBS):
             raise POMError(", ".join(self.__class__.REQUIRED_ATTRIBS) +
                     " are required keywords")
-        self.repository_list = set()
-        self.dependency_list = set()
+        self.repositories = set()
+        self.dependencies = set()
 
         self.root = Element('project')
         self.tree = ElementTree(self.root)
@@ -301,7 +301,7 @@ class POM(object):
         :param dep: the dependency
         :type dep: :class:`MavenDependency`
         """
-        if dep in self.dependency_list:
+        if dep in self.dependencies:
             return
 
         if dep.repo:
@@ -313,7 +313,7 @@ class POM(object):
         e = SubElement(self.dependency_tree, 'dependency')
         dict2tree(e, clean_dep)
 
-        self.dependency_list.add(dep)
+        self.dependencies.add(dep)
 
     def add_repository(self, url, identifier=None):
         """
@@ -325,7 +325,7 @@ class POM(object):
         :param url: the URL of the repository
         :type url: string
         """
-        if url in self.repository_list:
+        if url in self.repositories:
             return
 
         if not identifier:
@@ -334,7 +334,7 @@ class POM(object):
         e = SubElement(self.repository_tree, 'repository')
         dict2tree(e, {'url': url, 'id': identifier})
 
-        self.repository_list.add(url)
+        self.repositories.add(url)
 
     def write(self, filename='pom.xml', pretty=True):
         """
