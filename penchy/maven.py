@@ -206,6 +206,7 @@ class MavenDependency(object):
         :return: path to artifact
         :rtype: string
         """
+        # XXX: use os.pathsep instead of `:`?
         cp = get_classpath(self.pom_path).split(":")
 
         for artifact in cp:
