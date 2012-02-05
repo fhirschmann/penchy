@@ -129,6 +129,42 @@ flow)::
             ]
   ...
 
+Multiple Workloads & Flows
+--------------------------
+
+A :class:`~penchy.jobs.job.SystemComposition` comprises of a JVM (with its
+``workload`` and ``tool``) that describes what to execute and a
+:class:`~penchy.jobs.job.NodeSetting` that describes where to execute but also
+of the flow that describes how to process the results of the execution.  Using
+multiple workloads means using multiple
+:class:`~penchy.jobs.job.SystemComposition` with different
+:class:`~penchy.jobs.job.JVM` (the number of compositions on a node is not
+limited). Here is an example with two different workloads::
+
+  j1 = JVM('java')
+  j2 = JVM('java')
+  c1 = SystemComposition(j1, LOCALNODE)
+  c2 = SystemComposition(j2, LOCALNODE)
+
+  w1 = Dacapo('fop')
+  j1.workload = w1
+  w2 = ScalaBench('scalac')
+  j2.workload = w2
+
+And now we will add two different flows::
+
+  c1.flow = w1 >> filters.DacapoHarness() >> filters.Print()
+  c2.flow = w2 >> filters.DacapoHarness() >> filters.Dump() >> filters.Print()
+
+:class:`~penchy.jobs.job.PipelineElement` can be used across flows but will be
+reset after the execution of a :class:`~penchy.jobs.job.SystemComposition`.
+This is mind we could reuse the ``filters.DacapoHarness()`` above
+(``filters.Print()`` has no state to speak of) without trouble::
+
+  h = filters.DacapoHarness()
+  c1.flow = w1 >> h >> filters.Print()
+  c2.flow = w2 >> h >> filters.Dump() >> filters.Print()
+
 Survey of the elements
 ======================
 
