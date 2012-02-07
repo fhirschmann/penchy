@@ -56,7 +56,7 @@ class Types(object):
                 assert len(t) > 1, msg.format('wrong length')
                 name = t[0]
                 types = t[1:]
-                assert isinstance(t[0], str), msg.format('name is not a `str`')
+                assert isinstance(name, str), msg.format('name is not a `str`')
                 assert all(isinstance(type_, type) for type_ in types), \
                     msg.format('types expected')
 
