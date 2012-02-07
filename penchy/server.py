@@ -193,9 +193,6 @@ class Server(object):
             log.error("All nodes have timed out. That's not good!")
             return
 
-        if self.received_all_results:
-            log.info("Received results from all nodes. Excellent.")
-
         self.run_pipeline()
 
     def run_pipeline(self):
