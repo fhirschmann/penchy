@@ -36,7 +36,39 @@ class Tamiflex(Filter):
     pass
 
 
-class HProf(Filter):
+class HProfCpuTimes(Filter):
+    """
+    Filters cpu=times output of hprof
+
+    Inputs:
+
+    - ``hprof``: Path to the hprof output file
+
+    %TODO: complete description of outputs
+    Outputs:
+
+    - ``rank``: Rank fo the method
+    - ``self``:
+    - ``accum``:
+    - ``count``:
+    - ``trace``:
+    - ``method``: Absolute method name
+    """
+    inputs = Types(('hprof', list, str))
+
+    outputs = Types(('rank', list, list, int),
+                    ('self', list, list, float),
+                    ('accum', list, list, float),
+                    ('count', list, list, int),
+                    ('trace', list, list, int),
+                    ('method', list, list, str))
+
+    def run(self, **kwargs)
+        files = kwargs['hprof']
+
+        for f in files
+            with open(f) as fobj:
+                buf = fobj.read()
     pass
 
 
