@@ -87,7 +87,6 @@ class HProfCpuTimes(Filter):
                     'method': []}
 
             with open(f) as fobj:
-                #FIXME: Check if file is invalid
                 line = fobj.readline()
                 while not line.startswith("CPU TIME (ms) BEGIN"):
                     line = fobj.readline()
