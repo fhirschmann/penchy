@@ -35,6 +35,7 @@ class WrongInputError(Exception):
 class Tamiflex(Filter):
     pass
 
+
 class HProfCpuTimes(Filter):
     """
     Filters cpu=times output of hprof
