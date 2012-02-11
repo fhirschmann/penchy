@@ -36,7 +36,7 @@ ax12 = fig.add_subplot(1, 2, 1)
 ax12.set_autoscale_on(False)
 ax12.set_xbound(-0.17, 0.15)
 ax12.set_ybound(-0.1, 0.15)
-ax12.set_aspect(1/ax12.get_data_ratio())
+ax12.set_aspect(1 / ax12.get_data_ratio())
 for datum in data:
     ax12.text(datum[2], datum[3], datum[0],
         rotation=-45,
@@ -50,7 +50,7 @@ ax34 = fig.add_subplot(1, 2, 2)
 ax34.set_autoscale_on(False)
 ax34.set_xbound(-0.062, 0.06)
 ax34.set_ybound(-0.083, 0.06)
-ax34.set_aspect(1/ax34.get_data_ratio())
+ax34.set_aspect(1 / ax34.get_data_ratio())
 for datum in data:
     ax34.text(datum[4], datum[5], datum[0],
         rotation=-45,
