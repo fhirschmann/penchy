@@ -1,0 +1,10 @@
+{
+ "single_iterations": [
+ "CPU TIME (ms) BEGIN (total = 282470) Sat Feb 11 10:22:30 2012\nrank   self  accum   count trace method\n   1 29.06% 29.06%       5 304028 java.lang.Object.wait\n   2 29.02% 58.08%     223 304039 java.lang.ref.ReferenceQueue.remove\n   3  2.84% 60.92%   15602 310099 com.sun.tools.javac.file.ZipFileIndex$ZipDirectory.readEntry\n   4  1.25% 62.17%   75198 310032 com.sun.tools.javac.file.ZipFileIndex.access$500\n   5  1.03% 63.19%   62408 310034 com.sun.tools.javac.file.ZipFileIndex.access$400\n   6  0.90% 64.10%   53072 310233 com.sun.tools.javac.file.ZipFileIndex$Entry.compareTo\n   7  0.90% 65.00%   53072 310232 com.sun.tools.javac.file.ZipFileIndex$Entry.compareTo\n   8  0.73% 65.73%   15926 310041 java.lang.StringCoding.decode\n   9  0.72% 66.45%   15926 310040 java.lang.StringCoding$StringDecoder.decode\n  10  0.72% 67.18%   41472 310234 java.lang.String.compareTo\nCPU TIME (ms) END\n"
+         ],
+  "wrong_input": [
+  "CPU TIME (ms) BEGUN (total = 282470) Sat Feb 11 10:22:30 2012\n",
+  "This is invalid input!",
+  "CPU TIME (ms) BEGIN (total = 282470) Sat Feb 11 10:22:30 2012\nrank   self  accum   count trace method\n   1 29.06% 29.06%       5 304028java.lang.Object.wait\nCPU TIME (ms) END\n"
+  ]
+}

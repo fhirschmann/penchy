@@ -72,8 +72,8 @@ class HProfCpuTimes(Filter):
         \s+(?P<accum>\d+\.\d{2})%
         \s+(?P<count>\d+)
         \s+(?P<trace>\d+)
-        \s+(?P<method>(\w|\.)+)
-        """)
+        \s+(?P<method>(\w|\.|\$)+)
+        """, re.VERBOSE)
 
     def run(self, **kwargs):
         files = kwargs['hprof']
@@ -91,7 +91,13 @@ class HProfCpuTimes(Filter):
                 line = fobj.readline()
                 while not line.startswith("CPU TIME (ms) BEGIN"):
                     line = fobj.readline()
-                total = self._TOTAL_RE.search(line).groups()[0]
+                    if not line:
+                        raise WrongInputError("Marker 'CPU TIME (ms) BEGIN' not found.")
+                s = self._TOTAL_RE.search(line)
+                if s is None:
+                    log.error('Received invalid input:\n{0}'.format(line))
+                    raise WrongInputError('Received invalid input.')
+                total = s.groups()[0]
                 self.out['total'].append(int(total))
 
                 # Jump over the heading
@@ -99,10 +105,16 @@ class HProfCpuTimes(Filter):
 
                 line = fobj.readline()
                 while not line.startswith("CPU TIME (ms) END"):
+                    m = self._DATA_RE.match(line)
+                    if m is None:
+                        log.error('Received invalid input:\n{0}'.format(line))
+                        raise WrongInputError('Received invalid input.')
                     result = self._DATA_RE.match(line).groupdict()
-                    data = dict((k, data.get(k).append(result.get(k)))
+                    dict((k, data.get(k).append(result.get(k)))
                            for k in data.keys())
                     line = fobj.readline()
+                    if not line:
+                        raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
 
                 for key, val in data.items():
                     self.out[key].append(val)

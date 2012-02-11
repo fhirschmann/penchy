@@ -30,7 +30,8 @@ class DacapoHarnessTest(unittest.TestCase):
         self.wrong_input = write_to_tempfiles(DacapoHarnessTest.wrong_input)
 
     def tearDown(self):
-        for f in itertools.chain(self.mi, self.si, self.failed, self.wrong_input):
+        for f in itertools.chain(self.mi, self.si, self.failed,
+                                 self.wrong_input):
             f.close()
 
     def test_multi_iteration_path(self):
@@ -66,6 +67,43 @@ class DacapoHarnessTest(unittest.TestCase):
         self.assertEqual(len(self.d.out['failures']), invocations)
         self.assertEqual(len(self.d.out['times']), invocations)
         self.assertEqual(len(self.d.out['valid']), invocations)
+
+
+class HProfCpuTimesTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        h = get_json_data('HProfCpuTimesFilter')
+        cls.single_iterations = h['single_iterations']
+        cls.wrong_input = h['wrong_input']
+
+    def setUp(self):
+        super(HProfCpuTimesTest, self).setUp()
+        self.h = HProfCpuTimes()
+
+        self.si = write_to_tempfiles(HProfCpuTimesTest.single_iterations)
+        self.wrong_input = write_to_tempfiles(HProfCpuTimesTest.wrong_input)
+
+    def tearDown(self):
+        for f in itertools.chain(self.si, self.wrong_input):
+            f.close()
+
+    def test_single_iteration_path(self):
+        invocations = len(self.si)
+        hprof_file = map(attrgetter('name'), self.si)
+        self.h.run(hprof=hprof_file)
+        self._assert_correct_out(invocations)
+
+    def test_wrong_input(self):
+        hprof_files = map(attrgetter('name'), self.wrong_input)
+        for hprof_file in hprof_files:
+            with self.assertRaises(WrongInputError):
+                self.h.run(hprof=[hprof_file])
+
+    def _assert_correct_out(self, invocations):
+        self.assertSetEqual(set(self.h.out), self.h._output_names)
+        for k in self.h.out.keys():
+            self.assertEqual(len(self.h.out[k]), invocations)
 
 
 def write_to_tempfiles(data):
