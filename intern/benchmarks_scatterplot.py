@@ -2,6 +2,11 @@
 
 # Das ganze soll aehnlich aussehen, wie in "da_capo_con_scala.pdf"
 # Seite 6 (Figure 4 und 5).
+#
+# TODO: Irgendwie ist es unelegant, wenn die Punkte und die
+# Beschriftungen so unabhaengig voneinander sind.
+# Vielleicht kann man auch dirket so etwas, wie
+# "beschriftete Punkte" setzen.
 
 import matplotlib.pyplot as plt
 
@@ -20,26 +25,29 @@ data = [
 circles = [0] * 4
 squares = [0] * 4
 for i in range(4):
-    circles[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
-    squares[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
+    circles[i] = [tuple_[i + 2] for tuple_ in data
+        if tuple_[1] == 'ScalaBench']
+    squares[i] = [tuple_[i + 2] for tuple_ in data
+        if tuple_[1] == 'DaCapo']
 
 fig = plt.figure()
 
 ax12 = fig.add_subplot(1, 2, 1)
+ax12.set_autoscale_on(False)
 ax12.set_xbound(-0.17, 0.15)
 ax12.set_ybound(-0.1, 0.15)
 for datum in data:
     ax12.text(datum[2], datum[3], datum[0])
-#ax12.plot(circles[0], circles[1], 'o')
-#ax12.plot(squares[0], squares[1], 's')
+ax12.plot(circles[0], circles[1], 'o')
+ax12.plot(squares[0], squares[1], 's')
 
 ax34 = fig.add_subplot(1, 2, 2)
-#fig.add_axes([-0.062, -0.083, 0.06, 0.06])
+ax34.set_autoscale_on(False)
 ax34.set_xbound(-0.062, 0.06)
 ax34.set_ybound(-0.083, 0.06)
 for datum in data:
     ax34.text(datum[4], datum[5], datum[0])
-#ax12.plot(circles[0], circles[1], 'o')
-#ax12.plot(squares[0], squares[1], 's')
+ax34.plot(circles[2], circles[3], 'o')
+ax34.plot(squares[2], squares[3], 's')
 
 plt.show()
