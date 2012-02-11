@@ -35,7 +35,6 @@ class WrongInputError(Exception):
 class Tamiflex(Filter):
     pass
 
-
 class HProfCpuTimes(Filter):
     """
     Filters cpu=times output of hprof
@@ -44,15 +43,14 @@ class HProfCpuTimes(Filter):
 
     - ``hprof``: Path to the hprof output file
 
-    %TODO: complete description of outputs
     Outputs:
 
     - ``total``: Total execution time (ms)
     - ``rank``: Rank of the method
-    - ``self``:
-    - ``accum``:
-    - ``count``:
-    - ``trace``:
+    - ``self``: Thread time (%)
+    - ``accum``: Thread time (%)
+    - ``count``: How often this method was entered
+    - ``trace``: Stack trace number
     - ``method``: Absolute method name
     """
     inputs = Types(('hprof', list, str))
