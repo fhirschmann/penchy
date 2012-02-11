@@ -7,18 +7,18 @@ import matplotlib.pyplot as plt
 
 data = [
     ('sunflow', 'DaCapo', -0.001, 0.12, 0.025, -0.078),
-    ('avrora', 'DaCapo', 0.01, 0.03, 0.025, -0.078),
-    ('tradesoap', 'DaCapo', -0.06, 0.02, 0.025, -0.078),
-    ('batik', 'DaCapo', -0.14, -0.04, 0.025, -0.078),
-    ('tomcat', 'DaCapo', -0.13, -0.02, 0.025, -0.078),
-    ('actors', 'ScalaBench', -0.08, -0.06, 0.025, -0.078),
-    ('apparat', 'ScalaBench', 0.12, 0.03, 0.025, -0.078),
-    ('factorie', 'ScalaBench', 0.1, 0.04, 0.025, -0.078),
-    ('tmt', 'ScalaBench', 0.03, 0.012, 0.025, -0.078),
-    ('kiama', 'ScalaBench', 0.05, 0.0, 0.025, -0.078)]
+    ('avrora', 'DaCapo', 0.01, 0.03, 0.018, 0.042),
+    ('tradesoap', 'DaCapo', -0.06, 0.02, -0.004, 0.02),
+    ('batik', 'DaCapo', -0.14, -0.04, 0.008, -0.018),
+    ('tomcat', 'DaCapo', -0.13, -0.02, 0.0, -0.018),
+    ('actors', 'ScalaBench', -0.08, -0.06, 0.028, -0.03),
+    ('apparat', 'ScalaBench', 0.12, 0.03, -0.057, 0.02),
+    ('factorie', 'ScalaBench', 0.1, 0.04, 0.05, -0.01),
+    ('tmt', 'ScalaBench', 0.03, 0.012, -0.02, -0.038),
+    ('kiama', 'ScalaBench', 0.05, 0.0, 0.02, 0.01)]
 
-circles = [0, 0, 0, 0]
-squares = [0, 0, 0, 0]
+circles = [0] * 4
+squares = [0] * 4
 for i in range(4):
     circles[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
     squares[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
