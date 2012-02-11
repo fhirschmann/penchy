@@ -47,7 +47,8 @@ class HProfCpuTimes(Filter):
     %TODO: complete description of outputs
     Outputs:
 
-    - ``rank``: Rank fo the method
+    - ``total``: Total execution time (ms)
+    - ``rank``: Rank of the method
     - ``self``:
     - ``accum``:
     - ``count``:
@@ -56,20 +57,55 @@ class HProfCpuTimes(Filter):
     """
     inputs = Types(('hprof', list, str))
 
-    outputs = Types(('rank', list, list, int),
+    outputs = Types(('total', list, int),
+                    ('rank', list, list, int),
                     ('self', list, list, float),
                     ('accum', list, list, float),
                     ('count', list, list, int),
                     ('trace', list, list, int),
                     ('method', list, list, str))
 
-    def run(self, **kwargs)
+    _TOTAL_RE = re.compile('total = (\d+)')
+    _DATA_RE = re.compile("""
+        \s+(?P<rank>\d+)
+        \s+(?P<self>\d+\.\d{2})%
+        \s+(?P<accum>\d+\.\d{2})%
+        \s+(?P<count>\d+)
+        \s+(?P<trace>\d+)
+        \s+(?P<method>(\w|\.)+)
+        """
+
+    def run(self, **kwargs):
         files = kwargs['hprof']
 
-        for f in files
+        for f in files:
+            data = {'rank': [],
+                    'self': [],
+                    'accum': [],
+                    'count': [],
+                    'trace': [],
+                    'method': []}
+
             with open(f) as fobj:
-                buf = fobj.read()
-    pass
+                #FIXME: Check if file is invalid
+                line = fobj.readline()
+                while not line.startswith("CPU TIME (ms) BEGIN"):
+                    line = fobj.readline()
+                total = self._TOTAL_RE.search(line).groups()[0]
+                self.out['total'].append(int(total))
+
+                # Jump over the heading
+                fobj.readline()
+
+                line = fobj.readline()
+                while not line.startswith("CPU TIME (ms) END"):
+                    result = self._DATA_RE.match(line).groupdict()
+                    data = dict((k, data.get(k).append(result.get(k)))
+                           for k in data.keys())
+                    line = fobj.readline()
+
+                for key, val in data.items():
+                    self.out[key].append(val)
 
 
 class DacapoHarness(Filter):
