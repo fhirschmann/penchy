@@ -25,7 +25,7 @@ for i in range(4):
 
 fig = plt.figure()
 
-ax12 = fig.add_subplot(1,2,1)
+ax12 = fig.add_subplot(1, 2, 1)
 ax12.set_xbound(-0.17, 0.15)
 ax12.set_ybound(-0.1, 0.15)
 for datum in data:
@@ -33,7 +33,7 @@ for datum in data:
 #ax12.plot(circles[0], circles[1], 'o')
 #ax12.plot(squares[0], squares[1], 's')
 
-ax34 = fig.add_subplot(1,2,2)
+ax34 = fig.add_subplot(1, 2, 2)
 #fig.add_axes([-0.062, -0.083, 0.06, 0.06])
 ax34.set_xbound(-0.062, 0.06)
 ax34.set_ybound(-0.083, 0.06)
