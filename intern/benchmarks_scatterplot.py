@@ -1,5 +1,8 @@
 #!/usr/bin/env python
 
+# Das ganze soll aehnlich aussehen, wie in "da_capo_con_scala.pdf"
+# Seite 6 (Figure 4 und 5).
+
 import matplotlib.pyplot as plt
 
 data = [
@@ -23,11 +26,15 @@ for i in range(4):
 fig = plt.figure()
 
 ax12 = fig.add_subplot(1,2,1)
-ax12.plot(circles[0], circles[1], 'o')
-ax12.plot(squares[0], squares[1], 's')
+for datum in data:
+    ax12.text(datum[2], datum[3], datum[0])
+#ax12.plot(circles[0], circles[1], 'o')
+#ax12.plot(squares[0], squares[1], 's')
 
 ax34 = fig.add_subplot(1,2,2)
-ax12.plot(circles[0], circles[1], 'o')
-ax12.plot(squares[0], squares[1], 's')
+for datum in data:
+    ax34.text(datum[4], datum[5], datum[0])
+#ax12.plot(circles[0], circles[1], 'o')
+#ax12.plot(squares[0], squares[1], 's')
 
 plt.show()
