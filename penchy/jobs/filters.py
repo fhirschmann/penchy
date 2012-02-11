@@ -73,7 +73,7 @@ class HProfCpuTimes(Filter):
         \s+(?P<count>\d+)
         \s+(?P<trace>\d+)
         \s+(?P<method>(\w|\.)+)
-        """
+        """)
 
     def run(self, **kwargs):
         files = kwargs['hprof']
