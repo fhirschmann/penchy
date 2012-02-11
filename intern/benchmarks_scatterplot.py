@@ -14,11 +14,11 @@ data = [
     ('tmt', 'ScalaBench', 0.03, 0.012, 0.025, -0.078),
     ('kiama', 'ScalaBench', 0.05, 0.0, 0.025, -0.078)]
 
-circles = [0,0,0,0]
-squares = [0,0,0,0]
+circles = [0, 0, 0, 0]
+squares = [0, 0, 0, 0]
 for i in range(4):
-    circles[i] = [tuple_[i+2] for tuple_ in data if tuple_[1] == 'DaCapo']
-    squares[i] = [tuple_[i+2] for tuple_ in data if tuple_[1] == 'DaCapo']
+    circles[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
+    squares[i] = [tuple_[i + 2] for tuple_ in data if tuple_[1] == 'DaCapo']
 
 fig = plt.figure()
 
