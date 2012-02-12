@@ -74,7 +74,7 @@ class HProfCpuTimes(Filter):
         \s+(?P<method>(\w|\.|\$)+)
         """, re.VERBOSE)
 
-    def run(self, **kwargs):
+    def _run(self, **kwargs):
         files = kwargs['hprof']
 
         for f in files:
