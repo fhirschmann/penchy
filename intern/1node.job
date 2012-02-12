@@ -1,0 +1,28 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+jvm = jvms.JVM('java')
+comp = SystemComposition(jvm, node)
+
+receiver = filters.Receive()
+
+w = workloads.ScalaBench('dummy')
+jvm.workload = w
+
+f1 = filters.DacapoHarness()
+f2 = filters.Send()
+
+flow = [w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2]
+comp.flow = flow
+
+job = Job(compositions=comp,
+          server_flow=[
+              receiver >> ('results', 'times') >> filters.Print()
+          ],
+          invocations = 2
+          )
