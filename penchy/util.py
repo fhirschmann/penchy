@@ -199,8 +199,7 @@ def load_job(filename):
 
 def load_config(filename):
     """
-    Loads the config module from filename. Looks
-    in the current working directory as well.
+    Loads the config module from filename.
 
     :param filename: filename of the config file
     :type filename: str
