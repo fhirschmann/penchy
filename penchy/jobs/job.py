@@ -18,7 +18,7 @@ from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
-from penchy.jobs.elements import PipelineElement, SystemFilter
+from penchy.jobs.elements import PipelineElement, SystemFilter, GenericFilter
 from penchy.jobs.filters import Receive, Send
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string, default
@@ -301,9 +301,12 @@ class Job(object):
 
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
-            kwargs = build_keys(group)
+            is_generic = isinstance(sink, GenericFilter)
+            kwargs, types = build_keys(group, is_generic)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
+            if is_generic:
+                kwargs['types'] = types
             sink.run(**kwargs)
 
         # reset state of filters for running multiple configurations
@@ -355,9 +358,12 @@ class Job(object):
 
         # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
-            kwargs = build_keys(group)
+            is_generic = isinstance(sink, GenericFilter)
+            kwargs, types = build_keys(group, is_generic)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
+            if is_generic:
+                kwargs['types'] = types
             sink.run(**kwargs)
 
     def _get_server_dependencies(self):

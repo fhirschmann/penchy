@@ -17,7 +17,7 @@ import shutil
 from pprint import pprint
 
 from penchy import __version__
-from penchy.jobs.elements import Filter, SystemFilter
+from penchy.jobs.elements import Filter, SystemFilter, GenericFilter
 from penchy.jobs.typecheck import Types
 from penchy.util import default
 
@@ -174,7 +174,7 @@ class DacapoHarness(Filter):
             self.out['valid'].append(exit_code == 0 and failures == 0)
 
 
-class Send(SystemFilter):
+class Send(SystemFilter, GenericFilter):
     """
     Send data to the server.
 

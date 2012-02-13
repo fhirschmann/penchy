@@ -44,6 +44,9 @@ class Types(object):
         :param type_descriptions: description of above format
         :type type_descriptions: tuple
         """
+        # Dict of types for GernericFilter
+        self.type_descriptions = dict((td[0], td[1:]) for td in type_descriptions)
+
         if not type_descriptions:
             self.descriptions = None
         else:
@@ -71,6 +74,10 @@ class Types(object):
     @property
     def names(self):
         return set(self.descriptions)
+
+    @property
+    def types(self):
+        return self.type_descriptions
 
     def check_input(self, kwargs):
         """

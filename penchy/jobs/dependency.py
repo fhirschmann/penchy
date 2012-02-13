@@ -162,7 +162,7 @@ def edgesort(starts, edges):
         edges = [edge for edge in edges if edge.sink not in resolved]
 
 
-def build_keys(edges):
+def build_keys(edges, generic):
     """
     Return dictionary that maps the the sink's inputs to the outputs of all its
     sources.
@@ -170,12 +170,14 @@ def build_keys(edges):
     All ``edges`` must have the identical sink.
 
     :param edges: iterable of :class:`~penchy.jobs.job.Edge`
+    :param generic: is this sink a :class:`~penchy.jobs.elements.GenericFilter`
     :returns: dictionary that contains the mapping of sink arguments to all
               wired sources' output
     :rtype: dict of strings to values
     """
     sink = None
     keys = dict()
+    types = dict()
 
     for edge in edges:
         # check for identical sinks
@@ -186,7 +188,11 @@ def build_keys(edges):
         if edge.map_ is None:
             for key in edge.source._output_names:
                 keys[key] = edge.source.out[key]
+                if generic:
+                    types[key] = edge.source.outputs.types[key]
         else:
             for output, input_ in edge.map_:
                 keys[input_] = edge.source.out[output]
-    return keys
+                if generic:
+                    types[input_] = edge.source.outputs.types[output]
+    return keys, types
