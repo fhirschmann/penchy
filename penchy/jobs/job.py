@@ -302,11 +302,9 @@ class Job(object):
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
             is_generic = isinstance(sink, GenericFilter)
-            kwargs, types = build_keys(group, is_generic)
+            kwargs = build_keys(group, is_generic)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
-            if is_generic:
-                kwargs['types'] = types
             sink.run(**kwargs)
 
         # reset state of filters for running multiple configurations
@@ -359,11 +357,9 @@ class Job(object):
         # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
             is_generic = isinstance(sink, GenericFilter)
-            kwargs, types = build_keys(group, is_generic)
+            kwargs = build_keys(group, is_generic)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
-            if is_generic:
-                kwargs['types'] = types
             sink.run(**kwargs)
 
     def _get_server_dependencies(self):

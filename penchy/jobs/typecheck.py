@@ -45,7 +45,8 @@ class Types(object):
         :type type_descriptions: tuple
         """
         # Dict of types for GernericFilter
-        self.type_descriptions = dict((td[0], td[1:]) for td in type_descriptions)
+        if not type_descriptions:
+            self.type_descriptions = dict((td[0], td[1:]) for td in type_descriptions)
 
         if not type_descriptions:
             self.descriptions = None

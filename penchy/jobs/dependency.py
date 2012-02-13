@@ -195,4 +195,7 @@ def build_keys(edges, generic):
                 keys[input_] = edge.source.out[output]
                 if generic:
                     types[input_] = edge.source.outputs.types[output]
-    return keys, types
+    if generic:
+        keys['types'] = types
+
+    return keys
