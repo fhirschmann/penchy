@@ -344,13 +344,19 @@ class Aggregate(Filter):
     def _run(self, **kwargs):
         results = kwargs['results']
         names = []
-        for c in self.columns:
-            if isinstance(c, str):
-                for r in results:
-                    if c in results[r].keys():
-                        self.out[c] = results[r][c]
-                        names.append((c, object))
+        for col in self.columns:
+            if isinstance(col, str):
+                for res in results:
+                    if col in results[r].keys():
+                        self.out[col] = results[res][col]
+                        #FIXME: replace object with real type
+                        names.append((col, object))
                         break
+            else:
+                comp, column = col
+                self.out[column] = results[comp][column]
+                #FIXME: replace object with real type
+                names.append((column, object))
         self.outputs = apply(Types, names)
 
 
