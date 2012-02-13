@@ -124,7 +124,7 @@ class SendTest(unittest.TestCase):
         f = Send()
         f._run(environment={'send' : lambda data: a.__setitem__(0, data)},
                payload=42)
-        self.assertListEqual(a, [42])
+        self.assertEqual(a, [{'payload': 42}])
 
 
 class StatisticRuntimeEvaluationTest(unittest.TestCase):

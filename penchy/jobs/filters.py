@@ -183,12 +183,14 @@ class Send(SystemFilter):
     - ``environment``: see :meth:`Job._build_environment`
     - ``payload``: data to send
     """
-    inputs = Types(('environment', dict),
-                   ('payload', object))
+    # FIXME: Make environmet a special name for SystemFilter
+    # to avoid name clashes
+    inputs = Types()
 
     def _run(self, **kwargs):
         send = kwargs['environment']['send']
-        send(kwargs['payload'])
+        del(kwargs['environment'])
+        send(kwargs)
 
 
 class Receive(SystemFilter):
