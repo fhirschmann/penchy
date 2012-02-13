@@ -326,6 +326,34 @@ def evaluate_runtimes(times):
             'negative_deviations' : neg_deviations}
 
 
+class Aggregate(Filter):
+    """
+    Extracts data out of the resultssets send by the clients.
+
+    Input:
+       - ``results``: Resultset as produced by the ``Receive`` filter
+    """
+
+    inputs = Types(('results', dict))
+
+    def __init__(self, *args):
+        super(Aggregate, self).__init__()
+        self.columns = args
+
+    #FIXME: Typecheck correctly & other correctness stuff
+    def _run(self, **kwargs):
+        results = kwargs['results']
+        names = []
+        for c in self.columns:
+            if isinstance(c, str):
+                for r in results:
+                    if c in results[r].keys():
+                        self.out[c] = results[r][c]
+                        names.append((c, object))
+                        break
+        self.outputs = apply(Types, names)
+
+
 class Plot(Filter):
     pass
 
