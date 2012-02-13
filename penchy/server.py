@@ -200,7 +200,7 @@ class Server(object):
         Called when we have received results for all compositions; starts
         the server-side pipeline.
         """
-        log.info(self.results)
+        log.info("Run server-side pipeline")
         self.job.filename = self.job_file
         self.job.receive = lambda: self.results
         self.job.run_server_pipeline()
