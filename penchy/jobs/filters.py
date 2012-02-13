@@ -346,14 +346,23 @@ class Aggregate(Filter):
         names = []
         for col in self.columns:
             if isinstance(col, str):
+                found = False
                 for res in results:
                     if col in results[res].keys():
                         self.out[col] = results[res][col]
                         names.append((col, object))
+                        found = True
                         break
+                if not found:
+                    raise WrongInputError("Column is not contained" +
+                                          "in the resultset")
             else:
                 comp, column = col
-                self.out[column] = results[comp][column]
+                try:
+                    self.out[column] = results[comp][column]
+                except:
+                    raise WrongInputError("Column is not contained" +
+                                          "in the resultset")
                 names.append((column, object))
         self.outputs = apply(Types, names)
 
