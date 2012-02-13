@@ -367,6 +367,42 @@ class Aggregate(Filter):
         self.outputs = apply(Types, names)
 
 
+class Condense(Filter):
+    """
+    Merges the data with the given identifiers
+
+    Input:
+       - ``results``: Resultset as produced by the ``Receive`` filter
+    """
+
+    inputs = Types(('results', dict))
+
+    def __init__(self, data, names):
+        super(Condense, self).__init__()
+        self.data = data
+        self.names = names
+        self.outputs = apply(Types, [(n, object) for n in names])
+
+    # Check if colums exist
+    def _run(self, **kwargs):
+        results = kwargs['results']
+        for cols in self.data:
+            if isinstance(cols[0], str):
+                for comp in results:
+                    if cols[0] in results[comp].keys():
+                        col = cols[0]
+                        ids = cols[1:]
+                        break
+            else:
+                comp = cols[0]
+                col = cols[1]
+                ids = cols[2:]
+            name = self.names[0]
+            self.out[name].extend(results[comp][col])
+            for name, col in zip(self.names[1:], ids):
+                self.out[name] = col
+
+
 class Plot(Filter):
     pass
 
