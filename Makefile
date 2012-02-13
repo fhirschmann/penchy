@@ -43,3 +43,8 @@ doc:
 
 static-analysis:
 	hooks/pre-commit --all
+
+clean:
+	find . -type f -name '*.pyc' -delete
+	find . -type f -name '*.pyo' -delete
+	find . -type f -regex '.*.log\(.[0-9]+\)?' -delete
