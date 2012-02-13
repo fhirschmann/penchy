@@ -121,16 +121,6 @@ class SystemFilter(Filter):
     pass
 
 
-class GenericFilter(Filter):
-    """
-    This represents a Filter that has access to the output types of the previous
-    filter.
-
-    Additionally to :class:`Filter` it receives a dict ``types``.
-    """
-    pass
-
-
 class Tool(NotRunnable, PipelineElement):
     """
     This represents a Tool of the pipeline.

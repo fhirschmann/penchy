@@ -18,7 +18,7 @@ from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
-from penchy.jobs.elements import PipelineElement, SystemFilter, GenericFilter
+from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.jobs.filters import Receive, Send
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string, default
@@ -301,8 +301,7 @@ class Job(object):
 
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
-            is_generic = isinstance(sink, GenericFilter)
-            kwargs = build_keys(group, is_generic)
+            kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
             sink.run(**kwargs)
@@ -356,8 +355,7 @@ class Job(object):
 
         # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
-            is_generic = isinstance(sink, GenericFilter)
-            kwargs = build_keys(group, is_generic)
+            kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
                 kwargs['environment'] = self._build_environment()
             sink.run(**kwargs)

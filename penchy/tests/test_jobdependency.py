@@ -34,12 +34,12 @@ class BuildKeysTest(unittest.TestCase):
                  make_edge(2, (('foz', 'bas'),
                                ('boz', 'bat')))]
         with self.assertRaises(AssertionError):
-            build_keys(edges, False)
+            build_keys(edges)
 
     def test_single_edge(self):
         edges = [make_edge(1, (('foo', 'bar'),
                                ('baz', 'bad')))]
-        self.assertDictEqual(build_keys(edges, False),
+        self.assertDictEqual(build_keys(edges),
                              {'bar' : 42,
                               'bad' : 42})
 
@@ -48,7 +48,7 @@ class BuildKeysTest(unittest.TestCase):
                                ('baz', 'bad'))),
                  make_edge(1, (('foz', 'bas'),
                                ('boz', 'bat')))]
-        self.assertDictEqual(build_keys(edges, False),
+        self.assertDictEqual(build_keys(edges),
                              {'bar' : 42,
                               'bad' : 42,
                               'bas' : 42,
@@ -63,7 +63,7 @@ class BuildKeysTest(unittest.TestCase):
         for edge in edges:
             edge.map_ = None
 
-        self.assertDictEqual(build_keys(edges, False),
+        self.assertDictEqual(build_keys(edges),
                              {'foo' : 42,
                               'baz' : 42,
                               'foz' : 42,

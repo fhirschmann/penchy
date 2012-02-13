@@ -17,7 +17,7 @@ import shutil
 from pprint import pprint
 
 from penchy import __version__
-from penchy.jobs.elements import Filter, SystemFilter, GenericFilter
+from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types
 from penchy.util import default
 
@@ -174,7 +174,7 @@ class DacapoHarness(Filter):
             self.out['valid'].append(exit_code == 0 and failures == 0)
 
 
-class Send(SystemFilter, GenericFilter):
+class Send(SystemFilter):
     """
     Send data to the server.
 
@@ -183,7 +183,7 @@ class Send(SystemFilter, GenericFilter):
     - ``environment``: see :meth:`Job._build_environment`
     - ``payload``: data to send
     """
-    # FIXME: Make environmet a special name for SystemFilter
+    # FIXME: Make environment a special name for SystemFilter
     # to avoid name clashes
     inputs = Types()
 
@@ -340,7 +340,7 @@ class Aggregate(Filter):
         super(Aggregate, self).__init__()
         self.columns = args
 
-    #FIXME: Typecheck correctly & other correctness stuff
+    # Check if colums exist
     def _run(self, **kwargs):
         results = kwargs['results']
         names = []
@@ -349,13 +349,11 @@ class Aggregate(Filter):
                 for res in results:
                     if col in results[r].keys():
                         self.out[col] = results[res][col]
-                        #FIXME: replace object with real type
                         names.append((col, object))
                         break
             else:
                 comp, column = col
                 self.out[column] = results[comp][column]
-                #FIXME: replace object with real type
                 names.append((column, object))
         self.outputs = apply(Types, names)
 
