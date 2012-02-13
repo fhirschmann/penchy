@@ -347,7 +347,7 @@ class Aggregate(Filter):
         for col in self.columns:
             if isinstance(col, str):
                 for res in results:
-                    if col in results[r].keys():
+                    if col in results[res].keys():
                         self.out[col] = results[res][col]
                         names.append((col, object))
                         break
