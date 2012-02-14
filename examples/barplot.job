@@ -7,7 +7,7 @@ import config
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 jvm1 = jvms.JVM('java')
-jvm2 = jvms.JVM('java_') # Hack to get a different SystemComposition
+jvm2 = jvms.JVM('java')
 comp1 = SystemComposition(jvm1, node)
 comp2 = SystemComposition(jvm2, node)
 
