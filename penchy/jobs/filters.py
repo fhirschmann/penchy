@@ -488,6 +488,7 @@ class Save(SystemFilter):
 class BackupFile(SystemFilter):
     """
     Copies content of path to specified location.
+        log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
 
     Inputs:
 
@@ -522,6 +523,8 @@ class Read(Filter):
     Inputs:
     - ``paths``: the filepaths to read
 
+        log.debug('Backup "{0}" to "{1}"'.format(os.path.abspath(path),
+                                                 os.path.abspath(self.target_path)))
     Outputs:
     - ``data``: the content of the filepaths
     """
@@ -535,3 +538,4 @@ class Read(Filter):
             with open(p) as f:
                 data.append(f.read())
         self.out['data'] = data
+            log.debug('Reading "{0}"'.format(os.path.abspath(p)))
