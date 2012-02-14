@@ -452,8 +452,11 @@ class Dump(SystemFilter):
             'composition' : str(env['current_composition']),
             'jvm' : env['current_composition'].jvm.information()
         }
-        kwargs['system'] = system
-        s = json.dumps(kwargs, indent=self.indent)
+        dump = {
+            'system' : system,
+            'data' : kwargs
+        }
+        s = json.dumps(dump, indent=self.indent)
         self.out['dump'] = s
 
 
