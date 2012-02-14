@@ -20,7 +20,7 @@ from pprint import pprint
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types
-from penchy.util import default
+from penchy.util import default, average
 
 
 log = logging.getLogger(__name__)
@@ -315,8 +315,7 @@ def evaluate_runtimes(times):
 
     maxs = [max(iteration) for iteration in grouped_by_iteration]
     mins = [min(iteration) for iteration in grouped_by_iteration]
-    avgs = [float(sum(iteration)) / len(iteration)
-            for iteration in grouped_by_iteration]
+    avgs = [average(iteration) for iteration in grouped_by_iteration]
     pos_deviations = [abs(max_ - avg) / avg for max_, avg in zip(maxs, avgs)]
     neg_deviations = [abs(min_ - avg) / avg for min_, avg in zip(mins, avgs)]
 
@@ -466,8 +465,7 @@ class BarPlot(Filter):
         bars, names, rects = [], [], []
         ziped_ys = zip(*ys)
         for i, y, c in zip(itertools.count(), ziped_ys, self.colors):
-            #FIXME use avg-filter instead of map
-            rects.append(plot.bar(ind + self.width * i, map(lambda x: sum(x) / len(x), y),
+            rects.append(plot.bar(ind + self.width * i, [average(x) for x in y],
                                   self.width, color=c))
             bars.append(rects[i][0])
             names.append('Invocation {0}'.format(i + 1))

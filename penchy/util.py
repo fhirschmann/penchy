@@ -259,3 +259,13 @@ def die(msg):
     """
     print(msg, file=sys.stderr)
     sys.exit(1)
+
+
+def average(xs):
+    """
+    :param xs: numbers to average
+    :type xs: list of numbers
+    :returns: averaged numbers
+    :rtype: float
+    """
+    return float(sum(xs)) / len(xs)
