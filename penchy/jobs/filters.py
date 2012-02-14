@@ -398,13 +398,64 @@ class Condense(Filter):
                 col = cols[1]
                 ids = cols[2:]
             name = self.names[0]
-            self.out[name].extend(results[comp][col])
+            if not self.out[name]:
+                self.out[name] = []
+            self.out[name].append(results[comp][col])
             for name, col in zip(self.names[1:], ids):
-                self.out[name] = col
+                if not self.out[name]:
+                    self.out[name] = []
+                self.out[name].append(col)
 
 
 class Plot(Filter):
     pass
+
+
+class BarPlot(Filter):
+
+    inputs = Types(('x', list, str), ('y', list, list))
+
+    def __init__(self, filename, title="", xlabel="", ylabel="", colors=[]):
+        super(BarPlot, self).__init__()
+        self.filename = filename
+        self.title = title
+        self.xlabel = xlabel
+        self.ylabel = ylabel
+        self.width = 0.2
+        self.colors = colors
+        self.prehooks.append(lambda: self._import())
+        self.posthooks.append(lambda: self._draw())
+
+    def _run(self, **kwargs):
+        import numpy as np
+        import matplotlib.pyplot as plt
+        xs = kwargs['x']
+        ys = kwargs['y']
+        ind = np.arange(len(xs))
+        fig = plt.figure()
+        plot = fig.add_subplot(1, 1, 1)
+        bars = names = rects = []
+        ziped_ys = apply(zip, ys)
+        for i, y, c in zip(range(len(ziped_ys)), ziped_ys, self.colors):
+            #FIXME use avg-filter instead of map
+            rects.append(plot.bar(ind + self.width * i, map(lambda x: sum(x) / len(x), y),
+                                  self.width, color=c))
+            bars.append(rects[i][0])
+            names.append('Invocation ' + str(i + 1))
+        plot.set_xlabel(self.xlabel)
+        plot.set_ylabel(self.ylabel)
+        plot.set_title(self.title)
+        plot.set_xticks(ind + self.width)
+        plot.set_xticklabels(xs)
+        plot.legend(bars, names)
+        plt.savefig(self.filename)
+        #plt.show()
+
+    def _draw(self):
+        pass
+
+    def _import(self):
+        pass
 
 
 class Upload(Filter):
