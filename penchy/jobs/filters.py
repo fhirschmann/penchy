@@ -407,6 +407,34 @@ class Condense(Filter):
                 self.out[name].append(col)
 
 
+class AggregatingReceive(Receive, Aggregate):
+    """
+    A composition of the ``Receive`` and ``Aggregate`` filter.
+    """
+    inputs = Types(('environment', dict))
+
+    def __init__(self, *args):
+        Aggregate.__init__(args)
+        Receiver.__init__()
+
+    def _run(self, **kwargs):
+        Aggregate._run(merge(kwargs, Receive._run(kwargs)))
+
+
+class CondensingReceive(Receive, Condense):
+    """
+    A composition of the ``Receive`` and ``Condense`` filter.
+    """
+    inputs = Types(('environment', dict))
+
+    def __init__(self, data, names):
+        Condense.__init__(data, names)
+        Receiver.__init__()
+
+    def _run(self, **kwargs):
+        Condense._run(merge(kwargs, Receive._run(kwargs)))
+
+
 class Plot(Filter):
     pass
 
