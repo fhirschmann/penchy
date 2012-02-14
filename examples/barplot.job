@@ -11,8 +11,6 @@ jvm2 = jvms.JVM('java')
 comp1 = SystemComposition(jvm1, node)
 comp2 = SystemComposition(jvm2, node)
 
-receiver = filters.Receive()
-
 fop = workloads.ScalaBench('fop')
 batik = workloads.ScalaBench('batik')
 jvm1.workload = fop
@@ -20,7 +18,7 @@ jvm2.workload = batik
 
 f = filters.DacapoHarness()
 send = filters.Send()
-con = filters.Condense([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
+condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
                        ('time','bench'))
 
 plot = filters.BarPlot('/tmp/barplot.svg', 'testplot', 'x', 'y', ['blue', 'red'])
@@ -32,7 +30,7 @@ comp2.flow = flow2
 
 job = Job(compositions=[comp1, comp2],
           server_flow=[
-              receiver >> con >> [('bench', 'x'), ('time', 'y')] >> plot
+              condense >> [('bench', 'x'), ('time', 'y')] >> plot
           ],
           invocations = 2
           )
