@@ -463,8 +463,7 @@ class BarPlot(Filter):
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
-        ziped_ys = zip(*ys)
-        for i, y, c in zip(itertools.count(), ziped_ys, self.colors):
+        for i, y, c in zip(itertools.count(), zip(*ys), self.colors):
             rects.append(plot.bar(ind + self.width * i, [average(x) for x in y],
                                   self.width, color=c))
             bars.append(rects[i][0])
