@@ -23,4 +23,5 @@ ax.set_xticks(ind+width)
 ax.set_xticklabels( ('fop', 'batik', 'eclipse') )
 ax.legend( (rect1[0], rect2[0]) , ('openJDK', 'hotspot') )
 
+plt.savefig("pylab_example.svg")
 plt.show()
