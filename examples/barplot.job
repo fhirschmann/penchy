@@ -1,0 +1,38 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+jvm1 = jvms.JVM('java')
+jvm2 = jvms.JVM('java_') # Hack to get a different SystemComposition
+comp1 = SystemComposition(jvm1, node)
+comp2 = SystemComposition(jvm2, node)
+
+receiver = filters.Receive()
+
+fop = workloads.ScalaBench('fop')
+batik = workloads.ScalaBench('batik')
+jvm1.workload = fop
+jvm2.workload = batik
+
+f = filters.DacapoHarness()
+send = filters.Send()
+con = filters.Condense([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
+                       ('time','bench'))
+
+plot = filters.BarPlot('/tmp/barplot.svg', 'testplot', 'x', 'y', ['blue', 'red'])
+
+flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
+flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
+comp1.flow = flow1
+comp2.flow = flow2
+
+job = Job(compositions=[comp1, comp2],
+          server_flow=[
+              receiver >> con >> [('bench', 'x'), ('time', 'y')] >> plot
+          ],
+          invocations = 2
+          )
