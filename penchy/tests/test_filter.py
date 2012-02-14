@@ -1,13 +1,15 @@
 import itertools
+import json
 import os
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
-from penchy.jobs.typecheck import Types, TypeCheckError
+from penchy.jobs.job import Job
 from penchy.jobs.filters import *
-
-from penchy.tests.util import get_json_data, make_system_composition
+from penchy.jobs.typecheck import Types
+from penchy.util import tempdir
+from penchy.tests.util import get_json_data, make_system_composition, MockPipelineElement
 
 
 class DacapoHarnessTest(unittest.TestCase):
@@ -263,3 +265,37 @@ class ReadTest(unittest.TestCase):
             r = Read()
             r.run(paths=[f.name])
             self.assertListEqual(r.out['data'], [s])
+
+
+class ServerFlowSystemFilterTest(unittest.TestCase):
+    def setUp(self):
+        self.env = {
+            'job' : 'no file',
+            'current_composition' : None
+        }
+
+    def test_dump(self):
+        numbers = [23, 42]
+        strings = ['a', 'b', 'c']
+        d = Dump()
+        d._run(numbers=numbers, strings=strings, environment=self.env)
+
+        dump = json.loads(d.out['dump'])
+        self.assertIn('job', dump['system'])
+        self.assertNotIn('jvm', dump['system'])
+        self.assertIn('numbers', dump['data'])
+        self.assertIn('strings', dump['data'])
+        self.assertItemsEqual(numbers, dump['data']['numbers'])
+        self.assertItemsEqual(strings, dump['data']['strings'])
+
+    def test_save_and_backup(self):
+        data = "'tis the end"
+        with tempdir():
+            s = Save('save')
+            s._run(data=data, environment=self.env)
+            b = BackupFile('backup')
+            b._run(filename='save', environment=self.env)
+            with open('save') as f:
+                self.assertEqual(f.read(), data)
+            with open('backup') as f:
+                self.assertEqual(f.read(), data)

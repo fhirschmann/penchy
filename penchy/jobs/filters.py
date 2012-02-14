@@ -421,7 +421,8 @@ class Dump(SystemFilter):
     JSON format consists of one dictionary that includes
 
     - the dictionary ``system`` which describes the system (JVM, Workload, Tool,
-      PenchY descriptions and versions)
+      SystemComposition, PenchY descriptions and versions, parts will miss if
+      executed as part of the server pipeline)
 
     - the dictionary ``data`` which contains all data sent to :class:`Dump`
       (with the name of the input as key)
@@ -448,10 +449,12 @@ class Dump(SystemFilter):
             job = os.path.basename(env['job'])
         system = {
             'job' : job,
-            'penchy' : __version__,
-            'composition' : str(env['current_composition']),
-            'jvm' : env['current_composition'].jvm.information()
+            'penchy' : __version__
         }
+        if env['current_composition'] is not None:
+            system['composition'] = str(env['current_composition']),
+            system['jvm'] = env['current_composition'].jvm.information()
+
         dump = {
             'system' : system,
             'data' : kwargs
@@ -473,17 +476,20 @@ class Save(SystemFilter):
     def __init__(self, target_path):
         """
         :param target_path: path to destination relative to
-                            :class:`~penchy.jobs.job.NodeSetting`.path or
-                            absolute)
+                            :class:`~penchy.jobs.job.NodeSetting`.path (on
+                            client), to working directory (on server) or
+                            absolute
         :type target_path: str
         """
         super(Save, self).__init__()
         self.target_path = target_path
 
     def _run(self, **kwargs):
-        if not os.path.isabs(self.target_path):
+        if not os.path.isabs(self.target_path) \
+           and kwargs['environment']['current_composition'] is not None:
             node_setting = kwargs['environment']['current_composition'].node_setting
             self.target_path = os.path.join(node_setting.path, self.target_path)
+        log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
         with open(self.target_path, 'w') as f:
             f.write(kwargs['data'])
 
@@ -491,7 +497,6 @@ class Save(SystemFilter):
 class BackupFile(SystemFilter):
     """
     Copies content of path to specified location.
-        log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
 
     Inputs:
 
@@ -502,20 +507,24 @@ class BackupFile(SystemFilter):
     def __init__(self, target_path):
         """
         :param target_path: path to destination relative to
-                            :class:`~penchy.jobs.job.NodeSetting`.path or
-                            absolute)
+                            :class:`~penchy.jobs.job.NodeSetting`.path (on
+                            client), to working directory (on server) or
+                            absolute
         :type target_path: str
         """
         super(BackupFile, self).__init__()
         self.target_path = target_path
 
     def _run(self, **kwargs):
-        if not os.path.isabs(self.target_path):
+        if not os.path.isabs(self.target_path) \
+           and kwargs['environment']['current_composition'] is not None:
             node_setting = kwargs['environment']['current_composition'].node_setting
             self.target_path = os.path.join(node_setting.path, self.target_path)
         path = kwargs['filename']
         if not os.path.exists(path):
             raise WrongInputError('file {0} does not exist'.format(path))
+        log.debug('Backup "{0}" to "{1}"'.format(os.path.abspath(path),
+                                                 os.path.abspath(self.target_path)))
         shutil.copyfile(path, self.target_path)
 
 
@@ -526,8 +535,6 @@ class Read(Filter):
     Inputs:
     - ``paths``: the filepaths to read
 
-        log.debug('Backup "{0}" to "{1}"'.format(os.path.abspath(path),
-                                                 os.path.abspath(self.target_path)))
     Outputs:
     - ``data``: the content of the filepaths
     """
@@ -538,7 +545,7 @@ class Read(Filter):
         paths = kwargs['paths']
         data = []
         for p in paths:
+            log.debug('Reading "{0}"'.format(os.path.abspath(p)))
             with open(p) as f:
                 data.append(f.read())
         self.out['data'] = data
-            log.debug('Reading "{0}"'.format(os.path.abspath(p)))
