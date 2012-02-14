@@ -9,6 +9,7 @@ Outputs are available via the ``out`` attribute.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
+import itertools
 import json
 import logging
 import os
@@ -462,14 +463,14 @@ class BarPlot(Filter):
         ind = np.arange(len(xs))
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
-        bars = names = rects = []
-        ziped_ys = apply(zip, ys)
-        for i, y, c in zip(range(len(ziped_ys)), ziped_ys, self.colors):
+        bars, names, rects = [], [], []
+        ziped_ys = zip(*ys)
+        for i, y, c in zip(itertools.count(), ziped_ys, self.colors):
             #FIXME use avg-filter instead of map
             rects.append(plot.bar(ind + self.width * i, map(lambda x: sum(x) / len(x), y),
                                   self.width, color=c))
             bars.append(rects[i][0])
-            names.append('Invocation ' + str(i + 1))
+            names.append('Invocation {0}'.format(i + 1))
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
