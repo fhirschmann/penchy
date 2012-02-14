@@ -263,6 +263,8 @@ def die(msg):
 
 def average(xs):
     """
+    Average the numbers in ``xs``.
+
     :param xs: numbers to average
     :type xs: list of numbers
     :returns: averaged numbers
