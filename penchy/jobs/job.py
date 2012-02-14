@@ -144,7 +144,10 @@ class SystemComposition(object):
         self._flow = []
 
     def __eq__(self, other):
-        return self.jvm == other.jvm and self.node_setting == other.node_setting
+        try:
+            return self.hash() == other.hash()
+        except Exception:
+            return False
 
     def __ne__(self, other):
         return self.jvm != other.jvm or self.node_setting != other.node_setting
