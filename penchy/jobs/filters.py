@@ -463,6 +463,7 @@ class BarPlot(Filter):
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
+        # XXX: ys is a 2d sequence, y is a list, thus those are bad names
         for i, y, c in zip(itertools.count(), zip(*ys), self.colors):
             rects.append(plot.bar(ind + self.width * i, [average(x) for x in y],
                                   self.width, color=c))
