@@ -137,6 +137,10 @@ class SystemComposition(object):
 
     def __init__(self, jvm, node_setting, name=None):
         """
+        :param jvm: the associated jvm
+        :type jvm: :class:`JVM`
+        :param node_setting: the node setting
+        :type node_setting: :class:`NodeSetting`
         """
         self.name = default(name, "{0} @ {1}".format(jvm, node_setting))
         self.jvm = jvm
@@ -478,8 +482,8 @@ class Job(object):
         :param dot: path to dot executable
         :type dot: str
 
-        ;returns: the path to the generated file
-        ;rtype: str
+        :returns: the path to the generated file
+        :rtype: str
         """
         def edges_of_flow(flow, flow_id=0):
             """
