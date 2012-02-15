@@ -15,6 +15,11 @@ def compare_argspec(func, expected):
     """
     Compares the specification of the arguments from the given
     function ``func`` with the ``expected`` arguments.
+
+    :param func: function to check
+    :type func: callable
+    :param expected: expected function signature
+    :type expected: :class:`ArgSpec`
     """
     actual = inspect.getargspec(func)
     if not expected == actual:
@@ -26,17 +31,39 @@ def compare_argspec(func, expected):
         return False
 
 
-def checkattr(func, attr):
+def checkattr(mod, attr):
     """
-    Checks if the attribute ``attr`` still exists in function
-    ``func``.
+    Checks if the attribute ``attr`` still exists in module
+    ``mod``.
+
+    :param mod: module to check
+    :type mod: module
+    :param attr: attribute to check for
     """
-    if not hasattr(func, attr):
+    if not hasattr(mod, attr):
         log.error('%s in %s no longer has a %s attribute' %
-                (func.__name__, func.__module__, attr))
+                (mod.__name__, mod.__module__, attr))
         return True
     else:
         return False
+
+
+def checkattrs(seq):
+    """
+    Checks a sequence of function/attribute pairs using
+    `checkattr`.
+
+    :param seq: sequence of a (``func``, ``attr``) or
+                (``func``, [``attr``, ``attr``]) pairs
+    :type seq: sequence
+    """
+
+    for func, attrs in seq:
+        if type(attrs) == list:
+            for attr in attrs:
+                checkattr(func, attr)
+        else:
+            checkattr(func, attrs)
 
 
 def check_paramiko():
@@ -50,12 +77,11 @@ def check_paramiko():
         log.error('Could not import paramiko - did you install it?')
         raise
 
-    checkattr(paramiko, 'SSHClient')
-    checkattr(paramiko.SSHClient, 'open_sftp')
-    checkattr(paramiko.SFTPClient, 'open')
-    checkattr(paramiko.SSHClient, 'connect')
-    checkattr(paramiko.SFTPClient, 'put')
-    checkattr(paramiko.SFTPClient, 'mkdir')
+    checkattrs([
+        (paramiko, 'SSHClient'),
+        (paramiko.SSHClient, ['open_sftp', 'connect']),
+        (paramiko.SFTPClient, ['open', 'put', 'mkdir'])
+        ])
 
     expected = ArgSpec(args=['self', 'hostname', 'port', 'username',
         'password', 'pkey', 'key_filename', 'timeout', 'allow_agent',
