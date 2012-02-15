@@ -16,6 +16,7 @@ Coverage
 
 Dokumentation
 -------------
+   - 2012-02-15 Überprüfung der API-Dokumentation ausgeführt von Pascal
 
 Statische Analyse
 -----------------
