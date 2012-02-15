@@ -12,6 +12,10 @@ log = logging.getLogger(__name__)
 
 
 def compare_argspec(func, expected):
+    """
+    Compares the specification of the arguments from the given
+    function ``func`` with the ``expected`` arguments.
+    """
     actual = inspect.getargspec(func)
     if not expected == actual:
         log.warning('Arguments for %s in %s have changed:\n'
@@ -23,6 +27,10 @@ def compare_argspec(func, expected):
 
 
 def checkattr(func, attr):
+    """
+    Checks if the attribute ``attr`` still exists in function
+    ``func``.
+    """
     if not hasattr(func, attr):
         log.error('%s in %s no longer has a %s attribute' %
                 (func.__name__, func.__module__, attr))
