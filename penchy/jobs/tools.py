@@ -16,8 +16,9 @@ from penchy.maven import MavenDependency
 
 class Tamiflex(Tool):
     """
-    Tamiflex-Tool for the play-out agent. For usage information
-    visit the `tamiflex homepage <http://code.google.com/p/tamiflex/>`_.
+    This tool implements the play-out agent of tamiflex. The play-out agent has no
+    configuration options. For general usage information visit the
+    `tamiflex homepage <http://code.google.com/p/tamiflex/>`_.
 
     Outputs:
 
