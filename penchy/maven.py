@@ -241,7 +241,7 @@ class MavenDependency(object):
         """
         Checks if the checksum is correct.
 
-        :raises: :exc:`IntegrityError` if checksum is not correct.
+        :raises: :exc:`IntegrityError` if the checksum is not correct.
         """
         if not self.wanted_checksum:
             return True
