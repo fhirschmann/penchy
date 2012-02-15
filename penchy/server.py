@@ -132,6 +132,7 @@ class Server(object):
                          :class:`SystemComposition` by
         :type hashcode: string
         :param result: the result of the job
+        :type result: dict
         """
         composition = self.composition_for(hashcode)
 
@@ -140,10 +141,15 @@ class Server(object):
             node.received(composition)
             self.results[composition] = result
 
+    # FIXME: reason is not used
     def exp_node_error(self, hashcode, reason=None):
         """
         Deal with client-side errors. Call this for each
         composition for which a job failed.
+
+        :param hashcode: the hashcode to identify the
+                         :class:`SystemComposition`
+        :type hashcode: string
         """
         composition = self.composition_for(hashcode)
 
@@ -209,10 +215,10 @@ class Server(object):
 
     def run_pipeline(self):
         """
-        Called when we have received results for all compositions; starts
+        Called when we have received results for *all* compositions; starts
         the server-side pipeline.
         """
-        log.info("Run server-side pipeline")
+        log.info("Run server-side pipeline.")
         self.job.filename = self.job_file
         self.job.receive = lambda: self.results
         self.job.run_server_pipeline()
