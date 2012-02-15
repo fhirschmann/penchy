@@ -290,7 +290,7 @@ class ServerFlowSystemFilterTest(unittest.TestCase):
 
     def test_save_and_backup(self):
         data = "'tis the end"
-        with tempdir():
+        with tempdir(delete=True):
             s = Save('save')
             s._run(data=data, environment=self.env)
             b = BackupFile('backup')
