@@ -530,9 +530,14 @@ class Dump(SystemFilter):
             'penchy' : __version__
         }
         if env['current_composition'] is not None:
-            system['composition'] = str(env['current_composition']),
-            system['jvm'] = env['current_composition'].jvm.information()
-
+            comp = env['current_composition']
+            system['composition'] = str(comp),
+            system['jvm'] = comp.jvm.information()
+            classes = set(e.__class__ for e in comp.elements)
+            system['dependencies'] = dict((c.__name__, [str(dep) for dep
+                                                        in c.DEPENDENCIES])
+                                           for c in classes
+                                          if c.DEPENDENCIES)
         dump = {
             'system' : system,
             'data' : kwargs
