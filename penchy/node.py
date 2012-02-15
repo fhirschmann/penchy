@@ -28,7 +28,7 @@ class NodeError(Exception):
 
 class Node(object):  # pragma: no cover
     """
-    This class represents a node (=a machine on which the benchmark
+    This class represents a node (a system on which the benchmark
     will be run on) and provides basic ssh/sftp functionality.
     """
 
