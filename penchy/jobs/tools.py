@@ -16,8 +16,8 @@ from penchy.maven import MavenDependency
 
 class Tamiflex(Tool):
     """
-    The Hotspot in at least version 1.6.0_29-b11 for 64-bit is currently
-    unsupported.
+    Tamiflex-Tool for the play-out agent. For usage information
+    visit the `tamiflex homepage <http://code.google.com/p/tamiflex/>`_.
 
     Outputs:
 
