@@ -279,6 +279,13 @@ class Evaluation(Filter):
 class StatisticRuntimeEvaluation(Evaluation):
     """
     Filter to evaluate runtime statistically.
+
+    Inputs:
+
+    - ``times``: list of invocations of iterations of
+                 the wallclocktime
+
+    Outputs: see ``evaluate_runtimes``
     """
     inputs = Types(('times', list, list, int))
     outputs = Types(('averages', list, int),
@@ -332,6 +339,8 @@ class Aggregate(Filter):
 
     Input:
        - ``results``: Resultset as produced by the ``Receive`` filter
+
+    Output: The columns specified in `Aggregate.columns`
     """
 
     inputs = Types(('results', dict))
@@ -340,7 +349,7 @@ class Aggregate(Filter):
         super(Aggregate, self).__init__()
         self.columns = args
 
-    # Check if colums exist
+    # FIXME: Check if colums exist
     def _run(self, **kwargs):
         results = kwargs['results']
         names = []
@@ -373,6 +382,8 @@ class Condense(Filter):
 
     Input:
        - ``results``: Resultset as produced by the ``Receive`` filter
+
+    Output: The columns specified in `Condense.names`
     """
 
     inputs = Types(('results', dict))
@@ -440,7 +451,9 @@ class Plot(Filter):
 
 
 class BarPlot(Filter):
-
+    """
+    A simple and static barplot.  Mainly for testing.
+    """
     inputs = Types(('x', list, str), ('y', list, list))
 
     def __init__(self, filename, title="", xlabel="", ylabel="", colors=[]):
