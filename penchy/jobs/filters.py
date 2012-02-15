@@ -464,21 +464,18 @@ class BarPlot(Filter):
         self.ylabel = ylabel
         self.width = 0.2
         self.colors = colors
-        self.prehooks.append(lambda: self._import())
-        self.posthooks.append(lambda: self._draw())
 
     def _run(self, **kwargs):
         import numpy as np
         import matplotlib.pyplot as plt
         xs = kwargs['x']
-        ys = kwargs['y']
+        yss = kwargs['y']
         ind = np.arange(len(xs))
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
-        # XXX: ys is a 2d sequence, y is a list, thus those are bad names
-        for i, y, c in zip(itertools.count(), zip(*ys), self.colors):
-            rects.append(plot.bar(ind + self.width * i, [average(x) for x in y],
+        for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
+            rects.append(plot.bar(ind + self.width * i, [average(y) for y in ys],
                                   self.width, color=c))
             bars.append(rects[i][0])
             names.append('Invocation {0}'.format(i + 1))
@@ -489,13 +486,6 @@ class BarPlot(Filter):
         plot.set_xticklabels(xs)
         plot.legend(bars, names)
         plt.savefig(self.filename)
-        #plt.show()
-
-    def _draw(self):
-        pass
-
-    def _import(self):
-        pass
 
 
 class Upload(Filter):
