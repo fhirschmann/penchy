@@ -34,21 +34,21 @@ class Node(object):  # pragma: no cover
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy.log'))
 
-    def __init__(self, setting, job_module):  # TODO: s/job_module/compositions
+    def __init__(self, setting, compositions):
         """
         Initialize the node.
 
         :param setting: the node setting
         :type setting: :class:`NodeSetting`
-        :param job_module: the job module to execute
-        :type job_module: module
+        :param compositions: the job module to execute
+        :type compositions: module
         """
         self.setting = setting
         self.log = logging.getLogger(".".join([__name__,
             self.setting.identifier]))
 
-        self.job_module = job_module
-        self.expected = list(job_module.job.compositions_for_node(
+        self.compositions = compositions
+        self.expected = list(compositions.job.compositions_for_node(
             self.setting.identifier))
 
         # TODO: Dictionary for timers
@@ -75,8 +75,8 @@ class Node(object):  # pragma: no cover
         Sets up the Timer using the timer attribute of the
         current job module.
         """
-        if hasattr(self.job_module, 'timeout'):
-            timeout = getattr(self.job_module, 'timeout')
+        if hasattr(self.compositions, 'timeout'):
+            timeout = getattr(self.compositions, 'timeout')
             if timeout:
                 return Timer(timeout * self.setting.timeout_factor, self.timeout)
 
