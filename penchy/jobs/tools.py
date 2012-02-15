@@ -52,7 +52,7 @@ class Tamiflex(Tool):
 
 class HProf(Tool):
     """
-    HProf must be called with exactly one option. Valid
+    This tool implements the hprof agent. Valid
     options can be obtained with the command::
 
        java -agentlib:hprof=help
@@ -79,7 +79,8 @@ class HProf(Tool):
         :param option: the argument for hprof
         """
         super(HProf, self).__init__()
-        # always the right file because a new dir is generated for each invocation
+        # chooses always the right file because a new directory
+        # is generated for each invocation
         self.posthooks.append(lambda: self.out['hprof']
                               .append(os.path.abspath('java.hprof.txt')))
         self.option = option
