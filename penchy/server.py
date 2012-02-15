@@ -83,13 +83,14 @@ class Server(object):
         thread.daemon = True
         return thread
 
-    # FIXME: frame is not used
     def _signal_handler(self, signum, frame):
         """
         Handles signals sent to this process.
 
         :param signum: signal number as defined in the ``signal`` module
-        :type signum: defined symbolically FIXME: How to describe the type here
+        :type signum: int
+        :param frame: execution frame
+        :type frame: frame object
         """
         log.info("Received signal %s " % signum)
         if signum == signal.SIGTERM:
