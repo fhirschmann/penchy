@@ -59,6 +59,8 @@ class Server(object):
                 allow_none=True)
         self.server.register_function(self.exp_rcv_data, "rcv_data")
         self.server.register_function(self.exp_node_error, "node_error")
+        self.server.register_function(self.exp_start_timeout, "start_timeout")
+        self.server.register_function(self.exp_stop_timeout, "stop_timeout")
         # XXX: I don't yet know if this will work. With no timeout set,
         # handle_request will wait forever and timeouts caused by Timer()
         # will not cause the server to stop waiting. I think this should work!
@@ -146,6 +148,14 @@ class Server(object):
         with Server._rcv_lock:
             node = self.node_for(composition.node_setting)
             node.received(composition)
+
+    def exp_start_timeout(self, hashcode):
+        composition = self.composition_for(hashcode)
+        # TODO: Implement me!
+
+    def exp_stop_timeout(self, hashcode):
+        composition = self.composition_for(hashcode)
+        # TODO: Implement me!
 
     @property
     def received_all_results(self):

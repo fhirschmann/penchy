@@ -40,6 +40,8 @@ class Client(object):
 
         configure_logging(int(self.args.loglevel))
 
+        # TODO: Implement signal handler for timeouts
+
     def run(self):
         """
         Runs the client.

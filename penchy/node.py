@@ -34,7 +34,7 @@ class Node(object):  # pragma: no cover
 
     _LOGFILES = set(('penchy_bootstrap.log', 'penchy.log'))
 
-    def __init__(self, setting, job_module):
+    def __init__(self, setting, job_module):  # TODO: s/job_module/compositions
         """
         Initialize the node.
 
@@ -50,6 +50,8 @@ class Node(object):  # pragma: no cover
         self.job_module = job_module
         self.expected = list(job_module.job.compositions_for_node(
             self.setting.identifier))
+
+        # TODO: Dictionary for timers
         self.timer = self._setup_timer()
         self.ssh = self._setup_ssh()
 

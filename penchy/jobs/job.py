@@ -219,6 +219,11 @@ class SystemComposition(object):
 
         return elements
 
+    @property
+    def timeout(self):
+        # TODO: Implement me!
+        pass
+
     def _reset(self):
         """
         Reset the elements..
@@ -285,6 +290,8 @@ class Job(object):
             self.send = partial(self.send, composition.hash())
 
         composition.jvm.basepath = composition.node_setting.basepath
+
+        # TODO: Add pre- and posthooks for timeouts
 
         _, edge_order = edgesort(composition.starts, composition.flow)
 
