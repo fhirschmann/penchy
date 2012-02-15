@@ -76,8 +76,6 @@ class Server(object):
         """
         Sets up the client threads.
 
-        :param args: arguments to pass to run_clients()
-        :type args: list
         :returns: the thread object
         :rtype: :class:`threading.Thread`
         """
