@@ -100,24 +100,24 @@ class Server(object):
 
     def node_for(self, setting):
         """
-        Find the Node for a given :class:`NodeSetting`.
+        Find the Node for a given :class:`~penchy.jobs.job.NodeSetting`.
 
-        :param setting: setting to receive Node for
-        :type setting: :class:`NodeSetting` or string
+        :param setting: setting identifier to receive Node for
+        :type setting: string
         :returns: the Node
-        :rtype: :class:`Node`
+        :rtype: :class:`~penchy.node.Node`
         """
         return self.nodes[setting.identifier]
 
     def composition_for(self, hashcode):
         """
-        Find the :class:`SystemComposition` for a given
+        Find the :class:`~penchy.jobs.job.SystemComposition` for a given
         hashcode.
 
         :param hashcode: hashcode of the wanted composition
         :type hashcode: string
         :returns: the system composition
-        :rtype: :class:`SystemComposition`
+        :rtype: :class:`~penchy.jobs.job.SystemComposition`
         """
         for composition in self.job.compositions:
             if hashcode == composition.hash():
@@ -130,7 +130,7 @@ class Server(object):
         Receive data from nodes.
 
         :param hashcode: the hashcode to identify the
-                         :class:`SystemComposition` by
+                         :class:`~penchy.jobs.job.SystemComposition` by
         :type hashcode: string
         :param result: the result of the job
         :type result: dict
@@ -149,7 +149,7 @@ class Server(object):
         composition for which a job failed.
 
         :param hashcode: the hashcode to identify the
-                         :class:`SystemComposition`
+                         :class:`~penchy.jobs.job.SystemComposition`
         :type hashcode: string
         """
         composition = self.composition_for(hashcode)
@@ -170,7 +170,7 @@ class Server(object):
     def received_all_results(self):
         """
         Indicates wheter we have received results for *all*
-        :class:`SystemComposition`.
+        :class:`~penchy.jobs.job.SystemComposition`.
         """
         return all([n.received_all_results for n in self.nodes.values()])
 

@@ -39,7 +39,7 @@ class Node(object):  # pragma: no cover
         Initialize the node.
 
         :param setting: the node setting
-        :type setting: :class:`NodeSetting`
+        :type setting: :class:`~penchy.jobs.job.NodeSetting`
         :param compositions: the job module to execute
         :type compositions: module
         """
@@ -95,17 +95,17 @@ class Node(object):  # pragma: no cover
         """
         Indicates wheter we are received all results. In other words,
         this is False if we are still waiting for a job which is
-        running on a :class:`SystemComposition`.
+        running on a :class:`~penchy.jobs.job.SystemComposition`.
         """
         return len(self.expected) == 0
 
     def received(self, composition):
         """
-        Should be called when a :class:`SystemComposition` was received
-        for this node.
+        Should be called when a :class:`~penchy.jobs.job.SystemComposition`
+        was received for this node.
 
         :param composition: composition which was received
-        :type composition: :class:`SystemComposition`
+        :type composition: :class:`~penchy.jobs.job.SystemComposition`
         """
         if composition in self.expected:
             self.expected.remove(composition)

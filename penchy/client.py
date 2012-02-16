@@ -26,7 +26,7 @@ class Client(object):
     """
     def __init__(self, args):
         """
-        :param args: arguments; this would normally be sys.argv
+        :param args: arguments; this would normally be :class:`sys.argv`
         :type args: list
         """
         self.args = self.parse_args(args)
@@ -60,7 +60,7 @@ class Client(object):
         """
         Parses the arguments.
 
-        :param args: arguments; this would normally be sys.argv
+        :param args: arguments; this would normally be :class:`sys.argv`
         :type args: list
         """
         parser = argparse.ArgumentParser(description=__doc__, prog=args)
