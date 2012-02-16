@@ -139,14 +139,13 @@ class Types(object):
         valid = True
 
         if mapping is not None:
-            sinks = map(lambda s: s[1], mapping)
-            if len(sinks) != len(set(sinks)):
-                log.error('Multiple source outputs are connected to the' +
-                          ' same sink input')
+            inputs = [m[1] for m in mapping]
+            if len(inputs) != len(set(inputs)):
+                log.error('Multiple outputs are connected to the same input')
                 valid = False
 
         if self.descriptions is not None:
-            if mapping == None:
+            if mapping is None:
                 mapping = [(name, name) for name in self.descriptions]
 
             for source, _ in mapping:
