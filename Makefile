@@ -10,6 +10,7 @@ help:
 	@echo "    - dev: pip install all developmet dependencies"
 	@echo "    - doc: generate html documentation"
 	@echo "    - static-analysis: static analysis of all code"
+	@echo "    - clean: removes all *.pyc *.pyo and logfiles"
 
 tests:
 	unit2 discover -s penchy/tests -t .
