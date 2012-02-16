@@ -360,7 +360,7 @@ class Aggregate(Filter):
                     if col in results[res].keys():
                         if found:
                             log.warn("Column '{0}' is contained in more " +
-                                     "than one system composition".format(col))
+                                     "than once system composition".format(col))
                         else:
                             self.out[col] = results[res][col]
                             names.append((col, object))
@@ -401,12 +401,23 @@ class Condense(Filter):
     def _run(self, **kwargs):
         results = kwargs['results']
         for cols in self.data:
+            col = ""
+            ids = []
             if isinstance(cols[0], str):
-                for comp in results:
-                    if cols[0] in results[comp].keys():
-                        col = cols[0]
-                        ids = cols[1:]
-                        break
+                found = False
+                for res in results:
+                    if cols[0] in results[res].keys():
+                        if found:
+                            log.warn("Column '{0}' is contained in more " +
+                                     "than once system composition".format(cols[0]))
+                        else:
+                            col = cols[0]
+                            ids = cols[1:]
+                            comp = res
+                            found = True
+                if not found:
+                    raise WrongInputError("Column is not contained " +
+                                          "in the resultset")
             else:
                 comp = cols[0]
                 col = cols[1]
@@ -414,7 +425,11 @@ class Condense(Filter):
             name = self.names[0]
             if not self.out[name]:
                 self.out[name] = []
-            self.out[name].append(results[comp][col])
+            try:
+                self.out[name].append(results[comp][col])
+            except:
+                raise WrongInputError("Column is not contained " +
+                                      "in the resultset")
             for name, col in zip(self.names[1:], ids):
                 if not self.out[name]:
                     self.out[name] = []
