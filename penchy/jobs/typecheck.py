@@ -138,8 +138,14 @@ class Types(object):
         """
         valid = True
 
+        if mapping is not None:
+            sinks = map(lambda s: s[1], mapping)
+            if len(sinks) != len(set(sinks)):
+                log.error('Multiple sources are connected to the same sink')
+                valid = False
+
         if self.descriptions is None or other.descriptions is None:
-            return True
+            return valid
 
         missing_inputs = set(other.descriptions)
         if mapping == None:
