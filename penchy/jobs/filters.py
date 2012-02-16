@@ -189,8 +189,7 @@ class Send(SystemFilter):
     inputs = Types()
 
     def _run(self, **kwargs):
-        send = kwargs['environment']['send']
-        del(kwargs['environment'])
+        send = kwargs.pop('environment')['send']
         send(kwargs)
 
 
