@@ -6,6 +6,7 @@ help:
 	@echo "    - hooks: install git hooks"
 	@echo "    - coverage: gather coverage and produce html about relevant parts"
 	@echo "    - full-coverage: gather coverage and produce html output"
+	@echo "    - coverage-upload: gather coverage and upload it to 0x0b.de"
 	@echo "    - dev: pip install all developmet dependencies"
 	@echo "    - doc: generate html documentation"
 	@echo "    - static-analysis: static analysis of all code"
