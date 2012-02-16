@@ -186,7 +186,7 @@ class Send(SystemFilter):
     """
     # FIXME: Make environment a special name for SystemFilter
     # to avoid name clashes
-    inputs = Types(('payload', object))
+    inputs = Types()
 
     def _run(self, **kwargs):
         send = kwargs['environment']['send']
