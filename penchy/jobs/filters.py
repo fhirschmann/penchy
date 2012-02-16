@@ -359,8 +359,8 @@ class Aggregate(Filter):
                 for res in results:
                     if col in results[res].keys():
                         if found:
-                            log.warn("Column '{0}' is contained in more
-                                      than one system composition".format(col))
+                            log.warn("Column '{0}' is contained in more " +
+                                     "than one system composition".format(col))
                         else:
                             self.out[col] = results[res][col]
                             names.append((col, object))
