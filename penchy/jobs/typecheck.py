@@ -9,6 +9,7 @@ outputs in the pipeline.
 """
 import logging
 from itertools import chain
+from collections import defaultdict
 
 
 log = logging.getLogger(__name__)
@@ -139,10 +140,14 @@ class Types(object):
         valid = True
 
         if mapping is not None:
-            inputs = [m[1] for m in mapping]
-            if len(inputs) != len(set(inputs)):
-                log.error('Multiple outputs are connected to the same input')
-                valid = False
+            connections = defaultdict(list)
+            for source, sink in mapping:
+                connections[source].append(sink)
+            for input_, outputs in connections.items():
+                if len(outputs) > 1:
+                    log.error('Multiple outputs {0} are connected to input {1}'
+                              .format(', '.join(outputs), input_))
+                    valid = False
 
         if self.descriptions is not None:
             if mapping is None:
