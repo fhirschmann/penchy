@@ -121,97 +121,69 @@ def write_to_tempfiles(data):
 
 
 class AggregateTest(unittest.TestCase):
+    def setUp(self):
+        self.results = {1: {'a': 42,
+                            'b': 32},
+                        2: {'b': 0,
+                            'c': 21}}
+
     def test_implicit(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Aggregate('a', 'b')
-        f._run(results=results)
+        f._run(results=self.results)
         self.assertEqual(f.out, {'a': 42, 'b': 32})
 
     def test_explicit(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Aggregate((1, 'a'), (2, 'b'))
-        f._run(results=results)
+        f._run(results=self.results)
         self.assertEqual(f.out, {'a': 42, 'b': 0})
 
     def test_implicit_fail(self):
-        results = {1: {'a': 42,
-                        'b': 32},
-                   2: {'b': 0,
-                        'c': 21}}
         f = Aggregate('a', 'd')
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
     def test_explicit_fail1(self):
-        results = {1: {'a': 42,
-                        'b': 32},
-                   2: {'b': 0,
-                        'c': 21}}
         f = Aggregate((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
     def test_explicit_fail2(self):
-        results = {1: {'a': 42,
-                        'b': 32},
-                   2: {'b': 0,
-                        'c': 21}}
         f = Aggregate((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
 
 class CondenseTest(unittest.TestCase):
+    def setUp(self):
+        self.results = {1: {'a': 42,
+                            'b': 32},
+                        2: {'b': 0,
+                            'c': 21}}
+
     def test_implicit(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Condense([('a', 'id1'), ('b', 'id2')], ('col1', 'col2'))
-        f._run(results=results)
+        f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Condense([(1, 'a', 'id1'), (2, 'b', 'id2')], ('col1', 'col2'))
-        f._run(results=results)
+        f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Condense([('a', 'id1'), ('d', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
     def test_explicit_fail1(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Condense([(1, 'a', 'id1'), (2, 'd', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
     def test_explicit_fail2(self):
-        results = {1: {'a': 42,
-                       'b': 32},
-                   2: {'b': 0,
-                       'c': 21}}
         f = Condense([(1, 'a', 'id1'), (3, 'c', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(results=results)
+            f._run(results=self.results)
 
 
 class CondensingReceiveTest(unittest.TestCase):
