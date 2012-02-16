@@ -358,10 +358,13 @@ class Aggregate(Filter):
                 found = False
                 for res in results:
                     if col in results[res].keys():
-                        self.out[col] = results[res][col]
-                        names.append((col, object))
-                        found = True
-                        break
+                        if found:
+                            log.warn("Column '{0}' is contained in more
+                                      than one system composition".format(col))
+                        else:
+                            self.out[col] = results[res][col]
+                            names.append((col, object))
+                            found = True
                 if not found:
                     raise WrongInputError("Column is not contained" +
                                           "in the resultset")
