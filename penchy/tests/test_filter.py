@@ -214,6 +214,74 @@ class CondenseTest(unittest.TestCase):
             f._run(results=results)
 
 
+class CondensingReceiveTest(unittest.TestCase):
+    def setUp(self):
+        self.environment = {'receive': lambda: self.results}
+        self.results = {1: {'a': 42,
+                            'b': 32},
+                        2: {'b': 0,
+                            'c': 21}}
+
+    def test_implicit(self):
+        f = CondensingReceive([('a', 'id1'), ('b', 'id2')], ('col1', 'col2'))
+        f._run(environment=self.environment)
+        self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
+
+    def test_explicit(self):
+        f = CondensingReceive([(1, 'a', 'id1'), (2, 'b', 'id2')], ('col1', 'col2'))
+        f._run(environment=self.environment)
+        self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
+
+    def test_implicit_fail(self):
+        f = CondensingReceive([('a', 'id1'), ('d', 'id2')], ('col1', 'col2'))
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+    def test_explicit_fail1(self):
+        f = CondensingReceive([(1, 'a', 'id1'), (2, 'd', 'id2')], ('col1', 'col2'))
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+    def test_explicit_fail2(self):
+        f = CondensingReceive([(1, 'a', 'id1'), (3, 'c', 'id2')], ('col1', 'col2'))
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+
+class AggregatingReceiveTest(unittest.TestCase):
+    def setUp(self):
+        self.environment = {'receive': lambda: self.results}
+        self.results = {1: {'a': 42,
+                            'b': 32},
+                        2: {'b': 0,
+                            'c': 21}}
+
+    def test_implicit(self):
+        f = AggregatingReceive('a', 'b')
+        f._run(environment=self.environment)
+        self.assertEqual(f.out, {'a': 42, 'b': 32})
+
+    def test_explicit(self):
+        f = AggregatingReceive((1, 'a'), (2, 'b'))
+        f._run(environment=self.environment)
+        self.assertEqual(f.out, {'a': 42, 'b': 0})
+
+    def test_implicit_fail(self):
+        f = AggregatingReceive('a', 'd')
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+    def test_explicit_fail1(self):
+        f = AggregatingReceive((1, 'a'), (2, 'd'))
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+    def test_explicit_fail2(self):
+        f = AggregatingReceive((1, 'a'), (3, 'c'))
+        with self.assertRaises(WrongInputError):
+            f._run(environment=self.environment)
+
+
 class SendTest(unittest.TestCase):
     def test_send(self):
         a = [1]
