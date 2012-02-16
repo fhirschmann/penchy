@@ -41,7 +41,7 @@ class Tamiflex(Tool):
     def __init__(self):
         super(Tamiflex, self).__init__()
         self.posthooks.extend([
-            lambda: self.out['reflection log'].append(os.path.abspath('out/refl.log')) ,
+            lambda: self.out['reflection_log'].append(os.path.abspath('out/refl.log')) ,
             lambda: self.out['classfolder'].append(os.path.abspath('out/')) ,
         ])
 
