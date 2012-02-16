@@ -142,12 +142,12 @@ class AggregateTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
-    def test_explicit_fail1(self):
+    def test_explicit_fail_column(self):
         f = Aggregate((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
-    def test_explicit_fail2(self):
+    def test_explicit_fail_composition(self):
         f = Aggregate((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
@@ -175,12 +175,12 @@ class CondenseTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
-    def test_explicit_fail1(self):
+    def test_explicit_fail_column(self):
         f = Condense([(1, 'a', 'id1'), (2, 'd', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
-    def test_explicit_fail2(self):
+    def test_explicit_fail_composition(self):
         f = Condense([(1, 'a', 'id1'), (3, 'c', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
@@ -209,12 +209,12 @@ class CondensingReceiveTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
 
-    def test_explicit_fail1(self):
+    def test_explicit_fail_column(self):
         f = CondensingReceive([(1, 'a', 'id1'), (2, 'd', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
 
-    def test_explicit_fail2(self):
+    def test_explicit_fail_composition(self):
         f = CondensingReceive([(1, 'a', 'id1'), (3, 'c', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
@@ -243,12 +243,12 @@ class AggregatingReceiveTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
 
-    def test_explicit_fail1(self):
+    def test_explicit_fail_column(self):
         f = AggregatingReceive((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
 
-    def test_explicit_fail2(self):
+    def test_explicit_fail_composition(self):
         f = AggregatingReceive((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
             f._run(environment=self.environment)
