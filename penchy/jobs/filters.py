@@ -366,14 +366,14 @@ class Aggregate(Filter):
                             names.append((col, object))
                             found = True
                 if not found:
-                    raise WrongInputError("Column is not contained" +
+                    raise WrongInputError("Column is not contained " +
                                           "in the resultset")
             else:
                 comp, column = col
                 try:
                     self.out[column] = results[comp][column]
                 except:
-                    raise WrongInputError("Column is not contained" +
+                    raise WrongInputError("Column is not contained " +
                                           "in the resultset")
                 names.append((column, object))
         self.outputs = apply(Types, names)
