@@ -22,7 +22,7 @@ class Tamiflex(Tool):
 
     Outputs:
 
-    - ``reflection log``: log file of all uses of the reflection API
+    - ``reflection_log``: log file of all uses of the reflection API
     - ``classfolder``: folder of all classes that were used (including generated)
     """
 
