@@ -443,11 +443,14 @@ class AggregatingReceive(Receive, Aggregate):
     inputs = Types(('environment', dict))
 
     def __init__(self, *args):
-        Aggregate.__init__(self, args)
+        Aggregate.__init__(self, *args)
         Receive.__init__(self)
 
     def _run(self, **kwargs):
-        Aggregate._run(merge(kwargs, Receive._run(kwargs)))
+        Receive._run(self, **kwargs)
+        results = self.out['results']
+        self.out.clear()
+        Aggregate._run(self, results=results)
 
 
 class CondensingReceive(Receive, Condense):
@@ -461,7 +464,10 @@ class CondensingReceive(Receive, Condense):
         Receive.__init__(self)
 
     def _run(self, **kwargs):
-        Condense._run(merge(kwargs, Receive._run(kwargs)))
+        Receive._run(self, **kwargs)
+        results = self.out['results']
+        self.out.clear()
+        Condense._run(self, results=results)
 
 
 class Plot(Filter):
