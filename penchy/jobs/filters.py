@@ -349,7 +349,6 @@ class Aggregate(Filter):
         super(Aggregate, self).__init__()
         self.columns = args
 
-    # FIXME: Check if colums exist
     def _run(self, **kwargs):
         results = kwargs['results']
         names = []
@@ -360,7 +359,7 @@ class Aggregate(Filter):
                     if col in results[res].keys():
                         if found:
                             log.warn("Column '{0}' is contained in more " +
-                                     "than once system composition".format(col))
+                                     "than one system composition".format(col))
                         else:
                             self.out[col] = results[res][col]
                             names.append((col, object))
@@ -397,7 +396,6 @@ class Condense(Filter):
         self.names = names
         self.outputs = apply(Types, [(n, object) for n in names])
 
-    # Check if colums exist
     def _run(self, **kwargs):
         results = kwargs['results']
         for cols in self.data:
@@ -409,7 +407,7 @@ class Condense(Filter):
                     if cols[0] in results[res].keys():
                         if found:
                             log.warn("Column '{0}' is contained in more " +
-                                     "than once system composition".format(cols[0]))
+                                     "than one system composition".format(cols[0]))
                         else:
                             col = cols[0]
                             ids = cols[1:]
