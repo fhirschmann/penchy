@@ -443,8 +443,8 @@ class AggregatingReceive(Receive, Aggregate):
     inputs = Types(('environment', dict))
 
     def __init__(self, *args):
-        Aggregate.__init__(args)
-        Receiver.__init__()
+        Aggregate.__init__(self, args)
+        Receive.__init__(self)
 
     def _run(self, **kwargs):
         Aggregate._run(merge(kwargs, Receive._run(kwargs)))
@@ -457,8 +457,8 @@ class CondensingReceive(Receive, Condense):
     inputs = Types(('environment', dict))
 
     def __init__(self, data, names):
-        Condense.__init__(data, names)
-        Receiver.__init__()
+        Condense.__init__(self, data, names)
+        Receive.__init__(self)
 
     def _run(self, **kwargs):
         Condense._run(merge(kwargs, Receive._run(kwargs)))
