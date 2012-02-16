@@ -141,7 +141,7 @@ class Types(object):
         if mapping is not None:
             sinks = map(lambda s: s[1], mapping)
             if len(sinks) != len(set(sinks)):
-                log.error('Multiple sources are connected to the same sink')
+                log.error('Multiple sources are connected to the same sink input')
                 valid = False
 
         if self.descriptions is not None:
