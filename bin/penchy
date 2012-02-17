@@ -87,8 +87,10 @@ if __name__ == "__main__":
     check_paramiko()
 
     if args.check:
-        for composition in job.compositions:
-            job.check()
+        if job.check():
+            print("Check passed")
+        else:
+            print("Check failed")
     elif args.local:
         compositions = job.compositions_for_node("localhost")
         job.filename = job_module.__file__
