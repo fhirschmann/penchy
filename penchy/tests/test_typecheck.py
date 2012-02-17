@@ -78,3 +78,15 @@ class CheckArgsTest(unittest.TestCase):
                 d = self.d.copy()
                 d[k] = v
                 self.inputs.check_input(d)
+
+
+class SinkCheckTest(unittest.TestCase):
+    def test_valid_input(self):
+        sink = Types()
+        self.assertTrue(sink.check_sink([('foo', [('foo', 'bar')]),
+                                         ('baz', [('baz', 'bad')])]))
+
+    def test_overwritten_input(self):
+        sink = Types()
+        self.assertFalse(sink.check_sink([('foo', [('foo', 'bar')]),
+                                          ('baz', [('baz', 'bar')])]))
