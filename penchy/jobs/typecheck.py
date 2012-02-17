@@ -165,7 +165,11 @@ class Types(object):
 
     def check_sink(self, source_name_mappings):
         """
-        Check if the
+        Check if the connections to this sink are valid.
+
+        The connections are invalid if:
+
+        - sink inputs are saturated by multiple sources
 
         :param source_name_mappings: source names with their mapping against
                                      which this sink is checked
