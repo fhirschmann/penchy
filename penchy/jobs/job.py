@@ -10,6 +10,7 @@ This module provides the foundation to define jobs.
 import logging
 import os
 import subprocess
+from collections import defaultdict
 from functools import partial
 from hashlib import sha1
 from itertools import groupby, chain
@@ -460,9 +461,17 @@ class Job(object):
             log.exception('Check: cycle in server pipeline')
             valid = False
 
-        for edge in chain.from_iterable(c.flow for c in self.compositions):
-            valid = valid and edge.check()
+        # check all composition flow pipe connections
+        for flow in chain(c.flow for c in self.compositions):
+            sources_of_sinks = defaultdict(list)
+            for edge in flow:
+                valid = valid and edge.check()
+                sources_of_sinks[edge.sink].append((edge.source.__class__.__name__,
+                                                    edge.map_))
+            for sink, source_mappings in sources_of_sinks.items():
+                sink.inputs.check_sink(source_mappings)
 
+        # check server flow pipe connections
         for edge in self.server_flow:
             valid = valid and edge.check()
 

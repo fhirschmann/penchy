@@ -139,16 +139,6 @@ class Types(object):
         """
         valid = True
 
-        if mapping is not None:
-            connections = defaultdict(list)
-            for source, sink in mapping:
-                connections[source].append(sink)
-            for input_, outputs in connections.items():
-                if len(outputs) > 1:
-                    log.error('Multiple outputs {0} are connected to input {1}'
-                              .format(', '.join(outputs), input_))
-                    valid = False
-
         if self.descriptions is not None:
             if mapping is None:
                 mapping = [(name, name) for name in self.descriptions]
@@ -169,6 +159,34 @@ class Types(object):
                 if input == 'environment':
                     continue
                 log.error('Sink input {0} not saturated'.format(input))
+                valid = False
+
+        return valid
+
+    def check_sink(self, source_name_mappings):
+        """
+        Check if the
+
+        :param source_name_mappings: source names with their mapping against
+                                     which this sink is checked
+        :type source_name_mappings: list of tuples of str and list of tuples
+        :returns: if the connections to this sink are valid
+        :rtype: bool
+        """
+        valid = True
+        connections = defaultdict(list)
+        for source_name, mapping in source_name_mappings:
+            if mapping is None:
+                continue
+            for input_, sink in mapping:
+                connections[sink].append((source_name, input_))
+
+        for input_, outputs in connections.items():
+            if len(outputs) > 1:
+                log.error('Multiple outputs {0} are connected to input {1}'
+                          .format(', '.join('"{0}" ("{1}")'.format(output, name)
+                                            for name, output in outputs)
+                                  , input_))
                 valid = False
 
         return valid
