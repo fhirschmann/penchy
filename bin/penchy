@@ -11,7 +11,7 @@ cycle (deploying jobs, executing jobs, accumulating results).
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
-
+from __future__ import print_function
 import logging
 import os
 from functools import partial
@@ -98,12 +98,14 @@ if __name__ == "__main__":
             job.run(composition)
     elif args.visualize:
         path = job.visualize()
-        print 'You can view the visualization of the job here: "{0}"'.format(path)
+        print('You can view the visualization of the job here: "{0}"'.format(path))
     else:
         server = Server(config, job_module)
         server.bootstrap_args.extend(['--loglevel', str(args.loglevel)])
 
         if args.load_from:
             server.bootstrap_args.extend(['--load-from', args.load_from])
-
-        server.run()
+        if job.check():
+            server.run()
+        else:
+            print("Check failed, won't executed job.")
