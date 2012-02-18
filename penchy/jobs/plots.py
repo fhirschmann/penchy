@@ -9,21 +9,24 @@ from penchy.util import default, average
 
 
 class Plot(Filter):
-    pass
+    def __init__(self, filename, title="", xlabel="",
+                 ylabel=""):
+        super(Plot, self).__init__()
+        self.filename = filename
+        self.title = title
+        self.xlabel = xlabel
+        self.ylabel = ylabel
 
 
-class BarPlot(Filter):
+class BarPlot(Plot):
     """
     A simple and static barplot.  Mainly for testing.
     """
     inputs = Types(('x', list, str), ('y', list, list))
 
-    def __init__(self, filename, title="", xlabel="", ylabel="", colors=[]):
-        super(BarPlot, self).__init__()
-        self.filename = filename
-        self.title = title
-        self.xlabel = xlabel
-        self.ylabel = ylabel
+    #FIXME: Better solution to handle args without repeating
+    def __init__(self, colors=[], **kwarg):
+        super(BarPlot, self).__init__(**kwarg)
         self.width = 0.2
         self.colors = colors
 
