@@ -336,6 +336,7 @@ def evaluate_runtimes(times):
 
 
 class Aggregate(Filter):
+    # FIXME: Aggregate has no class attribute ``columns`` as indicated here
     """
     Extracts data out of the resultssets send by the clients.
 
@@ -379,6 +380,7 @@ class Aggregate(Filter):
 
 
 class Condense(Filter):
+    # FIXME: Condense has no class attribute ``names`` as indicated here
     """
     Merges the data with the given identifiers
 
@@ -482,6 +484,8 @@ class Map(Filter):
         for v in values:
             param = {self.names.keys().pop(): v}
             self.filter._run(**param)
+            # XXX: this copies _all_ (possibly multidimensional) filter output
+            #      into a single list
             self.out['result'].extend(self.filter.out.values())
             self.filter.reset()
 
