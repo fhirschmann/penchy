@@ -642,6 +642,27 @@ class Read(Filter):
         self.out['data'] = data
 
 
+class Unpack(Filter):
+    """
+    Reduces a singleton list to its only element.
+    """
+    inputs = Types(('singleton', list))
+    outputs = Types()
+
+    def __init__(self, name):
+        super(Unpack, self).__init__()
+        self.name = name
+
+    def _run(self, **kwargs):
+        singleton = kwargs['singleton']
+        print singleton
+        if len(singleton) != 1:
+            raise WrongInputError('The list has more than one element.')
+        value = singleton.pop()
+        self.outputs = Types((self.name, type(value)))
+        self.out[self.name] = value
+
+
 class Mean(Filter):
     """
     Computes the mean of given values.
