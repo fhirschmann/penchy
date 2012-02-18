@@ -375,7 +375,7 @@ class Aggregate(Filter):
                 except:
                     raise WrongInputError('Column is not contained in the resultset')
                 names.append((column, object))
-        self.outputs = apply(Types, names)
+        self.outputs = Types(*names)
 
 
 class Condense(Filter):
@@ -394,7 +394,7 @@ class Condense(Filter):
         super(Condense, self).__init__()
         self.data = data
         self.names = names
-        self.outputs = apply(Types, [(n, object) for n in names])
+        self.outputs = Types(*[(n, object) for n in names])
 
     def _run(self, **kwargs):
         results = kwargs['results']
