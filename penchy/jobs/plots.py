@@ -22,7 +22,7 @@ class BarPlot(Plot):
     """
     A simple and static barplot.  Mainly for testing.
     """
-    inputs = Types(('x', list, str), ('y', list, list))
+    inputs = Types(('x', list, str), ('y', list))
 
     #FIXME: Better solution to handle args without repeating
     def __init__(self, colors=[], **kwarg):
@@ -40,7 +40,7 @@ class BarPlot(Plot):
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
         for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
-            rects.append(plot.bar(ind + self.width * i, [average(y) for y in ys],
+            rects.append(plot.bar(ind + self.width * i, ys,
                                   self.width, color=c))
             bars.append(rects[i][0])
             names.append('Invocation {0}'.format(i + 1))
