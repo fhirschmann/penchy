@@ -469,6 +469,30 @@ class CondensingReceive(Receive, Condense):
         Condense._run(self, results=results)
 
 
+class Map(Filter):
+    """
+    Returns a list constructed by applying a filter to all
+    elements in the given list.
+    """
+    inputs = Types(('values', list))
+    outputs = Types(('result', list))
+
+    def __init__(self, filter_):
+        super(Map, self).__init__()
+        self.filter = filter_
+        self.names = filter_.inputs.descriptions
+
+    def _run(self, **kwargs):
+        values = kwargs['values']
+        print values
+        self.out['result'] = []
+        for v in values:
+            param = {self.names.keys().pop(): v}
+            self.filter._run(**param)
+            self.out['result'].extend(self.filter.out.values())
+            self.filter.out.clear()
+
+
 class Upload(Filter):
     pass
 
