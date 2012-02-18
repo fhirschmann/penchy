@@ -111,8 +111,7 @@ class HProfCpuTimes(Filter):
                         log.error('Received invalid input:\n{0}'.format(line))
                         raise WrongInputError('Received invalid input.')
                     result = self._DATA_RE.match(line).groupdict()
-                    dict((k, data.get(k).append(result.get(k)))
-                           for k in data.keys())
+                    dict((k, data[k].append(result[k])) for k in data)
                     line = fobj.readline()
                     if not line:
                         raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
@@ -357,7 +356,7 @@ class Aggregate(Filter):
             if isinstance(col, str):
                 found = False
                 for res in results:
-                    if col in results[res].keys():
+                    if col in results[res]:
                         if found:
                             log.warn("Column '{0}' is contained in more " +
                                      "than one system composition".format(col))
@@ -405,7 +404,7 @@ class Condense(Filter):
             if isinstance(cols[0], str):
                 found = False
                 for res in results:
-                    if cols[0] in results[res].keys():
+                    if cols[0] in results[res]:
                         if found:
                             log.warn("Column '{0}' is contained in more " +
                                      "than one system composition".format(cols[0]))
