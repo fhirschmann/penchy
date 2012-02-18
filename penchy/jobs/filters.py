@@ -676,6 +676,9 @@ class Mean(Filter):
     inputs = Types(('values', list))
     outputs = Types(('mean', float))
 
+    def __init__(self):
+        super(Mean, self).__init__()
+
     def _run(self, **kwargs):
         self.out['mean'] = numpy.average(kwargs['values'])
 
@@ -692,6 +695,9 @@ class StandardDeviation(Filter):
     """
     inputs = Types(('values', list))
     outputs = Types(('standard_deviation', float))
+
+    def __init__(self):
+        super(StandardDeviation, self).__init__()
 
     def _run(self, **kwargs):
         self.out['standard_deviation'] = numpy.std(kwargs['values'])
