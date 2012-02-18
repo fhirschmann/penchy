@@ -367,15 +367,13 @@ class Aggregate(Filter):
                             names.append((col, object))
                             found = True
                 if not found:
-                    raise WrongInputError("Column is not contained " +
-                                          "in the resultset")
+                    raise WrongInputError('Column is not contained in the resultset')
             else:
                 comp, column = col
                 try:
                     self.out[column] = results[comp][column]
                 except:
-                    raise WrongInputError("Column is not contained " +
-                                          "in the resultset")
+                    raise WrongInputError('Column is not contained in the resultset')
                 names.append((column, object))
         self.outputs = apply(Types, names)
 
@@ -408,7 +406,7 @@ class Condense(Filter):
                 for res in results:
                     if cols[0] in results[res]:
                         if found:
-                            log.warn("Column '{0}' is contained in more " +
+                            log.warn("Column '{0}' is contained in more "
                                      "than one system composition".format(cols[0]))
                         else:
                             col = cols[0]
@@ -416,8 +414,7 @@ class Condense(Filter):
                             comp = res
                             found = True
                 if not found:
-                    raise WrongInputError("Column is not contained " +
-                                          "in the resultset")
+                    raise WrongInputError('Column is not contained in the resultset')
             else:
                 comp = cols[0]
                 col = cols[1]
