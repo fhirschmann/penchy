@@ -448,7 +448,7 @@ class AggregatingReceive(Receive, Aggregate):
     def _run(self, **kwargs):
         Receive._run(self, **kwargs)
         results = self.out['results']
-        self.out.clear()
+        self.reset()
         Aggregate._run(self, results=results)
 
 
@@ -465,7 +465,7 @@ class CondensingReceive(Receive, Condense):
     def _run(self, **kwargs):
         Receive._run(self, **kwargs)
         results = self.out['results']
-        self.out.clear()
+        self.reset()
         Condense._run(self, results=results)
 
 
@@ -490,7 +490,7 @@ class Map(Filter):
             param = {self.names.keys().pop(): v}
             self.filter._run(**param)
             self.out['result'].extend(self.filter.out.values())
-            self.filter.out.clear()
+            self.filter.reset()
 
 
 class Upload(Filter):
