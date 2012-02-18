@@ -14,6 +14,7 @@ __all__ = [
     # modules
     'jvms',
     'filters',
+    'plots',
     'workloads',
     'tools'
 ]

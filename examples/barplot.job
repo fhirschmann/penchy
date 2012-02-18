@@ -21,7 +21,7 @@ send = filters.Send()
 condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
                        ('time','bench'))
 
-plot = filters.BarPlot('/tmp/barplot.svg', 'testplot', 'x', 'y', ['blue', 'red'])
+plot = plots.BarPlot('/tmp/barplot.svg', 'testplot', 'x', 'y', ['blue', 'red'])
 
 flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
 flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
