@@ -421,15 +421,11 @@ class Condense(Filter):
                 col = cols[1]
                 ids = cols[2:]
             name = self.names[0]
-            if not self.out[name]:
-                self.out[name] = []
             try:
                 self.out[name].append(results[comp][col])
             except KeyError:
                 raise WrongInputError('Column is not contained in the resultset')
             for name, col in zip(self.names[1:], ids):
-                if not self.out[name]:
-                    self.out[name] = []
                 self.out[name].append(col)
 
 
