@@ -17,6 +17,8 @@ jvm1.workload = fop
 jvm2.workload = batik
 
 f = filters.DacapoHarness()
+unpack = filters.Map(filters.Unpack('result'))
+
 send = filters.Send()
 condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
                        ('time','bench'))
@@ -24,8 +26,8 @@ condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', '
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot',
                      xlabel='x', ylabel='y', colors=['blue', 'red'])
 
-flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
-flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ['times'] >> send]
+flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
 comp1.flow = flow1
 comp2.flow = flow2
 
