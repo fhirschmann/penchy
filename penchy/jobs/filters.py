@@ -15,6 +15,8 @@ import logging
 import os
 import re
 import shutil
+import math
+import numpy
 from pprint import pprint
 
 from penchy import __version__
@@ -614,3 +616,37 @@ class Read(Filter):
             with open(p) as f:
                 data.append(f.read())
         self.out['data'] = data
+
+
+class Mean(Filter):
+    """
+    Computes the mean of given values.
+
+    Inputs:
+    - ``values``: numeric values
+
+    Outputs:
+    - ``mean``: mean of the numeric values
+    """
+    inputs = Types(('values', list))
+    outputs = Types(('mean', float))
+
+    def _run(self, **kwargs):
+        self.out['mean'] = numpy.average(kwargs['values'])
+
+
+class StandardDeviation(Filter):
+    """
+    Computes the standard deviation of given values.
+
+    Inputs:
+    - ``values``: numeric values
+
+    Outputs:
+    - ``standard_deviation``: mean of the numeric values
+    """
+    inputs = Types(('values', list))
+    outputs = Types(('standard_deviation', float))
+
+    def _run(self, **kwargs):
+        self.out['standard_deviation'] = numpy.std(kwargs['values'])
