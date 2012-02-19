@@ -89,11 +89,13 @@ class HProfCpuTimes(Filter):
                     'method': []}
 
             with open(f) as fobj:
-                line = fobj.readline()
-                while not line.startswith("CPU TIME (ms) BEGIN"):
-                    line = fobj.readline()
-                    if not line:
-                        raise WrongInputError("Marker 'CPU TIME (ms) BEGIN' not found.")
+                for line in fobj:
+                    if line.startswith('CPU TIME (ms) BEGIN'):
+                        break
+                # we did not break, i.e. no begin marker was found
+                else:
+                    raise WrongInputError("Marker 'CPU TIME (ms) BEGIN' not found.")
+
                 s = self._TOTAL_RE.search(line)
                 if s is None:
                     log.error('Received invalid input:\n{0}'.format(line))
@@ -102,10 +104,11 @@ class HProfCpuTimes(Filter):
                 self.out['total'].append(int(total))
 
                 # Jump over the heading
-                fobj.readline()
+                next(fobj)
 
-                line = fobj.readline()
-                while not line.startswith("CPU TIME (ms) END"):
+                for line in fobj:
+                    if line.startswith('CPU TIME (ms) END'):
+                        break
                     m = self._DATA_RE.match(line)
                     if m is None:
                         log.error('Received invalid input:\n{0}'.format(line))
@@ -114,9 +117,9 @@ class HProfCpuTimes(Filter):
                     # XXX: The returnvalue of list.append is always None, do you
                     #      want that? Eh, and building this dict and not using it?
                     dict((k, data[k].append(result[k])) for k in data)
-                    line = fobj.readline()
-                    if not line:
-                        raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
+                # we did not break, i.e. no end marker was found
+                else:
+                    raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
 
                 for key, val in data.items():
                     self.out[key].append(val)
