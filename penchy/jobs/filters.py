@@ -112,7 +112,7 @@ class HProfCpuTimes(Filter):
                         raise WrongInputError('Received invalid input.')
                     result = self._DATA_RE.match(line).groupdict()
                     # XXX: The returnvalue of list.append is always None, do you
-                    #      want that?
+                    #      want that? Eh, and building this dict and not using it?
                     dict((k, data[k].append(result[k])) for k in data)
                     line = fobj.readline()
                     if not line:
