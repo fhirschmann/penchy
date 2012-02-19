@@ -16,8 +16,9 @@ import os
 import re
 import shutil
 import math
-import numpy
 from pprint import pprint
+
+import numpy
 
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
