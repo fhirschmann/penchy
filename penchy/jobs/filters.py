@@ -675,9 +675,7 @@ class Mean(Filter):
     outputs = Types(('mean', float))
 
     def _run(self, **kwargs):
-        # XXX: Do we really need numpy here? Then we would require numpy on
-        #      every client...
-        self.out['mean'] = numpy.average(kwargs['values'])
+        self.out['mean'] = average(kwargs['values'])
 
 
 class StandardDeviation(Filter):
