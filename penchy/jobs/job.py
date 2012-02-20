@@ -466,8 +466,11 @@ class Job(object):
             sources_of_sinks = defaultdict(list)
             for edge in flow:
                 valid = valid and edge.check()
-                sources_of_sinks[edge.sink].append((edge.source.__class__.__name__,
-                                                    edge.map_))
+                source_name_mapping = (edge.source.__class__.__name__,
+                                       default(edge.map_,
+                                               [(name, name) for name
+                                                in edge.source.outputs.names]))
+                sources_of_sinks[edge.sink].append(source_name_mapping)
             for sink, source_mappings in sources_of_sinks.items():
                 valid = valid and sink.inputs.check_sink(source_mappings)
 

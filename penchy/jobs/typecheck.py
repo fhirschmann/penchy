@@ -84,7 +84,7 @@ class Types(object):
 
     @property
     def names(self):
-        return set(self.descriptions)
+        return set(self.descriptions) if self.descriptions is not None else set()
 
     def check_input(self, kwargs):
         """
@@ -161,17 +161,9 @@ class Types(object):
                     valid = False
 
         if other.descriptions is not None and mapping is not None:
-            missing_inputs = set(other.descriptions)
             for _, sink in mapping:
                 if sink not in other.descriptions:
                     log.warning('Sink has no input {0}'.format(sink))
-                missing_inputs.discard(sink)
-
-            for input in missing_inputs:
-                if input.startswith(':') and input.endswith(':'):
-                    continue
-                log.error('Sink input {0} not saturated'.format(input))
-                valid = False
 
         return valid
 
@@ -204,5 +196,13 @@ class Types(object):
                                             for name, output in outputs)
                                   , input_))
                 valid = False
+
+        missing_inputs = self.names - set(connections)
+        for input_ in missing_inputs:
+            if input_.startswith(':') and input_.endswith(':'):
+                missing_inputs.discard(input_)
+        if missing_inputs:
+            valid = False
+            log.error('Sink inputs not satisfied: {0}'.format(', '.join(missing_inputs)))
 
         return valid
