@@ -47,7 +47,7 @@ class JVM(object):
                          after execution
     """
 
-    def __init__(self, path, options=""):
+    def __init__(self, path, options="", timeout_factor=1):
         """
         :param path: path to jvm executable relative to node's basepath
                      (can also be absolute)
@@ -56,6 +56,7 @@ class JVM(object):
         :type options: str
         """
         self.basepath = '/'
+        self.timeout_factor = timeout_factor
         self._path = path
         # keep user_options for log messages and comparisons around
         self._user_options = options
@@ -91,6 +92,15 @@ class JVM(object):
             log.warn("Overwriting Tool!")
 
         self._tool = tool
+
+    @property
+    def timeout(self):
+        """
+        Timeout of this JVM and the current workload.
+        """
+        if not self.workload:
+            return 0
+        return float(self.workload.timeout) * self.timeout_factor
 
     def add_to_cp(self, path):
         """
