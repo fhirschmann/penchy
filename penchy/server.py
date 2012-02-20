@@ -161,11 +161,12 @@ class Server(object):
             node.received(composition)
 
     def exp_set_timeout(self, hashcode, timeout):
-        if hashcode in self.timers:
-            self.timers[hashcode].cancel()
-        if timeout > 0:
-            self.timers[hashcode] = threading.Timer(timeout,
-                    lambda: self._on_timeout(hashcode))
+        with Server._rcv_lock:
+            if hashcode in self.timers:
+                self.timers[hashcode].cancel()
+            if timeout > 0:
+                self.timers[hashcode] = threading.Timer(timeout,
+                        lambda: self._on_timeout(hashcode))
 
     def _on_timeout(self, hashcode):
         log.error("%s timed out." % self.composition_for(hashcode))
