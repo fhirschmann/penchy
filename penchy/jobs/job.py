@@ -135,13 +135,6 @@ class SystemComposition(object):
         jvm.workload = w
         composition.flow = [w >> Print()]
 
-    Additionally, a timeout function can be supplied
-
-    - ``composition.timeout`` to be set on client to a function with a signature
-      ``(hash, timeout)`` where ``hash`` identifies the :class:`SystemComposition`
-        and ``timeout`` is the time (in seconds) after which this composition
-        should time out. ``timeout`` may be 0, in which case an existing timeout
-        will be cancelled.
     """
 
     def __init__(self, jvm, node_setting, name=None):
@@ -186,17 +179,9 @@ class SystemComposition(object):
         update_hasher(hasher, self.node_setting.hash())
         return hasher.hexdigest()
 
-    @property
-    def set_timeout(self):
-        """
-        The timeout function of this composition.
-        """
-        return None
-
-    @set_timeout.setter
     def set_timeout(self, fun):
         """
-        The timeout function of this composition.
+        Set the timeout function of this composition.
 
         :param fun: timeout function
         """
