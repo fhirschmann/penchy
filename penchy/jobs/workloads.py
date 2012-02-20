@@ -39,8 +39,8 @@ class Dacapo(Workload):
         :type benchmark: string
         :param iterations: Number of iterations in an invocation.
         :type iterations: int
-        :param dacapo_args: additional arguments for harness (shell escaped)
-        :type dacapo_args: string
+        :param args: additional arguments for harness (shell escaped)
+        :type args: string
         """
         super(Dacapo, self).__init__(*wargs, **wkwargs)
 
