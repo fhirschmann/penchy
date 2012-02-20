@@ -1,6 +1,8 @@
 import itertools
 import json
 import os
+from numpy import average, std
+from numpy.random import random_integers, random_sample
 from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
@@ -435,3 +437,17 @@ class ServerFlowSystemFilterTest(unittest.TestCase):
                 self.assertEqual(f.read(), data)
             with open('backup') as f:
                 self.assertEqual(f.read(), data)
+
+
+class StandardDeviationTest(unittest.TestCase):
+    def test_against_numpy_integes(self):
+        rnd = random_integers(-20, 20, 50)
+        f = StandardDeviation(ddof=1)
+        f._run(values=rnd)
+        self.assertAlmostEqual(f.out['standard_deviation'], std(rnd, ddof=1))
+
+    def test_against_numpy_floats(self):
+        rnd = random_sample(20)
+        f = StandardDeviation(ddof=1)
+        f._run(values=rnd)
+        self.assertAlmostEqual(f.out['standard_deviation'], std(rnd, ddof=1))
