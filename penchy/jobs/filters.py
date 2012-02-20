@@ -18,8 +18,6 @@ import shutil
 import math
 from pprint import pprint
 
-import numpy
-
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types
@@ -691,7 +689,12 @@ class StandardDeviation(Filter):
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('standard_deviation', float))
 
+    def __init__(self, ddof=1):
+        super(StandardDeviation, self).__init__()
+        self.ddof = 1
+
     def _run(self, **kwargs):
-        # XXX: Do we really need numpy here? Then we would require numpy on
-        #      every client...
-        self.out['standard_deviation'] = numpy.std(kwargs['values'])
+        vs = kwargs['values']
+        avg = average(vs)
+        std = math.sqrt(sum((v - avg) ** 2 for v in vs) / (len(vs) - self.ddof))
+        self.out['standard_deviation'] = std
