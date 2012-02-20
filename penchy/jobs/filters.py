@@ -674,7 +674,7 @@ class Mean(Filter):
     Outputs:
     - ``mean``: mean of the numeric values
     """
-    inputs = Types(('values', list))
+    inputs = Types(('values', list, (int, float)))
     outputs = Types(('mean', float))
 
     def _run(self, **kwargs):
@@ -693,7 +693,7 @@ class StandardDeviation(Filter):
     Outputs:
     - ``standard_deviation``: mean of the numeric values
     """
-    inputs = Types(('values', list))
+    inputs = Types(('values', list, (int, float)))
     outputs = Types(('standard_deviation', float))
 
     def _run(self, **kwargs):
