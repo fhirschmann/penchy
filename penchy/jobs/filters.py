@@ -658,7 +658,6 @@ class Unpack(Filter):
         if len(singleton) != 1:
             raise WrongInputError('The list has more than one element.')
         value = singleton.pop()
-        self.outputs = Types((self.name, type(value)))
         self.out[self.name] = value
 
 
