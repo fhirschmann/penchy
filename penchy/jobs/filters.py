@@ -691,7 +691,7 @@ class StandardDeviation(Filter):
 
     def __init__(self, ddof=1):
         super(StandardDeviation, self).__init__()
-        self.ddof = 1
+        self.ddof = ddof
 
     def _run(self, **kwargs):
         vs = kwargs['values']
