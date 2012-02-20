@@ -39,6 +39,13 @@ class Types(object):
         - ``types`` are zero or more subtypes
            (preceding types must be ``list``, ``tuple`` or ``dict``)
 
+        A type can be a sum type, meaning it is one of several types. This is
+        expressed by using tuples of types, e.g.::
+
+            Types(('x', list, (float, int)))
+
+        For an output x that is a list whose elements are floats or ints.
+
         Alternatively you can pass no args to disable type checking.
 
         :raises: :class:`AssertError` if ``type_descriptions has a wrong format.
@@ -59,8 +66,13 @@ class Types(object):
                 name = t[0]
                 types = t[1:]
                 assert isinstance(name, str), msg.format('name is not a `str`')
-                assert all(isinstance(type_, type) for type_ in types), \
-                    msg.format('types expected')
+                assert all(
+                    # must be a single type
+                    isinstance(type_, type)
+                    # or a sum type
+                    or (isinstance(type_, (list, tuple)) and
+                       all(isinstance(t, type) for t in type_))
+                    for type_ in types), msg.format('types expected')
 
                 if name in type_descriptions:
                     log.warn('Overring types of name {0} from {1} to {2}'
