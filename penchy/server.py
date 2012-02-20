@@ -160,7 +160,7 @@ class Server(object):
             node = self.node_for(composition.node_setting)
             node.received(composition)
 
-    def exp_set_timeout(self, timeout, hashcode):
+    def exp_set_timeout(self, hashcode, timeout):
         if self.timers.haskey(hashcode):
             self.timers[hashcode].cancel()
         if timeout > 0:
