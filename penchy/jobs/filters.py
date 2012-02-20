@@ -273,8 +273,8 @@ class Evaluation(Filter):
                 args = dict([(name, kwargs[name]) for name in self.inputs.names])
             except KeyError:
                 log.exception('Evaluator: expected arguments "{0}", got "{1}"'
-                              .format(', '.join(i[0] for i in self.inputs.descriptions),
-                                      ', '.join(k for k in kwargs)))
+                              .format(', '.join(sorted(self.inputs.names)),
+                                      ', '.join(sorted(kwargs))))
                 raise ValueError('Missing input')
 
         self.out = self.evaluator(**args)
