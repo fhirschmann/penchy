@@ -72,7 +72,7 @@ class Client(object):
                 self._current_composition = None
             except Exception, err:
                 log.exception('Exception occured while executing PenchY:')
-                self.proxy.node_error(composition.hash(), err)
+                self.proxy.report_error(composition.hash(), err)
 
     def parse_args(self, args):
         """

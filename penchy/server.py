@@ -58,7 +58,7 @@ class Server(object):
                 (config.SERVER_HOST, config.SERVER_PORT),
                 allow_none=True)
         self.server.register_function(self.exp_rcv_data, "rcv_data")
-        self.server.register_function(self.exp_node_error, "node_error")
+        self.server.register_function(self.exp_report_error, "report_error")
         self.server.register_function(self.exp_start_timeout, "start_timeout")
         self.server.register_function(self.exp_stop_timeout, "stop_timeout")
         # XXX: I don't yet know if this will work. With no timeout set,
@@ -143,7 +143,7 @@ class Server(object):
             self.results[composition] = result
 
     # FIXME: reason is not used
-    def exp_node_error(self, hashcode, reason=None):
+    def exp_report_error(self, hashcode, reason=None):
         """
         Deal with client-side errors. Call this for each
         composition for which a job failed.
