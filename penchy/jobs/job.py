@@ -226,8 +226,10 @@ class SystemComposition(object):
 
     @property
     def timeout(self):
-        # TODO: Implement me!
-        pass
+        """
+        Timeout of this Composition.
+        """
+        return self.jvm.timeout * self.node_setting.timeout_factor
 
     def _reset(self):
         """
