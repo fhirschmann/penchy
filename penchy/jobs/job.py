@@ -134,6 +134,14 @@ class SystemComposition(object):
         w = Dacapo('fop')
         jvm.workload = w
         composition.flow = [w >> Print()]
+
+    Additionally, a timeout function can be supplied
+
+    - ``composition.timeout`` to be set on client to a function with a signature
+      ``(hash, timeout)`` where ``hash`` identifies the :class:`SystemComposition`
+        and ``timeout`` is the time (in seconds) after which this composition
+        should time out. ``timeout`` may be 0, in which case an existing timeout
+        will be cancelled.
     """
 
     def __init__(self, jvm, node_setting, name=None):
@@ -177,6 +185,23 @@ class SystemComposition(object):
         update_hasher(hasher, self.jvm.hash())
         update_hasher(hasher, self.node_setting.hash())
         return hasher.hexdigest()
+
+    @property
+    def set_timeout(self):
+        """
+        The timeout function of this composition.
+        """
+        return None
+
+    @set_timeout.setter
+    def set_timeout(self, fun):
+        """
+        The timeout function of this composition.
+
+        :param fun: timeout function
+        """
+        self.jvm.prehooks.append(lambda: fun(self.hash(), self.timeout))
+        self.jvm.posthooks.append(lambda: fun(self.hash(), 0))
 
     @property
     def flow(self):
@@ -255,12 +280,6 @@ class Job(object):
       :class:`SystemComposition` as key and the results as value.
 
     - ``job.filename`` has to be set to the filename of the job
-
-    - ``job.timeout`` to be set on client to a function with a signature
-      ``(hash, timeout)`` where ``hash`` identifies the :class:`SystemComposition`
-        and ``timeout`` is the time (in seconds) after which this composition
-        should time out. ``timeout`` may be 0, in which case an existing timeout
-        will be cancelled.
     """
 
     def __init__(self, compositions, server_flow, invocations=1):
@@ -302,8 +321,6 @@ class Job(object):
         # replace with one that knows how to identify the composition if it is set
         if self.send is not None:
             self.send = partial(self.send, composition.hash())
-        if self.timeout is not None:
-            self.timeout = partial(self.timeout, composition.hash())
 
         composition.jvm.basepath = composition.node_setting.basepath
 
@@ -318,9 +335,7 @@ class Job(object):
 
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
-                self.timeout(composition.timeout)
                 composition.jvm.run()
-                self.timeout(0)
 
             # measure usertime after
             after = os.times()[0]

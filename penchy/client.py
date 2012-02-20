@@ -64,11 +64,11 @@ class Client(object):
         """
         self.job.filename = self.job_file
         self.job.send = self.proxy.rcv_data
-        self.job.timeout = self.proxy.set_timeout
 
         for composition in self.job.compositions_for_node(self.identifier):
             try:
                 self._current_composition = composition
+                composition.set_timeout = self.proxy.set_timeout
                 self.job.run(composition)
                 self._current_composition = None
             except Exception, err:
