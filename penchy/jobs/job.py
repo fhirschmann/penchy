@@ -255,6 +255,12 @@ class Job(object):
       :class:`SystemComposition` as key and the results as value.
 
     - ``job.filename`` has to be set to the filename of the job
+
+    - ``job.timeout`` to be set on client to a function with a signature
+      ``(hash, timeout)`` where ``hash`` identifies the :class:`SystemComposition`
+        and ``timeout`` is the time (in seconds) after which this composition
+        should time out. ``timeout`` may be 0, in which case an existing timeout
+        will be cancelled.
     """
 
     def __init__(self, compositions, server_flow, invocations=1):
@@ -273,6 +279,7 @@ class Job(object):
         self.server_flow = list(chain.from_iterable(dep.edges for dep in server_flow))
         self.invocations = invocations
         self.send = None
+        self.timeout = None
         self.receive = None
         self._composition = None
         self.filename = None
@@ -295,6 +302,8 @@ class Job(object):
         # replace with one that knows how to identify the composition if it is set
         if self.send is not None:
             self.send = partial(self.send, composition.hash())
+        if self.timeout is not None:
+            self.timeout = partial(self.timeout, composition.hash())
 
         composition.jvm.basepath = composition.node_setting.basepath
 
@@ -309,7 +318,9 @@ class Job(object):
 
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
+                self.timeout(composition.timeout)
                 composition.jvm.run()
+                self.timeout(0)
 
             # measure usertime after
             after = os.times()[0]
