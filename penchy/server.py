@@ -178,13 +178,6 @@ class Server(object):
         """
         return all([n.received_all_results for n in self.nodes.values()])
 
-    @property
-    def nodes_timed_out(self):
-        """
-        Indicates wheter *all* nodes have timed out.
-        """
-        return all([n.timed_out for n in self.nodes.values()])
-
     def run_clients(self):
         """
         Run the client on all nodes.
@@ -206,15 +199,11 @@ class Server(object):
         Run the server component.
         """
         self.client_thread.start()
-        while not self.received_all_results and not self.nodes_timed_out:
+        while not self.received_all_results:
             self.server.handle_request()
 
         for node in self.nodes.values():
             node.close()
-
-        if self.nodes_timed_out:
-            log.error("All nodes have timed out. That's not good!")
-            return
 
         self.run_pipeline()
 

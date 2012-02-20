@@ -11,7 +11,6 @@ This module contains classes which deal with nodes
 import os
 import logging
 import atexit
-from threading import Timer
 
 import paramiko
 
@@ -51,12 +50,9 @@ class Node(object):  # pragma: no cover
         self.expected = list(compositions.job.compositions_for_node(
             self.setting.identifier))
 
-        # TODO: Dictionary for timers
-        self.timer = self._setup_timer()
         self.ssh = self._setup_ssh()
 
         self.client_is_running = False
-        self.timed_out = False
         self.was_closed = False
         self.sftp = None
 
@@ -69,16 +65,6 @@ class Node(object):  # pragma: no cover
 
     def __hash__(self):
         return hash(self.setting.identifier)
-
-    def _setup_timer(self):
-        """
-        Sets up the Timer using the timer attribute of the
-        current job module.
-        """
-        if hasattr(self.compositions, 'timeout'):
-            timeout = getattr(self.compositions, 'timeout')
-            if timeout:
-                return Timer(timeout * self.setting.timeout_factor, self.timeout)
 
     def _setup_ssh(self):
         """
@@ -109,9 +95,6 @@ class Node(object):  # pragma: no cover
         """
         if composition in self.expected:
             self.expected.remove(composition)
-        if self.received_all_results:
-            if self.timer:
-                self.timer.cancel()
 
     def connect(self):
         """
@@ -229,18 +212,7 @@ class Node(object):  # pragma: no cover
             self.setting.path, args))
         self.client_is_running = True
 
-        if self.timer:
-            self.timer.start()
-
         atexit.register(self.close)
-
-    def timeout(self):
-        """
-        Executed when node timeed out.
-        """
-        self.log.error("Timed out")
-        self.close()
-        self.timed_out = True
 
     def kill(self):
         """
