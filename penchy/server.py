@@ -161,7 +161,7 @@ class Server(object):
             node.received(composition)
 
     def exp_set_timeout(self, hashcode, timeout):
-        if self.timers.haskey(hashcode):
+        if hashcode in self.timers:
             self.timers[hashcode].cancel()
         if timeout > 0:
             self.timers[hashcode] = threading.Timer(timeout,
