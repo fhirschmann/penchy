@@ -469,7 +469,7 @@ class Job(object):
                 sources_of_sinks[edge.sink].append((edge.source.__class__.__name__,
                                                     edge.map_))
             for sink, source_mappings in sources_of_sinks.items():
-                sink.inputs.check_sink(source_mappings)
+                valid = valid and sink.inputs.check_sink(source_mappings)
 
         # check server flow pipe connections
         for edge in self.server_flow:
