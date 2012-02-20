@@ -439,6 +439,20 @@ class ServerFlowSystemFilterTest(unittest.TestCase):
                 self.assertEqual(f.read(), data)
 
 
+class MeanTest(unittest.TestCase):
+    def test_against_numpy_integers(self):
+        rnd = random_integers(-20, 20, 50)
+        f = Mean()
+        f._run(values=rnd)
+        self.assertAlmostEqual(f.out['mean'], average(rnd))
+
+    def test_against_numpy_floats(self):
+        rnd = random_sample(20)
+        f = Mean()
+        f._run(values=rnd)
+        self.assertAlmostEqual(f.out['mean'], average(rnd))
+
+
 class StandardDeviationTest(unittest.TestCase):
     def test_against_numpy_integes(self):
         rnd = random_integers(-20, 20, 50)
