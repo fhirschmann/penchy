@@ -40,6 +40,9 @@ class Server(object):
         # The dict of results we will receive (SystemComposition : result)
         self.results = {}
 
+        # The dict of Timers which implement timeouts
+        self.timers = {}
+
         # additional arguments to pass to the bootstrap client
         self.bootstrap_args = []
 
@@ -157,9 +160,15 @@ class Server(object):
             node = self.node_for(composition.node_setting)
             node.received(composition)
 
-    def exp_set_timeout(self, hashcode):
-        composition = self.composition_for(hashcode)
-        # TODO: Implement me!
+    def exp_set_timeout(self, timeout, hashcode):
+        if self.timers.haskey(hashcode):
+            self.timers[hashcode].cancel()
+        if timeout > 0:
+            self.timers[hashcode] = threading.Timer(timeout,
+                    lambda: self._on_timeout(hashcode))
+
+    def _on_timeout(self, hashcode):
+        log.error("%s timed out." % self.composition_for(hashcode))
 
     @property
     def received_all_results(self):
