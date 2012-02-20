@@ -33,16 +33,16 @@ class Dacapo(Workload):
         ),
     ))
 
-    def __init__(self, benchmark, iterations=1, args=''):
+    def __init__(self, benchmark, iterations=1, args='', *wargs, **wkwargs):
         """
         :param benchmark: benchmark to execute
         :type benchmark: string
         :param iterations: Number of iterations in an invocation.
         :type iterations: int
-        :param args: additional arguments for harness (shell escaped)
-        :type args: string
+        :param dacapo_args: additional arguments for harness (shell escaped)
+        :type dacapo_args: string
         """
-        super(Dacapo, self).__init__()
+        super(Dacapo, self).__init__(*wargs, **wkwargs)
 
         self.benchmark = benchmark
         self.iterations = iterations
