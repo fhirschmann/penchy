@@ -318,7 +318,7 @@ class Job(object):
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
-                kwargs['environment'] = self._build_environment()
+                kwargs[':environment:'] = self._build_environment()
             sink.run(**kwargs)
 
         # reset state of filters for running multiple configurations
@@ -366,13 +366,13 @@ class Job(object):
 
         # all starts are receivers, run them with the environment
         for start in starts:
-            start.run(environment=self._build_environment())
+            start.run(**{':environment:' : self._build_environment()})
 
         # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
-                kwargs['environment'] = self._build_environment()
+                kwargs[':environment:'] = self._build_environment()
             sink.run(**kwargs)
 
     def _get_server_dependencies(self):

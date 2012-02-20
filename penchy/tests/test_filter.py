@@ -188,7 +188,8 @@ class CondenseTest(unittest.TestCase):
 
 class CondensingReceiveTest(unittest.TestCase):
     def setUp(self):
-        self.environment = {'receive': lambda: self.results}
+        environment = {'receive': lambda: self.results}
+        self.kwargs = {':environment:' : environment}
         self.results = {1: {'a': 42,
                             'b': 32},
                         2: {'b': 0,
@@ -196,33 +197,34 @@ class CondensingReceiveTest(unittest.TestCase):
 
     def test_implicit(self):
         f = CondensingReceive([('a', 'id1'), ('b', 'id2')], ('col1', 'col2'))
-        f._run(environment=self.environment)
+        f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
         f = CondensingReceive([(1, 'a', 'id1'), (2, 'b', 'id2')], ('col1', 'col2'))
-        f._run(environment=self.environment)
+        f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
         f = CondensingReceive([('a', 'id1'), ('d', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
     def test_explicit_fail_column(self):
         f = CondensingReceive([(1, 'a', 'id1'), (2, 'd', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
     def test_explicit_fail_composition(self):
         f = CondensingReceive([(1, 'a', 'id1'), (3, 'c', 'id2')], ('col1', 'col2'))
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
 
 class AggregatingReceiveTest(unittest.TestCase):
     def setUp(self):
-        self.environment = {'receive': lambda: self.results}
+        environment = {'receive': lambda: self.results}
+        self.kwargs = {':environment:' : environment}
         self.results = {1: {'a': 42,
                             'b': 32},
                         2: {'b': 0,
@@ -230,36 +232,36 @@ class AggregatingReceiveTest(unittest.TestCase):
 
     def test_implicit(self):
         f = AggregatingReceive('a', 'b')
-        f._run(environment=self.environment)
+        f._run(**self.kwargs)
         self.assertEqual(f.out, {'a': 42, 'b': 32})
 
     def test_explicit(self):
         f = AggregatingReceive((1, 'a'), (2, 'b'))
-        f._run(environment=self.environment)
+        f._run(**self.kwargs)
         self.assertEqual(f.out, {'a': 42, 'b': 0})
 
     def test_implicit_fail(self):
         f = AggregatingReceive('a', 'd')
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
     def test_explicit_fail_column(self):
         f = AggregatingReceive((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
     def test_explicit_fail_composition(self):
         f = AggregatingReceive((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
-            f._run(environment=self.environment)
+            f._run(**self.kwargs)
 
 
 class SendTest(unittest.TestCase):
     def test_send(self):
         a = [1]
         f = Send()
-        f._run(environment={'send' : lambda data: a.__setitem__(0, data)},
-               payload=42)
+        f._run(payload=42,
+               **{':environment:' : {'send' : lambda data: a.__setitem__(0, data)}})
         self.assertEqual(a, [{'payload': 42}])
 
 
@@ -315,7 +317,7 @@ class BackupTest(unittest.TestCase):
         self.assertTrue(os.path.exists(path))
         backup_path = '/tmp/penchy-backup-test'
         b = BackupFile(backup_path)
-        b.run(environment={}, filename=path)
+        b.run(filename=path, **{':environment:' : {}})
 
         # did backup?
         with open(backup_path) as f:
@@ -340,7 +342,7 @@ class BackupTest(unittest.TestCase):
         backup_file = 'penchy-backup-test'
         backup_path = os.path.join(comp.node_setting.path, backup_file)
         b = BackupFile(backup_file)
-        b.run(environment={'current_composition' : comp}, filename=path)
+        b.run(filename=path, **{':environment:' : {'current_composition' : comp}})
 
         # did backup?
         with open(backup_path) as f:
@@ -360,7 +362,7 @@ class BackupTest(unittest.TestCase):
 
         b = BackupFile('/tmp/penchy-backup-test')
         with self.assertRaises(WrongInputError):
-            b.run(environment={}, filename=path)
+            b.run(filename=path, **{':environment:' : {}})
 
 
 class SaveTest(unittest.TestCase):
@@ -372,7 +374,7 @@ class SaveTest(unittest.TestCase):
         save_path = os.path.join(comp.node_setting.path, save_file)
 
         save = Save(save_file)
-        save.run(environment={'current_composition': comp}, data=s)
+        save.run(data=s, **{':environment:' : {'current_composition': comp}})
         with open(save_path) as f:
             self.assertEqual(f.read(), s)
 
@@ -382,7 +384,7 @@ class SaveTest(unittest.TestCase):
         s = "'tis a test string"
         save_path = '/tmp/penchy-save-test'
         save = Save(save_path)
-        save.run(environment={}, data=s)
+        save.run(data=s, **{':environment:' : {}})
         with open(save_path) as f:
             self.assertEqual(f.read(), s)
 
@@ -412,7 +414,7 @@ class ServerFlowSystemFilterTest(unittest.TestCase):
         numbers = [23, 42]
         strings = ['a', 'b', 'c']
         d = Dump()
-        d._run(numbers=numbers, strings=strings, environment=self.env)
+        d._run(numbers=numbers, strings=strings, **{':environment:' : self.env})
 
         dump = json.loads(d.out['dump'])
         self.assertIn('job', dump['system'])
@@ -426,9 +428,9 @@ class ServerFlowSystemFilterTest(unittest.TestCase):
         data = "'tis the end"
         with tempdir(delete=True):
             s = Save('save')
-            s._run(data=data, environment=self.env)
+            s._run(data=data, **{':environment:' : self.env})
             b = BackupFile('backup')
-            b._run(filename='save', environment=self.env)
+            b._run(filename='save', **{':environment:' : self.env})
             with open('save') as f:
                 self.assertEqual(f.read(), data)
             with open('backup') as f:

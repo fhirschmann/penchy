@@ -188,15 +188,13 @@ class Send(SystemFilter):
 
     Inputs:
 
-    - ``environment``: see :meth:`Job._build_environment`
+    - ``:environment:``: see :meth:`Job._build_environment`
     - ``payload``: data to send
     """
-    # FIXME: Make environment a special name for SystemFilter
-    # to avoid name clashes
     inputs = Types()
 
     def _run(self, **kwargs):
-        send = kwargs.pop('environment')['send']
+        send = kwargs.pop(':environment:')['send']
         send(kwargs)
 
 
@@ -206,17 +204,17 @@ class Receive(SystemFilter):
 
     Inputs:
 
-    - ``environment``: see :meth:`Job._build_environment`
+    - ``:environment:``: see :meth:`Job._build_environment`
 
     Outputs:
 
     - ``results``: dict that maps :class:`SystemComposition` to their results.
     """
-    inputs = Types(('environment', dict))
+    inputs = Types((':environment:', dict))
     outputs = Types(('results', dict))
 
     def _run(self, **kwargs):
-        receive = kwargs['environment']['receive']
+        receive = kwargs[':environment:']['receive']
         self.out['results'] = receive()
 
 
@@ -438,7 +436,7 @@ class AggregatingReceive(Receive, Aggregate):
     """
     A composition of the ``Receive`` and ``Aggregate`` filter.
     """
-    inputs = Types(('environment', dict))
+    inputs = Types((':environment:', dict))
 
     def __init__(self, *args):
         Aggregate.__init__(self, *args)
@@ -455,7 +453,7 @@ class CondensingReceive(Receive, Condense):
     """
     A composition of the ``Receive`` and ``Condense`` filter.
     """
-    inputs = Types(('environment', dict))
+    inputs = Types((':environment:', dict))
 
     def __init__(self, data, names):
         Condense.__init__(self, data, names)
@@ -528,7 +526,7 @@ class Dump(SystemFilter):
 
     def _run(self, **kwargs):
         # collect and include system information
-        env = kwargs.pop('environment')
+        env = kwargs.pop(':environment:')
         if self.include:
             with open(env['job']) as f:
                 job = f.read()
@@ -578,8 +576,8 @@ class Save(SystemFilter):
 
     def _run(self, **kwargs):
         if not os.path.isabs(self.target_path) \
-           and kwargs['environment']['current_composition'] is not None:
-            node_setting = kwargs['environment']['current_composition'].node_setting
+           and kwargs[':environment:']['current_composition'] is not None:
+            node_setting = kwargs[':environment:']['current_composition'].node_setting
             self.target_path = os.path.join(node_setting.path, self.target_path)
         log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
         with open(self.target_path, 'w') as f:
@@ -609,8 +607,8 @@ class BackupFile(SystemFilter):
 
     def _run(self, **kwargs):
         if not os.path.isabs(self.target_path) \
-           and kwargs['environment']['current_composition'] is not None:
-            node_setting = kwargs['environment']['current_composition'].node_setting
+           and kwargs[':environment:']['current_composition'] is not None:
+            node_setting = kwargs[':environment:']['current_composition'].node_setting
             self.target_path = os.path.join(node_setting.path, self.target_path)
         path = kwargs['filename']
         if not os.path.exists(path):

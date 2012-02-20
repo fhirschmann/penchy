@@ -168,7 +168,7 @@ class Types(object):
                 missing_inputs.discard(sink)
 
             for input in missing_inputs:
-                if input == 'environment':
+                if input.startswith(':') and input.endswith(':'):
                     continue
                 log.error('Sink input {0} not saturated'.format(input))
                 valid = False

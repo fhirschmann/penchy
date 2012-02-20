@@ -116,7 +116,8 @@ class SystemFilter(Filter):
     """
     This represents a Filter of the pipeline that needs access to the system.
 
-    Additionally to :class:`Filter` it receives additionally a ``environment``.
+    Additionally to :class:`Filter` it receives additionally an input named
+    ``:environment:`` that describes the execution environment.
     """
     pass
 
