@@ -51,3 +51,35 @@ class BarPlot(Plot):
         plot.set_xticklabels(xs)
         plot.legend(bars, names)
         plt.savefig(self.filename)
+
+
+class ScatterPlot(Plot):
+    """
+    Scatterplot
+    """
+    inputs = Types(('x', list, (int, float)),
+                   ('y', list, (int, float)),
+                   ('z', list, str))
+
+    #FIXME: Better solution to handle args without repeating
+    #TODO: allow to draw circles and squares
+    def __init__(self, **kwarg):
+        super(ScatterPlot, self).__init__(**kwarg)
+
+    def _run(self, **kwargs):
+        import numpy as np
+        import matplotlib.pyplot as plt
+        xs = kwargs['x']
+        ys = kwargs['y']
+        zs = kwargs['z']
+        fig = plt.figure()
+        plot = fig.add_subplot(1, 1, 1)
+
+        for x, y, z in zip(xs, ys, zs):
+            plot.text(x, y, z, rotation=-45)
+        plot.plot(xs, ys, 'o')
+
+        plot.set_xlabel(self.xlabel)
+        plot.set_ylabel(self.ylabel)
+        plot.set_title(self.title)
+        plt.savefig(self.filename)
