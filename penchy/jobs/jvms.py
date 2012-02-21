@@ -71,6 +71,9 @@ class JVM(object):
         self._tool = None
         self._workload = None
 
+        # jvm process
+        self.proc = None
+
     @property
     def workload(self):
         return self._workload
@@ -135,14 +138,14 @@ class JVM(object):
         with nested(NamedTemporaryFile(delete=False, dir='.'),
                     NamedTemporaryFile(delete=False, dir='.')) \
             as (stderr, stdout):
-            exit_code = subprocess.call(self.cmdline,
-                                        stderr=stderr,
-                                        stdout=stdout)
+            self.proc = subprocess.Popen(self.cmdline,
+                    stdout=stdout, stderr=stderr)
+            self.proc.communicate()
 
-            self.workload.out['exit_code'].append(exit_code)
+            self.workload.out['exit_code'].append(self.proc.returncode)
             self.workload.out['stdout'].append(stdout.name)
             self.workload.out['stderr'].append(stderr.name)
-            if exit_code != 0:
+            if self.proc.returncode != 0:
                 log.error('jvm execution failed, stderr:')
                 stderr.seek(0)
                 log.error(stderr.read())
