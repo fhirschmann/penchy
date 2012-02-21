@@ -50,9 +50,7 @@ class BarPlot(Plot):
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
-        print yss
         for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
-            print ys
             if self.horizontal:
                 if self.error_bars:
                     rects.append(plot.barh(ind + self.width * i, ys, self.width,
