@@ -465,3 +465,17 @@ class StandardDeviationTest(unittest.TestCase):
         f = StandardDeviation(ddof=1)
         f._run(values=rnd)
         self.assertAlmostEqual(f.out['standard_deviation'], std(rnd, ddof=1))
+
+
+class SumTest(unittest.TestCase):
+    def test_integers(self):
+        rnd = random_integers(-20, 20, 50)
+        f = Sum()
+        f._run(values=rnd)
+        self.assertEqual(f.out['sum'], sum(rnd))
+
+    def test_against_numpy_floats(self):
+        rnd = random_sample(20)
+        f = Sum()
+        f._run(values=rnd)
+        self.assertAlmostEqual(f.out['sum'], sum(rnd))
