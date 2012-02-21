@@ -122,7 +122,7 @@ class Node(object):  # pragma: no cover
         Indicates whether we are connected to this node.
         """
         transport = self.ssh.get_transport()
-        if transport and transport.isAlive():
+        if transport and transport.is_active():
             return True
         return False
 
