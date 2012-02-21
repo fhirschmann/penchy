@@ -150,7 +150,7 @@ class JVM(object):
                 stderr.seek(0)
                 log.error(stderr.read())
                 raise JVMExecutionError('non zero exit code: {0}'
-                                        .format(exit_code))
+                                        .format(self.proc.returncode))
 
         log.debug("executing posthooks")
         for hook in posthooks:
