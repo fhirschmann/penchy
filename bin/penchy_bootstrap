@@ -12,6 +12,7 @@ import sys
 import logging
 import signal
 from logging.handlers import RotatingFileHandler
+from optparse import OptionParser
 
 from subprocess import Popen, PIPE
 
@@ -90,16 +91,21 @@ def build_classpath():
     return stdout
 
 
-def main(args, load_from=None):
+def main(job, config, identifier, loglevel=logging.INFO, load_from=None):
     """
-    This method starts the bootstrap client. All arguments will be
-    passed to the real client.
+    This method starts the bootstrap client.
 
     A valid bootstrap.pom in the current working directory is
     expected!
 
-    :param args: arguments to pass; this would normally be sys.argv
-    :type args: list
+    :param job: filename of job to execute
+    :type job: string
+    :param config: config file to use
+    :type config: string
+    :param identifier: identifier for this node
+    :type identifier: string
+    :param loglevel: loglevel to use
+    :type loglevel: int
     :param load_from: this will load PenchY from this path instead of
                       running it from the maven repository
     :type load_from: string
@@ -112,7 +118,7 @@ def main(args, load_from=None):
         penchy_zip = find_penchy_zip(maven_output)
         Client = load_penchy(penchy_zip)
 
-    client = Client(args[1:])
+    client = Client(job, config, identifier, loglevel)
     client.run()
 
 
@@ -121,22 +127,15 @@ if __name__ == "__main__":
         with open('penchy.pid', 'w') as pidfile:
             pidfile.write(str(os.getpid()))
 
-        args = sys.argv[:]
-        if '--load-from' in args:
-            load_from = args[args.index('--load-from') + 1]
-            if not os.path.isdir(load_from):
-                raise ValueError("Argument to --load-from must be a directory")
-            args.remove('--load-from')
-            args.remove(load_from)
-        else:
-            load_from = None
-        if '--loglevel' in args:
-            loglevel = args[args.index('--loglevel') + 1]
-            log.setLevel(int(loglevel))
-        else:
-            load_from = None
+        parser = OptionParser()
+        parser.add_option('--load-from', action='store', type='string',
+                dest='load_from', help='load PenchY from this location instead')
+        parser.add_option('--loglevel', action='store', type='int',
+                dest='loglevel', help='loglevel', default=logging.INFO)
+        opts, args = parser.parse_args()
+        log.setLevel(opts.loglevel)
 
-        main(args, load_from)
+        main(*args, load_from=opts.load_from, loglevel=opts.loglevel)
     except Exception, err:
         log.exception('Exception occured while executing PenchY:')
         sys.exit(1)

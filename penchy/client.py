@@ -10,9 +10,6 @@ Executes benchmarks and filters generated data.
 import logging
 import xmlrpclib
 import signal
-from time import sleep
-
-import argparse
 
 from penchy.util import load_config, load_job
 from penchy.log import configure_logging
@@ -26,22 +23,21 @@ class Client(object):
     This class represents a client which executes a job
     and sends the results to the server.
     """
-    def __init__(self, args):
+    def __init__(self, job, config, identifier, loglevel=logging.INFO):
         """
         :param args: arguments; this would normally be :class:`sys.argv`
         :type args: list
         """
-        self.args = self.parse_args(args)
-        self.config = load_config(self.args.config)
-        job_module = load_job(self.args.job)
+        self.config = load_config(config)
+        job_module = load_job(job)
+        self.identifier = identifier
+        configure_logging(loglevel)
+
         self.job = job_module.job
         self.job_file = job_module.__file__
-        self.identifier = self.args.identifier
         self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
         self._current_composition = None
-
-        configure_logging(int(self.args.loglevel))
 
         signal.signal(signal.SIGHUP, self._signal_handler)
 
@@ -86,18 +82,3 @@ class Client(object):
             except Exception, err:
                 log.exception('Exception occured while executing PenchY:')
                 self.proxy.report_error(composition.hash(), err)
-
-    def parse_args(self, args):
-        """
-        Parses the arguments.
-
-        :param args: arguments; this would normally be :class:`sys.argv`
-        :type args: list
-        """
-        parser = argparse.ArgumentParser(description=__doc__, prog=args)
-        parser.add_argument("job", help="job to execute", metavar="job")
-        parser.add_argument("config", help="config file to use", metavar="config")
-        parser.add_argument("identifier", help="my identifier", metavar="identifier")
-        parser.add_argument("--loglevel", dest="loglevel", default='20')
-        args = parser.parse_args(args=args)
-        return args
