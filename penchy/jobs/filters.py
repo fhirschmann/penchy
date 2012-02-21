@@ -60,7 +60,7 @@ class HProfCpuTimes(Filter):
 
     outputs = Types(('total', list, int),
                     ('rank', list, list, int),
-                    ('self', list, list, float),
+                    ('selftime', list, list, float),
                     ('accum', list, list, float),
                     ('count', list, list, int),
                     ('trace', list, list, int),
@@ -69,7 +69,7 @@ class HProfCpuTimes(Filter):
     _TOTAL_RE = re.compile('total = (\d+)')
     _DATA_RE = re.compile("""
         \s+(?P<rank>\d+)
-        \s+(?P<self>\d+\.\d{2})%
+        \s+(?P<selftime>\d+\.\d{2})%
         \s+(?P<accum>\d+\.\d{2})%
         \s+(?P<count>\d+)
         \s+(?P<trace>\d+)
@@ -81,7 +81,7 @@ class HProfCpuTimes(Filter):
 
         for f in files:
             data = {'rank': [],
-                    'self': [],
+                    'selftime': [],
                     'accum': [],
                     'count': [],
                     'trace': [],
@@ -113,9 +113,8 @@ class HProfCpuTimes(Filter):
                         log.error('Received invalid input:\n{0}'.format(line))
                         raise WrongInputError('Received invalid input.')
                     result = self._DATA_RE.match(line).groupdict()
-                    # XXX: The returnvalue of list.append is always None, do you
-                    #      want that? Eh, and building this dict and not using it?
-                    dict((k, data[k].append(result[k])) for k in data)
+                    for k in data:
+                        data[k].append(result[k])
                 # we did not break, i.e. no end marker was found
                 else:
                     raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
