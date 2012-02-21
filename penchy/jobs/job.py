@@ -476,20 +476,24 @@ class Job(object):
 
         # check all composition flow pipe connections
         for flow in chain(c.flow for c in self.compositions):
-            sources_of_sinks = defaultdict(list)
-            for edge in flow:
-                valid = valid and edge.check()
-                source_name_mapping = (edge.source.__class__.__name__,
-                                       default(edge.map_,
-                                               [(name, name) for name
-                                                in edge.source.outputs.names]))
-                sources_of_sinks[edge.sink].append(source_name_mapping)
-            for sink, source_mappings in sources_of_sinks.items():
-                valid = valid and sink.inputs.check_sink(source_mappings)
+            valid = self._check_flow(valid, flow)
 
         # check server flow pipe connections
-        for edge in self.server_flow:
+        valid = self._check_flow(valid, self.server_flow)
+
+        return valid
+
+    def _check_flow(self, valid, flow):
+        sources_of_sinks = defaultdict(list)
+        for edge in flow:
             valid = valid and edge.check()
+            source_name_mapping = (edge.source.__class__.__name__,
+                                   default(edge.map_,
+                                           [(name, name) for name
+                                            in edge.source.outputs.names]))
+            sources_of_sinks[edge.sink].append(source_name_mapping)
+        for sink, source_mappings in sources_of_sinks.items():
+            valid = valid and sink.inputs.check_sink(source_mappings)
 
         return valid
 
