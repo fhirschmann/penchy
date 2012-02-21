@@ -481,6 +481,18 @@ class Job(object):
         return valid
 
     def _check_flow(self, flow):
+        """
+        Check the flow for validity.
+
+        That is:
+        - all Edges are valid (inputs/outputs exist)
+        - all Sinks are saturated
+
+        :param flow: flow to check
+        :type flow: sequence of :class:`~penchy.jobs.dependency.Edge`
+        :returns: if flow is valid
+        :rtype: bool
+        """
         valid = True
         sources_of_sinks = defaultdict(list)
         for edge in flow:
