@@ -25,9 +25,9 @@ class BarPlot(Plot):
     inputs = Types(('x', list, str), ('y', list))
 
     #FIXME: Better solution to handle args without repeating
-    def __init__(self, colors, zlabels, **kwarg):
+    def __init__(self, colors, zlabels, width=0.2, **kwarg):
         super(BarPlot, self).__init__(**kwarg)
-        self.width = 0.2
+        self.width = width
         self.colors = colors
         self.zlabels = zlabels
 
