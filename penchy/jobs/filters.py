@@ -469,17 +469,24 @@ class Map(Filter):
     Returns a list constructed by applying a filter to all
     elements in the given list.
     """
-    inputs = Types(('values', list))
-    outputs = Types(('result', list))
 
     def __init__(self, filter_):
         super(Map, self).__init__()
-        if len(filter_.inputs.descriptions) != 1:
-            raise TypeCheckError("Map takes only filters with excatly one input")
+        input_desc = filter_.inputs.descriptions
+        output_desc = filter_.outputs.descriptions
+        if input_desc is None or len(input_desc) != 1:
+            raise TypeCheckError("Map takes only filters with exactly one input")
+        if output_desc is not None and len(output_desc) != 1:
+            raise TypeCheckError("Map takes only filters with exactly one output")
+
         self.name = filter_.inputs.names.pop()
         self.filter = filter_
-        input_types = filter_.inputs.descriptions[self.name]
+        input_types = input_desc[self.name]
         inputs = Types(('values', list) + input_types)
+        if output_desc is not None:
+            output_name = filter_.outputs.names.pop()
+            output_types = output_desc[output_name]
+            outputs = Types(('result', list) + output_types)
 
     def _run(self, **kwargs):
         for v in kwargs['values']:
