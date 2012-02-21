@@ -179,7 +179,7 @@ class SystemComposition(object):
         update_hasher(hasher, self.node_setting.hash())
         return hasher.hexdigest()
 
-    def set_timeout(self, fun):
+    def set_timeout_function(self, fun):
         """
         Set the timeout function of this composition.
 
