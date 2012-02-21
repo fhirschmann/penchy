@@ -78,7 +78,7 @@ def check_paramiko():
         raise
 
     checkattrs([
-        (paramiko, 'SSHClient'),
+        (paramiko.Transport, 'is_active'),
         (paramiko.SSHClient, ['open_sftp', 'connect']),
         (paramiko.SFTPClient, ['open', 'put', 'mkdir'])
         ])
