@@ -22,7 +22,8 @@ class BarPlot(Plot):
     """
     BarPlot
     """
-    inputs = Types(('x', list, str), ('y', list))
+    inputs = Types(('x', list, str),
+                   ('y', list, (int, float)))
 
     #FIXME: Better solution to handle args without repeating
     def __init__(self, colors, zlabels, error_bars=False, ecolor="red", horizontal=False, width=0.2, **kwarg):
@@ -35,8 +36,8 @@ class BarPlot(Plot):
         if error_bars:
             self.ecolor = ecolor
             self.inputs = Types(('x', list, str),
-                                ('y', list),
-                                ('err', list))
+                                ('y', list, (int, float)),
+                                ('err', list, (int, float)))
 
     def _run(self, **kwargs):
         import numpy as np
