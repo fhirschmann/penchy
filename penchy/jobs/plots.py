@@ -20,16 +20,17 @@ class Plot(Filter):
 
 class BarPlot(Plot):
     """
-    A simple and static barplot.  Mainly for testing.
+    BarPlot
     """
     inputs = Types(('x', list, str), ('y', list))
 
     #FIXME: Better solution to handle args without repeating
-    def __init__(self, colors, zlabels, width=0.2, **kwarg):
+    def __init__(self, colors, zlabels, horizontal=False, width=0.2, **kwarg):
         super(BarPlot, self).__init__(**kwarg)
         self.width = width
         self.colors = colors
         self.zlabels = zlabels
+        self.horizontal = horizontal
 
     def _run(self, **kwargs):
         import numpy as np
@@ -40,15 +41,24 @@ class BarPlot(Plot):
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
+        print yss
         for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
-            rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
+            print ys
+            if self.horizontal:
+                rects.append(plot.barh(ind + self.width * i, ys, self.width, color=c))
+            else:
+                rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
             bars.append(rects[i][0])
             names.append(zlabel)
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
-        plot.set_xticks(ind + self.width)
-        plot.set_xticklabels(xs)
+        if self.horizontal:
+            plot.set_yticks(ind + self.width)
+            plot.set_yticklabels(xs)
+        else:
+            plot.set_xticks(ind + self.width)
+            plot.set_xticklabels(xs)
         plot.legend(bars, names)
         plt.savefig(self.filename)
 
