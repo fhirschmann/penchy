@@ -23,7 +23,7 @@ for bench in benchmarks:
 
 # Server side filters
 condense = filters.CondensingReceive([(com, 'times', bench) for com, bench in zip(comps, benchmarks)],
-                       ('time','bench'))
+                                     ('time','bench'))
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot',
                      xlabel='x', ylabel='y', colors=['blue', 'red'])
 
