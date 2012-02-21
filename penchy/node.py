@@ -214,6 +214,20 @@ class Node(object):  # pragma: no cover
 
         atexit.register(self.close)
 
+    def kill_composition(self):
+        """
+        Kill the current :class:`~penchy.jobs.job.SystemComposition`
+        on this node.
+
+        A pidfile named `penchy.pid` must exist on the node.
+        """
+        pidfile_name = os.path.join(self.setting.path, 'penchy.pid')
+        pidfile = self.sftp.open(pidfile_name)
+        pid = pidfile.read()
+        pidfile.close()
+        self.execute('kill -SIGHUP ' + pid)
+        self.log.warn("Current composition was terminated")
+
     def kill(self):
         """
         Kill PenchY on node. This will kill all processes whose
@@ -225,6 +239,5 @@ class Node(object):  # pragma: no cover
         pidfile = self.sftp.open(pidfile_name)
         pid = pidfile.read()
         pidfile.close()
-        self.execute('pkill -TERM -P' + pid)
-        self.execute('sleep 5 && pkill -KILL -P' + pid)
-        self.log.warn("Client was terminated")
+        self.execute('pkill -TERM -P ' + pid)
+        self.log.warn("PenchY was terminated")

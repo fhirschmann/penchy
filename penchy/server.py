@@ -169,6 +169,8 @@ class Server(object):
                         lambda: self._on_timeout(hashcode))
 
     def _on_timeout(self, hashcode):
+        composition = self.composition_for(hashcode)
+        self.node_for(composition.node_setting).kill_composition()
         log.error("%s timed out." % self.composition_for(hashcode))
 
     @property
