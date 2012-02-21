@@ -474,16 +474,14 @@ class Job(object):
             log.exception('Check: cycle in server pipeline')
             valid = False
 
-        # check all composition flow pipe connections
-        for flow in chain(c.flow for c in self.compositions):
-            valid = self._check_flow(valid, flow)
-
-        # check server flow pipe connections
-        valid = self._check_flow(valid, self.server_flow)
+        for flow in chain(chain(c.flow for c in self.compositions),
+                         [self.server_flow]):
+            valid = valid and self._check_flow(flow)
 
         return valid
 
-    def _check_flow(self, valid, flow):
+    def _check_flow(self, flow):
+        valid = True
         sources_of_sinks = defaultdict(list)
         for edge in flow:
             valid = valid and edge.check()
