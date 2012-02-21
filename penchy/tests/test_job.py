@@ -295,14 +295,3 @@ class PipelineVisualizationTest(unittest.TestCase):
         self.assertFalse(os.path.exists(os.path.splitext(path_pdf)[0]))
         os.remove(path)
         os.remove(path_pdf)
-
-
-class NodeSettingTest(unittest.TestCase):
-    def test_timeout_factor_int(self):
-        ns = NodeSetting('localhost', 22, 'dummy', '/', '/', timeout_factor=5)
-        self.assertEquals(ns.timeout_factor, 5)
-
-    def test_timeout_factor_func(self):
-        ns = NodeSetting('localhost', 22, 'dummy', '/', '/',
-                timeout_factor=lambda: 6)
-        self.assertEquals(ns.timeout_factor, 6)
