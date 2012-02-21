@@ -705,3 +705,21 @@ class StandardDeviation(Filter):
         avg = average(vs)
         std = math.sqrt(sum((v - avg) ** 2 for v in vs) / (len(vs) - self.ddof))
         self.out['standard_deviation'] = std
+
+
+class Sum(Filter):
+    """
+    Computes the sum of a list of integers or floats
+
+    Inputs:
+    - ``values``: numeric values
+
+    Outputs:
+    - ``sum``: sum of the numeric values
+    """
+
+    inputs = Types(('values', list, (int, float)))
+    outputs = Types(('sum', (int, float)))
+
+    def _run(self, **kwargs):
+        self.out['sum'] = sum(kwargs['values'])
