@@ -25,10 +25,11 @@ class BarPlot(Plot):
     inputs = Types(('x', list, str), ('y', list))
 
     #FIXME: Better solution to handle args without repeating
-    def __init__(self, colors=[], **kwarg):
+    def __init__(self, colors, zlabels, **kwarg):
         super(BarPlot, self).__init__(**kwarg)
         self.width = 0.2
         self.colors = colors
+        self.zlabels = zlabels
 
     def _run(self, **kwargs):
         import numpy as np
@@ -39,11 +40,10 @@ class BarPlot(Plot):
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
         bars, names, rects = [], [], []
-        for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
-            rects.append(plot.bar(ind + self.width * i, ys,
-                                  self.width, color=c))
+        for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
+            rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
             bars.append(rects[i][0])
-            names.append('Invocation {0}'.format(i + 1))
+            names.append(zlabel)
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
