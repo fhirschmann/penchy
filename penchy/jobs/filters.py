@@ -113,8 +113,14 @@ class HProfCpuTimes(Filter):
                         log.error('Received invalid input:\n{0}'.format(line))
                         raise WrongInputError('Received invalid input.')
                     result = self._DATA_RE.match(line).groupdict()
-                    for k in data:
-                        data[k].append(result[k])
+
+                    data['rank'].append(int(result['rank']))
+                    data['selftime'].append(float(result['selftime']))
+                    data['accum'].append(float(result['accum']))
+                    data['count'].append(int(result['count']))
+                    data['trace'].append(int(result['trace']))
+                    data['method'].append(result['method'])
+
                 # we did not break, i.e. no end marker was found
                 else:
                     raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
