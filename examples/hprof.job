@@ -9,13 +9,13 @@ jvm = jvms.JVM('java')
 composition = SystemComposition(jvm, node)
 
 w = workloads.ScalaBench('fop')
-t = tools.HProf('heap=dump')
+t = tools.HProf('cpu=times')
 jvm.workload = w
 jvm.tool = t
 
-f = filters.Print()
+f = filters.HProfCpuTimes()
 
-composition.flow = [t >> f]
+composition.flow = [t >> f >> filters.Print()]
 
 job = Job(compositions=composition,
           server_flow=[],
