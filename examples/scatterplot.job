@@ -1,0 +1,40 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = ['dummy']
+
+# Client side filters
+f = filters.HProfCpuTimes()
+send = filters.Send()
+unpack_sum = filters.Unpack('sum')
+unpack_total = filters.Unpack('total')
+
+comps = []
+for bench in benchmarks:
+    jvm = jvms.JVM('java')
+    jvm.workload = workloads.ScalaBench(bench)
+    jvm.tool = tools.HProf('cpu=times')
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.tool >> f >> ('count', 'values') >> filters.Map(filters.Sum()) >> ('result', 'singleton') >> unpack_sum >> 'sum' >> send,
+                 f >> ('total','singleton') >> unpack_total >> send]
+    comps.append(comp)
+
+# Server side filters
+condense = filters.CondensingReceive([(com, 'sum', bench) for com, bench in zip(comps, benchmarks)],
+                                     ('sum','bench'))
+aggregate = filters.AggregatingReceive('total')
+plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='testplot',
+                     xlabel='x', ylabel='y')
+
+job = Job(compositions=comps,
+          server_flow=[
+              # FIXME: second 'sum' should be 'total'
+              condense >> [('bench', 'z'), ('sum', 'x'), ('sum', 'y')] >> plot
+          ],
+          invocations = 1
+          )
