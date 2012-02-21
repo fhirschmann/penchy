@@ -487,11 +487,11 @@ class Map(Filter):
         self.name = filter_.inputs.names.pop()
         self.filter = filter_
         input_types = input_desc[self.name]
-        inputs = Types(('values', list) + input_types)
+        self.inputs = Types(('values', list) + input_types)
         if output_desc is not None:
             output_name = filter_.outputs.names.pop()
             output_types = output_desc[output_name]
-            outputs = Types(('result', list) + output_types)
+            self.outputs = Types(('result', list) + output_types)
 
     def _run(self, **kwargs):
         for v in kwargs['values']:
