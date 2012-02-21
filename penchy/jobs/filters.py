@@ -20,7 +20,7 @@ from pprint import pprint
 
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
-from penchy.jobs.typecheck import Types
+from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.util import default, average
 
 
@@ -474,8 +474,12 @@ class Map(Filter):
 
     def __init__(self, filter_):
         super(Map, self).__init__()
-        self.filter = filter_
+        if len(filter_.inputs.descriptions) != 1:
+            raise TypeCheckError("Map takes only filters with excatly one input")
         self.name = filter_.inputs.names.pop()
+        self.filter = filter_
+        input_types = filter_.inputs.descriptions[self.name]
+        inputs = Types(('values', list) + input_types)
 
     def _run(self, **kwargs):
         for v in kwargs['values']:
