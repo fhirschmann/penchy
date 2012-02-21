@@ -1,0 +1,35 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = ['fop', 'batik']
+
+# Client side filters
+f = filters.DacapoHarness()
+unpack = filters.Map(filters.Unpack('result'))
+send = filters.Send()
+
+comps = []
+for bench in benchmarks:
+    jvm = jvms.JVM('java')
+    jvm.workload = workloads.ScalaBench(bench)
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+    comps.append(comp)
+
+# Server side filters
+condense = filters.CondensingReceive([(com, 'times', bench) for com, bench in zip(comps, benchmarks)],
+                       ('time','bench'))
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot',
+                     xlabel='x', ylabel='y', colors=['blue', 'red'])
+
+job = Job(compositions=comps,
+          server_flow=[
+              condense >> [('bench', 'x'), ('time', 'y')] >> plot
+          ],
+          invocations = 2
+          )
