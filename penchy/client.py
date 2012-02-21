@@ -10,6 +10,7 @@ Executes benchmarks and filters generated data.
 import logging
 import xmlrpclib
 import signal
+from time import sleep
 
 import argparse
 
@@ -53,10 +54,21 @@ class Client(object):
         :param frame: execution frame
         :type frame: frame object
         """
-        log.info("Received signal %s " % signum)
+        log.info("Received signal %s" % signum)
         if signum == signal.SIGHUP:
-            # TODO: Kill self._current_composition.jvm
-            pass
+            self.send_signal_to_composition(signal.SIGTERM)
+
+    def send_signal_to_composition(self, signum):
+        """
+        Send signal ``signum`` to the composition which is currently running.
+
+        :param signum: signal number as defined in the ``signal`` module
+        :type signum: int
+        """
+        if self._current_composition:
+            if self._current_composition.jvm.proc:
+                if self._current_composition.jvm.proc.returncode is None:
+                    self._current_composition.jvm.proc.send_signal(signum)
 
     def run(self):
         """
