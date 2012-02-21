@@ -90,3 +90,7 @@ class SinkCheckTest(unittest.TestCase):
         sink = Types()
         self.assertFalse(sink.check_sink([('foo', [('foo', 'bar')]),
                                           ('baz', [('baz', 'bar')])]))
+
+    def test_inputs_not_statisfied(self):
+        sink = Types()
+        self.assertFalse(sink.check_sink([('foo', [('foo', 'bar'), ('baz', 'bar')])]))
