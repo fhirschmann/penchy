@@ -475,14 +475,11 @@ class Map(Filter):
     def __init__(self, filter_):
         super(Map, self).__init__()
         self.filter = filter_
-        self.names = filter_.inputs.descriptions
+        self.name = filter_.inputs.names.pop()
 
     def _run(self, **kwargs):
-        values = kwargs['values']
-        print values
-        self.out['result'] = []
-        for v in values:
-            param = {self.names.keys().pop(): v}
+        for v in kwargs['values']:
+            param = {self.name: v}
             self.filter._run(**param)
             # XXX: this copies _all_ (possibly multidimensional) filter output
             #      into a single list
