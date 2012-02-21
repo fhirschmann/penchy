@@ -341,19 +341,22 @@ def evaluate_runtimes(times):
 
 
 class Aggregate(Filter):
-    # FIXME: Aggregate has no class attribute ``columns`` as indicated here
     """
     Extracts data out of the resultssets send by the clients.
 
     Input:
-       - ``results``: Resultset as produced by the ``Receive`` filter
+       - ``results``: Resultset as produced by the :class:`~penchy.jobs.filters.Receive` filter
 
-    Output: The columns specified in `Aggregate.columns`
+    Output: The extracted data associated with the names specified in the constructor.
     """
 
     inputs = Types(('results', dict))
 
     def __init__(self, *args):
+        """
+        :param args: names of the data
+        :type evaluator: list str or list (:class:`~penchy.jobs.job.SystemComposition`, str)
+        """
         super(Aggregate, self).__init__()
         self.columns = args
 
