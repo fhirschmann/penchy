@@ -11,6 +11,7 @@ This module contains classes which deal with nodes
 import os
 import logging
 import atexit
+from contextlib import contextmanager
 
 import paramiko
 
@@ -115,6 +116,30 @@ class Node(object):  # pragma: no cover
         self.sftp.close()
         self.ssh.close()
 
+    @property
+    def connected(self):
+        """
+        Indicates whether we are connected to this node.
+        """
+        transport = self.ssh.get_transport()
+        if transport and transport.isAlive():
+            return True
+        return False
+
+    @contextmanager
+    def connection_required(self):
+        """
+        Contextmanager to make sure we are connected before
+        working on this node.
+        """
+        if not self.connected:
+            self.connect()
+
+        yield
+
+        if self.connected:
+            self.disconnect()
+
     def close(self):
         """
         Close node (disconnect, receive the logs and kill the
@@ -126,14 +151,12 @@ class Node(object):  # pragma: no cover
         if self.was_closed:
             return
 
-        self.connect()
+        with self.connection_required():
+            if not self.received_all_results:
+                self.kill()
+                self.expected = []
 
-        if not self.received_all_results:
-            self.kill()
-            self.expected = []
-
-        self.get_logs()
-        self.disconnect()
+            self.get_logs()
         self.was_closed = True
 
     def put(self, local, remote=None):

@@ -174,9 +174,8 @@ class Server(object):
     def _on_timeout(self, hashcode):
         composition = self.composition_for(hashcode)
         node = self.node_for(composition.node_setting)
-        node.connect()
-        node.kill_composition()
-        node.disconnect()
+        with node.connection_required():
+            node.kill_composition()
         log.error("%s timed out." % self.composition_for(hashcode))
 
     @property
@@ -193,15 +192,14 @@ class Server(object):
         """
         with make_bootstrap_pom() as pom:
             for node in self.nodes.values():
-                node.connect()
-                for upload in self.uploads:
-                    node.put(*upload)
-                node.put(pom.name, 'bootstrap.pom')
+                with node.connection_required():
+                    for upload in self.uploads:
+                        node.put(*upload)
+                    node.put(pom.name, 'bootstrap.pom')
 
-                node.execute_penchy(" ".join(
-                    self.bootstrap_args + [os.path.basename(self.job_file),
-                        'config.py', node.setting.identifier]))
-                node.disconnect()
+                    node.execute_penchy(" ".join(
+                        self.bootstrap_args + [os.path.basename(self.job_file),
+                            'config.py', node.setting.identifier]))
 
     def run(self):
         """
