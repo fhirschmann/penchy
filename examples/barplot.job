@@ -11,8 +11,8 @@ jvm2 = jvms.JVM('java')
 comp1 = SystemComposition(jvm1, node)
 comp2 = SystemComposition(jvm2, node)
 
-fop = workloads.ScalaBench('fop')
-batik = workloads.ScalaBench('batik')
+fop = workloads.ScalaBench('dummy')
+batik = workloads.ScalaBench('dummy')
 jvm1.workload = fop
 jvm2.workload = batik
 
@@ -23,8 +23,8 @@ send = filters.Send()
 condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
                        ('time','bench'))
 
-plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot',
-                     xlabel='x', ylabel='y', colors=['blue', 'red'])
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y',
+                     zlabels=["Iteration " + str(i) for i in range(1,3)], colors=['blue', 'red'])
 
 flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
 flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
