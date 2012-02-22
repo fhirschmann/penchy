@@ -400,7 +400,7 @@ class Condense(Filter):
 
     inputs = Types(('results', dict))
 
-    def __init__(self, data, names):
+    def __init__(self, names, data):
         super(Condense, self).__init__()
         self.data = data
         self.names = names
@@ -461,8 +461,8 @@ class CondensingReceive(Receive, Condense):
     """
     inputs = Types((':environment:', dict))
 
-    def __init__(self, data, names):
-        Condense.__init__(self, data, names)
+    def __init__(self, names, data):
+        Condense.__init__(self, names, data)
         Receive.__init__(self)
 
     def _run(self, **kwargs):
