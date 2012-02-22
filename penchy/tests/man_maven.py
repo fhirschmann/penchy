@@ -60,7 +60,7 @@ class MavenTest(unittest.TestCase):
         self.assertRaises(OSError, get_classpath, '')
 
     def test_checksum(self):
-        self.assertEquals(self.dep.actual_checksum,
+        self.assertEqual(self.dep.actual_checksum,
                 '55856d711ab8b88f8c7b04fd85ff1643ffbfde7c')
 
     def test_no_checksum_required(self):

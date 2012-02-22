@@ -117,24 +117,24 @@ class MavenTest(unittest.TestCase):
                 'http://repo.scalabench.org/snapshots/')
 
     def test_mavendep_equal(self):
-        self.assertEquals(self.d1, self.d2)
+        self.assertEqual(self.d1, self.d2)
 
     def test_mavendep_duplicates(self):
         p = POM(**_ATTRIBS)
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
-        self.assertEquals(p.dependencies, set((self.d1,)))
+        self.assertEqual(p.dependencies, set((self.d1,)))
 
     def test_mavendep_repo_duplicates(self):
         p = POM(**_ATTRIBS)
         p.add_repository('foo')
         p.add_repository('foo')
-        self.assertEquals(p.repositories, set(('foo',)))
+        self.assertEqual(p.repositories, set(('foo',)))
 
         p = POM(**_ATTRIBS)
         p.add_dependency(self.d1)
         p.add_dependency(self.d2)
-        self.assertEquals(p.repositories, set((self.d1.repo,)))
+        self.assertEqual(p.repositories, set((self.d1.repo,)))
 
     def test_required_keywords(self):
         self.assertRaises(POMError, POM)
