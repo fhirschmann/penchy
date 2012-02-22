@@ -27,6 +27,10 @@ Filters
 -------
 .. automodule:: penchy.jobs.filters
 
+Plots
+-----
+.. automodule:: penchy.jobs.plots
+
 Pipeline dependency specification
 ---------------------------------
 
