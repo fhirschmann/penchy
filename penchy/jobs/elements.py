@@ -43,21 +43,20 @@ class PipelineElement(object):
     def __init__(self):
         self.reset()
 
-        self.prehooks = []
-        self.posthooks = []
+        self.hooks = []
 
     def run(self, **kwargs):
         """
         Run element with hooks.
         """
         self.inputs.check_input(kwargs)
-        for hook in self.prehooks:
-            hook()
+        for hook in self.hooks:
+            hook.setup()
 
         self._run(**kwargs)
 
-        for hook in self.posthooks:
-            hook()
+        for hook in self.hooks:
+            hook.teardown()
 
     def reset(self):
         """

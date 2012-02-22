@@ -10,6 +10,7 @@ This module provides tools.
 import os.path
 
 from penchy.jobs.elements import Tool
+from penchy.jobs.hooks import Hook
 from penchy.jobs.typecheck import Types
 from penchy.maven import MavenDependency
 
@@ -40,10 +41,11 @@ class Tamiflex(Tool):
 
     def __init__(self):
         super(Tamiflex, self).__init__()
-        self.posthooks.extend([
-            lambda: self.out['reflection_log'].append(os.path.abspath('out/refl.log')) ,
-            lambda: self.out['classfolder'].append(os.path.abspath('out/')) ,
-        ])
+        self.hooks.extend([
+            Hook(teardown=lambda: self.out['reflection_log']
+                            .append(os.path.abspath('out/refl.log'))),
+            Hook(teardown=lambda: self.out['classfolder']
+                            .append(os.path.abspath('out/')))])
 
     @property
     def arguments(self):
@@ -81,8 +83,8 @@ class HProf(Tool):
         super(HProf, self).__init__()
         # chooses always the right file because a new directory
         # is generated for each invocation
-        self.posthooks.append(lambda: self.out['hprof']
-                              .append(os.path.abspath('java.hprof.txt')))
+        self.hooks.append(Hook(teardown=lambda: self.out['hprof']
+                                          .append(os.path.abspath('java.hprof.txt'))))
         self.option = option
 
     @property

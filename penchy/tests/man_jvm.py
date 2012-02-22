@@ -1,4 +1,5 @@
 from penchy.compat import unittest
+from penchy.jobs.hooks import Hook
 from penchy.jobs.jvms import JVM
 from penchy.jobs.workloads import ScalaBench
 from penchy.maven import BootstrapPOM, get_classpath
@@ -14,14 +15,12 @@ class JVMTest(unittest.TestCase):
 
         w = ScalaBench('dummy')
         jvm.workload = w
-
-        jvm.prehooks = [lambda: a.__setitem__(0, 1),
-                        lambda: a.__setitem__(1, 2),
-                        lambda: a.__setitem__(2, 3)]
-
-        jvm.posthooks = [lambda: b.__setitem__(0, 1),
-                         lambda: b.__setitem__(1, 2),
-                         lambda: b.__setitem__(2, 3)]
+        jvm.hooks = [Hook(lambda: a.__setitem__(0, 1)),
+                     Hook(lambda: a.__setitem__(1, 2)),
+                     Hook(lambda: a.__setitem__(2, 3)),
+                     Hook(teardown=lambda: b.__setitem__(0, 1)),
+                     Hook(teardown=lambda: b.__setitem__(1, 2)),
+                     Hook(teardown=lambda: b.__setitem__(2, 3))]
 
         self.assertFalse('stdout' in w.out)
         self.assertFalse('stderr' in w.out)

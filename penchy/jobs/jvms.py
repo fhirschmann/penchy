@@ -16,6 +16,7 @@ from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher, nested
 from penchy.jobs.elements import PipelineElement
+from penchy.jobs.hooks import Hook
 from penchy.jobs.typecheck import Types
 
 
@@ -41,10 +42,9 @@ class JVM(object):
     """
     This class represents a JVM.
 
-    :attr:`jvm.prehooks` callables (e.g. functions or methods) that are executed
-                         before execution
-    :attr:`jvm.posthooks` callables (e.g. functions or methods) that are executed
-                         after execution
+    :attr:`hooks` :class:`~penchy.jobs.hooks.BaseHook` instances which ``setup``
+    and ``teardown`` methods will be executed before respectively after the JVM
+    is run.
     """
 
     def __init__(self, path, options="", timeout_factor=1):
@@ -64,8 +64,7 @@ class JVM(object):
         self._options = shlex.split(options)
         self._classpath = _extract_classpath(self._options)
 
-        self.prehooks = []
-        self.posthooks = []
+        self.hooks = []
 
         # for tools and workloads
         self._tool = None
@@ -120,7 +119,7 @@ class JVM(object):
 
         :raises: :exc:`JVMNotConfiguredError` if no workload or classpath is set
         """
-        prehooks, posthooks = self._get_hooks()
+        hooks = self._get_hooks()
 
         if not self._classpath:
             log.error('No classpath configured')
@@ -130,9 +129,9 @@ class JVM(object):
             log.error('No workload configured')
             raise JVMNotConfiguredError('no workload configured')
 
-        log.debug("executing prehooks")
-        for hook in prehooks:
-            hook()
+        log.debug("executing setup hooks")
+        for hook in hooks:
+            hook.setup()
 
         log.debug("executing {0}".format(self.cmdline))
         with nested(NamedTemporaryFile(delete=False, dir='.'),
@@ -152,9 +151,9 @@ class JVM(object):
                 raise JVMExecutionError('non zero exit code: {0}'
                                         .format(self.proc.returncode))
 
-        log.debug("executing posthooks")
-        for hook in posthooks:
-            hook()
+        log.debug("executing teardown hooks")
+        for hook in hooks:
+            hook.teardown()
 
     @property
     def cmdline(self):
@@ -174,30 +173,22 @@ class JVM(object):
 
     def _get_hooks(self):
         """
-        Return hooks of jvm together with possible workload and tool hooks.
+        Return hooks of JVM together with possible workload and tool hooks.
 
-        :returns: hooks of configuration grouped as pre- and posthooks
-        :rtype: tuple of :func:`itertools.chain`
+        :returns: hooks of configuration
+        :rtype: sequence of :class:`~penchy.jobs.hooks.BaseHook`
         """
         if self.workload is None:
-            workload_prehooks = []
-            workload_posthooks = []
+            workload_hooks = []
         else:
-            workload_prehooks = self.workload.prehooks
-            workload_posthooks = self.workload.posthooks
+            workload_hooks = self.workload.hooks
 
         if self.tool is None:
-            tool_prehooks = []
-            tool_posthooks = []
+            tool_hooks = []
         else:
-            tool_prehooks = self.tool.prehooks
-            tool_posthooks = self.tool.posthooks
+            tool_hooks = self.tool.hooks
 
-        prehooks = itertools.chain(self.prehooks, tool_prehooks,
-                                   workload_prehooks)
-        posthooks = itertools.chain(self.posthooks, tool_posthooks,
-                                    workload_posthooks)
-        return prehooks, posthooks
+        return itertools.chain(self.hooks, tool_hooks, workload_hooks)
 
     def __eq__(self, other):
         try:
@@ -323,12 +314,10 @@ class ValgrindJVM(WrappedJVM):
         self.valgrind_options = valgrind_options
         self.log_name = 'penchy-valgrind.log'
 
-        self.posthooks.append(lambda: self.out['valgrind_log']
-                              .append(os.path.abspath(self.log_name)))
-        if hasattr(self, '_before_execution'):
-            self.posthooks.append(self._before_execution)
-        if hasattr(self, '_after_execution'):
-            self.posthooks.append(self._after_execution)
+        self.hooks.append(Hook(teardown=lambda: self.out['valgrind_log']
+                               .append(os.path.abspath(self.log_name))))
+        if hasattr(self, '_hooks'):
+            self.hooks.extend(self._hooks)
 
     @property
     def cmdline(self):
@@ -385,8 +374,10 @@ class CacheGrindJVM(ValgrindJVM):
     arguments = ['--tool=cachegrind',
                  '--cachegrind-out-file={0}'.format(_cachegrind_file)]
 
-    def _after_execution(self):
-        self.out['cachegrind'] = os.path.abspath(CacheGrindJVM._cachegrind_file)
+    def __init__(self, *args, **kwargs):
+        super(CacheGrindJVM, self).__init__(self, *args, **kwargs)
+        self._hooks = [Hook(teardown=lambda: self.out['cachegrind']
+                            .append(os.path.abspath(CacheGrindJVM._cachegrind_file)))]
 
 
 class CallGrindJVM(ValgrindJVM):
@@ -404,8 +395,10 @@ class CallGrindJVM(ValgrindJVM):
     arguments = ['--tool=callgrind',
                  '--callgrind-out-file={0}'.format(_callgrind_file)]
 
-    def _after_execution(self):
-        self.out['callgrind'] = os.path.abspath(CallGrindJVM._callgrind_file)
+    def __init__(self, *args, **kwargs):
+        super(CacheGrindJVM, self).__init__(self, *args, **kwargs)
+        self._hooks = [Hook(teardown=lambda: self.out['callgrind']
+                            .append(os.path.abspath(CacheGrindJVM._callgrind_file)))]
 
 
 class MassifJVM(ValgrindJVM):

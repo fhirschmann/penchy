@@ -3,6 +3,7 @@ import os
 
 from penchy.compat import unittest, update_hasher
 from penchy.jobs.jvms import JVM, JVMNotConfiguredError, _extract_classpath
+from penchy.jobs.hooks import Hook
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
 from penchy.tests.util import MockPipelineElement
@@ -79,27 +80,25 @@ class JVMHooksTest(unittest.TestCase):
 
     def test_get_hooks_empty(self):
         jvm = JVM('foo')
-        self.assertSequenceEqual(map(list, jvm._get_hooks()), [[], []])
+        self.assertSequenceEqual(list(jvm._get_hooks()), [])
 
     def test_get_hooks_tool(self):
         a = [0]
         jvm = JVM('foo')
         w = MockPipelineElement()
-        w.prehooks = [lambda: a.__setitem__(0, 23)]
-        w.posthooks = [lambda: a.__setitem__(0, 42)]
+        w.hooks = [Hook(lambda: a.__setitem__(0, 23),
+                        lambda: a.__setitem__(0, 42))]
         jvm.workload = w
-        self.assertSequenceEqual(map(list, jvm._get_hooks()), [w.prehooks,
-                                                               w.posthooks])
+        self.assertSequenceEqual(list(jvm._get_hooks()), w.hooks)
 
     def test_get_hooks_workload(self):
         a = [0]
         jvm = JVM('foo')
         t = MockPipelineElement()
-        t.prehooks = [lambda: a.__setitem__(0, 23)]
-        t.posthooks = [lambda: a.__setitem__(0, 42)]
+        t.hooks = [Hook(lambda: a.__setitem__(0, 23),
+                        lambda: a.__setitem__(0, 42))]
         jvm.tool = t
-        self.assertSequenceEqual(map(list, jvm._get_hooks()), [t.prehooks,
-                                                               t.posthooks])
+        self.assertSequenceEqual(list(jvm._get_hooks()), t.hooks)
 
 
 class JVMTest(unittest.TestCase):

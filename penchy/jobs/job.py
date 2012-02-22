@@ -21,6 +21,7 @@ from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.jobs.filters import Receive, Send
+from penchy.jobs.hooks import Hook
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, dict2string, default
 
@@ -185,8 +186,9 @@ class SystemComposition(object):
 
         :param fun: timeout function
         """
-        self.jvm.prehooks.append(lambda: fun(self.hash(), self.timeout))
-        self.jvm.posthooks.append(lambda: fun(self.hash(), 0))
+        timeout_hook = Hook(setup=lambda: fun(self.hash(), self.timeout),
+                            teardown=lambda: fun(self.hash(), 0))
+        self.jvm.hooks.append(timeout_hook)
 
     @property
     def flow(self):

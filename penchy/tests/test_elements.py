@@ -1,5 +1,6 @@
 from penchy.compat import unittest
 from penchy.jobs.elements import Workload, Tool
+from penchy.jobs.hooks import Hook
 from penchy.tests.util import MockPipelineElement
 
 
@@ -9,20 +10,20 @@ class PipelineElementHookTest(unittest.TestCase):
         self.list_ = [23, 42, 5]
 
     def test_pre_hooks(self):
-        self.e.prehooks = [
-            lambda: self.list_.__setitem__(0, 1),
-            lambda: self.list_.__setitem__(1, 1),
-            lambda: self.list_.__setitem__(2, 1)]
+        self.e.hooks = [
+            Hook(lambda: self.list_.__setitem__(0, 1)),
+            Hook(lambda: self.list_.__setitem__(1, 1)),
+            Hook(lambda: self.list_.__setitem__(2, 1))]
 
         self.e.run()
 
         self.assertListEqual(self.list_, [1, 1, 1])
 
     def test_post_hooks(self):
-        self.e.posthooks = [
-            lambda: self.list_.__setitem__(0, 1),
-            lambda: self.list_.__setitem__(1, 1),
-            lambda: self.list_.__setitem__(2, 1)]
+        self.e.hooks = [
+            Hook(teardown=lambda: self.list_.__setitem__(0, 1)),
+            Hook(teardown=lambda: self.list_.__setitem__(1, 1)),
+            Hook(teardown=lambda: self.list_.__setitem__(2, 1))]
 
         self.e.run()
 
