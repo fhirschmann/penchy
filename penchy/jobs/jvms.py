@@ -119,7 +119,6 @@ class JVM(object):
 
         :raises: :exc:`JVMNotConfiguredError` if no workload or classpath is set
         """
-        hooks = self._get_hooks()
 
         if not self._classpath:
             log.error('No classpath configured')
@@ -130,6 +129,7 @@ class JVM(object):
             raise JVMNotConfiguredError('no workload configured')
 
         log.debug("executing setup hooks")
+        hooks = self._get_hooks()
         for hook in hooks:
             hook.setup()
 
@@ -176,7 +176,7 @@ class JVM(object):
         Return hooks of JVM together with possible workload and tool hooks.
 
         :returns: hooks of configuration
-        :rtype: sequence of :class:`~penchy.jobs.hooks.BaseHook`
+        :rtype: list of :class:`~penchy.jobs.hooks.BaseHook`
         """
         if self.workload is None:
             workload_hooks = []
@@ -188,7 +188,7 @@ class JVM(object):
         else:
             tool_hooks = self.tool.hooks
 
-        return itertools.chain(self.hooks, tool_hooks, workload_hooks)
+        return list(itertools.chain(self.hooks, tool_hooks, workload_hooks))
 
     def __eq__(self, other):
         try:
