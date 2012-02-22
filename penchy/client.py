@@ -34,7 +34,8 @@ class Client(object):
         configure_logging(loglevel)
 
         self.job = job_module.job
-        self.job_file = job_module.__file__
+        self.job.filename = job_module.__file__
+
         self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
         self._current_composition = None
@@ -70,7 +71,6 @@ class Client(object):
         """
         Runs the client.
         """
-        self.job.filename = self.job_file
         self.job.send = self.proxy.rcv_data
 
         for composition in self.job.compositions_for_node(self.identifier):
