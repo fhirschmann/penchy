@@ -71,7 +71,7 @@ class ExecuteHook(BaseHook):
     """
     def __init__(self, args):
         """
-        :param args: string or sequence of program arguments,
+        :param args: sequence of program arguments,
                      see :class:`subprocess.Popen` for details
         :type args: string or sequence
         """
