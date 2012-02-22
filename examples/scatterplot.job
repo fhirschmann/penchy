@@ -25,8 +25,9 @@ for bench in benchmarks:
     comps.append(comp)
 
 # Server side filters
-condense = filters.CondensingReceive([(com, 'sum', bench) for com, bench in zip(comps, benchmarks)],
-                                     ('sum','bench'))
+condense = filters.CondensingReceive([('sum','bench'),
+                                      (com, 'sum', bench) for com, bench in zip(comps, benchmarks)])
+
 aggregate = filters.AggregatingReceive('total')
 plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='testplot',
                      xlabel='x', ylabel='y')

@@ -20,8 +20,9 @@ f = filters.DacapoHarness()
 unpack = filters.Map(filters.Unpack('result'))
 
 send = filters.Send()
-condense = filters.CondensingReceive([(comp1, 'times','fop'), (comp2, 'times', 'batik')],
-                       ('time','bench'))
+condense = filters.CondensingReceive([('time','bench'),
+                                      (comp1, 'times','fop'),
+                                      (comp2, 'times', 'batik')])
 
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y',
                      zlabels=["Iteration " + str(i) for i in range(1,3)], colors=['blue', 'red'])
