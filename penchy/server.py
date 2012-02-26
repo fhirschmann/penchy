@@ -206,13 +206,15 @@ class Server(object):
         Run the server component.
         """
         self.client_thread.start()
-        while not self.received_all_results:
-            self.server.handle_request()
-
-        for node in self.nodes.values():
-            node.close()
-
-        self.run_pipeline()
+        try:
+            while not self.received_all_results:
+                self.server.handle_request()
+            self.run_pipeline()
+        except KeyboardInterrupt:
+            log.warning("Keyboard Interrupt - Shutting down, please wait")
+        finally:
+            for node in self.nodes.values():
+                node.close()
 
     def run_pipeline(self):
         """
