@@ -66,6 +66,7 @@ class Client(object):
             if self._current_composition.jvm.proc:
                 if self._current_composition.jvm.proc.returncode is None:
                     self._current_composition.jvm.proc.send_signal(signum)
+                    log.error("Current composition timed out and was terminated")
 
     def run(self):
         """
