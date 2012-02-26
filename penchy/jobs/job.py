@@ -101,9 +101,8 @@ class NodeSetting(object):
     def __hash__(self):
         return hash(self.identifier)
 
-    def __str__(self):  # pragma: no cover
-        return "<%s: %s>" % (self.__class__.__name__,
-                dict2string(self.__dict__, ['host', 'ssh_port']))
+    def __str__(self):
+        return self.identifier
 
     def hash(self):
         """

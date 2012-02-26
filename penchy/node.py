@@ -57,9 +57,6 @@ class Node(object):  # pragma: no cover
         self.was_closed = False
         self.sftp = None
 
-    def __str__(self):
-        return "<Node %s>" % self.setting.host
-
     def __eq__(self, other):
         return isinstance(other, Node) and \
                 self.setting.identifier == other.setting.identifier
