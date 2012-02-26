@@ -3,18 +3,14 @@
 from penchy.jobs import *
 import config
 
-timeout = 2
-node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin',
-                    timeout_factor=10) # Effective timeout: 20
-node2 = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
 
 jvm = jvms.JVM('java')
 comp1 = SystemComposition(jvm, node1)
-comp2 = SystemComposition(jvm, node2)
 
 receiver = filters.Receive()
 
-w = workloads.ScalaBench('fop')
+w = workloads.ScalaBench('fop', iterations=10, timeout=5)
 jvm.workload = w
 
 f1 = filters.DacapoHarness()
@@ -22,9 +18,8 @@ f2 = filters.Send()
 
 flow = [w >> ['stderr', 'exit_code'] >> f1 >> ('times', 'payload') >> f2]
 comp1.flow = flow
-comp2.flow = flow
 
-job = Job(compositions=[comp1, comp2],
+job = Job(compositions=comp1,
           server_flow=[
               receiver >> ('results', 'times') >> filters.Print()
           ],
