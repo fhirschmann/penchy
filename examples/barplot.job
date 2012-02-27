@@ -1,6 +1,7 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
+from penchy.util import Value
 import config
 
 # Only the i386 node
@@ -20,12 +21,12 @@ f = filters.DacapoHarness()
 unpack = filters.Map(filters.Unpack('result'))
 
 send = filters.Send()
-condense = filters.CondensingReceive([('time','bench'),
-                                      (comp1, 'times','fop'),
-                                      (comp2, 'times', 'batik')])
+condense = filters.CondensingReceive(('time','bench'),
+                                    [(comp1, 'times', Value('fop')),
+                                    (comp2, 'times', Value('batik'))])
 
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y',
-                     zlabels=["Iteration " + str(i) for i in range(1,3)], colors=['blue', 'red'])
+                     zlabels=["Invocation " + str(i) for i in range(1,3)], colors=['blue', 'red'])
 
 flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
 flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
