@@ -30,8 +30,8 @@ condense = filters.CondensingReceive(('sum', 'total', 'bench'),
                                      [(com, 'sum', 'total', Value(bench)) for com, bench in zip(comps, benchmarks)])
 
 aggregate = filters.AggregatingReceive('total')
-plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='testplot',
-                     xlabel='x', ylabel='y')
+plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='Scatterplot',
+                     xlabel='Sum of method calls', ylabel='Total execution time')
 
 job = Job(compositions=comps,
           server_flow=[
