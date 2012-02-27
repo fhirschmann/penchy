@@ -271,3 +271,17 @@ def average(xs):
     :rtype: float
     """
     return float(sum(xs)) / len(xs)
+
+
+class Value(object):
+    """
+    Represents a value in the context of the Condense filter.
+    It is used to distinguish direct values from filter inputs.
+
+    TODO: refere to the not yet existing Condense filter documentation.
+    """
+    def __init__(self, value):
+        self.value = value
+
+    def value(self):
+        return self.value
