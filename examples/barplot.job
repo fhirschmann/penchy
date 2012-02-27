@@ -25,7 +25,7 @@ condense = filters.CondensingReceive(('time','bench'),
                                     [(comp1, 'times', Value('fop')),
                                     (comp2, 'times', Value('batik'))])
 
-plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y',
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
                      zlabels=["Invocation " + str(i) for i in range(1,3)], colors=['blue', 'red'])
 
 flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
