@@ -10,7 +10,7 @@ from penchy.compat import unittest, write
 from penchy.jobs.job import Job
 from penchy.jobs.filters import *
 from penchy.jobs.typecheck import Types
-from penchy.util import tempdir
+from penchy.util import tempdir, Value
 from penchy.tests.util import get_json_data, make_system_composition, MockPipelineElement
 
 
@@ -163,27 +163,27 @@ class CondenseTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = Condense(('col1', 'col2'), [('a', 'id1'), ('b', 'id2')])
+        f = Condense(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
         f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', 'id1'), (2, 'b', 'id2')])
+        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
         f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
-        f = Condense(('col1', 'col2'), [('a', 'id1'), ('d', 'id2')])
+        f = Condense(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_column(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', 'id1'), (2, 'd', 'id2')])
+        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_composition(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', 'id1'), (3, 'c', 'id2')])
+        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
@@ -198,27 +198,27 @@ class CondensingReceiveTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = CondensingReceive(('col1', 'col2'), [('a', 'id1'), ('b', 'id2')])
+        f = CondensingReceive(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', 'id1'), (2, 'b', 'id2')])
+        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
-        f = CondensingReceive(('col1', 'col2'), [('a', 'id1'), ('d', 'id2')])
+        f = CondensingReceive(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_column(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', 'id1'), (2, 'd', 'id2')])
+        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_composition(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', 'id1'), (3, 'c', 'id2')])
+        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 

@@ -21,7 +21,7 @@ from pprint import pprint
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.util import default, average
+from penchy.util import default, average, Value
 
 
 log = logging.getLogger(__name__)
@@ -408,34 +408,31 @@ class Condense(Filter):
 
     def _run(self, **kwargs):
         results = kwargs['results']
-        for cols in self.data:
-            col = ""
-            ids = []
-            if isinstance(cols[0], str):
-                found = False
-                for res in results:
-                    if cols[0] in results[res]:
-                        if found:
-                            log.warn("Column '{0}' is contained in more "
-                                     "than one system composition".format(cols[0]))
-                        else:
-                            col = cols[0]
-                            ids = cols[1:]
-                            comp = res
-                            found = True
-                if not found:
-                    raise WrongInputError('Column is not contained in the resultset')
+        for row in self.data:
+            #FIXME: Check for isinstance(first, SystemComposition)
+            if not isinstance(row[0], str):
+                comp = row[0]
+                row = row[1:]
             else:
-                comp = cols[0]
-                col = cols[1]
-                ids = cols[2:]
-            name = self.names[0]
-            try:
-                self.out[name].append(results[comp][col])
-            except KeyError:
-                raise WrongInputError('Column is not contained in the resultset')
-            for name, col in zip(self.names[1:], ids):
-                self.out[name].append(col)
+                comp = None
+
+            # Everything is taken from the same system composition
+            for name, field in zip(self.names, row):
+                if isinstance(field, str):
+                    if comp is None:
+                        for c in results:
+                            if field in results[c]:
+                                comp = c
+                                break
+                    try:
+                        self.out[name].append(results[comp][field])
+                    except KeyError:
+                        raise WrongInputError('Column is not contained in the resultset')
+                elif isinstance(field, Value):
+                    self.out[name].append(field.value)
+                else:
+                    #FIXME: Catch this error before running the job
+                    raise TypeCheckError("Condense filter is maleformed.")
 
 
 class AggregatingReceive(Receive, Aggregate):
