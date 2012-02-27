@@ -427,12 +427,12 @@ class Condense(Filter):
                     try:
                         self.out[name].append(results[comp][field])
                     except KeyError:
-                        raise WrongInputError('Column is not contained in the resultset')
+                        raise WrongInputError('Column "{0}" is not contained in the resultset'.format(field))
                 elif isinstance(field, Value):
                     self.out[name].append(field.value)
                 else:
                     #FIXME: Catch this error before running the job
-                    raise TypeCheckError("Condense filter is maleformed.")
+                    raise TypeCheckError("Condense filter is malformed.")
 
 
 class AggregatingReceive(Receive, Aggregate):
