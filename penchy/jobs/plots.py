@@ -45,7 +45,7 @@ class BarPlot(Plot):
         import matplotlib.pyplot as plt
         xs = kwargs['x']
         yss = kwargs['y']
-        if self.erro_bars:
+        if self.error_bars:
             err = kwargs['err']
         ind = np.arange(len(xs))
         fig = plt.figure()
@@ -60,10 +60,10 @@ class BarPlot(Plot):
                     rects.append(plot.barh(ind + self.width * i, ys, self.width, color=c))
             else:
                 if self.error_bars:
-                    rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
-                else:
                     rects.append(plot.bar(ind + self.width * i, ys, self.width,
                                           xerr=err, ecolor=self.ecolor, color=c))
+                else:
+                    rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
             bars.append(rects[i][0])
             names.append(zlabel)
         plot.set_xlabel(self.xlabel)
