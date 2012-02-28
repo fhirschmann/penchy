@@ -34,6 +34,7 @@ full-coverage: .coverage
 	coverage run --append bin/penchy -c penchyrc.example --run-locally examples/valgrind_jvm.job
 
 coverage-upload: coverage
+	chmod -R 755 htmlcov
 	rsync -avz htmlcov bp@0x0b.de:~/docs/
 
 dev:
