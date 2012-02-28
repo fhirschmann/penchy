@@ -734,3 +734,31 @@ class Sum(Filter):
 
     def _run(self, **kwargs):
         self.out['sum'] = sum(kwargs['values'])
+
+
+class Enumerate(Filter):
+    """
+    Enumerates the given values.
+
+    Inputs:
+    - ``values``
+
+    Outputs:
+    - ``values``
+    - ``numbers``
+    """
+
+    inputs = Types(('values', list))
+    outputs = Types(('values', list),
+                    ('numbers', list, int))
+
+    def __init__(self, start=0, step=1):
+        super(Enumerate, self).__init__()
+        self.start = start
+        self.step = step
+
+    def _run(self, **kwargs):
+        self.out['values'] = kwargs['values']
+        self.out['numbers'] = range(self.start,
+                                    self.start + len(kwargs['values']),
+                                    self.step)
