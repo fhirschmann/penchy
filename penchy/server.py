@@ -13,8 +13,8 @@ import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 
 from penchy.maven import make_bootstrap_pom
+from penchy.util import make_bootstrap_client
 from penchy.node import Node
-from penchy.util import find_bootstrap_client
 
 
 log = logging.getLogger(__name__)
@@ -53,7 +53,6 @@ class Server(object):
         # Files to upload
         self.uploads = (
                 (job.__file__,),
-                (find_bootstrap_client(),),
                 (self.config.__file__, 'config.py'))
 
         # Set up the listener
@@ -191,15 +190,18 @@ class Server(object):
         Run the client on all nodes.
         """
         with make_bootstrap_pom() as pom:
-            for node in self.nodes.values():
-                with node.connection_required():
-                    for upload in self.uploads:
-                        node.put(*upload)
-                    node.put(pom.name, 'bootstrap.pom')
+            with make_bootstrap_client() as bclient:
+                for node in self.nodes.values():
+                    with node.connection_required():
+                        for upload in self.uploads:
+                            node.put(*upload)
+                        node.put(pom.name, 'bootstrap.pom')
+                        print bclient.name
+                        node.put(bclient.name, 'penchy_bootstrap')
 
-                    node.execute_penchy(" ".join(
-                        self.bootstrap_args + [os.path.basename(self.job_file),
-                            'config.py', node.setting.identifier]))
+                        node.execute_penchy(" ".join(
+                            self.bootstrap_args + [os.path.basename(self.job_file),
+                                'config.py', node.setting.identifier]))
 
     def run(self):
         """

@@ -17,12 +17,13 @@ import os
 import shutil
 import sys
 import tempfile
+import inspect
 from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
-
-import pkg_resources
+from tempfile import NamedTemporaryFile
 
 from penchy.compat import update_hasher
+from penchy import bootstrap
 
 
 log = logging.getLogger(__name__)
@@ -169,16 +170,16 @@ def tempdir(prefix='penchy-invocation', delete=False):
         shutil.rmtree(cwd)
 
 
-def find_bootstrap_client():
+def make_bootstrap_client():
     """
-    Returns the path of the penchy bootstrap client.
-
-    :returns: path of bootstrap client
-    :rtype: str
+    Returns the temporary filename of a file containing
+    the bootstrap client.
     """
-    import penchy               # import for side effects
-    return pkg_resources.resource_filename('penchy',
-            os.path.join('../', 'bin', 'penchy_bootstrap'))
+    tf = NamedTemporaryFile()
+    source = inspect.getsource(bootstrap)
+    tf.write(source)
+    tf.flush()
+    return tf
 
 
 def load_job(filename):
