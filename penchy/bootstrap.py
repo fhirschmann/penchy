@@ -18,11 +18,6 @@ from subprocess import Popen, PIPE
 
 
 log = logging.getLogger('penchy.bootstrap')
-formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
-ch = RotatingFileHandler('penchy_bootstrap.log', backupCount=10)
-ch.doRollover()
-ch.setFormatter(formatter)
-log.addHandler(ch)
 
 
 def load_penchy(path):
@@ -123,6 +118,12 @@ def main(job, config, identifier, loglevel=logging.INFO, load_from=None):
 
 
 if __name__ == "__main__":
+    formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
+    ch = RotatingFileHandler('penchy_bootstrap.log', backupCount=10)
+    ch.doRollover()
+    ch.setFormatter(formatter)
+    log.addHandler(ch)
+
     try:
         with open('penchy.pid', 'w') as pidfile:
             pidfile.write(str(os.getpid()))
