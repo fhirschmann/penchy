@@ -50,7 +50,7 @@ class BarPlot(Plot):
         # Use gray shades if no colors are given
         if self.colors is None:
             step = float(1) / len(self.zlabels)
-            self.colors = map(str, np.arange(0, 1, step).tolist())
+            self.colors = [str(n) for n in np.arange(0, 1, step).tolist()]
 
         xs = kwargs['x']
         yss = kwargs['y']
