@@ -118,3 +118,37 @@ class ScatterPlot(Plot):
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
         plt.savefig(self.filename)
+
+
+class LinePlot(Plot):
+    """
+    Lineplot
+    """
+    inputs = Types(('x', list, list, (int, float)),
+                   ('y', list, list, (int, float)),
+                   ('z', list, str))
+
+    #FIXME: Better solution to handle args without repeating
+    def __init__(self, colors, **kwarg):
+        super(LinePlot, self).__init__(**kwarg)
+        self.colors = colors
+
+    def _run(self, **kwargs):
+        import numpy as np
+        import matplotlib.pyplot as plt
+        xs = kwargs['x']
+        ys = kwargs['y']
+        zs = kwargs['z']
+        fig = plt.figure()
+        plot = fig.add_subplot(1, 1, 1)
+
+        lines = []
+        for x, y, c in zip(xs, ys, self.colors):
+            lines.append(plot.plot(x, y, c)[0])
+
+        plot.legend(lines, zs)
+
+        plot.set_xlabel(self.xlabel)
+        plot.set_ylabel(self.ylabel)
+        plot.set_title(self.title)
+        plt.savefig(self.filename)
