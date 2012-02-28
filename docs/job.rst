@@ -292,6 +292,43 @@ given a :file:`penchyrc` that looks like this::
   
   LOCALNODE = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
+Defining Timeouts
+=================
+
+PenchY allows the definition of timeouts in order to automatically
+terminate JVMs. These timeouts can be defined in your job like so::
+
+    node = NodeSetting(..., timeout_factor=2)
+    jvm = jvms.JVM=(..., timeout_factor=3)
+    jvm.workload = workloads.ScalaBench(..., timeout=5)
+
+where the workload defines an absolute timeout value and the other
+two add the possibility to add a factor which will get multiplied
+with the workoad timeout.
+
+.. warning::
+
+    It is very important to understand that these timeouts are defined
+    per execution of the JVM.
+
+    Let's say your timeout is 10 seconds, than a Scalabench run with
+    4 iterations may not exeed 10 seconds in total.
+
+    However, when Scalabench is asked to run 10 invocations, these
+    invocations should **each** not take longer than 10 seconds.
+
+Before the exeuction of the JVM, the PenchY client will ask the server
+to start a timeout, after which it should step in and remotely terminate
+the JVM. Once the JVM has finished what it was asked to to, the client
+will ask the server to stop the timeout again. This process is repeated
+for every run of the JVM.
+
+.. note::
+
+    Timeouts do not affect any filters you might want to use. When
+    your filters don't terminate, the timeout won't terminate them
+    either.
+
 Testing Jobs
 ============
 
