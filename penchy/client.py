@@ -31,7 +31,7 @@ class Client(object):
         self.config = load_config(config)
         job_module = load_job(job)
         self.identifier = identifier
-        configure_logging(loglevel)
+        configure_logging(loglevel, logfile='penchy.log')
 
         self.job = job_module.job
         self.job.filename = job_module.__file__
