@@ -38,7 +38,7 @@ class BarPlot(Plot):
             self.ecolor = ecolor
             self.inputs = Types(('x', list, str),
                                 ('y', list, list, (int, float)),
-                                ('err', list, (int, float)))
+                                ('err', list, list, (int, float)))
 
     def _run(self, **kwargs):
         import numpy as np
@@ -46,7 +46,7 @@ class BarPlot(Plot):
         xs = kwargs['x']
         yss = kwargs['y']
         if self.error_bars:
-            err = kwargs['err']
+            errs = zip(*kwargs['err'])
         ind = np.arange(len(xs))
         fig = plt.figure()
         plot = fig.add_subplot(1, 1, 1)
@@ -55,13 +55,13 @@ class BarPlot(Plot):
             if self.horizontal:
                 if self.error_bars:
                     rects.append(plot.barh(ind + self.width * i, ys, self.width,
-                                           xerr=err, ecolor=self.ecolor, color=c))
+                                           xerr=errs.pop(), ecolor=self.ecolor, color=c))
                 else:
                     rects.append(plot.barh(ind + self.width * i, ys, self.width, color=c))
             else:
                 if self.error_bars:
                     rects.append(plot.bar(ind + self.width * i, ys, self.width,
-                                          xerr=err, ecolor=self.ecolor, color=c))
+                                          yerr=errs.pop(), ecolor=self.ecolor, color=c))
                 else:
                     rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
             bars.append(rects[i][0])
