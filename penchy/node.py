@@ -64,6 +64,9 @@ class Node(object):  # pragma: no cover
     def __hash__(self):
         return hash(self.setting.identifier)
 
+    def __str__(self):
+        return self.setting.identifier
+
     def _setup_ssh(self):
         """
         Initializes the SSH Connection.
