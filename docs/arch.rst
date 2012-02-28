@@ -39,7 +39,7 @@ Execution and Communication Process
 ===================================
 
 PenchY uses XML-RPC in order to communicate between clients, hereafter
-called nodes to distinguish between physical machines and the PenchY client.
+called nodes to distinguish physical machines from the PenchY client.
 
 Upon executing a job, PenchY will follow a procedure to distribute your wishes
 as defined in your job. This procedure will now be explained in detail.
