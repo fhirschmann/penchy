@@ -142,6 +142,8 @@ class Server(object):
             node = self.node_for(composition.node_setting)
             node.received(composition)
             self.results[composition] = result
+            log.info("Received result. Waiting for %s more." %
+                    self.remaining_compositions)
 
     # FIXME: reason is not used
     def exp_report_error(self, hashcode, reason=None):
@@ -184,6 +186,13 @@ class Server(object):
         :class:`~penchy.jobs.job.SystemComposition`.
         """
         return all([n.received_all_results for n in self.nodes.values()])
+
+    @property
+    def remaining_compositions(self):
+        """
+        Number of composition we are still waiting for.
+        """
+        return sum([len(n.expected) for n in self.nodes.values()])
 
     def run_clients(self):
         """
