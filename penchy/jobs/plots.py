@@ -34,6 +34,9 @@ class BarPlot(Plot):
         self.horizontal = horizontal
         self.error_bars = error_bars
 
+        if self.colors is not None and len(colors) != len(zlabels):
+            raise ValueError("The number of zlables and colors have to be equal.")
+
         if self.error_bars:
             self.ecolor = ecolor
             self.inputs = Types(('x', list, str),
