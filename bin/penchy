@@ -56,7 +56,7 @@ if __name__ == "__main__":
 
     parser.add_argument("--logfile",
             action="store", dest="logfile", help="log file to log to",
-            default=ca('LOGFILE', 'penchy.log'))
+            default=ca('LOGFILE', None))
 
     parser.add_argument("-f", "--load-from",
             action="store", dest="load_from",

@@ -11,7 +11,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def configure_logging(level=logging.INFO, logfile='penchy.log'):
+def configure_logging(level=logging.INFO, logfile=None):
     """
     Configure the root logger for our purposes.
     """
@@ -19,12 +19,13 @@ def configure_logging(level=logging.INFO, logfile='penchy.log'):
     formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
     ch = logging.StreamHandler()
     ch.setFormatter(formatter)
-    ch2 = RotatingFileHandler(logfile, backupCount=10)
-    ch2.doRollover()
-    ch2.setFormatter(formatter)
-
     logging.root.addHandler(ch)
-    logging.root.addHandler(ch2)
+
+    if logfile:
+        ch2 = RotatingFileHandler(logfile, backupCount=10)
+        ch2.doRollover()
+        ch2.setFormatter(formatter)
+        logging.root.addHandler(ch2)
 
     logging.getLogger('paramiko.transport').setLevel(logging.ERROR)
 
