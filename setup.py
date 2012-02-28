@@ -11,7 +11,7 @@ setup(name='penchy',
             'bin/penchy_test_job',
             'bin/penchy_bootstrap'],
         install_requires=[
-            'numpy'
+            'numpy',
             'argparse',
             'paramiko',
             'pycrypto',
