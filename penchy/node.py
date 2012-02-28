@@ -218,7 +218,7 @@ class Node(object):  # pragma: no cover
         :param cmd: command to execute
         :type cmd: string
         """
-        self.log.info("Executing `%s`" % cmd)
+        self.log.debug("Executing `%s`" % cmd)
         return self.ssh.exec_command(cmd)
 
     def execute_penchy(self, args):
@@ -230,6 +230,8 @@ class Node(object):  # pragma: no cover
         """
         if self.client_is_running:
             raise NodeError("You may not start penchy twice!")
+
+        self.log.info('Staring PenchY client')
 
         self.execute('cd %s && python penchy_bootstrap %s' % (
             self.setting.path, args))
