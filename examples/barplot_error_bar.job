@@ -1,0 +1,37 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+from penchy.util import Value
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = ['fop', 'batik']
+
+# Client side filters
+f = filters.DacapoHarness()
+mean = filters.Map(filters.Mean())
+std = filters.Map(filters.StandardDeviation())
+send = filters.Send()
+
+comps = []
+for bench in benchmarks:
+    jvm = jvms.JVM('java')
+    jvm.workload = workloads.ScalaBench(bench, iterations=2)
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> mean >> ('result', 'means') >> send,
+                 f >> ('times', 'values') >> std >> ('result', 'std') >> send]
+    comps.append(comp)
+
+# Server side filters
+condense = filters.CondensingReceive(('avg', 'std' ,'bench'),
+                                     [(com, 'means', 'std', Value(bench)) for com, bench in zip(comps, benchmarks)])
+
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='Benchmarks', ylabel='Wallclocktime',
+                     zlabels=["Invocation " + str(i) for i in range(1,3)], colors=['blue', 'yellow'], error_bars=True)
+
+job = Job(compositions=comps,
+          server_flow=[condense >> [('bench', 'x'), ('avg', 'y'), ('std', 'err')] >> plot],
+          invocations = 2
+          )
