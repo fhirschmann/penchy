@@ -375,7 +375,7 @@ class CacheGrindJVM(ValgrindJVM):
                  '--cachegrind-out-file={0}'.format(_cachegrind_file)]
 
     def __init__(self, *args, **kwargs):
-        super(CacheGrindJVM, self).__init__(self, *args, **kwargs)
+        super(CacheGrindJVM, self).__init__(*args, **kwargs)
         self._hooks = [Hook(teardown=lambda: self.out['cachegrind']
                             .append(os.path.abspath(CacheGrindJVM._cachegrind_file)))]
 
@@ -396,7 +396,7 @@ class CallGrindJVM(ValgrindJVM):
                  '--callgrind-out-file={0}'.format(_callgrind_file)]
 
     def __init__(self, *args, **kwargs):
-        super(CacheGrindJVM, self).__init__(self, *args, **kwargs)
+        super(CacheGrindJVM, self).__init__(*args, **kwargs)
         self._hooks = [Hook(teardown=lambda: self.out['callgrind']
                             .append(os.path.abspath(CacheGrindJVM._callgrind_file)))]
 
