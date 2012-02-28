@@ -1,0 +1,42 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+from penchy.util import Value
+import os
+import config
+
+# Only the i386 node
+node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+jvm1 = jvms.JVM('java')
+jvm2 = jvms.JVM('java')
+comp1 = SystemComposition(jvm1, node)
+comp2 = SystemComposition(jvm2, node)
+
+fop = workloads.ScalaBench('fop')
+batik = workloads.ScalaBench('batik')
+jvm1.workload = fop
+jvm2.workload = batik
+
+f = filters.DacapoHarness()
+unpack = filters.Map(filters.Unpack('result'))
+
+send = filters.Send()
+condense = filters.CondensingReceive(('time', 'bench'),
+                                    [(comp1, 'times', Value('fop')),
+                                    (comp2, 'times', Value('batik'))])
+
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
+                     zlabels=["Invocation " + str(i) for i in range(1, 3)], colors=['blue', 'red'])
+
+flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+comp1.flow = flow1
+comp2.flow = flow2
+
+job = Job(compositions=[comp1, comp2],
+          server_flow=[
+              condense >> [('bench', 'x'), ('time', 'y')] >> plot
+          ],
+          invocations=2
+          )
