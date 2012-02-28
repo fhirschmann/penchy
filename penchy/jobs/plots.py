@@ -26,7 +26,7 @@ class BarPlot(Plot):
                    ('y', list, list, (int, float)))
 
     #FIXME: Better solution to handle args without repeating
-    def __init__(self, colors, zlabels, error_bars=False, ecolor="red", horizontal=False, width=0.2, **kwarg):
+    def __init__(self, zlabels, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, **kwarg):
         super(BarPlot, self).__init__(**kwarg)
         self.width = width
         self.colors = colors
@@ -43,6 +43,12 @@ class BarPlot(Plot):
     def _run(self, **kwargs):
         import numpy as np
         import matplotlib.pyplot as plt
+
+        # Use gray shades if no colors are given
+        if self.colors is None:
+            step = float(1) / len(self.zlabels)
+            self.colors = map(str, np.arange(0, 1, step).tolist())
+
         xs = kwargs['x']
         yss = kwargs['y']
         if self.error_bars:
