@@ -185,6 +185,9 @@ class SystemComposition(object):
 
         :param fun: timeout function
         """
+        if not self.timeout:
+            return
+
         timeout_hook = Hook(setup=lambda: fun(self.hash(), self.timeout),
                             teardown=lambda: fun(self.hash(), 0))
         self.jvm.hooks.append(timeout_hook)
