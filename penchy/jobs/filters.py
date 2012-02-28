@@ -358,11 +358,19 @@ class Aggregate(Filter):
         :type evaluator: list str or list (:class:`~penchy.jobs.job.SystemComposition`, str)
         """
         super(Aggregate, self).__init__()
+
+        if not args:
+            raise ValueError("Aggregate Filter needs at least one argument")
+
+        if isinstance(args[0], str):
+            self.outputs = Types(*[(n, object) for n in args])
+        else:
+            self.outputs = Types(*[(n, object) for _, n in args])
+
         self.columns = args
 
     def _run(self, **kwargs):
         results = kwargs['results']
-        names = []
         for col in self.columns:
             if isinstance(col, str):
                 found = False
@@ -373,7 +381,6 @@ class Aggregate(Filter):
                                      "than one system composition".format(col))
                         else:
                             self.out[col] = results[res][col]
-                            names.append((col, object))
                             found = True
                 if not found:
                     raise WrongInputError('Column is not contained in the resultset')
@@ -383,8 +390,6 @@ class Aggregate(Filter):
                     self.out[column] = results[comp][column]
                 except:
                     raise WrongInputError('Column is not contained in the resultset')
-                names.append((column, object))
-        self.outputs = Types(*names)
 
 
 class Condense(Filter):
