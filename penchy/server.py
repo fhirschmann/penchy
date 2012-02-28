@@ -205,7 +205,6 @@ class Server(object):
                         for upload in self.uploads:
                             node.put(*upload)
                         node.put(pom.name, 'bootstrap.pom')
-                        print bclient.name
                         node.put(bclient.name, 'penchy_bootstrap')
 
                         node.execute_penchy(" ".join(
