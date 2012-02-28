@@ -62,9 +62,12 @@ class Server(object):
         self.server.register_function(self.exp_rcv_data, "rcv_data")
         self.server.register_function(self.exp_report_error, "report_error")
         self.server.register_function(self.exp_set_timeout, "set_timeout")
-        # XXX: I don't yet know if this will work. With no timeout set,
-        # handle_request will wait forever and timeouts caused by Timer()
-        # will not cause the server to stop waiting. I think this should work!
+
+        # This sets the timeout after which self.server.handle_request() should
+        # return. This should be a nonzero value, because we are running it
+        # in a loop until we have received all results. However, timeouts
+        # can occur while running handle_request() in which case handle_request()
+        # would run forever without actually expecting anymore results.
         self.server.timeout = 2
 
         # Set up the thread which is deploying the job
