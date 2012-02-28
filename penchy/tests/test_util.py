@@ -64,9 +64,6 @@ class MiscTest(unittest.TestCase):
     def test_dict2string(self):
         self.assertEqual(util.dict2string({'foo': 'bar'}), "foo=bar")
 
-    def test_find_bootstrap_client(self):
-        self.assertTrue(util.find_bootstrap_client().endswith('penchy_bootstrap'))
-
 
 class ImportTest(unittest.TestCase):
     def test_load_config(self):
