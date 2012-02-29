@@ -21,7 +21,7 @@ import argparse
 from penchy.server import Server
 from penchy.util import load_job, load_config, get_config_attribute, die
 from penchy.log import configure_logging
-from penchy.apicheck import check_paramiko
+from penchy.apicheck import check_all
 
 
 if __name__ == "__main__":
@@ -84,7 +84,7 @@ if __name__ == "__main__":
     job = job_module.job
 
     configure_logging(args.loglevel, args.logfile)
-    check_paramiko()
+    check_all()
 
     if args.check:
         if job.check():

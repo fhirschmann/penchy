@@ -8,6 +8,10 @@ import logging
 import inspect
 from inspect import ArgSpec
 
+import matplotlib
+import matplotlib.figure
+import matplotlib.pyplot
+
 log = logging.getLogger(__name__)
 
 
@@ -97,3 +101,21 @@ def check_paramiko():
     expected = ArgSpec(args=['self', 'path', 'mode'], varargs=None,
             keywords=None, defaults=(511,))
     compare_argspec(paramiko.SFTPClient.mkdir, expected)
+
+
+def check_matplotlib():
+    expected = ArgSpec(args=['num', 'figsize', 'dpi', 'facecolor',
+        'edgecolor', 'frameon', 'FigureClass'], varargs=None,
+        keywords='kwargs', defaults=(None, None, None, None,
+            None, True, matplotlib.figure.Figure))
+    compare_argspec(matplotlib.pyplot.figure, expected)
+
+
+def check_all():
+    check_paramiko()
+    check_matplotlib()
+
+
+if __name__ == "__main__":
+    logging.basicConfig()
+    check_all()
