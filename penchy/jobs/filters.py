@@ -367,7 +367,11 @@ class Aggregate(Filter):
             if isinstance(col, str):
                 names.append((col, object))
             else:
-                _, name = col
+                try:
+                    _, name = col
+                except ValueError:
+                    raise ValueError("Aggregate Filter takes only input names and pairs of system"
+                                     "compositions and input names.")
                 names.append((name, object))
 
         self.outputs = Types(*names)
