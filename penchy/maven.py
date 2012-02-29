@@ -13,7 +13,7 @@ from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import Element, SubElement, ElementTree
 
 from penchy import __version__ as penchy_version
-from penchy.util import memoized, tree_pp, dict2tree, dict2string, sha1sum
+from penchy.util import memoized, tree_pp, dict2tree, sha1sum
 
 
 log = logging.getLogger(__name__)
@@ -195,8 +195,7 @@ class MavenDependency(object):
         return hash(self.__key())
 
     def __str__(self):  # pragma: no cover
-        return "<%s: %s>" % (self.__class__.__name__,
-                dict2string(self.__dict__, MavenDependency.POM_ATTRIBS))
+        return self.artifactId
 
     @property
     def filename(self):

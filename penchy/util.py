@@ -123,19 +123,6 @@ def dict2tree(elem, dict_):
             e.text = dict_[key]
 
 
-def dict2string(dict_, attribs=None):
-    """
-    PrettyPrints a dictionary as string.
-
-    :param dict_: dict to print
-    :type dict_: dict
-    :returns: dict_ as string
-    :rtype: str
-    """
-    return ", ".join("{0}={1}".format(key, dict_[key]) for key in dict_
-                     if attribs is None or key in attribs)
-
-
 def sha1sum(filename, blocksize=65536):
     """
     Returns the sha1 hexdigest of a file.

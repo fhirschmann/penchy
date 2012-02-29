@@ -23,7 +23,7 @@ from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.jobs.filters import Receive, Send
 from penchy.jobs.hooks import Hook
 from penchy.maven import get_classpath, setup_dependencies
-from penchy.util import tempdir, dict2string, default
+from penchy.util import tempdir, default
 
 
 log = logging.getLogger(__name__)
