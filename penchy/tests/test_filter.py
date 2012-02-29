@@ -500,3 +500,20 @@ class EnumerateTest(unittest.TestCase):
         f = Enumerate(start=3, step=2)
         f._run(values=['a', 'b', 'c'])
         self.assertEqual(f.out['numbers'], [3, 5, 7])
+
+
+class UnpackTest(unittest.TestCase):
+    def test_valid(self):
+        f = Unpack()
+        f._run(singleton=[1])
+        self.assertEqual(f.out['result'], 1)
+
+    def test_list_too_long(self):
+        f = Unpack()
+        with self.assertRaises(WrongInputError):
+            f._run(singleton=[1, 2, 3])
+
+    def test_list_too_short(self):
+        f = Unpack()
+        with self.assertRaises(WrongInputError):
+            f._run(singleton=[])
