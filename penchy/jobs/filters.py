@@ -497,7 +497,7 @@ class Map(Filter):
 
         if finput is None and (input_desc is None or len(input_desc) != 1):
             raise TypeCheckError("Map takes only filters with exactly one input")
-        if foutput is None and (output_desc is None and len(output_desc) != 1):
+        if foutput is None and (output_desc is None or len(output_desc) != 1):
             raise TypeCheckError("Map takes only filters with exactly one output")
 
         self.finput = filter_.inputs.names.pop() if finput is None else finput
