@@ -521,3 +521,33 @@ class UnpackTest(unittest.TestCase):
         f = Unpack()
         with self.assertRaises(WrongInputError):
             f._run(singleton=[])
+
+
+class MapTest(unittest.TestCase):
+    def test_idenity(self):
+        identity = Evaluation(lambda x: {'x': x}, Types(('x', object)), Types(('x', object)))
+        f = Map(identity)
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['result'], [1, 2, 3])
+
+    def test_multidimensional(self):
+        multi = Evaluation(lambda x: {'x': [x]}, Types(('x', object)), Types(('x', object)))
+        f = Map(multi)
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['result'], [[1], [2], [3]])
+
+    def test_wrong_inputs(self):
+        wrong = Evaluation(lambda x, y: {'x': x}, Types(('x', object), ('y', object)), Types(('x', object)))
+        with self.assertRaises(TypeCheckError):
+            f = Map(wrong)
+
+    def test_wrong_outputs(self):
+        wrong = Evaluation(lambda x: {'x': x, 'y': x}, Types(('x', object)), Types(('x', object), ('y', object)))
+        with self.assertRaises(TypeCheckError):
+            f = Map(wrong)
+
+    def test_with_all_arguments(self):
+        identity = Evaluation(lambda c: {'d': c}, Types(('c', object)), Types(('d', object)))
+        f = Map(identity, 'a', 'b', 'c', 'd')
+        f._run(a=[1, 2, 3])
+        self.assertEqual(f.out['b'], [1, 2, 3])
