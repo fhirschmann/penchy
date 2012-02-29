@@ -14,7 +14,7 @@ from subprocess import Popen
 from penchy.util import default
 
 
-class BaseHook(object):
+class BaseHook(object):  # pragma: no cover
     """
     This is the interface that pipeline hooks have to provide.
     """
@@ -85,3 +85,4 @@ class ExecuteHook(BaseHook):
         self.proc.poll()
         if self.proc.returncode is None:
             self.proc.terminate()
+            self.proc.wait()
