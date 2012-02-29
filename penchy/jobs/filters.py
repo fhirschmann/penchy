@@ -661,20 +661,20 @@ class Unpack(Filter):
     """
     Reduces a singleton list to its only element.
     """
-    inputs = Types(('singleton', list))
-    outputs = Types()
 
-    def __init__(self, name):
+    def __init__(self, input='singleton', output='result'):
         super(Unpack, self).__init__()
-        self.name = name
+        self.input = input
+        self.output = output
+        self.inputs = Types((input, list))
+        self.outputs = Types((output, object))
 
     def _run(self, **kwargs):
-        singleton = kwargs['singleton']
-        print singleton
+        singleton = kwargs[self.input]
         if len(singleton) != 1:
             raise WrongInputError('The list has more than one element.')
         value = singleton.pop()
-        self.out[self.name] = value
+        self.out[self.output] = value
 
 
 class Mean(Filter):
