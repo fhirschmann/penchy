@@ -488,31 +488,34 @@ class Map(Filter):
     elements in the given list.
     """
 
-    def __init__(self, filter_):
+    def __init__(self, filter_, input='values', output='result', finput=None, foutput=None):
         super(Map, self).__init__()
+        self.input = input
+        self.output = output
         input_desc = filter_.inputs.descriptions
         output_desc = filter_.outputs.descriptions
-        if input_desc is None or len(input_desc) != 1:
+
+        if finput is None and (input_desc is None or len(input_desc) != 1):
             raise TypeCheckError("Map takes only filters with exactly one input")
-        if output_desc is not None and len(output_desc) != 1:
+        if foutput is None and (output_desc is None and len(output_desc) != 1):
             raise TypeCheckError("Map takes only filters with exactly one output")
 
-        self.name = filter_.inputs.names.pop()
+        self.finput = filter_.inputs.names.pop() if finput is None else finput
+        self.foutput = filter_.outputs.names.pop() if foutput is None else foutput
+
+        input_types = input_desc[self.finput]
+        self.inputs = Types((self.input, list) + input_types)
+
+        output_types = output_desc[self.foutput]
+        self.outputs = Types((self.output, list) + output_types)
+
         self.filter = filter_
-        input_types = input_desc[self.name]
-        self.inputs = Types(('values', list) + input_types)
-        if output_desc is not None:
-            output_name = filter_.outputs.names.pop()
-            output_types = output_desc[output_name]
-            self.outputs = Types(('result', list) + output_types)
 
     def _run(self, **kwargs):
-        for v in kwargs['values']:
-            param = {self.name: v}
+        for v in kwargs[self.input]:
+            param = {self.finput: v}
             self.filter._run(**param)
-            # XXX: this copies _all_ (possibly multidimensional) filter output
-            #      into a single list
-            self.out['result'].extend(self.filter.out.values())
+            self.out[self.output].append(self.filter.out[self.foutput])
             self.filter.reset()
 
 
