@@ -20,7 +20,7 @@ from pprint import pprint
 
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
-from penchy.jobs.typecheck import Types, TypeCheckError
+from penchy.jobs.typecheck import Types
 from penchy.util import default, average, Value
 
 
@@ -437,7 +437,7 @@ class Condense(Filter):
                     self.out[name].append(field.value)
                 else:
                     #FIXME: Catch this error before running the job
-                    raise TypeCheckError("Condense filter is malformed.")
+                    raise ValueError("Condense filter is malformed.")
 
 
 class AggregatingReceive(Receive, Aggregate):
