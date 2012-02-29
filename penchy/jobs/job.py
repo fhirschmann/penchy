@@ -500,14 +500,20 @@ class Job(object):
         valid = True
         sources_of_sinks = defaultdict(list)
         for edge in flow:
-            valid = valid and edge.check()
+            if not edge.check():
+                log.error('Error at connection from "{0}" to "{1}"'
+                          .format(edge.source.__class__.__name__,
+                                  edge.sink.__class__.__name__))
+                valid = False
             source_name_mapping = (edge.source.__class__.__name__,
                                    default(edge.map_,
                                            [(name, name) for name
                                             in edge.source.outputs.names]))
             sources_of_sinks[edge.sink].append(source_name_mapping)
         for sink, source_mappings in sources_of_sinks.items():
-            valid = valid and sink.inputs.check_sink(source_mappings)
+            if not sink.inputs.check_sink(source_mappings):
+                log.error('Error at sink "{0}"'.format(sink.__class__.__name__))
+                valid = False
 
         return valid
 
