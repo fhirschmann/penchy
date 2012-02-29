@@ -36,9 +36,8 @@ class BarPlot(Plot):
     inputs = Types(('x', list, str),
                    ('y', list, list, (int, float)))
 
-    #FIXME: Better solution to handle args without repeating
-    def __init__(self, zlabels, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, **kwarg):
-        super(BarPlot, self).__init__(**kwarg)
+    def __init__(self, zlabels, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
+        super(BarPlot, self).__init__(*arg, **kwarg)
         self.width = width
         self.colors = colors
         self.zlabels = zlabels
@@ -119,10 +118,9 @@ class ScatterPlot(Plot):
                    ('y', list, (int, float)),
                    ('z', list, str))
 
-    #FIXME: Better solution to handle args without repeating
     #TODO: allow to draw circles and squares
-    def __init__(self, **kwarg):
-        super(ScatterPlot, self).__init__(**kwarg)
+    def __init__(self, *arg, **kwarg):
+        super(ScatterPlot, self).__init__(*arg, **kwarg)
 
     def _run(self, **kwargs):
         import numpy as np
@@ -151,9 +149,8 @@ class LinePlot(Plot):
                    ('y', list, list, (int, float)),
                    ('z', list, str))
 
-    #FIXME: Better solution to handle args without repeating
-    def __init__(self, colors, **kwarg):
-        super(LinePlot, self).__init__(**kwarg)
+    def __init__(self, colors, *arg, **kwarg):
+        super(LinePlot, self).__init__(*arg, **kwarg)
         self.colors = colors
 
     def _run(self, **kwargs):
