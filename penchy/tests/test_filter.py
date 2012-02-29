@@ -187,6 +187,11 @@ class CondenseTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
+    def test_malformed_arguments(self):
+        f = Condense(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
+        with self.assertRaises(ValueError):
+            f._run(results=self.results)
+
 
 class CondensingReceiveTest(unittest.TestCase):
     def setUp(self):
