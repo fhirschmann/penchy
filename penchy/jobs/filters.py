@@ -362,11 +362,15 @@ class Aggregate(Filter):
         if not args:
             raise ValueError("Aggregate Filter needs at least one argument")
 
-        if isinstance(args[0], str):
-            self.outputs = Types(*[(n, object) for n in args])
-        else:
-            self.outputs = Types(*[(n, object) for _, n in args])
+        names = []
+        for col in args:
+            if isinstance(col, str):
+                names.append((col, object))
+            else:
+                _, name = col
+                names.append((name, object))
 
+        self.outputs = Types(*names)
         self.columns = args
 
     def _run(self, **kwargs):
