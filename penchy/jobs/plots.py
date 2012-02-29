@@ -11,6 +11,11 @@ import itertools
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
 from penchy.util import default, average
+from penchy import is_server
+
+if is_server:
+    import numpy as np
+    import matplotlib.pyplot as plt
 
 
 class Plot(Filter):
@@ -54,9 +59,6 @@ class BarPlot(Plot):
                                 ('err', list, list, (int, float)))
 
     def _run(self, **kwargs):
-        import numpy as np
-        import matplotlib.pyplot as plt
-
         # Use gray shades if no colors are given
         if self.colors is None:
             step = float(1) / len(self.zlabels)
@@ -123,8 +125,6 @@ class ScatterPlot(Plot):
         super(ScatterPlot, self).__init__(*arg, **kwarg)
 
     def _run(self, **kwargs):
-        import numpy as np
-        import matplotlib.pyplot as plt
         xs = kwargs['x']
         ys = kwargs['y']
         zs = kwargs['z']
@@ -154,8 +154,6 @@ class LinePlot(Plot):
         self.colors = colors
 
     def _run(self, **kwargs):
-        import numpy as np
-        import matplotlib.pyplot as plt
         xs = kwargs['x']
         ys = kwargs['y']
         zs = kwargs['z']
