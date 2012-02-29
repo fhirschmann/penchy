@@ -157,13 +157,13 @@ class Types(object):
 
             for source, _ in mapping:
                 if source not in self.descriptions:
-                    log.error('Source has no output {0}'.format(source))
+                    log.error('Source has no output "{0}"'.format(source))
                     valid = False
 
         if other.descriptions is not None and mapping is not None:
             for _, sink in mapping:
                 if sink not in other.descriptions:
-                    log.warning('Sink has no input {0}'.format(sink))
+                    log.error('Sink has no input "{0}"'.format(sink))
 
         return valid
 
