@@ -71,7 +71,7 @@ class Dacapo(Workload):
         """
         return ['Harness', '-i', self.benchmark]
 
-    def __repr__(self):
+    def __repr__(self):  # pragma: no cover
         return '{0}({1})'.format(self.__class__.__name__, self.benchmark)
 
 
