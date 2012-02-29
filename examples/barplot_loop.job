@@ -11,7 +11,7 @@ benchmarks = ['fop', 'batik']
 
 # Client side filters
 f = filters.DacapoHarness()
-unpack = filters.Map(filters.Unpack('result'))
+unpack = filters.Map(filters.Unpack())
 send = filters.Send()
 
 comps = []

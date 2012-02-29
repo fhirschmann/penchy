@@ -18,7 +18,7 @@ jvm1.workload = fop
 jvm2.workload = batik
 
 f = filters.DacapoHarness()
-unpack = filters.Map(filters.Unpack('result'))
+unpack = filters.Map(filters.Unpack())
 
 send = filters.Send()
 condense = filters.CondensingReceive(('time','bench'),
