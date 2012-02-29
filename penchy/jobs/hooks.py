@@ -35,7 +35,7 @@ class BaseHook(object):  # pragma: no cover
         pass
 
 
-class Hook(BaseHook):
+class Hook(BaseHook):  # pragma: no cover
     """
     This class wraps setup and teardown callables as a :class:`Hook`.
     """

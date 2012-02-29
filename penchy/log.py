@@ -11,7 +11,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 
 
-def configure_logging(level=logging.INFO, logfile=None):
+def configure_logging(level=logging.INFO, logfile=None):  # pragma: no cover
     """
     Configure the root logger for our purposes.
     """
