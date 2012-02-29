@@ -10,6 +10,7 @@ import itertools
 
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
+from penchy.jobs.hooks import Hook
 from penchy.util import default, average
 from penchy import is_server
 
@@ -29,6 +30,9 @@ class Plot(Filter):
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
+
+        if is_server:
+            self.hooks.append(Hook(teardown=lambda: plt.savefig(self.filename)))
 
 
 class BarPlot(Plot):
@@ -109,8 +113,6 @@ class BarPlot(Plot):
         # Draw the legend with zlabels
         plot.legend(bars, names)
 
-        plt.savefig(self.filename)
-
 
 class ScatterPlot(Plot):
     """
@@ -138,7 +140,6 @@ class ScatterPlot(Plot):
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
-        plt.savefig(self.filename)
 
 
 class LinePlot(Plot):
@@ -169,4 +170,3 @@ class LinePlot(Plot):
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
-        plt.savefig(self.filename)
