@@ -479,3 +479,15 @@ class SumTest(unittest.TestCase):
         f = Sum()
         f._run(values=rnd)
         self.assertAlmostEqual(f.out['sum'], sum(rnd))
+
+
+class EnumerateTest(unittest.TestCase):
+    def test_preserves_input(self):
+        f = Enumerate()
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], [1, 2, 3])
+
+    def test_enumerate(self):
+        f = Enumerate(start=3, step=2)
+        f._run(values=['a', 'b', 'c'])
+        self.assertEqual(f.out['numbers'], [3, 5, 7])
