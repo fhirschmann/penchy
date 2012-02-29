@@ -760,5 +760,5 @@ class Enumerate(Filter):
     def _run(self, **kwargs):
         self.out['values'] = kwargs['values']
         self.out['numbers'] = range(self.start,
-                                    self.start + len(kwargs['values']),
+                                    self.start + len(kwargs['values'] * self.step),
                                     self.step)
