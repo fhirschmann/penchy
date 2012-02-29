@@ -20,7 +20,7 @@ from pprint import pprint
 
 from penchy import __version__
 from penchy.jobs.elements import Filter, SystemFilter
-from penchy.jobs.typecheck import Types
+from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.util import default, average, Value
 
 
