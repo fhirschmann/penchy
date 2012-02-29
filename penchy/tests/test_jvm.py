@@ -2,7 +2,7 @@ from hashlib import sha1
 import os
 
 from penchy.compat import unittest, update_hasher
-from penchy.jobs.jvms import JVM, JVMNotConfiguredError, _extract_classpath
+from penchy.jobs.jvms import JVM, JVMNotConfiguredError, JVMExecutionError, _extract_classpath
 from penchy.jobs.hooks import Hook
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
@@ -139,6 +139,13 @@ class JVMTest(unittest.TestCase):
     def test_wrong_comparison(self):
         i = JVM('foo')
         self.assertNotEqual(i, 2)
+
+    def test_execution_error(self):
+        j = JVM('/bin/false')
+        j.add_to_cp('foo')
+        j.workload = ScalaBench('dummy')
+        with self.assertRaises(JVMExecutionError):
+            j.run()
 
 
 class ExtractClasspathTest(unittest.TestCase):
