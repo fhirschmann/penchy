@@ -64,6 +64,10 @@ class MiscTest(unittest.TestCase):
     def test_dict2string(self):
         self.assertEqual(util.dict2string({'foo': 'bar'}), "foo=bar")
 
+    def test_make_bootstrap_client(self):
+        with util.make_bootstrap_client() as bclient:
+            self.assertTrue(os.path.exists(bclient.name))
+
 
 class ImportTest(unittest.TestCase):
     def test_load_config(self):
