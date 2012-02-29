@@ -49,28 +49,28 @@ def get_classpath(path=None):
             break
 
     if not path or not os.path.isfile(path):
-        raise OSError("No pom.xml found!")
+        raise OSError('No pom.xml found!')
 
     if path:
-        log.debug("Using %s" % path)
+        log.debug('Using %s' % path)
 
     cmd = ['mvn', '-f', path, 'dependency:build-classpath']
-    log.info("Executing maven. This may take a while")
+    log.info('Executing maven. This may take a while')
     proc = Popen(cmd, stdout=PIPE)
     stdout, _ = proc.communicate()
 
     if proc.returncode is not 0:  # pragma: no cover
         log.error(stdout)
-        raise MavenError("The classpath could not be determined: ")
+        raise MavenError('The classpath could not be determined: ')
 
     for line in stdout.split(os.linesep):
-        if line.startswith("["):
+        if line.startswith('['):
             # maven logging output
             continue
 
-        if line.startswith("/"):
+        if line.startswith('/'):
             if all(filter(os.path.isabs, line.split(os.pathsep))):
-                log.debug("Using classpath %s" % line)
+                log.debug('Using classpath %s' % line)
                 return line
 
     raise MavenError("The classpath was not in maven's output")  # pragma: no cover
@@ -206,21 +206,21 @@ class MavenDependency(object):
         :rtype: string
         """
         # XXX: use os.pathsep instead of `:`?
-        cp = get_classpath(self.pom_path).split(":")
+        cp = get_classpath(self.pom_path).split(':')
 
         for artifact in cp:
             if self._filename:
                 if os.path.basename(artifact) == self._filename:
                     return artifact
             else:
-                if os.path.basename(artifact).startswith("-".join((
+                if os.path.basename(artifact).startswith('-'.join((
                     self.artifactId, self.version))):
                     return artifact
 
         if not self._filename:  # pragma: no cover
-            log.error("Please specify the filename as argument to %s." % self)
+            log.error('Please specify the filename as argument to %s.' % self)
         else:
-            log.error("Incorrect artifact filename for %s." % self)
+            log.error('Incorrect artifact filename for %s.' % self)
 
         raise LookupError('Artifact filename could not be determined!')
 
@@ -279,8 +279,8 @@ class POM(object):
 
     def __init__(self, **kwargs):
         if not set(kwargs.keys()).issuperset(self.__class__.REQUIRED_ATTRIBS):
-            raise POMError(", ".join(self.__class__.REQUIRED_ATTRIBS) +
-                    " are required keywords")
+            raise POMError(', '.join(self.__class__.REQUIRED_ATTRIBS) +
+                    ' are required keywords')
         self.repositories = set()
         self.dependencies = set()
 

@@ -59,9 +59,9 @@ class Server(object):
         self.server = SimpleXMLRPCServer(
                 (config.SERVER_HOST, config.SERVER_PORT),
                 allow_none=True)
-        self.server.register_function(self.exp_rcv_data, "rcv_data")
-        self.server.register_function(self.exp_report_error, "report_error")
-        self.server.register_function(self.exp_set_timeout, "set_timeout")
+        self.server.register_function(self.exp_rcv_data, 'rcv_data')
+        self.server.register_function(self.exp_report_error, 'report_error')
+        self.server.register_function(self.exp_set_timeout, 'set_timeout')
 
         # This sets the timeout after which self.server.handle_request() should
         # return. This should be a nonzero value, because we are running it
@@ -96,7 +96,7 @@ class Server(object):
         :param frame: execution frame
         :type frame: frame object
         """
-        log.info("Received signal %s " % signum)
+        log.info('Received signal %s ' % signum)
         if signum == signal.SIGTERM:
             for node in self.nodes.values():
                 node.close()
@@ -145,7 +145,7 @@ class Server(object):
             node = self.node_for(composition.node_setting)
             node.received(composition)
             self.results[composition] = result
-            log.info("Received result. Waiting for %s more." %
+            log.info('Received result. Waiting for %s more.' %
                     self.remaining_compositions)
 
     # FIXME: reason is not used
@@ -173,14 +173,14 @@ class Server(object):
                 self.timers[hashcode] = threading.Timer(timeout,
                         lambda: self._on_timeout(hashcode))
                 self.timers[hashcode].start()
-        log.debug("Timeout set to %s for %s" % (timeout, composition))
+        log.debug('Timeout set to %s for %s' % (timeout, composition))
 
     def _on_timeout(self, hashcode):
         composition = self.composition_for(hashcode)
         node = self.node_for(composition.node_setting)
         with node.connection_required():
             node.kill_composition()
-        log.error("%s timed out." % self.composition_for(hashcode))
+        log.error('%s timed out.' % self.composition_for(hashcode))
 
     @property
     def received_all_results(self):
@@ -210,7 +210,7 @@ class Server(object):
                         node.put(pom.name, 'bootstrap.pom')
                         node.put(bclient.name, 'penchy_bootstrap')
 
-                        node.execute_penchy(" ".join(
+                        node.execute_penchy(' '.join(
                             self.bootstrap_args + [os.path.basename(self.job_file),
                                 'config.py', node.setting.identifier]))
 
@@ -224,7 +224,7 @@ class Server(object):
                 self.server.handle_request()
             self.run_pipeline()
         except KeyboardInterrupt:
-            log.warning("Keyboard Interrupt - Shutting down, please wait")
+            log.warning('Keyboard Interrupt - Shutting down, please wait')
         finally:
             for node in self.nodes.values():
                 node.close()
@@ -234,7 +234,7 @@ class Server(object):
         Called when we have received results for *all* compositions; starts
         the server-side pipeline.
         """
-        log.info("Run server-side pipeline.")
+        log.info('Run server-side pipeline.')
         self.job.filename = self.job_file
         self.job.receive = lambda: self.results
         self.job.run_server_pipeline()

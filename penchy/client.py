@@ -36,7 +36,7 @@ class Client(object):
         self.job = job_module.job
         self.job.filename = job_module.__file__
 
-        self.proxy = xmlrpclib.ServerProxy("http://%s:%s/" % \
+        self.proxy = xmlrpclib.ServerProxy('http://%s:%s/' % \
                 (self.config.SERVER_HOST, self.config.SERVER_PORT))
         self._current_composition = None
 
@@ -51,7 +51,7 @@ class Client(object):
         :param frame: execution frame
         :type frame: frame object
         """
-        log.info("Received signal %s" % signum)
+        log.info('Received signal %s' % signum)
         if signum == signal.SIGHUP:
             self.send_signal_to_composition(signal.SIGTERM)
 
@@ -66,7 +66,7 @@ class Client(object):
             if self._current_composition.jvm.proc:
                 if self._current_composition.jvm.proc.returncode is None:
                     self._current_composition.jvm.proc.send_signal(signum)
-                    log.error("Current composition timed out and was terminated")
+                    log.error('Current composition timed out and was terminated')
 
     def run(self):
         """

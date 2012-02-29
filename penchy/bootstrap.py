@@ -33,7 +33,7 @@ def load_penchy(path):
     sys.path.insert(0, os.path.abspath(path))
     from penchy.client import Client
     import penchy
-    log.info("Running PenchY %s from %s" % (penchy.__version__, penchy.__file__))
+    log.info('Running PenchY %s from %s' % (penchy.__version__, penchy.__file__))
     return Client
 
 
@@ -53,7 +53,7 @@ def find_penchy_zip(source):
             if os.path.isfile(path):
                 return path
 
-    raise OSError("PenchY zip could not be found")
+    raise OSError('PenchY zip could not be found')
 
 
 def install_penchy():
@@ -64,7 +64,7 @@ def install_penchy():
     :returns: maven output
     :rtype: string
     """
-    log.debug("Installing/updating PenchY using maven")
+    log.debug('Installing/updating PenchY using maven')
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
     signal.signal(signal.SIGTERM, lambda num, frame: proc.send_signal(num))
     stdout, _ = proc.communicate()
@@ -79,7 +79,7 @@ def build_classpath():
     :returns: maven output
     :rtype: string
     """
-    log.debug("Building maven classpath")
+    log.debug('Building maven classpath')
     proc2 = Popen(['mvn', '-f', 'bootstrap.pom', 'dependency:build-classpath'],
             stdout=PIPE)
     stdout, _ = proc2.communicate()
@@ -117,7 +117,7 @@ def main(job, config, identifier, loglevel=logging.INFO, load_from=None):
     client.run()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     formatter = logging.Formatter('%(asctime)s [%(levelname)s] %(name)s: %(message)s')
     ch = RotatingFileHandler('penchy_bootstrap.log', backupCount=10)
     ch.doRollover()

@@ -44,7 +44,7 @@ class Node(object):  # pragma: no cover
         :type compositions: module
         """
         self.setting = setting
-        self.log = logging.getLogger(".".join([__name__,
+        self.log = logging.getLogger('.'.join([__name__,
             self.setting.identifier]))
 
         self.compositions = compositions
@@ -101,7 +101,7 @@ class Node(object):  # pragma: no cover
         """
         Connect to node.
         """
-        self.log.debug("Connecting")
+        self.log.debug('Connecting')
         self.ssh.connect(self.setting.host, username=self.setting.username,
                 port=self.setting.ssh_port, password=self.setting.password,
                 key_filename=self.setting.keyfile)
@@ -112,7 +112,7 @@ class Node(object):  # pragma: no cover
         """
         Disconnect from node.
         """
-        self.log.debug("Disconnecting")
+        self.log.debug('Disconnecting')
         self.sftp.close()
         self.ssh.close()
 
@@ -182,7 +182,7 @@ class Node(object):  # pragma: no cover
         except IOError:
             pass
 
-        self.log.debug("Copying file %s to %s" % (local, remote))
+        self.log.debug('Copying file %s to %s' % (local, remote))
         self.sftp.put(local, remote)
 
     def get_logs(self):
@@ -199,7 +199,7 @@ class Node(object):  # pragma: no cover
                 client_log.append(logfile.read())
                 logfile.close()
             except IOError:
-                log.error("Logfile %s could not be received from %s" % \
+                log.error('Logfile %s could not be received from %s' % \
                         (filename, self))
 
         log.info("""
@@ -209,7 +209,7 @@ class Node(object):  # pragma: no cover
         """ % {
             'separator': '-' * 10,
             'identifier': self.setting.identifier,
-            'client_log': "".join(client_log)})
+            'client_log': ''.join(client_log)})
 
     def execute(self, cmd):
         """
@@ -218,7 +218,7 @@ class Node(object):  # pragma: no cover
         :param cmd: command to execute
         :type cmd: string
         """
-        self.log.debug("Executing `%s`" % cmd)
+        self.log.debug('Executing `%s`' % cmd)
         return self.ssh.exec_command(cmd)
 
     def execute_penchy(self, args):
@@ -229,7 +229,7 @@ class Node(object):  # pragma: no cover
         :type args: string
         """
         if self.client_is_running:
-            raise NodeError("You may not start penchy twice!")
+            raise NodeError('You may not start penchy twice!')
 
         self.log.info('Staring PenchY client')
 
@@ -251,7 +251,7 @@ class Node(object):  # pragma: no cover
         pid = pidfile.read()
         pidfile.close()
         self.execute('kill -SIGHUP ' + pid)
-        self.log.warn("Current composition was terminated")
+        self.log.warn('Current composition was terminated')
 
     def kill(self):
         """
@@ -265,4 +265,4 @@ class Node(object):  # pragma: no cover
         pid = pidfile.read()
         pidfile.close()
         self.execute('pkill -TERM -P ' + pid)
-        self.log.warn("PenchY was terminated")
+        self.log.warn('PenchY was terminated')

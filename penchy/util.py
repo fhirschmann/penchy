@@ -93,10 +93,10 @@ def tree_pp(elem, level=0):
     :param level: current level in tree
     :type level: int
     """
-    i = "\n" + level * "  "
+    i = '\n' + level * '  '
     if len(elem):
         if not elem.text or not elem.text.strip():
-            elem.text = i + "  "
+            elem.text = i + '  '
         if not elem.tail or not elem.tail.strip():
             elem.tail = i
         for elem in elem:
@@ -177,11 +177,11 @@ def load_job(filename):
     :type filename: str
     """
 
-    assert 'config' in sys.modules, "You have to load the penchyrc before a job"
+    assert 'config' in sys.modules, 'You have to load the penchyrc before a job'
 
     with disable_write_bytecode():
         job = imp.load_source('job', filename)
-    log.info("Loaded job from %s" % filename)
+    log.info('Loaded job from %s' % filename)
     return job
 
 
@@ -195,7 +195,7 @@ def load_config(filename):
     with disable_write_bytecode():
         config = imp.load_source('config', filename)
 
-    log.info("Loaded configuration from %s" % filename)
+    log.info('Loaded configuration from %s' % filename)
     return config
 
 

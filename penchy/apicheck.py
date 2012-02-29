@@ -116,6 +116,6 @@ def check_all():
     check_matplotlib()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     logging.basicConfig()
     check_all()
