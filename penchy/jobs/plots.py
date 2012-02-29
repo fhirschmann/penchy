@@ -14,6 +14,9 @@ from penchy.util import default, average
 
 
 class Plot(Filter):
+    """
+    This is the base class for all plotting filters.
+    """
     def __init__(self, filename, title="", xlabel="",
                  ylabel=""):
         super(Plot, self).__init__()
@@ -25,7 +28,10 @@ class Plot(Filter):
 
 class BarPlot(Plot):
     """
-    BarPlot
+    This class represents a barplot filter. It is possible:
+
+    - to draw horizontal barplots
+    - to display error bars
     """
     inputs = Types(('x', list, str),
                    ('y', list, list, (int, float)))
@@ -61,11 +67,16 @@ class BarPlot(Plot):
         yss = kwargs['y']
         if self.error_bars:
             errs = zip(*kwargs['err'])
+
         ind = np.arange(len(xs))
         fig = plt.figure()
+
+        # Add the (only) subplot
         plot = fig.add_subplot(1, 1, 1)
+
         bars, names, rects = [], [], []
         for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
+            # Draw the bars depending on the configuration
             if self.horizontal:
                 if self.error_bars:
                     rects.append(plot.barh(ind + self.width * i, ys, self.width,
@@ -78,18 +89,25 @@ class BarPlot(Plot):
                                           yerr=errs.pop(), ecolor=self.ecolor, color=c))
                 else:
                     rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
+            # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
             names.append(zlabel)
+
         plot.set_xlabel(self.xlabel)
         plot.set_ylabel(self.ylabel)
         plot.set_title(self.title)
+
+        # Display bar names
         if self.horizontal:
             plot.set_yticks(ind + self.width)
             plot.set_yticklabels(xs)
         else:
             plot.set_xticks(ind + self.width)
             plot.set_xticklabels(xs)
+
+        # Draw the legend with zlabels
         plot.legend(bars, names)
+
         plt.savefig(self.filename)
 
 
