@@ -32,7 +32,16 @@ class Plot(Filter):
         self.ylabel = ylabel
 
         if is_server:
-            self.hooks.append(Hook(teardown=lambda: plt.savefig(self.filename)))
+            self.fig = plt.figure()
+            # Add the (only) subplot
+            self.plot = self.fig.add_subplot(1, 1, 1)
+
+            hooks = [lambda: self.plot.set_xlabel(self.xlabel),
+                     lambda: self.plot.set_ylabel(self.ylabel),
+                     lambda: self.plot.set_title(self.title),
+                     lambda: plt.savefig(self.filename)]
+
+            self.hooks.extend(Hook(teardown=f) for f in hooks)
 
 
 class BarPlot(Plot):
@@ -74,44 +83,36 @@ class BarPlot(Plot):
             errs = zip(*kwargs['err'])
 
         ind = np.arange(len(xs))
-        fig = plt.figure()
-
-        # Add the (only) subplot
-        plot = fig.add_subplot(1, 1, 1)
 
         bars, names, rects = [], [], []
         for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
             # Draw the bars depending on the configuration
             if self.horizontal:
                 if self.error_bars:
-                    rects.append(plot.barh(ind + self.width * i, ys, self.width,
+                    rects.append(self.plot.barh(ind + self.width * i, ys, self.width,
                                            xerr=errs.pop(), ecolor=self.ecolor, color=c))
                 else:
-                    rects.append(plot.barh(ind + self.width * i, ys, self.width, color=c))
+                    rects.append(self.plot.barh(ind + self.width * i, ys, self.width, color=c))
             else:
                 if self.error_bars:
-                    rects.append(plot.bar(ind + self.width * i, ys, self.width,
+                    rects.append(self.plot.bar(ind + self.width * i, ys, self.width,
                                           yerr=errs.pop(), ecolor=self.ecolor, color=c))
                 else:
-                    rects.append(plot.bar(ind + self.width * i, ys, self.width, color=c))
+                    rects.append(self.plot.bar(ind + self.width * i, ys, self.width, color=c))
             # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
             names.append(zlabel)
 
-        plot.set_xlabel(self.xlabel)
-        plot.set_ylabel(self.ylabel)
-        plot.set_title(self.title)
-
         # Display bar names
         if self.horizontal:
-            plot.set_yticks(ind + self.width)
-            plot.set_yticklabels(xs)
+            self.plot.set_yticks(ind + self.width)
+            self.plot.set_yticklabels(xs)
         else:
-            plot.set_xticks(ind + self.width)
-            plot.set_xticklabels(xs)
+            self.plot.set_xticks(ind + self.width)
+            self.plot.set_xticklabels(xs)
 
         # Draw the legend with zlabels
-        plot.legend(bars, names)
+        self.plot.legend(bars, names)
 
 
 class ScatterPlot(Plot):
@@ -130,16 +131,10 @@ class ScatterPlot(Plot):
         xs = kwargs['x']
         ys = kwargs['y']
         zs = kwargs['z']
-        fig = plt.figure()
-        plot = fig.add_subplot(1, 1, 1)
 
         for x, y, z in zip(xs, ys, zs):
-            plot.text(x, y, z, rotation=-45)
-        plot.plot(xs, ys, 'o')
-
-        plot.set_xlabel(self.xlabel)
-        plot.set_ylabel(self.ylabel)
-        plot.set_title(self.title)
+            self.plot.text(x, y, z, rotation=-45)
+        self.plot.plot(xs, ys, 'o')
 
 
 class LinePlot(Plot):
@@ -158,15 +153,9 @@ class LinePlot(Plot):
         xs = kwargs['x']
         ys = kwargs['y']
         zs = kwargs['z']
-        fig = plt.figure()
-        plot = fig.add_subplot(1, 1, 1)
 
         lines = []
         for x, y, c in zip(xs, ys, self.colors):
-            lines.append(plot.plot(x, y, c)[0])
+            lines.append(self.plot.plot(x, y, c)[0])
 
-        plot.legend(lines, zs)
-
-        plot.set_xlabel(self.xlabel)
-        plot.set_ylabel(self.ylabel)
-        plot.set_title(self.title)
+        self.plot.legend(lines, zs)
