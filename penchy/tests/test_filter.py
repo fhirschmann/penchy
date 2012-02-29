@@ -154,6 +154,10 @@ class AggregateTest(unittest.TestCase):
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
+    def test_malformed_argument(self):
+        with self.assertRaises(ValueError):
+            f = Aggregate()
+
 
 class CondenseTest(unittest.TestCase):
     def setUp(self):
