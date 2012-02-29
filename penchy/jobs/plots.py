@@ -1,5 +1,10 @@
 """
 This module provides plotting filters.
+
+  .. moduleauthor:: Pascal Wittmann <mail@pascal-wittmann.de>
+
+  :copyright: PenchY Developers 2011-2012, see AUTHORS
+  :license: MIT License, see LICENSE
 """
 import itertools
 
