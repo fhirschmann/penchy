@@ -50,42 +50,47 @@ class BarPlot(Plot):
 
     - to draw horizontal barplots
     - to display error bars
+
+    Inputs:
+
+    - ``x``: Labels for the first dimension of ``y``
+    - ``y``: 2d list of bar heights
+    - ``z``: Labels for the second dimension of ``y`
     """
     inputs = Types(('x', list, str),
-                   ('y', list, list, (int, float)))
+                   ('y', list, list, (int, float)),
+                   ('z', list, str))
 
-    def __init__(self, zlabels, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
+    def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
         super(BarPlot, self).__init__(*arg, **kwarg)
         self.width = width
         self.colors = colors
-        self.zlabels = zlabels
         self.horizontal = horizontal
         self.error_bars = error_bars
-
-        if self.colors is not None and len(colors) != len(zlabels):
-            raise ValueError("The number of zlables and colors have to be equal.")
 
         if self.error_bars:
             self.ecolor = ecolor
             self.inputs = Types(('x', list, str),
-                                ('y', list, list, (int, float)),
+                                ('y', list, list, (int, float))
+                                ('z', list, str),
                                 ('err', list, list, (int, float)))
 
     def _run(self, **kwargs):
-        # Use gray shades if no colors are given
-        if self.colors is None:
-            step = float(1) / len(self.zlabels)
-            self.colors = [str(n) for n in np.arange(0, 1, step)]
-
         xs = kwargs['x']
         yss = kwargs['y']
+        zs = kwargs['z']
         if self.error_bars:
             errs = zip(*kwargs['err'])
 
+        # Use gray shades if no colors are given
+        if self.colors is None:
+            step = float(1) / len(zs)
+            self.colors = [str(n) for n in np.arange(0, 1, step)]
+
         ind = np.arange(len(xs))
 
-        bars, names, rects = [], [], []
-        for i, ys, c, zlabel in zip(itertools.count(), zip(*yss), self.colors, self.zlabels):
+        bars, rects = [], []
+        for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
             # Draw the bars depending on the configuration
             if self.horizontal:
                 if self.error_bars:
@@ -101,7 +106,6 @@ class BarPlot(Plot):
                     rects.append(self.plot.bar(ind + self.width * i, ys, self.width, color=c))
             # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
-            names.append(zlabel)
 
         # Display bar names
         if self.horizontal:
@@ -112,7 +116,7 @@ class BarPlot(Plot):
             self.plot.set_xticklabels(xs)
 
         # Draw the legend with zlabels
-        self.plot.legend(bars, names)
+        self.plot.legend(bars, zs)
 
 
 class ScatterPlot(Plot):
