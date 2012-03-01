@@ -39,3 +39,12 @@ class JobClientElementsTest(unittest.TestCase):
         c.set_timeout_function(lambda x, y: 42)
         self.assertEqual(j.hooks[0].setup(), 42)
         self.assertEqual(j.hooks[0].teardown(), 42)
+
+    def test_no_timeout(self):
+        n = NodeSetting('localhost', 22, 'dummy', '/', '/')
+        j = jvms.JVM('java')
+        j.workload = workloads.ScalaBench('dummy')
+        c = SystemComposition(j, n)
+        c.set_timeout_function(lambda x, y: 42)
+        self.assertEqual(j.hooks, [])
+        self.assertEqual(j.hooks, [])
