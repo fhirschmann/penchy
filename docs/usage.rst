@@ -26,7 +26,7 @@ which takes quite a few command line parameters:
  * ``--run-locally``
    runs a job locally without the involvement of client/server
    communication. This requires the ``hostname`` passed to
-   :class:`penchy.jobs.job.NodeSetting` to be ``localhost``.
+   :class:`~penchy.jobs.job.NodeSetting` to be ``localhost``.
  * ``-f`` or ``--load-from`` will load PenchY from the path supplied
    instead of acquiring it using maven. This is a pretty nifty feature
    if you are working on the client code and don't want to deploy
