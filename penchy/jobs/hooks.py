@@ -80,7 +80,8 @@ class ExecuteHook(BaseHook):
         self.proc = None
 
     def setup(self):
-        self.proc = Popen(shlex.split(self.args))
+        self.proc = Popen(shlex.split(self.args) if
+                isinstance(self.args, str) else self.args)
 
     def teardown(self):
         self.proc.poll()
