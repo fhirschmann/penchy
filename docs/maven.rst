@@ -1,10 +1,8 @@
-Maven Documentation
-===================
+Maven
+=====
 PenchY is using Maven to handle dependencies which Workloads
 might have.
 
-Declaring Maven Dependencies
-----------------------------
 Maven dependencies can be declared using the `MavenDependeny` module:
 
 .. autoclass:: penchy.maven.MavenDependency
