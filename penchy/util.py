@@ -199,7 +199,7 @@ def load_config(filename):
     return config
 
 
-def get_config_attribute(config, name, default):
+def get_config_attribute(config, name, default_value):
     """
     Returns an attribute of a config module or the
     default value.
@@ -212,7 +212,7 @@ def get_config_attribute(config, name, default):
     if hasattr(config, name):
         return getattr(config, name)
     else:
-        return default
+        return default_value
 
 
 @contextmanager
