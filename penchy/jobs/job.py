@@ -453,6 +453,11 @@ class Job(object):
                           .format(composition))
                 valid = False
 
+            # check if there are no starts in client pipelines
+            if not composition.starts:
+                log.error('Check: composition {0} has no starts'
+                          .format(composition.name))
+                valid = False
             # check if there are cycles in client pipelines
             try:
                 edgesort(composition.starts, composition.flow)
