@@ -773,3 +773,26 @@ class Enumerate(Filter):
         self.out['numbers'] = range(self.start,
                                     self.start + len(kwargs['values'] * self.step),
                                     self.step)
+
+
+class Decorate(Filter):
+    """
+    Decorates the inputs with the a given string.
+
+    Inputs:
+    - ``values``
+
+    Outputs:
+    - ``values``
+    """
+
+    inputs = Types(('values', list, (int, float)))
+    outputs = Types(('values', list, str))
+
+    def __init__(self, string):
+        super(Decorate, self).__init__()
+        self.string = string
+
+    #TODO: Multiple Inputs?
+    def _run(self, **kwargs):
+        self.out['values'] = [self.string.format(v) for v in kwargs['values']]
