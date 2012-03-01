@@ -1,3 +1,9 @@
+"""
+PenchY.
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+"""
 import sys
 
 # Version will be replaced by maven!
