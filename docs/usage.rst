@@ -35,4 +35,13 @@ which takes quite a few command line parameters:
    using that version. Let's say you are using rsync to copy your
    version of PenchY to ``/tmp/penchy2``, then you'd need to pass
    ``-f /tmp/penchy2`` to the ``penchy`` command on the server, which
-   will result in all nodes loading PenchY from this path.
+   will result in all nodes loading PenchY from this path. The following
+   snippet might be useful to you::
+
+        #!/bin/bash -e
+
+        for node in 192.168.56.10 192.168.56.11; do
+            rsync -az --exclude '*.log' --exclude '*.pyc' . bench@${node}:~/penchy
+        done
+
+        bin/penchy --load-from /home/bench/penchy $*
