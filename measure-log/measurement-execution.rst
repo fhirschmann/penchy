@@ -8,6 +8,7 @@ Iteration 6
 Testpläne
 ---------
    - 2012-02-15 Abweichungen erfolgreich durchgeführt von Michael
+   - 2012-02-15 Zwei Nodes erfolgreich durchgeführt von Michael
 
 Coverage
 --------
