@@ -185,6 +185,13 @@ class Server(object):
         log.debug('Timeout set to %s for %s' % (timeout, composition))
 
     def _on_timeout(self, hashcode):
+        """
+        Called when a timeout occurs for the node identified
+        by ``hashcode``.
+
+        :param hashcode: hashcode of the node
+        :type hashcode: string
+        """
         composition = self.composition_for(hashcode)
         node = self.node_for(composition.node_setting)
         with node.connection_required():
