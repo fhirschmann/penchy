@@ -57,9 +57,6 @@ class BarPlot(Plot):
     - ``y``: 2d list of bar heights
     - ``z``: Labels for the second dimension of ``y`
     """
-    inputs = Types(('x', list, str),
-                   ('y', list, list, (int, float)),
-                   ('z', list, str))
 
     def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
         super(BarPlot, self).__init__(*arg, **kwarg)
