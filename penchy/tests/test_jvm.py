@@ -6,6 +6,7 @@ from penchy.jobs.jvms import JVM, JVMNotConfiguredError, JVMExecutionError, _ext
 from penchy.jobs.hooks import Hook
 from penchy.jobs.tools import HProf
 from penchy.jobs.workloads import ScalaBench
+from penchy.util import tempdir
 from penchy.tests.util import MockPipelineElement
 
 
@@ -144,8 +145,9 @@ class JVMTest(unittest.TestCase):
         j = JVM('/bin/false')
         j.add_to_cp('foo')
         j.workload = ScalaBench('dummy')
-        with self.assertRaises(JVMExecutionError):
-            j.run()
+        with tempdir(delete=True):
+            with self.assertRaises(JVMExecutionError):
+                j.run()
 
 
 class ExtractClasspathTest(unittest.TestCase):
