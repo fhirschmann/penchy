@@ -20,6 +20,7 @@ Dokumentation
 
 Statische Analyse
 -----------------
+   - 2012-02-15 Durchgeführt von Fabian. Rating: 9.24/10 → 9.29/10
 
 Iteration
 =========
