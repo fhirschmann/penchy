@@ -49,7 +49,7 @@ latex-doc:
 	make -C docs/_build/latex
 
 static-analysis:
-	hooks/pre-commit --all
+	PYLINTRC=./.pylintrc hooks/pre-commit --all
 
 clean:
 	find . -type f -name '*.pyc' -delete
