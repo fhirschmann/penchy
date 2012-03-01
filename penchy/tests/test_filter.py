@@ -551,3 +551,15 @@ class MapTest(unittest.TestCase):
         f = Map(identity, 'a', 'b', 'c', 'd')
         f._run(a=[1, 2, 3])
         self.assertEqual(f.out['b'], [1, 2, 3])
+
+
+class DecorateTest(unittest.TestCase):
+    def test_valid(self):
+        f = Decorate("{0}")
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], ["1", "2", "3"])
+
+    def test_nothing_to_interplolate(self):
+        f = Decorate("")
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], ["", "", ""])
