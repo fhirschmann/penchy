@@ -10,6 +10,7 @@ This module provides Hook elements that wrap the execution of
  :license: MIT License, see LICENSE
 """
 from subprocess import Popen
+import shlex
 
 from penchy.util import default
 
@@ -79,7 +80,7 @@ class ExecuteHook(BaseHook):
         self.proc = None
 
     def setup(self):
-        self.proc = Popen(self.args)
+        self.proc = Popen(shlex.split(self.args))
 
     def teardown(self):
         self.proc.poll()
