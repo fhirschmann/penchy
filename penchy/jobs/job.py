@@ -467,16 +467,18 @@ class Job(object):
                 valid = False
 
         # check if there are cycles in server pipeline
-        try:
-            starts = [edge.source for edge in self.server_flow
-                      if isinstance(edge.source, Receive)]
-            if not starts:
-                # if there are no receivers, edgesort will fail, just signal it
-                log.error('Check: There is no Receiver in server pipeline')
-            edgesort(starts, self.server_flow)
-        except ValueError:
-            log.exception('Check: cycle in server pipeline')
+        starts = [edge.source for edge in self.server_flow
+                  if isinstance(edge.source, Receive)]
+        if not starts:
+            # if there are no receivers the server pipeline is not valid
+            log.error('Check: There is no Receiver in server pipeline')
             valid = False
+        else:
+            try:
+                edgesort(starts, self.server_flow)
+            except ValueError:
+                log.exception('Check: cycle in server pipeline')
+                valid = False
 
         for flow in chain(chain(c.flow for c in self.compositions),
                          [self.server_flow]):
