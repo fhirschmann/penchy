@@ -1,3 +1,7 @@
+"""
+This module provides the foundation on which the
+PenchY job description language is build upon.
+"""
 from penchy.jobs import jvms, tools, filters, workloads
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
 
