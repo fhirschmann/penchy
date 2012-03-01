@@ -329,6 +329,67 @@ for every run of the JVM.
     your filters don't terminate, the timeout won't terminate them
     either.
 
+Using Hooks
+===========
+
+PenchY allows the definition of hooks which can execute an arbitary
+command before and after the execution of a JVM. In general, a Hook
+will execute two functions, ``setup`` and ``teardown``, which will
+be execute before and after the JVM run, respectively.
+
+There are two ways to define these hooks:
+
+Simple Declaration
+------------------
+
+In simple cases where you want to execute a single command, PenchY
+provides a convenience method::
+
+    jvm = JVM('java')
+    jvm.hooks.append(Hook(setup=lambda: dosomething(),
+                          teardown=lambda: dosomething()))
+
+Using this method, you can write simple hooks that will, for instance,
+delete files you might have created in your benchmark run.
+
+Advanced Declaration
+--------------------
+
+In cases where you need more control, you can subclass
+:class:`~penchy.jobs.hooks.BaseHook` like so::
+
+    jvm = JVM('java')
+    class MyHook(hooks.BaseHook):
+        def setup(self):
+            # do something
+            pass
+
+        def teardown(self):
+            # do something
+            pass
+
+    myhook = MyHook()
+    jvm.hooks.append(myhook)
+
+This will give you the most power over the definition of actions which
+should take place before and after the exeuction of a JVM.
+
+Execution Hook
+--------------
+
+PenchY comes with :class:`~penchy.jobs.hooks.ExecuteHook`, which is
+a simple Hook that is supposed to make the exeuction of programs
+easier. It allows you to pass a command along with it's arguments
+which will get started before the exeuction and terminated afterwards
+(if neccessary)::
+
+    jvm = JVM('java')
+    myhook = hooks.ExecuteHook('myprogram')
+    jvm.hooks.append(myhook)
+
+Upon teardown, the returncode will be checked. If the program has
+not terminated yet, the Hook itself will terminate it.
+
 Testing Jobs
 ============
 

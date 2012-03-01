@@ -15,6 +15,10 @@ JVMs
 ----
 .. autoclass:: penchy.jobs.jvms.JVM
 
+Hooks
+-----
+.. automodule:: penchy.jobs.hooks
+
 Workloads
 ---------
 .. automodule:: penchy.jobs.workloads
