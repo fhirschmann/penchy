@@ -313,8 +313,6 @@ class Job(object):
 
         composition.jvm.basepath = composition.node_setting.basepath
 
-        # TODO: Add pre- and posthooks for timeouts
-
         _, edge_order = edgesort(composition.starts, composition.flow)
 
         for i in range(1, self.invocations + 1):
