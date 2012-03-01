@@ -71,7 +71,7 @@ class BarPlot(Plot):
         if self.error_bars:
             self.ecolor = ecolor
             self.inputs = Types(('x', list, str),
-                                ('y', list, list, (int, float))
+                                ('y', list, list, (int, float)),
                                 ('z', list, str),
                                 ('err', list, list, (int, float)))
 
