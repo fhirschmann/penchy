@@ -165,6 +165,15 @@ class Server(object):
             node.received(composition)
 
     def exp_set_timeout(self, hashcode, timeout):
+        """
+        Sets the timeout for the node identified by
+        ``hashcode`` to ``timeout``
+
+        :param hashcode: hashcode for composition
+        :type hashcode: string
+        :param timeout: timeout in seconds
+        :type timeout: int
+        """
         composition = self.composition_for(hashcode)
         with Server._rcv_lock:
             if hashcode in self.timers:
