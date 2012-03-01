@@ -4,16 +4,12 @@ Usage
 This document explains the basic usage of PenchY.
 
 There is only a single entry point to PenchY, the ``penchy`` command,
-which takes quite a few command line parameters.
-
-Command Line Parameters
------------------------
-The command line parameters of ``penchy`` explained:
+which takes quite a few command line parameters:
 
  * ``-h`` or ``--help``
    shows a help message and exit
  * ``-c CONFIG`` or ``--config config`` specifies a configuration file. Please
-   consult the :ref:`cfg` file section in order to learn how to
+   consult the :doc:`configuration` file section in order to learn how to
    write such a file. This argument defaults to ``~/.penchyrc``.
  * ``--logfile``
    specifies the file to which PenchY will log. Please note that PenchY will
