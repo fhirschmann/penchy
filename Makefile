@@ -1,4 +1,4 @@
-.PHONY: tests help hooks coverage full-coverage dev doc static-analysis
+.PHONY: tests help hooks coverage full-coverage dev latex-doc doc static-analysis
 
 help:
 	@echo "Please use \`make <target>', targets:"
@@ -43,6 +43,10 @@ dev:
 
 doc:
 	PYTHONPATH=${PYTHONPATH}:`pwd` make -C docs html
+
+latex-doc:
+	PYTHONPATH=${PYTHONPATH}:`pwd` make -C docs latex
+	make -C docs/_build/latex
 
 static-analysis:
 	hooks/pre-commit --all
