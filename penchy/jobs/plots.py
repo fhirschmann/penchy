@@ -11,7 +11,6 @@ import itertools
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
-from penchy.util import default, average
 from penchy import is_server
 
 if is_server:
