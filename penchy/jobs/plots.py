@@ -23,8 +23,8 @@ class Plot(Filter):
     """
     This is the base class for all plotting filters.
     """
-    def __init__(self, filename, title="", xlabel="",
-                 ylabel=""):
+    def __init__(self, filename, title="", xlabel="", ylabel="",
+                 x_max=None, x_min=None, y_max=None, y_min=None):
         super(Plot, self).__init__()
         self.filename = filename
         self.title = title
@@ -35,6 +35,16 @@ class Plot(Filter):
             self.fig = plt.figure()
             # Add the (only) subplot
             self.plot = self.fig.add_subplot(1, 1, 1)
+
+            # Set minimums and maximums of the axes
+            if x_min is not None:
+                self.plot.set_xlim(left=x_min)
+            if x_max is not None:
+                self.plot.set_xlim(right=x_max)
+            if y_min is not None:
+                self.plot.set_ylim(bottom=y_min)
+            if y_max is not None:
+                self.plot.set_ylim(top=y_max)
 
             hooks = [lambda: self.plot.set_xlabel(self.xlabel),
                      lambda: self.plot.set_ylabel(self.ylabel),
