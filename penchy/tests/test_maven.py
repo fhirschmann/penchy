@@ -86,7 +86,7 @@ class PomTest(unittest.TestCase):
 
     def test_penchy_pom2(self):
         with NamedTemporaryFile() as tf:
-            pom = write_penchy_pom([MavenDependency('a', 'b', '1')], tf.name)
+            write_penchy_pom([MavenDependency('a', 'b', '1')], tf.name)
             tree = ET()
             tree.parse(tf)
             root = tree.getroot()
