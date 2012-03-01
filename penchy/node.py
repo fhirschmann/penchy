@@ -133,7 +133,13 @@ class Node(object):  # pragma: no cover
         working on this node.
         """
         if not self.connected:
-            self.connect()
+            try:
+                self.connect()
+            except paramiko.AuthenticationException, e:
+                self.log.error('Authentication Error: %s' % e)
+                self.expected = []
+                self.was_closed = True
+                raise
 
         yield
 
