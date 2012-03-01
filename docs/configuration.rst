@@ -2,13 +2,17 @@ Configuration
 =============
 PenchY provides a framework for using a configuration file. The configuration
 file, by default located at ``~/.penchyrc``, is actually a Python file itself.
-The following options are required in order to run PenchY:
+The following options are **required** in order to run PenchY:
 
 * ``SERVER_HOST`` describes the hostname or IP address of the server penchy will be run on.
   This is not one of the nodes where the benchmark will be run, but the one deploying
   PenchY and collecting the resuts.
 * ``SERVER_PORT`` describes the port on which penchy will listen on for incoming
   benchmark results.
+
+The following options are **optional**:
+
+* ``LOGFILE`` path of logfile to log to. The logfile will be rotated in each run.
 
 In addition to the options above, you can define whatever options you like and
 use them in your jobs. Just make sure to ``import config`` in your jobs and then
