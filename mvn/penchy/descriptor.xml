@@ -22,6 +22,8 @@
                 <include>AUTHORS</include>
                 <include>LICENSE</include>
                 <include>bin/*</include>
+                <include>docs/*.rst</include>
+                <include>docs/*.py</include>
             </includes>
         </fileSet>
     </fileSets>
