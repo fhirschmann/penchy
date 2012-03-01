@@ -9,6 +9,7 @@ Tool for Java Virtual Machines.
    :maxdepth: 2
 
    installation
+   configuration
    usage
    job
    extending

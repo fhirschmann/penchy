@@ -40,21 +40,3 @@ The command line parameters of ``penchy`` explained:
    version of PenchY to ``/tmp/penchy2``, then you'd need to pass
    ``-f /tmp/penchy2`` to the ``penchy`` command on the server, which
    will result in all nodes loading PenchY from this path.
-
-.. _cfg:
-
-Configuration File
-------------------
-PenchY provides a framework for using a configuration file. The configuration
-file, by default located at ``~/.penchyrc``, is actually a Python file itself.
-The following options are required in order to run PenchY:
-
-* ``SERVER_HOST`` describes the hostname or IP address of the server penchy will be run on.
-  This is not one of the nodes where the benchmark will be run, but the one deploying
-  PenchY and collecting the resuts.
-* ``SERVER_PORT`` describes the port on which penchy will listen on for incoming
-  benchmark results.
-
-In addition to the options above, you can define whatever options you like and
-use them in your jobs. Just make sure to ``import config`` in your jobs and then
-use ``config.MY_SETTING``.
