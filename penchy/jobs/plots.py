@@ -48,7 +48,7 @@ class BarPlot(Plot):
     """
     This class represents a barplot filter. It is possible:
 
-    - to draw horizontal barplots
+    - to draw horizontal barplots (in that case inputs ``x`` and ``y`` swap)
     - to display error bars
 
     Inputs:
@@ -68,16 +68,29 @@ class BarPlot(Plot):
         self.horizontal = horizontal
         self.error_bars = error_bars
 
+        input_types = [('z', list, str)]
+        if self.horizontal:
+            input_types.extend([('x', list, list, (int, float)),
+                               ('y', list, str)])
+        else:
+            input_types.extend([('x', list, str),
+                               ('y', list, list, (int, float))])
+
         if self.error_bars:
             self.ecolor = ecolor
-            self.inputs = Types(('x', list, str),
-                                ('y', list, list, (int, float)),
-                                ('z', list, str),
-                                ('err', list, list, (int, float)))
+            input_types.append(('err', list, list, (int, float)))
+
+        self.inputs = Types(*input_types)
 
     def _run(self, **kwargs):
-        xs = kwargs['x']
-        yss = kwargs['y']
+        # Swap inputs back on horizontal plots
+        if self.horizontal:
+            xs = kwargs['y']
+            yss = kwargs['x']
+        else:
+            xs = kwargs['x']
+            yss = kwargs['y']
+
         zs = kwargs['z']
         if self.error_bars:
             errs = zip(*kwargs['err'])
