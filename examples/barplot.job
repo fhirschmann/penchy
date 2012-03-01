@@ -19,23 +19,28 @@ jvm2.workload = batik
 
 f = filters.DacapoHarness()
 unpack = filters.Map(filters.Unpack())
+enum = filters.Enumerate()
+deco = filters.Decorate("Invocation {0}")
 
 send = filters.Send()
-condense = filters.CondensingReceive(('time','bench'),
+condense = filters.CondensingReceive(('time', 'bench'),
                                     [(comp1, 'times', Value('fop')),
                                     (comp2, 'times', Value('batik'))])
 
-plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
-                     zlabels=["Invocation " + str(i) for i in range(1,3)], colors=['blue', 'red'])
+aggregate = filters.AggregatingReceive('invoc')
 
-flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
-flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
+                     colors=['blue', 'red'])
+
+flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
+flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
 comp1.flow = flow1
 comp2.flow = flow2
 
 job = Job(compositions=[comp1, comp2],
           server_flow=[
-              condense >> [('bench', 'x'), ('time', 'y')] >> plot
+              condense >> [('bench', 'x'), ('time', 'y')] >> plot,
+              aggregate >> ('invoc', 'values') >> deco >> ('values', 'z') >> plot
           ],
           invocations = 2
           )
