@@ -4,9 +4,6 @@ import os
 
 from penchy.jobs import NodeSetting
 
-# The location of your private ssh key
-ID_RSA = os.path.expanduser('~/.ssh/id_rsa')
-
 # The default username on nodes
 USERNAME = 'bench'
 
