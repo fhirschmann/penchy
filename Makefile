@@ -54,6 +54,9 @@ latex-doc:
 static-analysis:
 	PYLINTRC=./.pylintrc hooks/pre-commit --all
 
+injection:
+	PYTHONPATH=.:dev/injected_modules/ python penchy/apicheck.py
+
 clean:
 	find . -type f -name '*.pyc' -delete
 	find . -type f -name '*.pyo' -delete
