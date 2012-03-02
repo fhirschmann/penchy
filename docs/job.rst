@@ -197,8 +197,8 @@ will be passed to the JVM. Here's an example with several options::
 
   j = JVM('java', '-verbose:gc -Xmx800m -Xms42m')
 
-JVMs may contain pre- and post-hooks, which are executed before
-and after they are run, respectively.
+JVMs may contain hooks, which are executed before and after they are run.
+Please consult the section on :ref:`using hooks <using-hooks>`.
 
 .. _sec-workloads:
 
@@ -207,8 +207,8 @@ Workloads
 
 Workloads are programs (mostly benchmarks) that are executed by a JVM.
 
-Workloads may contain pre- and post-hooks, which are executed before
-and after they are run, respectively.
+Workloads may contain hooks, which are executed before and after they are run.
+Please consult the section on :ref:`using hooks <using-hooks>`.
 
 Tools
 -----
@@ -216,8 +216,8 @@ Tools
 Tools are programs that collect data about the executed workload and come in two
 flavors: Agent and WrappedJVM.
 
-Tools may contain pre- and post-hooks, which are executed before
-and after they are run, respectively.
+Tools may contain hooks, which are executed before and after they are run.
+Please consult the section on :ref:`using hooks <using-hooks>`.
 
 .. _sec-agent:
 
@@ -255,8 +255,8 @@ Filters are used to process the raw output of the tools. They define the
 client and server flow and therefore describe how the raw output of
 (potentially many) Tools is processed into the desired output (e.g. diagrams).
 
-Filters may contain pre- and post-hooks, which are executed before
-and after they are run, respectively.
+Filters may contain hooks, which are executed before and after they are run.
+Please consult the section on :ref:`using hooks <using-hooks>`.
 
 Using penchyrc: Stop repeating yourself
 =======================================
@@ -329,6 +329,7 @@ for every run of the JVM.
     your filters don't terminate, the timeout won't terminate them
     either.
 
+.. _using-hooks:
 Using Hooks
 ===========
 
