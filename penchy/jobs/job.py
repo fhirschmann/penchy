@@ -113,7 +113,7 @@ class NodeSetting(object):
         client.
 
         :returns: sha1 hexdigest of instance
-        :rtype: str
+        :rtype: string
         """
         hasher = sha1()
         update_hasher(hasher, self.identifier)
@@ -122,11 +122,11 @@ class NodeSetting(object):
 
 class SystemComposition(object):
     """
-    This class represents a combination of a :class:`JVM` and a
-    :class:`NodeSetting`.
+    This class represents a combination of a :class:`~penchy.jobs.jvms.JVM`
+    and a :class:`NodeSetting`.
 
     A :class:`SystemComposition` is a unique identifier that groups the
-    results of its execution for server consumation.
+    results of its execution for server consumption.
 
     The ``flow`` of the :class:`SystemComposition` has to be set before
     executing the job::
@@ -141,7 +141,7 @@ class SystemComposition(object):
     def __init__(self, jvm, node_setting, name=None):
         """
         :param jvm: the associated jvm
-        :type jvm: :class:`JVM`
+        :type jvm: :class:`~penchy.jobs.jvms.JVM`
         :param node_setting: the node setting
         :type node_setting: :class:`NodeSetting`
         """
@@ -185,6 +185,7 @@ class SystemComposition(object):
         Set the timeout function of this composition.
 
         :param fun: timeout function
+        :type fun: callable
         """
         if not self.timeout:
             return
@@ -215,7 +216,8 @@ class SystemComposition(object):
         """
         The starts of the pipeline.
 
-        All :class:`PipelineElement` that are executed by the jvm.
+        All :class:`~penchy.jobs.elements.PipelineElement` that
+        are executed by the jvm.
         """
         return [e for e in (self.jvm.workload, self.jvm.tool, self.jvm)
                 if isinstance(e, PipelineElement)]
@@ -223,7 +225,7 @@ class SystemComposition(object):
     @property
     def elements(self):
         """
-        All :class:`PipelineElement` of this composition.
+        All :class:`~penchy.jobs.elements.PipelineElement` of this composition.
         """
         if not self._flow:
             log.warn('No flow set')

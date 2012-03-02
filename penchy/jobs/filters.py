@@ -675,6 +675,9 @@ class Unpack(Filter):
     """
 
     def __init__(self, input='singleton', output='result'):
+        """
+        TODO: document me
+        """
         super(Unpack, self).__init__()
         self.input = input
         self.output = output
@@ -720,6 +723,9 @@ class StandardDeviation(Filter):
     outputs = Types(('standard_deviation', float))
 
     def __init__(self, ddof=1):
+        """
+        TODO: document me
+        """
         super(StandardDeviation, self).__init__()
         self.ddof = ddof
 

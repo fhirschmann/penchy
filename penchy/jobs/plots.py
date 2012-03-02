@@ -24,6 +24,9 @@ class Plot(Filter):
     """
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None):
+        """
+        TODO: document me
+        """
         super(Plot, self).__init__()
         self.filename = filename
         self.title = title
@@ -68,6 +71,9 @@ class BarPlot(Plot):
     """
 
     def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
+        """
+        TODO: document me
+        """
         super(BarPlot, self).__init__(*arg, **kwarg)
         self.width = width
         self.colors = colors
@@ -169,6 +175,9 @@ class LinePlot(Plot):
                    ('z', list, str))
 
     def __init__(self, colors, *arg, **kwarg):
+        """
+        TODO: document me
+        """
         super(LinePlot, self).__init__(*arg, **kwarg)
         self.colors = colors
 
