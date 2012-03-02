@@ -97,10 +97,10 @@ have to provide a strict superset).
 Filters
 =======
 
-Filters can be simple :class:`~penchy.jobs.elements.Filter` or
+Filters can be a simple :class:`~penchy.jobs.elements.Filter` or a
 :class:`~penchy.jobs.elements.SystemFilter`.
-The latter will be passed an additional argument called ``:environment:`` which
-describes the execution environment of the SystemFilter (see
+The latter will be passed an additional argument called ``:environment:`` on
+execution which describes the execution environment of the SystemFilter (see
 :meth:`penchy.jobs.job.Job._build_environment`).
 
 Tools
