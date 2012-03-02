@@ -52,6 +52,8 @@ Statische Analyse
 Python3-Kompatibilitätstest
 ===========================
 
+2012-03-02 erfolgreich ausgeführt.
+
 Testlauf mit unerwarteten Versionen
 ===================================
 
