@@ -79,6 +79,7 @@ def check_paramiko():
         die('Could not import paramiko - did you install it?')
 
     checkattrs([
+        (paramiko, ['Transport', 'SSHClient', 'SFTPClient']),
         (paramiko.Transport, 'is_active'),
         (paramiko.SSHClient, ['open_sftp', 'connect']),
         (paramiko.SFTPClient, ['open', 'put', 'mkdir'])
