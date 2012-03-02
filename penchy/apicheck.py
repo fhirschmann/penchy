@@ -42,11 +42,10 @@ def checkattr(mod, attr):
     :type mod: module
     :param attr: attribute to check for
     """
+    package = '' if not mod.__package__ else 'in package %s' % mod.__package__
     if not hasattr(mod, attr):
-        if not hasattr(mod, '__module__'):
-            die('%s not found!' % mod.__name__)
-        die('%s in %s has no %s attribute, which was expected' %
-                (mod.__name__, mod.__module__, attr))
+        ('%s%s has no %s attribute, which was expected' %
+            (mod.__name__, package, attr))
 
 
 def checkattrs(seq):
