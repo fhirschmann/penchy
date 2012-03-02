@@ -138,7 +138,7 @@ A :class:`~penchy.jobs.job.SystemComposition` comprises of a JVM (with its
 In addition, the flow describes how to process the results of the execution.
 Using multiple workloads means using multiple
 :class:`~penchy.jobs.job.SystemComposition` with different
-:class:`~penchy.jobs.job.JVM` (the number of compositions on a node is not
+:class:`~penchy.jobs.jvms.JVM` (the number of compositions on a node is not
 limited). Here is an example of two different workloads::
 
   j1 = JVM('java')
@@ -156,7 +156,7 @@ And now we will add two different flows::
   c1.flow = w1 >> filters.DacapoHarness() >> filters.Print()
   c2.flow = w2 >> filters.DacapoHarness() >> filters.Dump() >> filters.Print()
 
-:class:`~penchy.jobs.job.PipelineElement` can be used across flows but will be
+:class:`~penchy.jobs.elements.PipelineElement` can be used across flows but will be
 reset after the execution of a :class:`~penchy.jobs.job.SystemComposition`.
 This is why we could reuse the ``filters.DacapoHarness()`` above
 (``filters.Print()`` has no state to speak of) without trouble::
@@ -420,7 +420,7 @@ As outlined above, it checks for each :class:`~penchy.jobs.job.SystemComposition
 
 and for the pipeline if
 
-- each :class:`~penchy.jobs.element.PipelineElement` receives the expected input
+- each :class:`~penchy.jobs.elements.PipelineElement` receives the expected input
   (correct names and types)
 
 Running the job locally
