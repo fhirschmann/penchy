@@ -8,6 +8,8 @@ pipeline.
  :license: MIT License, see LICENSE
 """
 
+from penchy.compat import str
+
 
 class Edge(object):
     """
