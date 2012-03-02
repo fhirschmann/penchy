@@ -19,7 +19,7 @@ import math
 from pprint import pprint
 
 from penchy import __version__
-from penchy.compat import str, path, unicode
+from penchy.compat import str, path, unicode, to_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.util import default, average, Value
@@ -365,7 +365,7 @@ class Aggregate(Filter):
 
         names = []
         for col in args:
-            if isinstance(col, unicode):
+            if isinstance(to_unicode(col), unicode):
                 names.append((col, object))
             else:
                 try:
@@ -381,7 +381,7 @@ class Aggregate(Filter):
     def _run(self, **kwargs):
         results = kwargs['results']
         for col in self.columns:
-            if isinstance(col, unicode):
+            if isinstance(to_unicode(col), unicode):
                 found = False
                 for res in results:
                     if col in results[res]:
@@ -424,7 +424,7 @@ class Condense(Filter):
         results = kwargs['results']
         for row in self.data:
             #FIXME: Check for isinstance(first, SystemComposition)
-            if not isinstance(row[0], unicode):
+            if not isinstance(to_unicode(row[0]), unicode):
                 comp = row[0]
                 row = row[1:]
             else:
@@ -432,7 +432,7 @@ class Condense(Filter):
 
             # Everything is taken from the same system composition
             for name, field in zip(self.names, row):
-                if isinstance(field, unicode):
+                if isinstance(to_unicode(field), unicode):
                     if comp is None:
                         for c in results:
                             if field in results[c]:
