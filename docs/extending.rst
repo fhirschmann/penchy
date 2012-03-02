@@ -9,12 +9,14 @@ General notes
 described here.
 
 A :class:`~penchy.jobs.elements.PipelineElement` has this attributes:
+
 - ``out``, a ``defaultdict(list)`` (which means that if you access a key that is
   not in use you will be presented a list for use)
 - ``inputs``, a :class:`~penchy.jobs.typecheck.Types`
 - ``outputs``, a :class:`~penchy.jobs.typecheck.Types`
 
 and this methods:
+
 - ``_run``, which takes arbitrary keyword arguments and performs the actual action.
 
 ``out`` is used to offer the output of this
@@ -66,6 +68,7 @@ what they mean.
 ``_run`` performs the execution of the element and you are free to do want you
 want here.
 With two exceptions:
+
 1. the signature is ``def _run(self, **kwargs)`` and nothing else (well you can
    change the name of ``kwargs``)
 2. you set ``out`` to the values that are described in ``outputs``
@@ -81,6 +84,7 @@ Workloads
 =========
 
 A workload has the attributes (you may want to use properties instead):
+
 - ``arguments`` the arguments to execute the workload
 - (optional) ``information_arguments`` the arguments to gather information about
   the workload (version, etc.)
@@ -110,6 +114,7 @@ agent parameters (e.g.  ``-agentlib``).
 Contrary to a workload it has to care for its ``outputs`` and ``out``.
 
 An Agent has to provide this attributes (here you might want to use properties as well):
+
 - ``arguments`` the arguments to execute the agent, that is to include it in the JVM
 
 WrappedJVM
@@ -118,10 +123,12 @@ WrappedJVM
 A WrappedJVM is a :class:`~penchy.jobs.elements.PipelineElement` as well as a
 :class:`~penchy.jobs.jvms.JVM`.
 You have to provide this attributes:
+
 - ``cmdline`` how to invoke the JVM with the wrapping (to use most of
   :class:`~penchy.jobs.jvm.JVM` infrastructure)
 
 and this methods:
+
 - ``information`` that returns information about the JVM (and its configuration)
 
 Even if a WrappedJVM is a :class:`~penchy.jobs.elements.PipelineElement` you
