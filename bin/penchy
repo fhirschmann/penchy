@@ -96,7 +96,7 @@ if __name__ == "__main__":
         compositions = job.compositions_for_node("localhost")
         job.filename = job_module.__file__
         if len(compositions) == 0:
-            raise ValueError("Job has no JVMNodeConfiguration for \"localhost\"")
+            die("Job has no JVMNodeConfiguration for \"localhost\"")
         for composition in compositions:
             job.run(composition)
     elif args.visualize:
