@@ -129,3 +129,20 @@ def update_hasher(hasher, string, codec='utf8'):
         hasher.update(string.encode(codec))
 
     return hasher
+
+
+def to_unicode(string):
+    """
+    If ``string`` is of type ``str`` it returns
+    its unicode representation. Otherwise ``string``
+    is not modified.
+
+    :param string: string to decode
+    :type string: str, object
+    :returns: decoded string
+    :rtype: unicode, object
+    """
+    if isinstance(string, str):
+        return string.decode("iso-8859-1")
+    else:
+        return string
