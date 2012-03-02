@@ -258,10 +258,11 @@ class JVM(object):
             p = subprocess.Popen(call + self._workload.information_arguments,
                                  stderr=subprocess.PIPE)
             _, workload = p.communicate()
+            workload = workload.decode('utf-8')
 
         tool = str(self._tool) if self._tool else ''
         return {
-            'jvm' : jvm,
+            'jvm' : jvm.decode('utf-8'),
             'cmdline' : ' '.join(self.cmdline),
             'workload' : workload,
             'tool' : tool
@@ -347,7 +348,7 @@ class ValgrindJVM(WrappedJVM):
         d = super(ValgrindJVM, self).information()
         p = subprocess.Popen([self.valgrind_path, '--version'], stdout=subprocess.PIPE)
         valgrind, _ = p.communicate()
-        d['valgrind'] = valgrind
+        d['valgrind'] = valgrind.decode('utf-8')
         return d
 
 
