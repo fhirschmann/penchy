@@ -49,6 +49,14 @@ Statische Analyse
 -----------------
 - 2012-03-02 Durchgeführt von Fabian. Rating: 9.22/10 → 9.23/10
 
+Python3-Kompatibilitätstest
+===========================
+
+Testlauf mit unerwarteten Versionen
+===================================
+
+2012-03-02 erfolgreich ausgeführt.
+
 Iteration
 =========
 
