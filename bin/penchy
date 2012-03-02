@@ -34,7 +34,7 @@ if __name__ == "__main__":
     args, _ = conf_parser.parse_known_args()
     try:
         config = load_config(args.config)
-    except IOError, e:
+    except IOError as e:
         config_err = str(e)
         config = None
 
@@ -79,7 +79,7 @@ if __name__ == "__main__":
 
     try:
         job_module = load_job(args.job)
-    except Exception, e:
+    except Exception as e:
         die("Error loading job '%s: %s" % (args.job, e))
     job = job_module.job
 
