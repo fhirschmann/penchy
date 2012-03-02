@@ -135,7 +135,7 @@ class Node(object):  # pragma: no cover
         if not self.connected:
             try:
                 self.connect()
-            except paramiko.AuthenticationException, e:
+            except paramiko.AuthenticationException as e:
                 self.log.error('Authentication Error: %s' % e)
                 self.expected = []
                 self.was_closed = True
