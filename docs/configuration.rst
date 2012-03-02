@@ -10,7 +10,7 @@ The following options are **required** in order to run PenchY:
 * ``SERVER_PORT`` describes the port on which penchy will listen on for incoming
   benchmark results.
 
-The following options are **optional**:
+The following option is **optional**:
 
 * ``LOGFILE`` path of logfile to log to. The logfile will be rotated in each run.
 
