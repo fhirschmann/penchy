@@ -42,7 +42,10 @@ def checkattr(mod, attr):
     :type mod: module
     :param attr: attribute to check for
     """
-    package = '' if not mod.__package__ else 'in package %s' % mod.__package__
+    try:
+        package = '' if not mod.__package__ else 'in package %s' % mod.__package__
+    except AttributeError:
+        package = ''
     if not hasattr(mod, attr):
         ('%s%s has no %s attribute, which was expected' %
             (mod.__name__, package, attr))
