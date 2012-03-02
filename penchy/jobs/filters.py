@@ -342,7 +342,7 @@ def evaluate_runtimes(times):
 
 class Aggregate(Filter):
     """
-    Extracts data out of the resultssets send by the clients.
+    Extracts data out of the resultssets sent by the clients.
 
     Input:
        - ``results``: Resultset as produced by the :class:`~penchy.jobs.filters.Receive` filter
