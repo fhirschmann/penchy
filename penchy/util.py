@@ -22,7 +22,7 @@ from contextlib import contextmanager
 from xml.etree.ElementTree import SubElement
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import update_hasher
+from penchy.compat import update_hasher, write
 from penchy import bootstrap
 
 
@@ -164,7 +164,7 @@ def make_bootstrap_client():
     """
     tf = NamedTemporaryFile()
     source = inspect.getsource(bootstrap)
-    tf.write(source)
+    write(tf, source)
     tf.flush()
     return tf
 
