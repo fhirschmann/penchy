@@ -566,10 +566,10 @@ class Dump(SystemFilter):
         }
         if env['current_composition'] is not None:
             comp = env['current_composition']
-            system['composition'] = str(comp),
+            system['composition'] = comp.__str__(),
             system['jvm'] = comp.jvm.information()
             classes = set(e.__class__ for e in comp.elements)
-            system['dependencies'] = dict((c.__name__, [str(dep) for dep
+            system['dependencies'] = dict((c.__name__, [dep.__str__() for dep
                                                         in c.DEPENDENCIES])
                                            for c in classes
                                           if c.DEPENDENCIES)
