@@ -20,6 +20,7 @@ Pipeline
 
         Filter -> PipelineElement
         SystemFilter -> Filter
+        Plot -> Filter
 
         Workload -> NotRunnable
         Workload -> PipelineElement
