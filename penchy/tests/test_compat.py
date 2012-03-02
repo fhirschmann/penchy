@@ -2,7 +2,7 @@ from hashlib import sha1
 from tempfile import TemporaryFile
 from contextlib import contextmanager
 
-from penchy.compat import unittest, nested, update_hasher, unicode_
+from penchy.compat import unittest, nested, update_hasher, unicode
 
 
 class NestedTest(unittest.TestCase):
@@ -39,7 +39,7 @@ class HasherTest(unittest.TestCase):
                          '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33')
 
     def test_unicode_hash(self):
-        u = unicode_('foo')
+        u = unicode('foo')
         update_hasher(self.h, u)
         self.assertEqual(self.h.hexdigest(),
                          '0beec7b5ea3f0fdbc95d0dd47f3c5bc275da8a33')

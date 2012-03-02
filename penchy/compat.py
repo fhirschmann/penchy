@@ -20,14 +20,14 @@ on_python3 = sys.version_info[0] == 3
 
 if on_python3:  # pragma: no cover
     unicode = str
-    unicode_ = str
     str = bytes
     from io import StringIO
     from xmlrpc.server import SimpleXMLRPCServer
 else:
+    str = str
+    unicode = unicode
     from StringIO import StringIO
     from SimpleXMLRPCServer import SimpleXMLRPCServer
-    unicode_ = unicode
 
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
