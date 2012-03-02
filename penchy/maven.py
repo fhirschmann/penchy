@@ -43,7 +43,7 @@ def get_classpath(path=None):
     :returns: java classpath
     :rtype: string
     """
-    for p in ([path, path + os.sep + 'pom.xml'] if path else []) + ['pom.xml']:
+    for p in ([path, os.path.join(path, 'pom.xml')] if path else []) + ['pom.xml']:
         if os.path.isfile(p):
             path = p
             break
