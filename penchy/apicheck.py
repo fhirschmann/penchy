@@ -43,11 +43,10 @@ def checkattr(mod, attr):
     :param attr: attribute to check for
     """
     if not hasattr(mod, attr):
+        if not hasattr(mod, '__module__'):
+            die('%s not found!' % mod.__name__)
         die('%s in %s no longer has a %s attribute' %
                 (mod.__name__, mod.__module__, attr))
-        return True
-    else:
-        return False
 
 
 def checkattrs(seq):
