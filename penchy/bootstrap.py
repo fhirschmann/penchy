@@ -137,6 +137,6 @@ if __name__ == '__main__':
         log.setLevel(opts.loglevel)
 
         main(*args, load_from=opts.load_from, loglevel=opts.loglevel)
-    except Exception, err:
+    except Exception as err:
         log.exception('Exception occured while executing PenchY:')
         sys.exit(1)
