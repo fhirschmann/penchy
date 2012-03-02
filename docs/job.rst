@@ -319,7 +319,7 @@ with the workload timeout.
 
 Before the exeuction of the JVM, the PenchY client will ask the server
 to start a timeout, after which it should step in and remotely terminate
-the JVM. Once the JVM has finished what it was asked to to, the client
+the JVM. Once the JVM has finished what it was asked to, the client
 will ask the server to stop the timeout again. This process is repeated
 for every run of the JVM.
 
