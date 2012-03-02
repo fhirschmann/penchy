@@ -748,6 +748,7 @@ class Sum(Filter):
 
 
 class Enumerate(Filter):
+    # FIXME: Document my inputs & outputs
     """
     Enumerates the given values.
 
