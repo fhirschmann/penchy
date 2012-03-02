@@ -27,10 +27,20 @@ class Test(Filter):
     inputs = filters.DacapoHarness.inputs
     outputs = Types(('foo', str))
 
-    def _run(self):
-        self.out['foo'] = 'hallo'
+    def _run(self, **kwargs):
+        self.out['foo'] = 'foo' * 50000000 # ~ 150M
+
+class Test2(Filter):
+    inputs = Types()
+
+    def _run(self, **kwargs):
+        l1 = len(kwargs['results'][comp1]['foo'])
+        l2 = len(kwargs['results'][comp2]['foo'])
+
+        print("Comp1 length: %s, Comp2 lenght: %s" % (l1, l2))
 
 test = Test()
+test2 = Test2()
 send = filters.Send()
 
 flow = [w >> test >> send]
@@ -39,6 +49,6 @@ comp2.flow = flow
 
 job = Job(compositions=[comp1, comp2],
           server_flow=[
-              receiver >> filters.Print()
+              receiver >> test2
           ],
           )
