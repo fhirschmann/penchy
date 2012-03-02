@@ -45,7 +45,7 @@ def checkattr(mod, attr):
     if not hasattr(mod, attr):
         if not hasattr(mod, '__module__'):
             die('%s not found!' % mod.__name__)
-        die('%s in %s no longer has a %s attribute' %
+        die('%s in %s has no %s attribute, which was expected' %
                 (mod.__name__, mod.__module__, attr))
 
 
