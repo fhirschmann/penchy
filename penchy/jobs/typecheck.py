@@ -48,7 +48,7 @@ class Types(object):
 
         Alternatively you can pass no args to disable type checking.
 
-        :raises: :class:`AssertError` if ``type_descriptions has a wrong format.
+        :raises: :class:`AssertError` if ``type_descriptions`` has a wrong format.
         :param type_descriptions: description of above format
         :type type_descriptions: tuple
         """
@@ -90,8 +90,9 @@ class Types(object):
         """
         Check if ``kwargs`` satisfies the descriptions .
         That is:
-            - All required names are found and
-            - have the right type (and subtypes)
+
+        - All required names are found and
+        - have the right type (and subtypes)
 
         Logs warnings if there are more arguments than the required.
 
