@@ -148,7 +148,6 @@ class Server(object):
             log.info('Received result. Waiting for %s more.' %
                     self.remaining_compositions)
 
-    # FIXME: reason is not used
     def exp_report_error(self, hashcode, reason=None):
         """
         Deal with client-side errors. Call this for each
@@ -157,12 +156,19 @@ class Server(object):
         :param hashcode: the hashcode to identify the
                          :class:`~penchy.jobs.job.SystemComposition`
         :type hashcode: string
+        :type reason: reason for the error; please note that this is
+                      used when you'd like to display an error right
+                      away without waiting for the server to fetch
+                      the logs from the node.
         """
         composition = self.composition_for(hashcode)
 
         with Server._rcv_lock:
             node = self.node_for(composition.node_setting)
             node.received(composition)
+
+        if reason:
+            node.log.error(reason)
 
     def exp_set_timeout(self, hashcode, timeout):
         """
