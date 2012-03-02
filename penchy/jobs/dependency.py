@@ -104,7 +104,11 @@ class Pipeline(object):
         if isinstance(other, (str, unicode)):
             self.pending = [(other, other)]
         elif isinstance(other, tuple):
-            self.pending = [other]
+            if len(other) == 2 and \
+               all(isinstance(x, (str, unicode)) for x in other):
+                self.pending = [other]
+            else:
+                raise ValueError('{0} is not a tuple of 2 strings'.format(other))
         elif isinstance(other, list):
             mapping = [(map_, map_) if isinstance(map_, (str, unicode))
                        else map_ for map_ in other]
