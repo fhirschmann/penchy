@@ -330,6 +330,7 @@ for every run of the JVM.
     either.
 
 .. _using-hooks:
+
 Using Hooks
 ===========
 
