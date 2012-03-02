@@ -41,7 +41,7 @@ class DacapoHarnessTest(unittest.TestCase):
     def test_multi_iteration_path(self):
         invocations = len(self.mi)
         exit_codes = [0] * invocations
-        stderr = map(attrgetter('name'), self.mi)
+        stderr = [i.name for i in self.mi]
         self.d.run(exit_code=exit_codes, stderr=stderr)
 
         self._assert_correct_out(invocations)
@@ -49,19 +49,19 @@ class DacapoHarnessTest(unittest.TestCase):
     def test_single_iteration_path(self):
         invocations = len(self.si)
         exit_codes = [0] * invocations
-        stderr = map(attrgetter('name'), self.si)
+        stderr = [i.name for i in self.si]
         self.d.run(exit_code=exit_codes, stderr=stderr)
         self._assert_correct_out(invocations)
 
     def test_failed(self):
         invocations = len(self.failed)
         exit_codes = [0] * invocations
-        stderr = map(attrgetter('name'), self.failed)
+        stderr = [i.name for i in self.failed]
         self.d.run(exit_code=exit_codes, stderr=stderr)
         self.assertListEqual(self.d.out['failures'], [1] * invocations)
 
     def test_wrong_input(self):
-        stderr = map(attrgetter('name'), self.wrong_input)
+        stderr = [i.name for i in self.wrong_input]
         for e in stderr:
             with self.assertRaises(WrongInputError):
                 self.d.run(exit_code=[0], stderr=[e])
@@ -94,12 +94,12 @@ class HProfCpuTimesTest(unittest.TestCase):
 
     def test_single_iteration_path(self):
         invocations = len(self.si)
-        hprof_file = map(attrgetter('name'), self.si)
+        hprof_file = [i.name for i in self.si]
         self.h.run(hprof=hprof_file)
         self._assert_correct_out(invocations)
 
     def test_wrong_input(self):
-        hprof_files = map(attrgetter('name'), self.wrong_input)
+        hprof_files = [i.name for i in self.wrong_input]
         for hprof_file in hprof_files:
             with self.assertRaises(WrongInputError):
                 self.h.run(hprof=[hprof_file])
