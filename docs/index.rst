@@ -15,7 +15,6 @@ Tool for Java Virtual Machines.
    extending
    maven
    arch
-   modules
    api
 
 Indices and tables
