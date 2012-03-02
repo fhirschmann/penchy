@@ -44,6 +44,7 @@ Coverage
 
 Dokumentation
 -------------
+- 2012-03-02 Überprüfung der API-Dokumentation ausgeführt von Fabian
 
 Statische Analyse
 -----------------
