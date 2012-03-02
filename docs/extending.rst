@@ -55,7 +55,7 @@ A ``Types(('first', object), ('second', object), ...)`` is sufficient and will
 do the same.
 
 ``inputs`` are declared in the same way as ``outputs``.
-They are relevant at check time and at execution time.
+They are relevant at check time and execution time.
 At execution time, the values of the actual items passed to ``_run`` are checked,
 not the ``outputs`` descriptions of the Sources that passed the items.
 As they are relevant at the beginning of ``_run``, they have to be set at the latest
@@ -65,7 +65,7 @@ Additionally to the types of ``inputs`` and ``outputs``, you should describe
 (e.g. in the docstring of the class) which ``inputs`` and ``outputs`` exist and
 what they mean.
 
-``_run`` performs the execution of the element and you are free to do want you
+``_run`` performs the execution of the element, and you are free to do want you
 want here.
 With two exceptions:
 
@@ -75,9 +75,9 @@ With two exceptions:
 
 
 If you define elements that are only intended for server usage and require
-libraries you should not import them toplevel but at the filter level (that is
-in ``__init__`` or similar) to minimize the libraries needed for a client.
-That is necessary because every client reads the complete job (and therefor the
+libraries, you should not import them toplevel but at the filter level (that is,
+in ``__init__``, or similar) to minimize the libraries needed for a client.
+This is necessary because every client reads the complete job (and therefor the
 complete job description language).
 
 Workloads
@@ -91,7 +91,7 @@ A workload has the attributes (you may want to use properties instead):
 
 You don't have to set ``out`` yourself as it will be set by the executing JVM.
 The same goes for ``outputs``, because they are set by
-:class:`~penchy.jobs.elements.Workload` and inherited (if you change them you
+:class:`~penchy.jobs.elements.Workload` and inherited (if you change them, you
 have to provide a strict superset).
 
 Filters
