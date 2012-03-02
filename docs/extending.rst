@@ -125,7 +125,7 @@ A WrappedJVM is a :class:`~penchy.jobs.elements.PipelineElement` as well as a
 You have to provide this attributes:
 
 - ``cmdline`` how to invoke the JVM with the wrapping (to use most of
-  :class:`~penchy.jobs.jvm.JVM` infrastructure)
+  :class:`~penchy.jobs.jvms.JVM` infrastructure)
 
 and this methods:
 
@@ -134,5 +134,5 @@ and this methods:
 Even if a WrappedJVM is a :class:`~penchy.jobs.elements.PipelineElement` you
 must not specify a ``_run`` method.
 
-Whatever you do: You must behave like a :class:`~penchy.jobs.jvm.JVM`, so be
+Whatever you do: You must behave like a :class:`~penchy.jobs.jvms.JVM`, so be
 sure to take a look how it is implemented.
