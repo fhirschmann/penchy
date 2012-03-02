@@ -2,7 +2,7 @@
 Installation
 ============
 
-This document will guide you through installing PenchY and its
+This section will guide you through installing PenchY and its
 dependencies.
 
 Client-Side
