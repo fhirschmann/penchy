@@ -10,7 +10,7 @@ import logging
 import os
 import signal
 import threading
-from SimpleXMLRPCServer import SimpleXMLRPCServer
+from penchy.compat import SimpleXMLRPCServer
 
 from penchy.maven import make_bootstrap_pom
 from penchy.util import make_bootstrap_client

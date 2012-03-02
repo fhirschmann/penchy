@@ -23,8 +23,10 @@ if on_python3:  # pragma: no cover
     unicode_ = str
     str = bytes
     from io import StringIO
+    from xmlrpc.server import SimpleXMLRPCServer
 else:
     from StringIO import StringIO
+    from SimpleXMLRPCServer import SimpleXMLRPCServer
     unicode_ = unicode
 
 if sys.version_info >= (2, 7):  # pragma: no cover
