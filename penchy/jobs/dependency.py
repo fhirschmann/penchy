@@ -8,7 +8,7 @@ pipeline.
  :license: MIT License, see LICENSE
 """
 
-from penchy.compat import str
+from penchy.compat import str, unicode
 
 
 class Edge(object):
@@ -101,13 +101,13 @@ class Pipeline(object):
         :type other: str, list of str, list of tuple,
                      :class:`~penchy.jobs.element.PipelineElement`
         """
-        if isinstance(other, str):
+        if isinstance(other, (str, unicode)):
             self.pending = [(other, other)]
         elif isinstance(other, tuple):
             self.pending = [other]
         elif isinstance(other, list):
-            mapping = [(map_, map_) if isinstance(map_, str) else map_
-                       for map_ in other]
+            mapping = [(map_, map_) if isinstance(map_, (str, unicode))
+                       else map_ for map_ in other]
             self.pending = mapping
         else:
             edge = Edge(self.current_source, other, self.pending)
