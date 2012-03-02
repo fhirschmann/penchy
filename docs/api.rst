@@ -35,6 +35,10 @@ Plots
 -----
 .. automodule:: penchy.jobs.plots
 
+Type checking
+-------------
+.. automodule:: penchy.jobs.typecheck
+
 Pipeline dependency specification
 ---------------------------------
 
