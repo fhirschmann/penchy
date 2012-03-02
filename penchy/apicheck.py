@@ -43,7 +43,7 @@ def checkattr(mod, attr):
     :param attr: attribute to check for
     """
     if not hasattr(mod, attr):
-        log.error('%s in %s no longer has a %s attribute' %
+        die('%s in %s no longer has a %s attribute' %
                 (mod.__name__, mod.__module__, attr))
         return True
     else:
@@ -79,7 +79,9 @@ def check_paramiko():
         die('Could not import paramiko - did you install it?')
 
     checkattrs([
-        (paramiko, ['Transport', 'SSHClient', 'SFTPClient']),
+        (paramiko, ['Transport', 'SSHClient', 'SFTPClient'])
+    ])
+    checkattrs([
         (paramiko.Transport, 'is_active'),
         (paramiko.SSHClient, ['open_sftp', 'connect']),
         (paramiko.SFTPClient, ['open', 'put', 'mkdir'])
