@@ -54,10 +54,12 @@ class MavenTest(unittest.TestCase):
 
     def test_get_incorrect_filename(self):
         self.dep.filename = 'foo.jar'
-        self.assertRaises(LookupError, lambda: self.dep.filename)
+        with self.assertRaises(LookupError):
+            self.dep.filename
 
     def test_pom_not_found(self):
-        self.assertRaises(OSError, get_classpath, '')
+        with self.assertRaises(OSError):
+            get_classpath('')
 
     def test_checksum(self):
         self.assertEqual(self.dep.actual_checksum,
@@ -70,11 +72,12 @@ class MavenTest(unittest.TestCase):
         self.assertTrue(self.dep_cs.check_checksum())
 
     def test_checksum_required_fails(self):
-        self.assertRaises(IntegrityError, self.dep_cs2.check_checksum)
+        with self.assertRaises(IntegrityError):
+            self.dep_cs2.check_checksum()
 
     def test_setup_dependencies(self):
         setup_dependencies(self.tf_cs, [self.dep_cs])
 
     def test_setup_dependencies_incorrect_checksum(self):
-        self.assertRaises(IntegrityError, setup_dependencies,
-                self.tf_cs2, [self.dep_cs2])
+        with self.assertRaises(IntegrityError):
+            setup_dependencies(self.tf_cs2, [self.dep_cs2])
