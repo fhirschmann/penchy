@@ -19,6 +19,7 @@ import math
 from pprint import pprint
 
 from penchy import __version__
+from penchy.compat import str, path
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.util import default, average, Value
@@ -56,7 +57,7 @@ class HProfCpuTimes(Filter):
     - ``trace``: Stack trace number
     - ``method``: Absolute method name
     """
-    inputs = Types(('hprof', list, str))
+    inputs = Types(('hprof', list, path))
 
     outputs = Types(('total', list, int),
                     ('rank', list, list, int),
@@ -144,7 +145,7 @@ class DacapoHarness(Filter):
     - ``times``: execution time per itertion per invocation
     - ``valid``: flag that indicates if execution was valid
     """
-    inputs = Types(('stderr', list, str),
+    inputs = Types(('stderr', list, path),
                    ('exit_code', list, int))
 
     outputs = Types(('failures', list, int, int),
@@ -588,7 +589,7 @@ class Save(SystemFilter):
 
     - ``data``: data to save (encoded)
     """
-    inputs = Types(('data', str))
+    inputs = Types(('data', path))
 
     def __init__(self, target_path):
         """
@@ -619,7 +620,7 @@ class BackupFile(SystemFilter):
 
     - ``filename``: path of file to backup
     """
-    inputs = Types(('filename', str))
+    inputs = Types(('filename', path))
 
     def __init__(self, target_path):
         """
@@ -655,8 +656,8 @@ class Read(Filter):
     Outputs:
     - ``data``: the content of the filepaths
     """
-    inputs = Types(('paths', list, str))
-    outputs = Types(('data', list, str))
+    inputs = Types(('paths', list, path))
+    outputs = Types(('data', list, path))
 
     def _run(self, **kwargs):
         paths = kwargs['paths']

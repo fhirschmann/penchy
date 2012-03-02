@@ -29,6 +29,8 @@ else:
     from StringIO import StringIO
     from SimpleXMLRPCServer import SimpleXMLRPCServer
 
+path = (str, unicode)
+
 if sys.version_info >= (2, 7):  # pragma: no cover
     import unittest
     # avoiding AttributeErrors is quite difficult here...

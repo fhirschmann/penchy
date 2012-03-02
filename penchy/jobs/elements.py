@@ -9,8 +9,10 @@ This module provides the foundation of job elements.
 import logging
 from collections import defaultdict
 
+from penchy.compat import str, unicode, path
 from penchy.jobs.dependency import Pipeline
 from penchy.jobs.typecheck import Types
+
 
 log = logging.getLogger(__name__)
 
@@ -152,8 +154,8 @@ class Workload(NotRunnable, PipelineElement):
     - `stderr`, the path to the file that contains the output on stderr
     - `exit_code`, the exitcode as int
     """
-    outputs = Types(('stdout', list, str),
-                    ('stderr', list, str),
+    outputs = Types(('stdout', list, path),
+                    ('stderr', list, path),
                     ('exit_code', list, int))
 
     def __init__(self, timeout=0):

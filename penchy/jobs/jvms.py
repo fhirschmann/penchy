@@ -14,7 +14,7 @@ import subprocess
 from hashlib import sha1
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import update_hasher, nested
+from penchy.compat import update_hasher, nested, path
 from penchy.jobs.elements import PipelineElement
 from penchy.jobs.hooks import Hook
 from penchy.jobs.typecheck import Types
@@ -290,7 +290,7 @@ class ValgrindJVM(WrappedJVM):
 
     - ``valgrind_log``: paths to valgrind log file.
     """
-    outputs = Types(('valgrind_log', list, str))
+    outputs = Types(('valgrind_log', list, path))
     arguments = []
 
     def __init__(self, path, options='',
@@ -368,8 +368,8 @@ class CacheGrindJVM(ValgrindJVM):
     - ``valgrind_log``: paths to Valgrind log file.
     - ``cachegrind``: paths to Cachegrind log file.
     """
-    outputs = Types(('valgrind_log', list, str),
-                    ('cachegrind', list, str))
+    outputs = Types(('valgrind_log', list, path),
+                    ('cachegrind', list, path))
     _cachegrind_file = 'penchy-cachegrind'
     arguments = ['--tool=cachegrind',
                  '--cachegrind-out-file={0}'.format(_cachegrind_file)]
@@ -389,8 +389,8 @@ class CallGrindJVM(ValgrindJVM):
     - ``valgrind_log``: paths to Valgrind log file.
     - ``callgrind``: paths to Callgrind log file.
     """
-    outputs = Types(('valgrind_log', list, str),
-                    ('callgrind', list, str))
+    outputs = Types(('valgrind_log', list, path),
+                    ('callgrind', list, path))
     _callgrind_file = 'penchy-callgrind'
     arguments = ['--tool=callgrind',
                  '--callgrind-out-file={0}'.format(_callgrind_file)]
