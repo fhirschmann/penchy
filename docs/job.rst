@@ -261,17 +261,16 @@ Please consult the section on :ref:`using hooks <using-hooks>`.
 Using penchyrc: Stop repeating yourself
 =======================================
 
-To avoid duplication of settings (such as :class:`NodeSetting` or user names)
-there is a possibility to use a configuration file (:file:`penchyrc`) and put
+To avoid duplication of settings (such as :class:`penchy.jobs.job.NodeSetting` or user names),
+there is a possibility to use a configuration file (:file:`penchyrc`), and put
 frequently used settings there.
 
-The configuration is a Python module and you can use any Python Code there to
-configure.
-If you do not specify where :file:`penchyrc` is (in the penchy invocation:
-``penchy --config <file>``) it will be searched in :file:`$HOME/.penchyrc`.
+The configuration is a Python module, and you can put any Python code there.
+If you do not specify where :file:`penchyrc` is located (in the penchy invocation:
+``penchy --config <file>``), it will be assumed to be in :file:`$HOME/.penchyrc`.
 
-To use :file:`penchyrc`, you have to import the ``config`` module, the header of
-above :ref:`sample job <sample-job>`::
+To use :file:`penchyrc`, you have to import the ``config`` module. The header of
+the :ref:`sample job <sample-job>` above::
 
   import os
   from penchy.jobs import *

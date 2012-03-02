@@ -60,7 +60,7 @@ This will be accomplished by using SCP.
 2. Executing the Bootstrap Client
 ---------------------------------
 
-The next step in the process is to execute the bootstrap client which was
+The next step in the process is to execute the bootstrap client, which was
 previously uploaded to all nodes. This is done by simply using SSH.
 
 In addition to installing the PenchY client from a maven repository,
