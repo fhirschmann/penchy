@@ -32,6 +32,9 @@ Testpläne
 - 2012-03-02 Valgrind erfolgreich ausgeführt von Michael
 - 2012-03-02 Dump erfolgreich ausgeführt von Michael
 - 2012-03-02 Abweichungen erfolgreich durchgeführt von Michael
+- 2012-02-02 Zwei Nodes erfolgreich durchgeführt von Fabian
+- 2012-02-02 Timeout erfolgreich durchgeführt von Fabian
+- 2012-02-02 Vorzeitiger Abbruch erfolgreich duchgeführt von Fabian
 
 Coverage
 --------
@@ -41,6 +44,7 @@ Dokumentation
 
 Statische Analyse
 -----------------
+- 2012-03-02 Durchgeführt von Fabian. Rating: 9.22/10 → 9.23/10
 
 Iteration
 =========
