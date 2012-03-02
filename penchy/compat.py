@@ -131,7 +131,7 @@ def update_hasher(hasher, string, codec='utf8'):
     return hasher
 
 
-def to_unicode(string):
+def try_unicode(string):
     """
     If ``string`` is of type ``str`` it returns
     its unicode representation. Otherwise ``string``
