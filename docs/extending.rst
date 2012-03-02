@@ -27,7 +27,7 @@ can choose to ignore the ``defaultdict(list)`` nature of it, and replace it by a
 What is part of the interface that offer via ``out`` has to be described by
 ``outputs``.
 This can be set at class level and thus used for all instances of the
-:class:`~penchy.jobs.elements.PipelineElement` you define or overridden (or even
+:class:`~penchy.jobs.elements.PipelineElement` you define, or overridden (or even
 create) in every instance (likely by ``__init__`` or ``_run``, see below).
 
 If you only offer the output ``out`` which is a :class:`list` of :class:`list`
