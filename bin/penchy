@@ -18,8 +18,6 @@ from functools import partial
 
 import argparse
 
-from penchy.apicheck import check_all
-check_all()
 from penchy.server import Server
 from penchy.util import load_job, load_config, get_config_attribute, die
 from penchy.log import configure_logging
@@ -63,6 +61,10 @@ if __name__ == "__main__":
             action="store", dest="load_from",
             help="path or zip to load penchy from on the node")
 
+    parser.add_argument("--skip-apicheck",
+            action="store_true", dest="skip_apicheck",
+            help="don't check the api of dependencies")
+
     mode_group = parser.add_mutually_exclusive_group()
     mode_group.add_argument("--check", action="store_true",
             dest="check", help="check a job for validity and exit")
@@ -84,8 +86,11 @@ if __name__ == "__main__":
         die("Error loading job '%s: %s" % (args.job, e))
     job = job_module.job
 
+    if not args.skip_apicheck:
+        from penchy.apicheck import check_all
+        check_all()
+
     configure_logging(args.loglevel, args.logfile)
-    check_all()
 
     if args.check:
         if job.check():
