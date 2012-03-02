@@ -18,7 +18,6 @@ from functools import partial
 
 import argparse
 
-from penchy.server import Server
 from penchy.util import load_job, load_config, get_config_attribute, die
 from penchy.log import configure_logging
 
@@ -108,6 +107,7 @@ if __name__ == "__main__":
         path = job.visualize()
         print('You can view the visualization of the job here: "{0}"'.format(path))
     else:
+        from penchy.server import Server
         server = Server(config, job_module)
         server.bootstrap_args.extend(['--loglevel', str(args.loglevel)])
 
