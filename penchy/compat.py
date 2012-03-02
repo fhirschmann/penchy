@@ -143,6 +143,6 @@ def try_unicode(string):
     :rtype: unicode, object
     """
     if isinstance(string, str):
-        return string.decode("iso-8859-1")
+        return string.decode("utf-8")
     else:
         return string
