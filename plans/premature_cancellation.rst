@@ -1,6 +1,6 @@
-======
- Premature Cancellation
-======
+=====================
+ Vorzeitiger Abbruch
+=====================
 
 Vorbedingungen
 ==============
