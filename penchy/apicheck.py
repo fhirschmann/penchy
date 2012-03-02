@@ -8,10 +8,6 @@ import logging
 import inspect
 from inspect import ArgSpec
 
-import matplotlib
-import matplotlib.figure
-import matplotlib.pyplot
-
 log = logging.getLogger(__name__)
 
 
@@ -104,6 +100,15 @@ def check_paramiko():
 
 
 def check_matplotlib():
+    log.debug('Checking for API changes in matplotlib')
+    try:
+        import matplotlib
+        import matplotlib.figure
+        import matplotlib.pyplot
+    except ImportError:
+        log.error('Could not import matplotlib - did you install it?')
+        raise
+
     expected = ArgSpec(args=['num', 'figsize', 'dpi', 'facecolor',
         'edgecolor', 'frameon', 'FigureClass'], varargs=None,
         keywords='kwargs', defaults=(None, None, None, None,
