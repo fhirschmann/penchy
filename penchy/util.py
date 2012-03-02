@@ -110,7 +110,8 @@ def tree_pp(elem, level=0):
 
 def dict2tree(elem, dict_):
     """
-    Add the content of ``dict_`` to ``elem`` aus subelements.
+    Transform the given dictionary to a ElementTree and
+    add it to the given element.
 
     :param elem: parent element
     :type elem: :class:`xml.etree.ElementTree.Element`
@@ -120,7 +121,10 @@ def dict2tree(elem, dict_):
     for key in dict_:
         if dict_[key]:
             e = SubElement(elem, key)
-            e.text = dict_[key]
+            if type(dict_[key]) == dict:
+                dict2tree(e, dict_[key])
+            else:
+                e.text = dict_[key]
 
 
 def sha1sum(filename, blocksize=65536):
