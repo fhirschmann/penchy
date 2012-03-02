@@ -39,6 +39,8 @@ Testpläne
 
 Coverage
 --------
+- 2012-03-02 manuelle Unittests erfolgreich ausgeführt von Michael
+- 2012-03-02 Coverage: coverage-2012-03-02.png
 
 Dokumentation
 -------------
