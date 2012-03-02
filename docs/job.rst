@@ -380,7 +380,7 @@ Execution Hook
 
 PenchY comes with :class:`~penchy.jobs.hooks.ExecuteHook`, which is
 a simple Hook that is supposed to make the exeuction of programs
-easier. It allows you to pass a command along with it's arguments
+easier. It allows you to pass a command along with it's arguments,
 which will get started before the exeuction and terminated afterwards
 (if neccessary)::
 
