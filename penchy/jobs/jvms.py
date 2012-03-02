@@ -148,6 +148,9 @@ class JVM(object):
                 log.error('jvm execution failed, stderr:')
                 stderr.seek(0)
                 log.error(stderr.read())
+                log.error('jvm execution failed, stdout:')
+                stdout.seek(0)
+                log.error(stdout.read())
                 raise JVMExecutionError('non zero exit code: {0}'
                                         .format(self.proc.returncode))
 
