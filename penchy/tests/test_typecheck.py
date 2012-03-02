@@ -11,7 +11,7 @@ class CheckArgsTest(unittest.TestCase):
         self.inputs = Types(('foo', str),
                             ('bar', list, int))
 
-        self.d = {'foo' : '23', 'bar' : range(5)}
+        self.d = {'foo' : '23', 'bar' : list(range(5))}
 
     def test_malformed_types(self):
         for t in ((1, str),
