@@ -771,9 +771,9 @@ class Enumerate(Filter):
 
     def _run(self, **kwargs):
         self.out['values'] = kwargs['values']
-        self.out['numbers'] = range(self.start,
-                                    self.start + len(kwargs['values'] * self.step),
-                                    self.step)
+        self.out['numbers'] = list(range(self.start,
+                                         self.start + len(kwargs['values'] * self.step),
+                                         self.step))
 
 
 class Decorate(Filter):
