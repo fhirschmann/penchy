@@ -8,6 +8,8 @@ import logging
 import inspect
 from inspect import ArgSpec
 
+from penchy.util import die
+
 log = logging.getLogger(__name__)
 
 
@@ -74,8 +76,7 @@ def check_paramiko():
     try:
         import paramiko
     except ImportError:
-        log.error('Could not import paramiko - did you install it?')
-        raise
+        die('Could not import paramiko - did you install it?')
 
     checkattrs([
         (paramiko.Transport, 'is_active'),
@@ -106,7 +107,7 @@ def check_matplotlib():
         import matplotlib.figure
         import matplotlib.pyplot
     except ImportError:
-        log.error('Could not import matplotlib - did you install it?')
+        die('Could not import matplotlib - did you install it?')
         raise
 
     expected = ArgSpec(args=['num', 'figsize', 'dpi', 'facecolor',
