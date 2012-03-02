@@ -1,0 +1,44 @@
+# -*- mode: python -*-
+"""
+Job which produces lots of data in order to
+test the client-server implementation.
+"""
+
+from penchy.jobs import *
+from penchy.jobs.elements import Filter
+from penchy.jobs.typecheck import Types
+import config
+
+node1 = NodeSetting('192.168.56.11', 22, 'bench', '/home/bench', '/usr/bin')
+node2 = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+
+jvm = jvms.JVM('java')
+comp1 = SystemComposition(jvm, node1)
+comp2 = SystemComposition(jvm, node2)
+
+receiver = filters.Receive()
+
+
+w = workloads.ScalaBench('dummy')
+jvm.workload = w
+
+class Test(Filter):
+    inputs = filters.DacapoHarness.inputs
+    outputs = Types(('foo', str))
+
+    def _run(self):
+        self.out['foo'] = 'hallo'
+
+test = Test()
+send = filters.Send()
+
+flow = [w >> test >> send]
+comp1.flow = flow
+comp2.flow = flow
+
+job = Job(compositions=[comp1, comp2],
+          server_flow=[
+              receiver >> filters.Print()
+          ],
+          )
