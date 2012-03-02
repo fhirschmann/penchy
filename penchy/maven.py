@@ -58,6 +58,7 @@ def get_classpath(path=None):
     log.info('Executing maven. This may take a while')
     proc = Popen(cmd, stdout=PIPE)
     stdout, _ = proc.communicate()
+    stdout = stdout.decode('utf-8')
 
     if proc.returncode is not 0:  # pragma: no cover
         log.error(stdout)
@@ -277,7 +278,7 @@ class POM(object):
     }
     REQUIRED_ATTRIBS = set(('artifactId', 'groupId', 'version'))
 
-    def __init__(self, **kwargs):
+    def __init__(self, encoding='UTF-8', **kwargs):
         if not set(kwargs.keys()).issuperset(self.__class__.REQUIRED_ATTRIBS):
             raise POMError(', '.join(self.__class__.REQUIRED_ATTRIBS) +
                     ' are required keywords')
@@ -288,10 +289,31 @@ class POM(object):
         self.tree = ElementTree(self.root)
         self.dependency_tree = SubElement(self.root, 'dependencies')
         self.repository_tree = SubElement(self.root, 'repositories')
+        self.build_tree = SubElement(self.root, 'build')
+        self.plugin_tree = SubElement(self.build_tree, 'plugins')
 
         attribs = POM.ATTRIBS.copy()
         attribs.update(kwargs)
         dict2tree(self.root, attribs)
+
+        if encoding:
+            self._setup_encoding(encoding)
+
+    def _setup_encoding(self, encoding):
+        """
+        Uses a specific encoding.
+
+        :param encoding: encoding to use
+        :type encoding: string
+        """
+        dict_ = {
+                'groupId': 'org.apache.maven.plugins',
+                'artifactId': 'maven-site-plugin',
+                'version': '2.3',
+                'configuration': {
+                    'outputEncoding': encoding}}
+        e = SubElement(self.plugin_tree, 'plugin')
+        dict2tree(e, dict_)
 
     def add_dependency(self, dep):
         """
@@ -407,7 +429,7 @@ def make_bootstrap_pom():
     :returns: temporary file
     :rtype: :class:`NamedTemporaryFile`
     """
-    tf = NamedTemporaryFile()
+    tf = NamedTemporaryFile(delete=False)
     pom = BootstrapPOM()
     pom.write(tf.name)
     return tf
