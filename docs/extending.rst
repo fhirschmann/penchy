@@ -26,9 +26,9 @@ can choose to ignore the ``defaultdict(list)`` nature of it, and replace it by a
 
 What is part of the interface that offer via ``out`` has to be described by
 ``outputs``.
-This can be set at class level for all instances of the
-:class:`~penchy.jobs.elements.PipelineElement` you define or overwrite (or even
-create) in every instance.
+This can be set at class level and thus used for all instances of the
+:class:`~penchy.jobs.elements.PipelineElement` you define or overridden (or even
+create) in every instance (likely by ``__init__`` or ``_run``, see below).
 
 If you only offer the output ``out`` which is a :class:`list` of :class:`list`
 of :class:`int`, you will use this::
@@ -97,7 +97,7 @@ have to provide a strict superset).
 Filters
 =======
 
-Filters can be as simple as :class:`~penchy.jobs.elements.Filter` or
+Filters can be a normal :class:`~penchy.jobs.elements.Filter` or
 :class:`~penchy.jobs.elements.SystemFilter`.
 The latter will be passed an additional argument called ``:environment:`` on
 execution, which describes the execution environment of the SystemFilter (see
