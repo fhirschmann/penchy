@@ -16,7 +16,7 @@ tests:
 	unit2 discover -s penchy/tests -t .
 
 tests3:
-	unit2-3.2 discover -s penchy/tests -t .
+	python -m unittest discover -s penchy/tests -t .
 
 hooks:
 	ln -s $(realpath hooks/pre-commit) .git/hooks/pre-commit
