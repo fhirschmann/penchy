@@ -68,6 +68,7 @@ def install_penchy():
     proc = Popen(['mvn', '-f', 'bootstrap.pom', 'install'], stdout=PIPE)
     signal.signal(signal.SIGTERM, lambda num, frame: proc.send_signal(num))
     stdout, _ = proc.communicate()
+    stdout = stdout.decode('utf-8')
     log.debug(stdout)
     return stdout
 
