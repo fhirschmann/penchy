@@ -35,6 +35,7 @@ Testpläne
 - 2012-02-02 Zwei Nodes erfolgreich durchgeführt von Fabian
 - 2012-02-02 Timeout erfolgreich durchgeführt von Fabian
 - 2012-02-02 Vorzeitiger Abbruch erfolgreich duchgeführt von Fabian
+- 2012-02-02 Memory Stress Test erfolgreich duchgeführt von Fabian
 
 Coverage
 --------
