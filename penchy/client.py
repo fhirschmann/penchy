@@ -80,6 +80,6 @@ class Client(object):
                 composition.set_timeout_function(self.proxy.set_timeout)
                 self.job.run(composition)
                 self._current_composition = None
-            except Exception, err:
+            except Exception as err:
                 log.exception('Exception occured while executing PenchY:')
                 self.proxy.report_error(composition.hash(), err)
