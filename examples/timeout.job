@@ -1,4 +1,10 @@
 # -*- mode: python -*-
+"""
+Sample job demonstrating the use of a timeout
+with one remote node involved. This job will
+certainly time out and is not expected to
+produce usable results.
+"""
 
 from penchy.jobs import *
 import config

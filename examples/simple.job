@@ -1,4 +1,8 @@
 # -*- mode: python -*-
+"""
+Extremely simple job running a dummy benchmark
+locally.
+"""
 
 import os
 from penchy.jobs import *

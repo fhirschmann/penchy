@@ -1,4 +1,8 @@
 # -*- mode: python -*-
+"""
+Sample job demonstrating a simple scenario
+involving two remote nodes.
+"""
 
 from penchy.jobs import *
 import config

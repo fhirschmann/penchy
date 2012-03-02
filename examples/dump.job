@@ -1,5 +1,8 @@
 # -*- mode: python -*-
-
+"""
+Sample job demonstrating the use of the ``Dump``
+filter locally.
+"""
 import os
 from penchy.jobs import *
 

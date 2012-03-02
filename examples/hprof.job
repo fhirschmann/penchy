@@ -1,4 +1,8 @@
 # -*- mode: python -*-
+"""
+Sample job demonstrating the use of the ``HProf``
+filter locally.
+"""
 
 import os
 from penchy.jobs import *
