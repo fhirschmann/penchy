@@ -289,7 +289,7 @@ given a :file:`penchyrc` that looks like this::
 
   import os
   from penchy.jobs import NodeSetting
-  
+
   LOCALNODE = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
 
 Defining Timeouts
@@ -304,7 +304,7 @@ terminate JVMs. These timeouts can be defined in your job like so::
 
 where the workload defines an absolute timeout value and the other
 two add the possibility to add a factor which will get multiplied
-with the workoad timeout.
+with the workload timeout.
 
 .. warning::
 
@@ -312,7 +312,7 @@ with the workoad timeout.
     per execution of the JVM.
 
     Let's say your timeout is 10 seconds, than a Scalabench run with
-    4 iterations may not exeed 10 seconds in total.
+    4 iterations may not exceed 10 seconds in total.
 
     However, when Scalabench is asked to run 10 invocations, these
     invocations should **each** not take longer than 10 seconds.
@@ -332,7 +332,7 @@ for every run of the JVM.
 Using Hooks
 ===========
 
-PenchY allows the definition of hooks which can execute an arbitary
+PenchY allows the definition of hooks which can execute an arbitrary
 command before and after the execution of a JVM. In general, a Hook
 will execute two functions, ``setup`` and ``teardown``, which will
 be execute before and after the JVM run, respectively.
@@ -372,7 +372,7 @@ In cases where you need more control, you can subclass
     jvm.hooks.append(myhook)
 
 This will give you the most power over the definition of actions which
-should take place before and after the exeuction of a JVM.
+should take place before and after the execution of a JVM.
 
 Execution Hook
 --------------
