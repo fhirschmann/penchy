@@ -10,17 +10,17 @@ xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'  # xml namespace
 
 def read_login_data(dest_id):
     tree = ElementTree.parse("settings.xml")
-    xpath = './/%sserver[%sid="%s"]' % (xmlns, xmlns, dest_id)
+    xpath = './/{0}server[{0}id="{1}"]'.format(xmlns, dest_id)
     servers = tree.findall(xpath)
 
-    username = servers[0].findtext(".//%susername" % xmlns)
-    password = servers[0].findtext(".//%spassword" % xmlns)
+    username = servers[0].findtext(".//{0}username".format(xmlns))
+    password = servers[0].findtext(".//{0}password".format(xmlns))
     return username, password
 
 
 def main():
     username, password = read_login_data(dest_server_id)
-    print username, password
+    print(username, password)
 
 if __name__ == '__main__':
     main()
