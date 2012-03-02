@@ -134,12 +134,12 @@ Multiple Workloads & Flows
 
 A :class:`~penchy.jobs.job.SystemComposition` comprises of a JVM (with its
 ``workload`` and ``tool``) that describes what to execute and a
-:class:`~penchy.jobs.job.NodeSetting` that describes where to execute but also
-of the flow that describes how to process the results of the execution.  Using
-multiple workloads means using multiple
+:class:`~penchy.jobs.job.NodeSetting` that describes where to execute it.
+In addition, the flow describes how to process the results of the execution.
+Using multiple workloads means using multiple
 :class:`~penchy.jobs.job.SystemComposition` with different
 :class:`~penchy.jobs.job.JVM` (the number of compositions on a node is not
-limited). Here is an example with two different workloads::
+limited). Here is an example of two different workloads::
 
   j1 = JVM('java')
   j2 = JVM('java')
@@ -158,7 +158,7 @@ And now we will add two different flows::
 
 :class:`~penchy.jobs.job.PipelineElement` can be used across flows but will be
 reset after the execution of a :class:`~penchy.jobs.job.SystemComposition`.
-This is mind we could reuse the ``filters.DacapoHarness()`` above
+This is why we could reuse the ``filters.DacapoHarness()`` above
 (``filters.Print()`` has no state to speak of) without trouble::
 
   h = filters.DacapoHarness()
