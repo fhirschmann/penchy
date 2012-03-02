@@ -21,6 +21,7 @@ from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
 from penchy.jobs.filters import Receive, Send
+from penchy.jobs.plots import Plot
 from penchy.jobs.hooks import Hook
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, default
@@ -466,6 +467,11 @@ class Job(object):
 
             if not any(isinstance(e, Send) for e in composition.elements):
                 log.error('Check: there is no Send in composition "{0}"'
+                          .format(composition))
+                valid = False
+
+            if any(isinstance(e, Plot) for e in composition.elements):
+                log.error('Check: there is a Plot in composition "{0}"'
                           .format(composition))
                 valid = False
 
