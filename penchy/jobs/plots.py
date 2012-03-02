@@ -64,7 +64,7 @@ class BarPlot(Plot):
 
     - ``x``: Labels for the first dimension of ``y``
     - ``y``: 2d list of bar heights
-    - ``z``: Labels for the second dimension of ``y`
+    - ``z``: Labels for the second dimension of ``y``
     """
 
     def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
