@@ -7,7 +7,7 @@ from subprocess import call as scall
 def call(cmd):
     try:
         return scall(cmd)
-    except OSError, e:
+    except OSError as e:
         print e
         print "Try installing {0}".format(cmd[0])
         return 1
