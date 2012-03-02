@@ -168,7 +168,7 @@ This is why we could reuse the ``filters.DacapoHarness()`` above
 Survey of the elements
 ======================
 
-Besides the definition of the flow, there are other elements of a job.
+Besides the definition of the flow, there are other elements to a job.
 This chapter tries to give an overview of what they are and how they are used.
 For an in-depth treatment see the :ref:`Job API <job-api>`.
 
