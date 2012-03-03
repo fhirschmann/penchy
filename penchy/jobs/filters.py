@@ -709,7 +709,10 @@ class Unpack(Filter):
 
     def __init__(self, input='singleton', output='result'):
         """
-        TODO: document me
+        :param input: the name of the input
+        :type input: string
+        :param output: the name of the output
+        :type output: string
         """
         super(Unpack, self).__init__()
         self.input = input
