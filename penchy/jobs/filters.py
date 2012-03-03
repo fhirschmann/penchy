@@ -409,14 +409,13 @@ class Aggregate(Filter):
 
 
 class Condense(Filter):
-    # FIXME: Condense has no class attribute ``names`` as indicated here
     """
-    Merges the data with the given identifiers
+    Merges the data with the given identifiers.
 
     Input:
-       - ``results``: Resultset as produced by the ``Receive`` filter
+       - ``results``: Resultset as produced by the :class:`~penchy.jobs.filters.Receive` filter
 
-    Output: The columns specified in `Condense.names`
+    Output: The columns specified in the constructor.
     """
 
     inputs = Types(('results', dict))
@@ -431,14 +430,17 @@ class Condense(Filter):
         results = kwargs['results']
         for row in self.data:
             #FIXME: Check for isinstance(first, SystemComposition)
+            # check if a system composition is explicitly given for that row
             if not isinstance(try_unicode(row[0]), unicode):
                 comp = row[0]
                 row = row[1:]
             else:
                 comp = None
 
-            # Everything is taken from the same system composition
+            # Everything in this row is taken from the same system composition
             for name, field in zip(self.names, row):
+
+                # if it is a column, extract it from the right composition
                 if isinstance(try_unicode(field), unicode):
                     if comp is None:
                         for c in results:
@@ -449,6 +451,8 @@ class Condense(Filter):
                         self.out[name].append(results[comp][field])
                     except KeyError:
                         raise WrongInputError('Column "{0}" is not contained in the resultset'.format(field))
+
+                # if it is a ``Value``, just append it
                 elif isinstance(field, Value):
                     self.out[name].append(field.value)
                 else:
