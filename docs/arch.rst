@@ -75,6 +75,7 @@ at the beginning of ``run`` and ``teardown`` at the end.
 Tools and Workloads are not run, but they have hooks nevertheless.
 Those hooks are executed when their :class:`~penchy.jobs.jvms.JVM` is run.
 
+
 Pipeline-Dependencies
 ---------------------
 
@@ -96,6 +97,23 @@ The elements are then executed one after another in this order.
 
 Input/Output Validation
 -----------------------
+
+Every element specifies the types of its :attr:`inputs` and :attr:`outputs` via
+:class:`~penchy.jobs.typecheck.Types`.
+If the elements follow their specification or are used correctly is checked at
+various points.
+While this does not guarantee that the checked values are the expected ones, it
+does at least provide some plausibility.
+
+The first validation takes place before a job will be executed:
+:meth:`~penchy.jobs.job.Job.check` does check if all elements fit into each
+other (:meth:`~penchy.jobs.typecheck.Types.check_pipe`) and if all elements will
+receive their inputs (:meth:`~penchy.jobs.typecheck.Types.check_sink`).
+This is performed purely on the specification.
+
+The second takes place inside the ``run`` of each element:
+:meth:`~penchy.jobs.typecheck.Types.check_input` examines all arguments that are
+passed to it and compares the actual arguments with the expected arguments.
 
 Execution and Communication Process
 ===================================
