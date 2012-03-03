@@ -3,7 +3,7 @@ PenchY -- JVM Provisioning & Reporting Documentation
 ====================================================
 
 This is the documentation for PenchY, the Python Benchmarking Automation
-Tool for Java Virtual Machines.
+Tool for Java Virtual Machines. 
 
 PenchY is a tool which allows you to execute benchmarks for the
 Java Virtual Machine on one or more hosts. It will take care of
@@ -20,6 +20,9 @@ on a remote host, filter the output and send it back to a server,
 where it is plotted. These filters can not only be on the client,
 but also on the server.
 
+For a quick demonstration of what PenchY is capable of, skip
+to the :doc:`examples`.
+
 If you want to learn more, please follow these steps in order
 to get your PenchY up and running:
 
@@ -32,6 +35,7 @@ to get your PenchY up and running:
    usage
    job
    extending
+   examples
    maven
    examples
    arch
