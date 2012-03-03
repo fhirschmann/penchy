@@ -83,15 +83,15 @@ Pipeline-Dependencies happen in the flow of a
 :class:`~penchy.jobs.job.Job` in form of data dependencies.
 
 Data dependencies in the job are expressed via
-:class:`~penchy.jobs.dependencies.Edge` objects.
+:class:`~penchy.jobs.dependency.Edge` objects.
 A user never encounters those because of the ``>>`` syntax, which generates
-:class:`~penchy.jobs.dependencies.Pipeline` objects, but they are used internally.
-:class:`~penchy.jobs.dependencies.Pipeline` can be converted to Edges by
+:class:`~penchy.jobs.dependency.Pipeline` objects, but they are used internally.
+:class:`~penchy.jobs.dependency.Pipeline` can be converted to Edges by
 accessing their ``edges`` attribute.
 
 The Edges construct a DAG (Directed Acyclic Graph) that is turned into a
 execution order by a topological sort (performed by
-:func:`~penchy.jobs.dependencies.edgesort`).
+:func:`~penchy.jobs.dependency.edgesort`).
 The elements are then executed one after another in this order.
 
 Input/Output Validation
