@@ -10,7 +10,7 @@ Es laufen möglichst wenige andere Prozesse.
 Job
 ===
 
-/examples/collect_statistics.job
+/plans/jobs/collect_statistics.job
 
 Während der Ausführung
 ======================

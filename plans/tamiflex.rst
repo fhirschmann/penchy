@@ -10,7 +10,7 @@ Nichts.
 Job
 ===
 
-/examples/tamiflex.job
+/plans/jobs/tamiflex.job
 
 Während der Ausführung
 ======================

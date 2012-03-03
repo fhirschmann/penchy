@@ -10,7 +10,7 @@ Valgrind ist installiert.
 Job
 ===
 
-/examples/valgrind_jvm.job
+/plans/jobs/valgrind.job
 
 Während der Ausführung
 ======================

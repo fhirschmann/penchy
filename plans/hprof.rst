@@ -10,7 +10,7 @@ Es ist eine OpenJVM (bzw. JVM mit HProf) installiert.
 Job
 ===
 
-/examples/hprof.job
+/plans/jobs/hprof.job
 
 Während der Ausführung
 ======================
