@@ -86,11 +86,21 @@ class BarPlot(Plot):
     - ``x``: Labels for the first dimension of ``y``
     - ``y``: 2d list of bar heights
     - ``z``: Labels for the second dimension of ``y``
+    - ``err`: list of error values (only visible if error_bars is True)
     """
 
     def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
         """
-        TODO: document me
+        :param colors: list of corresponding to the z-values
+        :type colors: list ``matplotlib.colors``
+        :param error_bars: draw error bars
+        :type error_bars: bool
+        :param ecolor: color of the error bars
+        :type ecolor: ``matplotlib.colors``
+        :param horizontal: draw the diagram horizontal
+        :type horizontal: bool
+        :param width: width of the bars
+        :type width: float
         """
         super(BarPlot, self).__init__(*arg, **kwarg)
         self.width = width
