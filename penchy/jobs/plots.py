@@ -21,11 +21,29 @@ if is_server:
 class Plot(Filter):
     """
     This is the base class for all plotting filters.
+
+    Notice: It is possible to set ``x_max`` < ``x_min`` and
+    ``y_max`` < ``y_min``.
     """
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None):
         """
-        TODO: document me
+        :param filename: filename of the resulting svg image
+        :type filename: string
+        :param title: title of the plot
+        :type title: string
+        :param xlabel: x axis label
+        :type xlabel: string
+        :param ylabel: y axis label
+        :type ylabel: string
+        :param x_max: maximum value of the x axis
+        :type x_max: int, float
+        :param x_min: minimum value of the x axis
+        :type x_min: int, float
+        :param y_max: maximum value of the y axis
+        :type y_max: int, float
+        :param y_min: minimum value of the y axis
+        :type y_min: int, float
         """
         super(Plot, self).__init__()
         self.filename = filename
