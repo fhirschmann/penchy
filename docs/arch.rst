@@ -55,7 +55,7 @@ When you execute PenchY, it will first copy the following files to your nodes:
 3. Your configuration file (``config.py``)
 4. The job file itself
 
-This will be accomplished by using SCP.
+This will be accomplished by using SSH.
 
 2. Executing the Bootstrap Client
 ---------------------------------
