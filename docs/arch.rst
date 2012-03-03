@@ -111,9 +111,9 @@ as defined in your job. This procedure will now be explained in detail.
 
 When you execute PenchY, it will first copy the following files to your nodes:
 
-1. The Bootstrap Client (``penchy_bootstrap``)
-2. A Maven POM file listing the dependencies of your job (``bootstrap.pom``)
-3. Your configuration file (``config.py``)
+1. The Bootstrap Client (:file:`penchy_bootstrap`)
+2. A Maven POM file listing the dependencies of your job (:file:`bootstrap.pom`)
+3. Your configuration file (:file:`config.py`)
 4. The job file itself
 
 This will be accomplished by using SSH.
