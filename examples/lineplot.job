@@ -11,7 +11,7 @@ benchmarks = ['fop', 'batik']
 
 # Client side filters
 f = filters.DacapoHarness()
-unpack = filters.Unpack('result')
+unpack = filters.Unpack(input='times', output='values')
 send = filters.Send()
 num = filters.Enumerate()
 
@@ -20,8 +20,7 @@ for bench in benchmarks:
     jvm = jvms.JVM('java')
     jvm.workload = workloads.ScalaBench(bench, iterations=20)
     comp = SystemComposition(jvm, node)
-    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> ('times', 'singleton') \
-                     >> unpack >> ('result', 'values') >> num >> [('values', 'times'), ('numbers', 'iter')] >> send]
+    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> 'times' >> unpack >> num >> [('values', 'times'), ('numbers', 'iter')] >> send]
     comps.append(comp)
 
 # Server side filters
