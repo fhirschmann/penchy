@@ -8,6 +8,7 @@ Tool for Java Virtual Machines.
 .. toctree::
    :maxdepth: 2
 
+   download
    installation
    configuration
    usage
