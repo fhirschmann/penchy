@@ -40,7 +40,7 @@ if sys.version_info >= (2, 7):  # pragma: no cover
             unittest.TestCase.assertItemsEqual = unittest.TestCase.assertCountEqual
         else:
             unittest.TestCase.assertItemsEqual = lambda self, a, b: None
-else:
+else:  # pragma: no cover
     try:
         import unittest2 as unittest
     # allow that python2.6 nodes don't depend on unittest2
@@ -53,7 +53,7 @@ else:
 # XXX: this is only necessary for python2.6 after dropping support for python2.6
 # you may want to replace this with ``with``-Statements native support for this
 @contextmanager
-def nested(*managers):
+def nested(*managers):  # pragma: no cover
     """Support multiple context managers in a single with-statement.
 
     Code like this:
