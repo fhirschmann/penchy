@@ -2,11 +2,12 @@
 Writing Jobs
 ============
 
-Here is a simple Job:
+We will start off with a simple job, which can also be
+found in ``docs/jobs/simple.job``.
 
 .. _sample-job:
 
-  .. literalinclude:: commented_sample_job.py
+  .. literalinclude:: jobs/simple.job
         :language: python
         :linenos:
         :encoding: utf8
