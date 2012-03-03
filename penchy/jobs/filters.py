@@ -792,16 +792,15 @@ class Sum(Filter):
 
 
 class Enumerate(Filter):
-    # FIXME: Document my inputs & outputs
     """
     Enumerates the given values.
 
     Inputs:
-    - ``values``
+    - ``values``: a list of arbitrary objects
 
     Outputs:
-    - ``values``
-    - ``numbers``
+    - ``values``: the same list of arbitrary objects
+    - ``numbers``: a list of numbers
     """
 
     inputs = Types(('values', list))
@@ -809,6 +808,12 @@ class Enumerate(Filter):
                     ('numbers', list, int))
 
     def __init__(self, start=0, step=1):
+        """
+        :param start: start value of the enumeration
+        :type start: int
+        :param step: step size of the enumeration
+        :type step: int
+        """
         super(Enumerate, self).__init__()
         self.start = start
         self.step = step
