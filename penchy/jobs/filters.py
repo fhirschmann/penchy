@@ -504,9 +504,25 @@ class Map(Filter):
     """
     Returns a list constructed by applying a filter to all
     elements in the given list.
+
+    The applied filter needs exactly one in- and output. If
+    the filter has more than one in- and output, it is possible
+    to pick one with ``finput`` and ``foutput``.
     """
 
     def __init__(self, filter_, input='values', output='result', finput=None, foutput=None):
+        """
+        :param filter_: the filter to be applied
+        :type filter_: :class:`~penchy.jobs.elements.Filter`
+        :param input: the name of the input of :class:`~penchy.jobs.filters.Map`
+        :type input: string
+        :param output: the name of the output of :class:`~penchy.jobs.filters.Map`
+        :type output: string
+        :param finput: the name of an input of the applied filter
+        :type finput: string
+        :param foutput: the name of an output of the applied filter
+        :type foutput: string
+        """
         super(Map, self).__init__()
         self.input = input
         self.output = output
