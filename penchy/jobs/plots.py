@@ -215,6 +215,11 @@ class ScatterPlot(Plot):
 class LinePlot(Plot):
     """
     Lineplot
+
+    Inputs:
+    - ``x``: 2d list of x-values
+    - ``y``: 2d list of y-values
+    - ``z``: labels for the first dimension of ``x`` and ``y`` values
     """
     inputs = Types(('x', list, list, (int, float)),
                    ('y', list, list, (int, float)),
@@ -222,7 +227,8 @@ class LinePlot(Plot):
 
     def __init__(self, colors, *arg, **kwarg):
         """
-        TODO: document me
+        :param colors: colors according to z-values
+        :type colors: list ``matplotlib.colors``
         """
         super(LinePlot, self).__init__(*arg, **kwarg)
         self.colors = colors
