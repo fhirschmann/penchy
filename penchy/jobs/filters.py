@@ -421,6 +421,12 @@ class Condense(Filter):
     inputs = Types(('results', dict))
 
     def __init__(self, names, data):
+        """
+        :param names: names of outputs
+        :type names: tuple string
+        :param data: the columns that should be merged and the identifiers
+        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string, :class:`~penchy.util.Value`)
+        """
         super(Condense, self).__init__()
         self.data = data
         self.names = names
