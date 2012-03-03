@@ -3,7 +3,7 @@ Writing Jobs
 ============
 
 We will start off with a simple job, which can also be
-found in ``docs/jobs/simple.job``.
+found in :file:`docs/examples/simple.job`:
 
 .. _sample-job:
 
