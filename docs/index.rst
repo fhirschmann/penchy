@@ -14,7 +14,7 @@ in order to make PenchY *extensible*.
 
 This is why the PenchY architecture makes heavy use of the
 *flow-based programming paradigm*, where you can plug together
-componentents of a so-called pipeline together in a very intuitive
+componentents of a so-called pipeline in a very intuitive
 fashion. In the most simple scenario, you execute a benchmark
 on a remote host, filter the output and send it back to a server,
 where it is plotted. These filters can not only be on the client,
