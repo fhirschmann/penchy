@@ -26,7 +26,8 @@ class Plot(Filter):
     ``y_max`` < ``y_min``.
     """
     def __init__(self, filename, title="", xlabel="", ylabel="",
-                 x_max=None, x_min=None, y_max=None, y_min=None):
+                 x_max=None, x_min=None, y_max=None, y_min=None,
+                 x_scale="linear", y_scale="linear"):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -44,6 +45,10 @@ class Plot(Filter):
         :type y_max: int, float
         :param y_min: minimum value of the y axis
         :type y_min: int, float
+        :param x_scale: scale of the x axis, either linear, log or symlog
+        :type x_scale: string
+        :param y_scale: scale of the y axis, either linear, log or symlog
+        :type y_scale: string
         """
         super(Plot, self).__init__()
         self.filename = filename
@@ -65,6 +70,19 @@ class Plot(Filter):
                 self.plot.set_ylim(bottom=y_min)
             if y_max is not None:
                 self.plot.set_ylim(top=y_max)
+
+            # Set the scale of the axes
+            if x_scale in ['linear', 'log', 'symlog']:
+                self.plot.set_xscale(x_scale)
+            else:
+                raise ValueError("x_scale must be either 'linear', 'log',"
+                                 " or 'symlog'")
+
+            if y_scale in ['linear', 'log', 'symlog']:
+                self.plot.set_yscale(y_scale)
+            else:
+                raise ValueError("y_scale must be either 'linear', 'log',"
+                                 " or 'symlog'")
 
             hooks = [lambda: self.plot.set_xlabel(self.xlabel),
                      lambda: self.plot.set_ylabel(self.ylabel),
