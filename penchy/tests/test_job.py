@@ -251,6 +251,12 @@ class JobCheckTest(unittest.TestCase):
                 [r >> p])
         self.assertFalse(j.check())
 
+    def test_wrong_sugar(self):
+        f = DacapoHarness()
+        p = Print()
+        with self.assertRaises(ValueError):
+            f >> ('a', 'b', 'c') >> p
+
     def test_missing_input(self):
         c = make_system_composition()
         w = ScalaBench('jython')
