@@ -827,26 +827,31 @@ class Enumerate(Filter):
 
 class Decorate(Filter):
     """
-    Decorates the inputs with the a given string.
+    Decorates the inputs with the a given string. By default the filter
+    has only the input ``values``, but it is possible to specify the inputs
+    with the argument ``inputs``. The interpolation syntax '{i}' where ``i``
+    is the position of the input value.
 
-    Inputs:
+    Inputs (default):
     - ``values``: a list of int or float values that shall be decorated
 
     Outputs:
     - ``values``: the decorated list
     """
-
-    inputs = Types(('values', list, (int, float)))
     outputs = Types(('values', list, str))
 
-    def __init__(self, string):
+    def __init__(self, string, inputs=['values']):
         """
         :param string: the decorate/interpolation string
         :type string: string
+        :param inputs: list of input names
+        :type inputs: list string
         """
         super(Decorate, self).__init__()
+
+        self.inputs = Types(*[(i, list, (int, float)) for i in inputs])
         self.string = string
 
-    #TODO: Multiple Inputs?
     def _run(self, **kwargs):
-        self.out['values'] = [self.string.format(v) for v in kwargs['values']]
+        values = zip(*[kwargs[name] for name in self.inputs.names])
+        self.out['values'] = [self.string.format(*v) for v in values]
