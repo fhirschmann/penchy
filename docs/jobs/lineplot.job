@@ -26,7 +26,7 @@ for bench in benchmarks:
 # Server side filters
 condense = filters.CondensingReceive(('time', 'iter' ,'bench'),
                                      [(com, 'times', 'iter', Value(bench)) for com, bench in zip(comps, benchmarks)])
-plot = plots.LinePlot(filename='/tmp/lineplot.svg', title='lineplot', xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
+plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot', xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
 
 job = Job(compositions=comps,
           server_flow=[
