@@ -830,16 +830,20 @@ class Decorate(Filter):
     Decorates the inputs with the a given string.
 
     Inputs:
-    - ``values``
+    - ``values``: a list of int or float values that shall be decorated
 
     Outputs:
-    - ``values``
+    - ``values``: the decorated list
     """
 
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('values', list, str))
 
     def __init__(self, string):
+        """
+        :param string: the decorate/interpolation string
+        :type string: string
+        """
         super(Decorate, self).__init__()
         self.string = string
 
