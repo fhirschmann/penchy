@@ -244,7 +244,8 @@ class Server(object):
         try:
             while not self.received_all_results:
                 self.server.handle_request()
-            self.run_pipeline()
+            if self.results:
+                self.run_pipeline()
         except KeyboardInterrupt:
             log.warning('Keyboard Interrupt - Shutting down, please wait')
         finally:
