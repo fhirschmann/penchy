@@ -91,7 +91,7 @@ accessing their ``edges`` attribute.
 
 The Edges construct a DAG (Directed Acyclic Graph) that is turned into a
 execution order by a topological sort (performed by
-:fun:`~penchy.jobs.dependencies.edgesort`).
+:func:`~penchy.jobs.dependencies.edgesort`).
 The elements are then executed one after another in this order.
 
 Input/Output Validation
