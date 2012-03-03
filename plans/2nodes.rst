@@ -15,7 +15,7 @@ stehen bereit, auf ihnen ist Maven und Python(2.6) installiert.
 Job
 ===
 
-/examples/2nodes.job
+/plans/jobs/2nodes.job
 
 Während der Ausführung
 ======================

@@ -15,7 +15,7 @@ PenchY wird mit dem ``-d`` (debug) Parameter gestartet.
 Job
 ===
 
-/examples/timeout.job
+/plans/jobs/timeout.job
 
 Während der Ausführung
 ======================

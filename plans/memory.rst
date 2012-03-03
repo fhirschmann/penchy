@@ -15,7 +15,7 @@ stehen bereit, auf ihnen ist Maven und Python(2.6) installiert.
 Job
 ===
 
-/examples/memory_stress.job
+/plans/jobs/memory.job
 
 Während der Ausführung
 ======================
