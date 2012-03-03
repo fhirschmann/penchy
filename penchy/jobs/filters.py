@@ -363,6 +363,7 @@ class Aggregate(Filter):
         if not args:
             raise ValueError("Aggregate Filter needs at least one argument")
 
+        # build the output types and check the given arguments
         names = []
         for col in args:
             if isinstance(try_unicode(col), unicode):
@@ -381,7 +382,12 @@ class Aggregate(Filter):
     def _run(self, **kwargs):
         results = kwargs['results']
         for col in self.columns:
+
+            # a system composition is not explicitly given
             if isinstance(try_unicode(col), unicode):
+
+                # take the column from the first system composition and
+                # warn if it appears in more than one
                 found = False
                 for res in results:
                     if col in results[res]:
@@ -393,6 +399,7 @@ class Aggregate(Filter):
                             found = True
                 if not found:
                     raise WrongInputError('Column is not contained in the resultset')
+            # a system composition is given explicitly
             else:
                 comp, column = col
                 try:
