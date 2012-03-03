@@ -462,7 +462,7 @@ class Condense(Filter):
 
 class AggregatingReceive(Receive, Aggregate):
     """
-    A composition of the ``Receive`` and ``Aggregate`` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive` and :class:`~penchy.jobs.filters.Aggregate` filter.
     """
     inputs = Types((':environment:', dict))
 
@@ -479,7 +479,7 @@ class AggregatingReceive(Receive, Aggregate):
 
 class CondensingReceive(Receive, Condense):
     """
-    A composition of the ``Receive`` and ``Condense`` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive` and :class:`~penchy.jobs.filters.Condense` filter.
     """
     inputs = Types((':environment:', dict))
 
