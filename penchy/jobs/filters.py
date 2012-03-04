@@ -877,19 +877,26 @@ class ConfidenceIntervalMean(Filter):
         self.con_level = 1 - self.sig_level
 
     def _run(self, **kwargs):
+        # Gaussian distribution
         from scipy.stats import norm
+        # Students t-distribution
+        from scipy.stats import t
+
         xs = kwargs['values']
+
+        # These computations are common to both of the follow two cases
+        n = len(xs)
+        avg = average(xs)
+        s = sqrt(sum((x - avg) ** 2 for x in xs) / n - 1)
 
         # If the number of samples is large
         if len(xs) > 29:
-            n = len(xs)
-            avg = average(xs)
-            z = norm.ppf(1 - self.sig_level / 2)
-            s = sqrt(sum((x - avg) ** 2 for x in xs) / n - 1)
-            c1 = avg - z * s / sqrt(n)
-            c2 = avg + z * s / sqrt(n)
+            d = norm.ppf(1 - self.sig_level / 2)
+
         # If the number of samples is small
         else:
-            pass
+            d = t.ppf(1 - self.sig_level / 2, n - 1)
 
+        c1 = avg - d * s / sqrt(n)
+        c2 = avg + d * s / sqrt(n)
         self.out['interval'] = (c1, c2)
