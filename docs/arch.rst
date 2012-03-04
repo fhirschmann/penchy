@@ -63,7 +63,7 @@ The elements of the Pipeline provide outputs (under logical names) that can be
 selected (full or in part) by other elements as input.
 Such an output can be used by several elements and must be persistent because of
 this (don't use generators!).
-Analogously, many outputs can be used the input of an element.
+Analogously the outputs of many elements can be used as the input of an element.
 
 The output is produced when ``run`` is called on an element and likewise fed to
 ``run`` of the element that needs this output.
