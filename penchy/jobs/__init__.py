@@ -4,6 +4,7 @@ PenchY job description language is build upon.
 """
 from penchy.jobs import jvms, tools, filters, workloads
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
+from penchy.util import Value
 
 JVM = jvms.JVM
 
@@ -21,5 +22,6 @@ __all__ = [
     'hooks',
     'plots',
     'workloads',
-    'tools'
+    'tools',
+    'Value'
 ]

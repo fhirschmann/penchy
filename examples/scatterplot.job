@@ -1,7 +1,6 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-from penchy.util import Value
 import config
 
 # Only the i386 node
