@@ -877,11 +877,19 @@ class ConfidenceIntervalMean(Filter):
         self.con_level = 1 - self.sig_level
 
     def _run(self, **kwargs):
-        values = kwargs['values']
+        from scipy.stats import norm
+        xs = kwargs['values']
 
         # If the number of samples is large
-        if len(values) > 29:
-            pass
+        if len(xs) > 29:
+            n = len(xs)
+            avg = average(xs)
+            z = norm.ppf(1 - self.sig_level / 2)
+            s = sqrt(sum((x - avg) ** 2 for x in xs) / n - 1)
+            c1 = avg - z * s / sqrt(n)
+            c2 = avg + z * s / sqrt(n)
         # If the number of samples is small
         else:
             pass
+
+        self.out['interval'] = (c1, c2)
