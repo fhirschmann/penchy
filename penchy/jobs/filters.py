@@ -867,6 +867,15 @@ class ConfidenceIntervalMean(Filter):
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('interval', tuple, float))
 
+    def __init__(self, significance_level):
+        """
+        :param significance_level: the significance level for the confidence interval
+        :type significance_level: float
+        """
+        super(ConfidenceIntervalMean, self).__init__()
+        self.sig_level = significance_level
+        self.con_level = 1 - self.sig_level
+
     def _run(self, **kwargs):
         values = kwargs['values']
 
