@@ -37,7 +37,6 @@ to get your PenchY up and running:
    extending
    examples
    maven
-   examples
    arch
    api
 
