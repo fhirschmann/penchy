@@ -855,3 +855,24 @@ class Decorate(Filter):
     def _run(self, **kwargs):
         values = zip(*[kwargs[name] for name in self.inputs.names])
         self.out['values'] = [self.string.format(*v) for v in values]
+
+
+class ConfidenceIntervalMean(Filter):
+    """
+    A filter that computes the confidence intervall for the mean.
+    The implementation is based on the paper 'Statisically Rigorous
+    Java Performance Evaluation' by Andy Georges et.al.
+    TODO: Refere to the paper via bibtex or so.
+    """
+    inputs = Types(('values', list, (int, float)))
+    outputs = Types(('interval', tuple, float))
+
+    def _run(self, **kwargs):
+        values = kwargs['values']
+
+        # If the number of samples is large
+        if len(values) > 29:
+            pass
+        # If the number of samples is small
+        else:
+            pass
