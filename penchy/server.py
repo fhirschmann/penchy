@@ -247,7 +247,7 @@ class Server(object):
             if self.results:
                 self.run_pipeline()
             else:
-                log.error('Received no results. Server-pipline was not executed')
+                log.error('Received no results. Server-pipline was not executed.')
         except KeyboardInterrupt:
             log.warning('Keyboard Interrupt - Shutting down, please wait')
         finally:
