@@ -25,6 +25,8 @@ class Plot(Filter):
     Notice: It is possible to set ``x_max`` < ``x_min`` and
     ``y_max`` < ``y_min``.
     """
+    outputs = Types(('filename', str))
+
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None,
                  x_scale="linear", y_scale="linear"):
@@ -52,6 +54,7 @@ class Plot(Filter):
         """
         super(Plot, self).__init__()
         self.filename = filename
+        self.out['filename'] = filename
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
