@@ -874,7 +874,6 @@ class ConfidenceIntervalMean(Filter):
         """
         super(ConfidenceIntervalMean, self).__init__()
         self.sig_level = significance_level
-        self.con_level = 1 - self.sig_level
 
     def _run(self, **kwargs):
         # Gaussian distribution
