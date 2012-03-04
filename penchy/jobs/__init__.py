@@ -14,6 +14,7 @@ __all__ = [
     'Job',
     'NodeSetting',
     'SystemComposition',
+    'Value',
     # jvms
     'JVM',
     # modules
@@ -23,5 +24,4 @@ __all__ = [
     'plots',
     'workloads',
     'tools',
-    'Value'
 ]
