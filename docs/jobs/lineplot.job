@@ -19,11 +19,11 @@ for bench in benchmarks:
     comp = SystemComposition(jvm, node)
     comp.flow = [
             jvm.workload >> ['stderr', 'exit_code']
-                    >> f >> 'times'
-                    >> unpack
-                    >> num >> [('values', 'times'), ('numbers', 'iter')]
-                    >> send
-                    ]
+            >> f >> 'times'
+            >> unpack
+            >> num >> [('values', 'times'), ('numbers', 'iter')]
+            >> send
+            ]
     comps.append(comp)
 
 # Server side filters
