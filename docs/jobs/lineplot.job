@@ -18,17 +18,17 @@ for bench in benchmarks:
     jvm.workload = workloads.ScalaBench(bench, iterations=20)
     comp = SystemComposition(jvm, node)
     comp.flow = [
-            jvm.workload >> ['stderr', 'exit_code'] \
-                    >> f >> 'times' \
-                    >> unpack \
-                    >> num >> [('values', 'times'), ('numbers', 'iter')] \
+            jvm.workload >> ['stderr', 'exit_code']
+                    >> f >> 'times'
+                    >> unpack
+                    >> num >> [('values', 'times'), ('numbers', 'iter')]
                     >> send
                     ]
     comps.append(comp)
 
 # Server side filters
 condense = filters.CondensingReceive(('time', 'iter' ,'bench'),
-        [(com, 'times', 'iter', Value(bench)) for com, bench in \
+        [(com, 'times', 'iter', Value(bench)) for com, bench in
             zip(comps, benchmarks)])
 
 # Plotting
@@ -36,7 +36,7 @@ plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot',
         xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
 
 job = Job(compositions=comps,
-        server_flow=[
+        server_flow = [
             condense >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
             ]
         )
