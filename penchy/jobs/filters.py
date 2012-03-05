@@ -988,10 +988,10 @@ class ConfidenceIntervalTwo(Filter):
         ys = kwargs['ys']
 
         # These computations are common to both of the following two cases
-        n1, n2 = len(xs), leng(ys)
+        n1, n2 = len(xs), math.leng(ys)
         s1 = sample_standard_deviation(xs)
         s2 = sample_standard_deviation(ys)
-        sx = sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
+        sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
 
         # If the number of samples is large in both samples
         if n1 > 29 and n2 > 29:
@@ -1004,8 +1004,8 @@ class ConfidenceIntervalTwo(Filter):
             ndf = numerator / denumerator
             d = t.ppf(1 - self.sig_level / 2, round(nfd, 0))
 
-        c1 = avg - d * sx
-        c2 = avg + d * sx
+        c1 = math.avg - d * sx
+        c2 = math.avg + d * sx
         self.out['interval'] = (c1, c2)
 
 
