@@ -937,7 +937,7 @@ class ConfidenceIntervalMean(Filter):
         s = sample_standard_deviation(xs)
 
         # If the number of samples is large
-        if len(xs) > 29:
+        if n > 29:
             d = norm.ppf(1 - self.sig_level / 2)
 
         # If the number of samples is small
