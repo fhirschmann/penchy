@@ -79,10 +79,7 @@ if __name__ == "__main__":
     if not config:
         die("Error loading config file from '%s': %s" % (args.config, config_err))
 
-    try:
-        job_module = load_job(args.job)
-    except Exception as e:
-        die("Error loading job '%s: %s" % (args.job, e))
+    job_module = load_job(args.job)
     job = job_module.job
 
     if not args.skip_apicheck:
