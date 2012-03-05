@@ -562,7 +562,7 @@ class Upload(Filter):
 
     - ``filename``: The filename of the plot file to upload
     """
-    inputs = Types(('filename', str))
+    inputs = Types(('filename', path))
 
     def __init__(self, method, path, *args, **kwargs):
         """

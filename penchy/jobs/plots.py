@@ -11,6 +11,7 @@ import itertools
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
+from penchy.compat import path
 from penchy import is_server
 
 if is_server:
@@ -25,7 +26,7 @@ class Plot(Filter):
     Notice: It is possible to set ``x_max`` < ``x_min`` and
     ``y_max`` < ``y_min``.
     """
-    outputs = Types(('filename', str))
+    outputs = Types(('filename', path))
 
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None,
