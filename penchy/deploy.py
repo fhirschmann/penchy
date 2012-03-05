@@ -91,11 +91,26 @@ class FTPDeploy(Deploy):
     Provides communication with a FTP Server.
     """
     def __init__(self, *args, **kwargs):
+        """
+        :param hostname: hostname of the host
+        :type hostname: str
+        :param username: username on the host
+        :type username: str
+        :param password: password on the host
+        :type password: str
+        :param port: port of the service
+        :type port: int
+        :param tls: use TLS support as described in RFC 4217
+        :type tls: boolean
+        """
+        self.tls = kwargs.pop('tls') if 'tls' in kwargs else False
+
         super(FTPDeploy, self).__init__(*args, **kwargs)
         self.conn = None
 
     def connect(self):
-        self.conn = ftplib.FTP(self.hostname, self.username, self.password)
+        FTP = ftplib.FTP_TLS if self.tls else ftplib.FTP
+        self.conn = FTP(self.hostname, self.username, self.password)
 
     def put(self, local, remote):
         with open(local, 'rb') as upload:
