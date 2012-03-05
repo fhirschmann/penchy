@@ -36,7 +36,7 @@ plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot',
         xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
 
 job = Job(compositions=comps,
-        server_flow = [
+        server_flow=[
             condense >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
             ]
         )

@@ -50,5 +50,5 @@ job = Job(compositions=[comp1, comp2],
             condense >> [('bench', 'x'), ('time', 'y')] >> plot,
             aggregate >> ('invoc', 'values') >> deco >> ('values', 'z') >> plot
             ],
-        invocations = 2
+        invocations=2
         )
