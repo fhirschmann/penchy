@@ -946,8 +946,8 @@ class ConfidenceIntervalMean(Filter):
         else:
             d = t.ppf(1 - self.sig_level / 2, n - 1)
 
-        c1 = avg - d * s / sqrt(n)
-        c2 = avg + d * s / sqrt(n)
+        c1 = avg - d * s / math.sqrt(n)
+        c2 = avg + d * s / math.sqrt(n)
         self.out['interval'] = (c1, c2)
 
 
