@@ -270,3 +270,23 @@ class LinePlot(Plot):
             lines.append(self.plot.plot(x, y, c)[0])
 
         self.plot.legend(lines, zs)
+
+
+class Histogram(Plot):
+    """
+    Histogram
+
+    Inputs:
+
+    - ``x``: list of values
+    """
+    inputs = Types(('x', list, (int, float)))
+
+    def __init__(self, bins, normed=True, *arg, **kwargs):
+        super(Histogram, self).__init__()
+        self.bins = bins
+        self.normed = normed
+
+    def _run(self, **kwargs):
+        xs = kwargs['x']
+        self.plot.hist(xs, bins=self.bins, normed=self.normed)
