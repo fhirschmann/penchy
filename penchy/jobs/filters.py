@@ -209,6 +209,54 @@ class HProfCpuSamples(HProf):
                                             start_re=TOTAL_RE)
 
 
+class HProfHeapSites(HProf):
+    """
+    Filters heap=sites output of hprof
+
+    Inputs:
+
+    - ``hprof``: Path to the hprof output file
+
+    Outputs:
+
+    - ``rank``: Rank of the method
+    - ``self``: space at a particular site (%)
+    - ``accum``: total space at a particular site (%)
+    - ``live_bytes``: TODO
+    - ``live_objs``: TODO
+    - ``alloc_bytes``: TODO
+    - ``alloc_objs``: TODO
+    - ``trace``: TODO
+    - ``class``: class name
+    """
+    outputs = Types(('rank', list, list, int),
+                    ('self', list, list, float),
+                    ('accum', list, list, float),
+                    ('live_bytes', list, list, int),
+                    ('live_objs', list, list, int),
+                    ('alloc_bytes', list, list, int),
+                    ('alloc_objs', list, list, int),
+                    ('trace', list, list, int),
+                    ('class', list, list, str))
+
+    def __init__(self):
+        DATA_RE = re.compile("""
+           \s+(?P<rank>\d+)
+           \s+(?P<self>\d+\.\d{2})%
+           \s+(?P<accum>\d+\.\d{2})%
+           \s+(?P<live_bytes>\d+)
+           \s+(?P<live_objs>\d+)
+           \s+(?P<alloc_bytes>\d+)
+           \s+(?P<alloc_objs>\d+)
+           \s+(?P<class>(\w|\.|\$)+)
+           """, re.VERBOSE)
+        super(HProfCpuSamples, self).__init__(outputs=self.outputs,
+                                            start_marker='SITES BEGIN',
+                                            end_marker='SITES END',
+                                            skip=2,
+                                            data_re=DATA_RE)
+
+
 class DacapoHarness(Filter):
     """
     Filters output of a DaCapo Harness.
