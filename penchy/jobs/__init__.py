@@ -5,6 +5,7 @@ PenchY job description language is build upon.
 from penchy.jobs import jvms, tools, filters, workloads
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
 from penchy.util import Value
+from penchy.deploy import SFTPDeploy, FTPDeploy
 
 JVM = jvms.JVM
 
@@ -15,6 +16,8 @@ __all__ = [
     'NodeSetting',
     'SystemComposition',
     'Value',
+    'SFTPDeploy',
+    'FTPDeploy',
     # jvms
     'JVM',
     # modules
