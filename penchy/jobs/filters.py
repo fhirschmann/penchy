@@ -1046,9 +1046,17 @@ class SteadyState(Filter):
     reached and suppose that we want to retain ``k`` measurements per invocation.
     I.e. once the coefficient of variation of the ``k`` iterations falls below
     ``threshold`` (typically 0.01 or 0.02).
+
+    Inputs:
+
+    - ``xs``: 2d list of measurements
+
+    Outputs:
+
+    - ``xs``: 2d list of steady-state iterations
     """
     inputs = Types(('xs', list, list, (int, float)))
-    inputs = Types(('xs', list, (int, float)))
+    outputs = Types(('xs', list, list, (int, float)))
 
     def __init__(self, k, threshold):
         super(SteadyState, self).__init__()
@@ -1059,11 +1067,7 @@ class SteadyState(Filter):
         xss = kwargs['xs']
 
         for xs in xss:
-            for i, xs in zip(itertools.count(), xs):
-                # TODO: What do here? Is NaN ok?
-                if len(xs[i:k]) < k:
-                    self.out['xs'].float('nan')
-                    break
+            for i in range(0, len(xs) - k):
                 if coefficient_of_variation(xs[i:k]) < threshold:
-                    self.out['xs'].append(x)
+                    self.out['xs'].append(xs[i:k])
                     break
