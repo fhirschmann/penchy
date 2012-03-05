@@ -563,3 +563,10 @@ class DecorateTest(unittest.TestCase):
         f = Decorate("")
         f._run(values=[1, 2, 3])
         self.assertEqual(f.out['values'], ["", "", ""])
+
+
+class DropFirstTest(unittest.TestCase):
+    def test_valid(self):
+        f = DropFirst()
+        f._run(xs=[1, 2, 3])
+        self.assertEqual(f.out['xs'], [2, 3])
