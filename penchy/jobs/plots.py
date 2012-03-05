@@ -111,7 +111,8 @@ class BarPlot(Plot):
     - ``err``: list of error values (only visible if error_bars is True)
     """
 
-    def __init__(self, colors=None, error_bars=False, ecolor="red", horizontal=False, width=0.2, *arg, **kwarg):
+    def __init__(self, colors=None, error_bars=False, ecolor="red",
+                 horizontal=False, stacked=False, width=0.2, *arg, **kwarg):
         """
         :param colors: list of corresponding to the z-values
         :type colors: list ``matplotlib.colors``
@@ -129,6 +130,7 @@ class BarPlot(Plot):
         self.colors = colors
         self.horizontal = horizontal
         self.error_bars = error_bars
+        self.stacked = stacked
 
         input_types = [('z', list, str)]
         if self.horizontal:
@@ -164,10 +166,10 @@ class BarPlot(Plot):
 
         ind = np.arange(len(xs))
 
-        bars, rects = [], []
+        bars, rects, bottoms = [], [], ()
         for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
             # Configure the plot function
-            options = {'left': ind + self.width * i, 'height': ys, 'width': self.width, 'color': c}
+            options = {'height': ys, 'width': self.width, 'color': c}
 
             if self.error_bars:
                 if self.horizontal:
@@ -176,11 +178,21 @@ class BarPlot(Plot):
                     options['yerr'] = errs.pop()
                 options['ecolor'] = self.ecolor
 
+            if self.stacked:
+                if i > 0:
+                    options['bottom'] = bottoms
+                options['left'] = ind + self.width
+            else:
+                options['left'] = ind + self.width * i
+
             # Draw the bars
             if self.horizontal:
                 rects.append(self.plot.barh(**options))
             else:
                 rects.append(self.plot.bar(**options))
+
+            if self.stacked:
+                    bottoms += bottoms + ys
 
             # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
