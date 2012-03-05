@@ -42,7 +42,85 @@ class Tamiflex(Filter):
     pass
 
 
-class HProfCpuTimes(Filter):
+class HProf(Filter):
+    """
+    A filter that abstracts the hprof output and aims
+    to make it easy creating new hprof filters.
+
+    It is nessasarry, that the ``data_re`` regular expression
+    supports ``groupdict`` and that the resulting keys
+    match with the keys in ``outputs``.
+    """
+    inputs = Types(('hprof', list, path))
+
+    def __init__(self, start_marker, end_marker, skip, data_re, start_re=None):
+        super(HProf, self).__init__()
+        self.start_marker = start_marker
+        self.end_marker = end_marker
+        self.start_re = start_re
+        self.data_re = data_re
+        self.skip = skip
+
+        # Names of 1 dimensional outputs
+        self.names1d = [k for k, d in self.outputs.descriptions.items() if len(d) == 2]
+        if len(self.names1d) > 1:
+            raise ValueError("The current implementation only allows one 1 dimensional output")
+
+        # Names of 2 dimensional outputs
+        self.names2d = [k for k, d in self.outputs.descriptions.items() if len(d) == 3]
+
+    def _run(self, **kwargs):
+        files = kwargs['hprof']
+
+        for f in files:
+            data = dict((name, []) for name in self.names2d)
+
+            with open(f) as fobj:
+                for line in fobj:
+                    if line.startswith(self.start_marker):
+                        break
+                # We did not break, i.e. no begin marker was found
+                else:
+                    raise WrongInputError("Marker {0} not found.".format(self.start_marker))
+
+                # Extract information from the start marker
+                if self.start_re is not None:
+                    s = self.start_re.search(line)
+                    if s is None:
+                        log.error('Received invalid input:\n{0}'.format(line))
+                        raise WrongInputError('Received invalid input.')
+                    start_value = s.groups()[0]
+                    name = self.names1d[0]
+                    type_ = self.outputs.descriptions[name][-1]
+                    self.out[name].append(type_(start_value))
+
+                # Jump over the heading
+                for _ in range(self.skip):
+                    next(fobj)
+
+                for line in fobj:
+                    if line.startswith(self.end_marker):
+                        break
+                    m = self.data_re.match(line)
+                    if m is None:
+                        log.error('Received invalid input:\n{0}'.format(line))
+                        raise WrongInputError('Received invalid input.')
+                    result = self.data_re.match(line).groupdict()
+
+                    # Cast and save the extracted values
+                    for name in self.names2d:
+                        type_ = self.outputs.descriptions[name][-1]
+                        data[name].append(type_(result[name]))
+
+                # We did not break, i.e. no end marker was found
+                else:
+                    raise WrongInputError("Marker {0} not found.".format(self.end_marker))
+
+                for key, val in data.items():
+                    self.out[key].append(val)
+
+
+class HProfCpuTimes(HProf):
     """
     Filters cpu=times output of hprof
 
@@ -60,8 +138,6 @@ class HProfCpuTimes(Filter):
     - ``trace``: Stack trace number
     - ``method``: Absolute method name
     """
-    inputs = Types(('hprof', list, path))
-
     outputs = Types(('total', list, int),
                     ('rank', list, list, int),
                     ('selftime', list, list, float),
@@ -70,67 +146,21 @@ class HProfCpuTimes(Filter):
                     ('trace', list, list, int),
                     ('method', list, list, str))
 
-    _TOTAL_RE = re.compile('total = (\d+)')
-    _DATA_RE = re.compile("""
-        \s+(?P<rank>\d+)
-        \s+(?P<selftime>\d+\.\d{2})%
-        \s+(?P<accum>\d+\.\d{2})%
-        \s+(?P<count>\d+)
-        \s+(?P<trace>\d+)
-        \s+(?P<method>(\w|\.|\$)+)
-        """, re.VERBOSE)
-
-    def _run(self, **kwargs):
-        files = kwargs['hprof']
-
-        for f in files:
-            data = {'rank': [],
-                    'selftime': [],
-                    'accum': [],
-                    'count': [],
-                    'trace': [],
-                    'method': []}
-
-            with open(f) as fobj:
-                for line in fobj:
-                    if line.startswith('CPU TIME (ms) BEGIN'):
-                        break
-                # we did not break, i.e. no begin marker was found
-                else:
-                    raise WrongInputError("Marker 'CPU TIME (ms) BEGIN' not found.")
-
-                s = self._TOTAL_RE.search(line)
-                if s is None:
-                    log.error('Received invalid input:\n{0}'.format(line))
-                    raise WrongInputError('Received invalid input.')
-                total = s.groups()[0]
-                self.out['total'].append(int(total))
-
-                # Jump over the heading
-                next(fobj)
-
-                for line in fobj:
-                    if line.startswith('CPU TIME (ms) END'):
-                        break
-                    m = self._DATA_RE.match(line)
-                    if m is None:
-                        log.error('Received invalid input:\n{0}'.format(line))
-                        raise WrongInputError('Received invalid input.')
-                    result = self._DATA_RE.match(line).groupdict()
-
-                    data['rank'].append(int(result['rank']))
-                    data['selftime'].append(float(result['selftime']))
-                    data['accum'].append(float(result['accum']))
-                    data['count'].append(int(result['count']))
-                    data['trace'].append(int(result['trace']))
-                    data['method'].append(result['method'])
-
-                # we did not break, i.e. no end marker was found
-                else:
-                    raise WrongInputError("Marker 'CPU TIME (ms) END' not found.")
-
-                for key, val in data.items():
-                    self.out[key].append(val)
+    def __init__(self):
+        TOTAL_RE = re.compile('total = (\d+)')
+        DATA_RE = re.compile("""
+           \s+(?P<rank>\d+)
+           \s+(?P<selftime>\d+\.\d{2})%
+           \s+(?P<accum>\d+\.\d{2})%
+           \s+(?P<count>\d+)
+           \s+(?P<trace>\d+)
+           \s+(?P<method>(\w|\.|\$)+)
+           """, re.VERBOSE)
+        super(HProfCpuTimes, self).__init__(start_marker='CPU TIME (ms) BEGIN',
+                                            end_marker='CPU TIME (ms) END',
+                                            skip=1,
+                                            data_re=DATA_RE,
+                                            start_re=TOTAL_RE)
 
 
 class DacapoHarness(Filter):
