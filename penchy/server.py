@@ -10,7 +10,7 @@ import logging
 import os
 import signal
 import threading
-from penchy.compat import SimpleXMLRPCServer
+from penchy.compat import SimpleXMLRPCServer, nested
 
 from penchy.maven import make_bootstrap_pom
 from penchy.util import make_bootstrap_client
@@ -223,8 +223,8 @@ class Server(object):
         """
         Run the client on all nodes.
         """
-        with make_bootstrap_pom() as pom, \
-                make_bootstrap_client() as bclient:
+        with nested(make_bootstrap_pom(), make_bootstrap_client()) \
+                as (pom, bclient):
             for node in self.nodes.values():
                 with node.connection_required():
                     for upload in self.uploads:
