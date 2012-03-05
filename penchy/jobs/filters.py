@@ -599,7 +599,7 @@ class Upload(Filter):
         self.args = args
         self.kwargs = kwargs
 
-    def run(self, **kwargs):
+    def _run(self, **kwargs):
         method = self.method(*self.args, **self.kwargs)
         with method.connection_required():
             method.put(kwargs['filename'], self.path)
