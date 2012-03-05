@@ -573,6 +573,14 @@ class Upload(Filter):
 
         Additionally, you can pass any arguments you'd normally
         pass to your implementation of :class:`~penchy.deploy.Deploy`
+
+        A simple way to use this might be::
+
+            upload = filters.Upload(SFTPDeploy, '/tmp/foo.svg', '0x0b.de', 'me', 'pass')
+
+            job = Job(composition=comp1)
+                server_flow=[
+                    ... >> plot >> upload
         """
         super(Upload, self).__init__()
         if not issubclass(method, Deploy):
