@@ -20,6 +20,10 @@ log = logging.getLogger(__name__)
 
 
 class Deploy(object):
+    """
+    Base class from which all deployment methods must
+    inherit from.
+    """
     def __init__(self, hostname, username, password, port=None):
         """
         :param hostname: hostname of the host
@@ -28,8 +32,6 @@ class Deploy(object):
         :type username: str
         :param password: password on the host
         :type password: str
-        :param path: path to upload to
-        :type path: str
         :param port: port of the service
         :type port: int
         """
@@ -84,6 +86,9 @@ class Deploy(object):
 
 
 class FTPDeploy(Deploy):
+    """
+    Provides communication with a FTP Server.
+    """
     def __init__(self, *args, **kwargs):
         super(FTPDeploy, self).__init__(*args, **kwargs)
 
@@ -105,17 +110,42 @@ class FTPDeploy(Deploy):
 
 
 class SFTPDeploy(Deploy):
+    """
+    Provides communication with a SFTP Server.
+
+    If you require to set a different private key file, you can::
+
+        d = SFTPDeploy('0x0b.de', 'foo', None)
+        d.keyfile = '/home/foo/.ssh/id_rsa123
+
+    """
     def __init__(self, *args, **kwargs):
+        """
+        :param hostname: hostname of the host
+        :type hostname: str
+        :param username: username on the host
+        :type username: str
+        :param password: password on the host
+                         can be empty for passphraseless
+                         public key authentication or set
+                         to the passphrase of a key
+        :type password: str
+        :param port: port of the service
+        :type port: int
+        """
         super(SFTPDeploy, self).__init__(*args, **kwargs)
         self.ssh = None
         self.sftp = None
+        self.keyfile = None
 
     def connect(self):
         self.ssh = paramiko.SSHClient()
         self.ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        self.ssh.load_system_host_keys()
+        if not self.keyfile:
+            self.ssh.load_system_host_keys()
         self.ssh.connect(self.hostname, username=self.username,
-                port=self.port or 22, password=self.password)
+                port=self.port or 22, password=self.password,
+                key_filename=self.keyfile)
         self.sftp = self.ssh.open_sftp()
 
     def put(self, local, remote):
