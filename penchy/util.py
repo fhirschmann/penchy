@@ -19,6 +19,7 @@ import sys
 import tempfile
 import inspect
 from contextlib import contextmanager
+from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
 from tempfile import NamedTemporaryFile
 
@@ -274,3 +275,23 @@ class Value(object):
     """
     def __init__(self, value):
         self.value = value
+
+
+def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')):
+    """
+    Extracts the username and password for a given ``id_``
+    from a maven settings.xml.
+
+    :param id_: id of the remote machine as defined in the settings file
+    :type id_: str
+    :param filename: path to settings.xml
+    :type filename: str
+    """
+    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'
+    tree = ElementTree.parse(path)
+    xpath = './/{0}server[{0}id="{1}"]'.format(xmlns, id_)
+    servers = tree.findall(xpath)
+
+    username = servers[0].findtext(".//{0}username".format(xmlns))
+    password = servers[0].findtext(".//{0}password".format(xmlns))
+    return username, password

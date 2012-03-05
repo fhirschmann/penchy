@@ -581,6 +581,14 @@ class Upload(Filter):
             job = Job(composition=comp1)
                 server_flow=[
                     ... >> plot >> upload
+
+        The credentials can also be extracted from maven's :file:`settings.xml`
+        like so::
+
+            upload = filters.Upload(SFTPDeploy, '/tmp/foo.svg', '0x0b.de',
+                                    *extract_maven_credentials('0x0b'))
+
+        where ``0x0b`` is the id of this server as defined in :file:`settings.xml`.
         """
         super(Upload, self).__init__()
         if not issubclass(method, Deploy):
