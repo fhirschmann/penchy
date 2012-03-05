@@ -166,19 +166,22 @@ class BarPlot(Plot):
 
         bars, rects = [], []
         for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
-            # Draw the bars depending on the configuration
+            # Configure the plot function
+            options = {'left': ind + self.width * i, 'height': ys, 'width': self.width, 'color': c}
+
+            if self.error_bars:
+                if self.horizontal:
+                    options['xerr'] = errs.pop()
+                else:
+                    options['yerr'] = errs.pop()
+                options['ecolor'] = self.ecolor
+
+            # Draw the bars
             if self.horizontal:
-                if self.error_bars:
-                    rects.append(self.plot.barh(ind + self.width * i, ys, self.width,
-                                           xerr=errs.pop(), ecolor=self.ecolor, color=c))
-                else:
-                    rects.append(self.plot.barh(ind + self.width * i, ys, self.width, color=c))
+                rects.append(self.plot.barh(**options))
             else:
-                if self.error_bars:
-                    rects.append(self.plot.bar(ind + self.width * i, ys, self.width,
-                                          yerr=errs.pop(), ecolor=self.ecolor, color=c))
-                else:
-                    rects.append(self.plot.bar(ind + self.width * i, ys, self.width, color=c))
+                rects.append(self.plot.bar(**options))
+
             # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
 
