@@ -1002,7 +1002,7 @@ class ConfidenceIntervalTwo(Filter):
             numerator = (s1 ** 2 / n1 + s2 ** 2 / n2) ** 2
             denumerator = (s1 ** 2 / n1) ** 2 / (n1 - 1) + (s2 ** 2 / n2) ** 2 / (n2 - 1)
             ndf = numerator / denumerator
-            d = t.ppf(1 - self.sig_level / 2, round(nfd, 0))
+            d = t.ppf(1 - self.sig_level / 2, round(ndf, 0))
 
         c1 = math.avg - d * sx
         c2 = math.avg + d * sx
