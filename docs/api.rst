@@ -30,6 +30,7 @@ Tools
 Filters
 -------
 .. automodule:: penchy.jobs.filters
+.. automodule:: penchy.deploy
 
 Plots
 -----
