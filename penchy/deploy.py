@@ -8,7 +8,7 @@ if is_server:
 
 
 class Deploy(object):
-    def __init__(self, hostname, username, password, path, port=None):
+    def __init__(self, hostname, username, password, port=None):
         """
         :param hostname: hostname of the host
         :type hostname: str
@@ -24,7 +24,6 @@ class Deploy(object):
         self.hostname = hostname
         self.username = username
         self.password = password
-        self.path = path
         self.port = port
 
     def connect(self):
@@ -62,9 +61,9 @@ class FTPDeploy(Deploy):
     def connect(self):
         self.conn = ftplib.FTP(self.hostname, self.username, self.password)
 
-    def put(self, local):
+    def put(self, local, remote):
         with open(local, 'rb') as upload:
-            self.conn.storbinary('STOR %s' % self.path, upload)
+            self.conn.storbinary('STOR %s' % remote, upload)
 
     def disconnect(self):
         if self.conn:
@@ -90,8 +89,8 @@ class SFTPDeploy(Deploy):
                 port=self.port or 22, password=self.password)
         self.sftp = self.ssh.open_sftp()
 
-    def put(self, local):
-        self.sftp.put(local, self.path)
+    def put(self, local, remote):
+        self.sftp.put(local, remote)
 
     def disconnect(self):
         self.sftp.close()
@@ -110,6 +109,6 @@ class SFTPDeploy(Deploy):
 
 if __name__ == '__main__':
     import paramiko
-    s = SFTPDeploy('localhost', 'fabian', None, '/tmp/foo.xx')
+    s = SFTPDeploy('localhost', 'fabian', None)
     with s.connection_required():
-        s.put('test.txt')
+        s.put('test.txt', '/tmp/foo.xx')
