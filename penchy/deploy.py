@@ -125,6 +125,8 @@ class SFTPDeploy(Deploy):
         :type hostname: str
         :param username: username on the host
         :type username: str
+        :param keyfile: private key to use
+        :type keyfile: str
         :param password: password on the host
                          can be empty for passphraseless
                          public key authentication or set
@@ -133,10 +135,10 @@ class SFTPDeploy(Deploy):
         :param port: port of the service
         :type port: int
         """
+        self.keyfile = kwargs.pop('keyfile') if 'keyfile' in kwargs else None
         super(SFTPDeploy, self).__init__(*args, **kwargs)
         self.ssh = None
         self.sftp = None
-        self.keyfile = None
 
     def connect(self):
         self.ssh = paramiko.SSHClient()
