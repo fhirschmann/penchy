@@ -7,6 +7,7 @@ Library which abstracts SFTP and FTP connections
  :license: MIT License, see LICENSE
 """
 import logging
+import shutil
 from contextlib import contextmanager
 
 from penchy import is_server
@@ -167,3 +168,24 @@ class SFTPDeploy(Deploy):
         if transport and transport.is_active():
             return True
         return False
+
+
+class CopyDeploy(Deploy):
+    """
+    Allows you to copy files locally.
+    """
+    def connect(self):
+        pass
+
+    def dissconnect(self):
+        pass
+
+    def put(self, local, remote):
+        shutil.copyfile(local, remote)
+
+    def disconnect(self):
+        pass
+
+    @property
+    def connected(self):
+        return True
