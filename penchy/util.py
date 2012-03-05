@@ -23,7 +23,7 @@ from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
 from tempfile import NamedTemporaryFile
 
-from penchy.compat import update_hasher, write
+from penchy.compat import write
 from penchy import bootstrap
 
 
