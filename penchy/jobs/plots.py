@@ -220,6 +220,7 @@ class LinePlot(Plot):
     Lineplot
 
     Inputs:
+
     - ``x``: 2d list of x-values
     - ``y``: 2d list of y-values
     - ``z``: labels for the first dimension of ``x`` and ``y`` values
