@@ -92,6 +92,7 @@ class FTPDeploy(Deploy):
     """
     def __init__(self, *args, **kwargs):
         super(FTPDeploy, self).__init__(*args, **kwargs)
+        self.conn = None
 
     def connect(self):
         self.conn = ftplib.FTP(self.hostname, self.username, self.password)
