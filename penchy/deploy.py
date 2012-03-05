@@ -1,3 +1,4 @@
+import logging
 from contextlib import contextmanager
 
 from penchy import is_server
@@ -5,6 +6,9 @@ from penchy import is_server
 if is_server:
     import ftplib
     import paramiko
+
+
+log = logging.getLogger(__name__)
 
 
 class Deploy(object):
@@ -90,6 +94,7 @@ class SFTPDeploy(Deploy):
         self.sftp = self.ssh.open_sftp()
 
     def put(self, local, remote):
+        log.debug('Uploading %s to %s' % (local, remote))
         self.sftp.put(local, remote)
 
     def disconnect(self):
