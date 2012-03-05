@@ -122,6 +122,14 @@ def write_to_tempfiles(data):
     return files
 
 
+class HProfTest(unittest.TestCase):
+    def test_wrong_outputs(self):
+        with self.assertRaises(ValueError):
+            HProf(outputs=Types(('a', list, int), ('b', list, int)),
+                  start_marker='', end_marker='',
+                  skip=1, data_re=None, start_re=None)
+
+
 class AggregateTest(unittest.TestCase):
     def setUp(self):
         self.results = {1: {'a': 42,
