@@ -9,7 +9,6 @@ Outputs are available via the ``out`` attribute.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
-import itertools
 import json
 import logging
 import os
