@@ -101,6 +101,7 @@ class BarPlot(Plot):
     This class represents a barplot filter. It is possible:
 
     - to draw horizontal barplots (in that case inputs ``x`` and ``y`` swap)
+    - to draw stacked barplots
     - to display error bars
 
     Inputs:
@@ -109,6 +110,10 @@ class BarPlot(Plot):
     - ``y``: 2d list of bar heights
     - ``z``: Labels for the second dimension of ``y``
     - ``err``: list of error values (only visible if error_bars is True)
+
+    Outputs:
+
+    - ``filename``: Filename of the generated image
     """
 
     def __init__(self, colors=None, error_bars=False, ecolor="red",
@@ -122,6 +127,8 @@ class BarPlot(Plot):
         :type ecolor: ``matplotlib.colors``
         :param horizontal: draw the diagram horizontal
         :type horizontal: bool
+        :param stacked: draw a stacked barplot
+        :type stacked: bool
         :param width: width of the bars
         :type width: float
         """
