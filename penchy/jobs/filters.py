@@ -911,6 +911,8 @@ class ConfidenceIntervalMean(Filter):
     The implementation is based on the paper 'Statisically Rigorous
     Java Performance Evaluation' by Andy Georges et.al.
     TODO: Refere to the paper via bibtex or so.
+
+    Note: It is assumed that the samples are statistically independend.
     """
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('interval', tuple, float))
@@ -961,6 +963,8 @@ class ConfidenceIntervalTwo(Filter):
     Note: If the resulting confidence interval includes zero, we can
     conclude, at the confidence level choosen, that there is no
     statistically significant diffeence between the two alternatives.
+
+    Note: It is assumed that the samples are statistically independend.
     """
     inputs = Types(('xs', list, (int, float)),
                    ('ys', list, (int, float)))
