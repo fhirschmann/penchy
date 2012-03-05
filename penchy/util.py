@@ -280,6 +280,19 @@ def sample_standard_deviation(xs):
     return math.sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
 
 
+def coefficient_of_variation(xs):
+    """
+    Computes the coefficient of variation of the samples ``xs``,
+    i.e. the standard deviation divided by the mean.
+
+    :param xs: sample values
+    :type xs: list of numbers
+    :returns: coefficient of variation
+    :rtype: float
+    """
+    return sample_standard_deviation(xs) / average(xs)
+
+
 class Value(object):
     """
     Represents a value in the context of the Condense filter.
