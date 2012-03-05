@@ -931,7 +931,7 @@ class ConfidenceIntervalMean(Filter):
 
         xs = kwargs['values']
 
-        # These computations are common to both of the follow two cases
+        # These computations are common to both of the following two cases
         n = len(xs)
         avg = average(xs)
         s = sample_standard_deviation(xs)
@@ -947,3 +947,54 @@ class ConfidenceIntervalMean(Filter):
         c1 = avg - d * s / sqrt(n)
         c2 = avg + d * s / sqrt(n)
         self.out['interval'] = (c1, c2)
+
+
+class ConfidenceIntervalTwo(Filter):
+    """
+    A filter that computes the confidence interval for the mean of
+    two alternatives.
+    The implementation is based on the paper 'Statisically Rigorous
+    Java Performance Evaluation' by Andy Georges et.al.
+    TODO: Refere to the paper via bibtex or so.
+    TODO: Better class name
+    """
+    inputs = Types(('xs', list, (int, float)),
+                   ('ys', list, (int, float)))
+    outputs = Types(('interval', tuple, float))
+
+    def __init__(self, significance_level):
+        """
+        :param significance_level: the significance level for the confidence interval
+        :type significance_level: float
+        """
+        super(ConfidenceIntervalTwo, self).__init__()
+        self.sig_level = significance_level
+
+    def _run(self, **kwargs):
+        # Gaussian distribution
+        from scipy.stats import norm
+        # Students t-distribution
+        from scipy.stats import t
+
+        xs = kwargs['xs']
+        ys = kwargs['ys']
+
+        # These computations are common to both of the following two cases
+        n1, n2 = len(xs), leng(ys)
+        s1 = sample_standard_deviation(xs)
+        s2 = sample_standard_deviation(ys)
+        sx = sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
+
+        # If the number of samples is large in both samples
+        if n1 > 29 and n2 > 29:
+            d = norm.ppf(1 - self.sig_level / 2)
+
+        # If the number of samples is small in at least one sample
+        else:
+            numerator = (s1 ** 2 / n1 + s2 ** 2 / n2) ** 2
+            denumerator = (s1 ** 2 / n1) ** 2 / (n1 - 1) + (s2 ** 2 / n2) ** 2 / (n2 - 1)
+            ndf = numerator / denumerator
+            d = t.ppf(1 - self.sig_level / 2, round(nfd, 0))
+
+        c1 = avg - d * sx
+        c2 = avg + d * sx
