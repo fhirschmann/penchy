@@ -23,6 +23,7 @@ from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 from penchy.util import default, average, Value
+from penchy.deploy import Deploy
 
 
 log = logging.getLogger(__name__)
@@ -554,7 +555,35 @@ class Map(Filter):
 
 
 class Upload(Filter):
-    pass
+    """
+    Uploads a plot to a remote machine.
+
+    Inputs:
+
+    - ``filename``: The filename of the plot file to upload
+    """
+    inputs = Types(('filename', str))
+
+    def __init__(self, method, path, *args, **kwargs):
+        """
+        :param method: method to use
+        :type method: :class:`~penchs.deploy.Deploy`
+        :param path: path to upload to
+        :type path: str
+        """
+        super(Upload, self).__init__()
+        if not issubclass(method, Deploy):
+            raise ValueError('deploy must be a descendant of ``Deploy``')
+
+        self.method = method
+        self.path = path
+        self.args = args
+        self.kwargs = kwargs
+
+    def run(self, **kwargs):
+        method = self.method(*self.args, **self.kwargs)
+        with method.connection_required():
+            method.put(kwargs['filename'], self.path)
 
 
 class Dump(SystemFilter):
