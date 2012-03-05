@@ -223,18 +223,18 @@ class Server(object):
         """
         Run the client on all nodes.
         """
-        with make_bootstrap_pom() as pom:
-            with make_bootstrap_client() as bclient:
-                for node in self.nodes.values():
-                    with node.connection_required():
-                        for upload in self.uploads:
-                            node.put(*upload)
-                        node.put(pom.name, 'bootstrap.pom')
-                        node.put(bclient.name, 'penchy_bootstrap')
+        with make_bootstrap_pom() as pom, \
+                make_bootstrap_client() as bclient:
+            for node in self.nodes.values():
+                with node.connection_required():
+                    for upload in self.uploads:
+                        node.put(*upload)
+                    node.put(pom.name, 'bootstrap.pom')
+                    node.put(bclient.name, 'penchy_bootstrap')
 
-                        node.execute_penchy(' '.join(
-                            self.bootstrap_args + [os.path.basename(self.job_file),
-                                'config.py', node.setting.identifier]))
+                    node.execute_penchy(' '.join(
+                        self.bootstrap_args + [os.path.basename(self.job_file),
+                            'config.py', node.setting.identifier]))
 
     def run(self):
         """
