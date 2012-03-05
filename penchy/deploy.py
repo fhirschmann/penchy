@@ -109,12 +109,14 @@ class FTPDeploy(Deploy):
         passive = kwargs.pop('passive') if 'passive' in kwargs else True
         super(FTPDeploy, self).__init__(*args, **kwargs)
 
-        self.conn = ftplib.FTP_TLS if tls else ftplib.FTP
+        self.conn = ftplib.FTP_TLS() if tls else ftplib.FTP()
         self.conn.set_pasv(passive)
+        self._connected = False
 
     def connect(self):
         self.conn.connect(self.hostname, self.port or 21)
         self.conn.login(self.username, self.password)
+        self._connected = True
 
     def put(self, local, remote):
         with open(local, 'rb') as upload:
@@ -123,11 +125,11 @@ class FTPDeploy(Deploy):
     def disconnect(self):
         if self.conn:
             self.conn.quit()
-        self.conn = None
+        self._connected = False
 
     @property
     def connected(self):
-        return self.conn is not None
+        return self._connected
 
 
 class SFTPDeploy(Deploy):
