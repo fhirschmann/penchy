@@ -22,7 +22,7 @@ from penchy import __version__
 from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.util import default, average, Value
+from penchy.util import default, average, sample_standard_deviation, Value
 from penchy.deploy import Deploy
 
 
@@ -934,7 +934,7 @@ class ConfidenceIntervalMean(Filter):
         # These computations are common to both of the follow two cases
         n = len(xs)
         avg = average(xs)
-        s = sqrt(sum((x - avg) ** 2 for x in xs) / n - 1)
+        s = sample_standard_deviation(xs)
 
         # If the number of samples is large
         if len(xs) > 29:
