@@ -1,3 +1,11 @@
+"""
+Library which abstracts SFTP and FTP connections
+
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+
+ :copyright: PenchY Developers 2011-2012, see AUTHORS
+ :license: MIT License, see LICENSE
+"""
 import logging
 from contextlib import contextmanager
 
