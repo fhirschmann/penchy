@@ -137,12 +137,6 @@ class FTPDeploy(Deploy):
 class SFTPDeploy(Deploy):
     """
     Provides communication with a SFTP Server.
-
-    If you require to set a different private key file, you can::
-
-        d = SFTPDeploy('0x0b.de', 'foo', None)
-        d.keyfile = '/home/foo/.ssh/id_rsa123
-
     """
     def __init__(self, *args, **kwargs):
         """
