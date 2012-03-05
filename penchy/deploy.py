@@ -102,15 +102,19 @@ class FTPDeploy(Deploy):
         :type port: int
         :param tls: use TLS support as described in RFC 4217
         :type tls: boolean
+        :param passive: ftp passive mode
+        :type passive: boolean
         """
-        self.tls = kwargs.pop('tls') if 'tls' in kwargs else False
-
+        tls = kwargs.pop('tls') if 'tls' in kwargs else False
+        passive = kwargs.pop('passive') if 'passive' in kwargs else True
         super(FTPDeploy, self).__init__(*args, **kwargs)
-        self.conn = None
+
+        self.conn = ftplib.FTP_TLS if tls else ftplib.FTP
+        self.conn.set_pasv(passive)
 
     def connect(self):
-        FTP = ftplib.FTP_TLS if self.tls else ftplib.FTP
-        self.conn = FTP(self.hostname, self.username, self.password)
+        self.conn.connect(self.hostname, self.port or 21)
+        self.conn.login(self.username, self.password)
 
     def put(self, local, remote):
         with open(local, 'rb') as upload:
