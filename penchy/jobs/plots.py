@@ -178,10 +178,11 @@ class BarPlot(Plot):
 
         ind = np.arange(len(xs))
 
-        bars, rects, bottoms = [], [], ()
-        for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
+        bottoms = ()
+        for i, ys, z, c in zip(itertools.count(), zip(*yss), zs, self.colors):
             # Configure the plot function
-            options = {'height': ys, 'width': self.width, 'color': c}
+            options = {'height': ys, 'width': self.width, 'color': c,
+                       'label': z}
 
             if self.error_bars:
                 if self.horizontal:
@@ -199,15 +200,12 @@ class BarPlot(Plot):
 
             # Draw the bars
             if self.horizontal:
-                rects.append(self.plot.barh(**options))
+                self.plot.barh(**options)
             else:
-                rects.append(self.plot.bar(**options))
+                self.plot.bar(**options)
 
             if self.stacked:
                     bottoms += bottoms + ys
-
-            # Save the bar identifier for assoziation wit zlabels
-            bars.append(rects[i][0])
 
         # Display bar names
         if self.horizontal:
@@ -217,8 +215,7 @@ class BarPlot(Plot):
             self.plot.set_xticks(ind + self.width)
             self.plot.set_xticklabels(xs)
 
-        # Draw the legend with zlabels
-        self.plot.legend(bars, zs)
+        self.plot.legend()
 
 
 class ScatterPlot(Plot):
