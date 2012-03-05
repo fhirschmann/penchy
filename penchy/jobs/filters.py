@@ -554,7 +554,7 @@ class Map(Filter):
             self.filter.reset()
 
 
-class Upload(Filter):
+class Upload(Filter):  # pragma: no cover
     """
     Uploads a plot to a remote machine.
 
