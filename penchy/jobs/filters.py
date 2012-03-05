@@ -55,6 +55,20 @@ class HProf(Filter):
     inputs = Types(('hprof', list, path))
 
     def __init__(self, outputs, start_marker, end_marker, skip, data_re, start_re=None):
+        """
+        :param outputs: outputs of the filter
+        :type outputs: :class:`~penchy.jobs.typecheck.Types`
+        :param start_marker: the string with which the data segment starts
+        :type start_marker: string
+        :param end_marker: the string with which the data segment ends
+        :type end_maker: string
+        :param skip: lines to skip before the actual data begin
+        :type skip: integer
+        :param data_re: regular expression to match one data line
+        :type data_re: ``re``
+        :param start_re: regular expression to extract information out of the first line
+        :type start_re: ``re``
+        """
         super(HProf, self).__init__()
         self.outputs = outputs
         self.start_marker = start_marker
