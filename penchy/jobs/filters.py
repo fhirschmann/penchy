@@ -17,6 +17,7 @@ import os
 import re
 import shutil
 import math
+import itertools
 from pprint import pprint
 
 from penchy import __version__
@@ -1037,3 +1038,32 @@ class DropFirst(Filter):
 
     def _run(self, **kwargs):
         self.out['xs'] = kwargs['xs'][1:]
+
+
+class SteadyState(Filter):
+    """
+    Determines for each invocation the iteration where steady-state performance is
+    reached and suppose that we want to retain ``k`` measurements per invocation.
+    I.e. once the coefficient of variation of the ``k`` iterations falls below
+    ``threshold`` (typically 0.01 or 0.02).
+    """
+    inputs = Types(('xs', list, list, (int, float)))
+    inputs = Types(('xs', list, (int, float)))
+
+    def __init__(self, k, threshold):
+        super(SteadyState, self).__init__()
+        self.threshold = threshold
+        self.k = k
+
+    def _run(self, **kwargs):
+        xss = kwargs['xs']
+
+        for xs in xss:
+            for i, xs in zip(itertools.count(), xs):
+                # TODO: What do here? Is NaN ok?
+                if len(xs[i:k]) < k:
+                    self.out['xs'].float('nan')
+                    break
+                if coefficient_of_variation(xs[i:k]) < threshold:
+                    self.out['xs'].append(x)
+                    break
