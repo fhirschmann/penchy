@@ -47,7 +47,7 @@ def checkattr(mod, attr):
     except AttributeError:
         package = ''
     if not hasattr(mod, attr):
-        ('%s%s has no %s attribute, which was expected' %
+        die('%s%s has no %s attribute, which was expected' %
             (mod.__name__, package, attr))
 
 
