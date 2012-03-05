@@ -266,6 +266,19 @@ def average(xs):
     return float(sum(xs)) / len(xs)
 
 
+def sample_standard_deviation(xs):
+    """
+    Computes the sample standard deviation of the samples ``xs``.
+
+    :param xs: sample values
+    :type xs: list of numbers
+    :returns: sample standard deviation
+    :rtype: float
+    """
+    avg = average(xs)
+    return sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
+
+
 class Value(object):
     """
     Represents a value in the context of the Condense filter.
