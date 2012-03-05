@@ -1003,3 +1003,17 @@ class ConfidenceIntervalTwo(Filter):
         c1 = avg - d * sx
         c2 = avg + d * sx
         self.out['interval'] = (c1, c2)
+
+
+class DropFirst(Filter):
+    """
+    This filter drops the first element of a list.
+
+    For example it can be used to discard the first iteration of a measurement
+    to reach indepedency of the measurements.
+    """
+    inputs = Types(('xs', list, object))
+    outputs = Types(('xs', list, object))
+
+    def _run(self, **kwargs):
+        self.out['xs'] = kwargs['xs'][1:]
