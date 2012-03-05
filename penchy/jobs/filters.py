@@ -998,3 +998,4 @@ class ConfidenceIntervalTwo(Filter):
 
         c1 = avg - d * sx
         c2 = avg + d * sx
+        self.out['interval'] = (c1, c2)
