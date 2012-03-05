@@ -1,9 +1,7 @@
 # -*- mode: python -*-
 
 from penchy.jobs import *
-import config
 
-# Only the i386 node
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 benchmarks = ['fop', 'batik']
@@ -19,17 +17,26 @@ for bench in benchmarks:
     jvm = jvms.JVM('java')
     jvm.workload = workloads.ScalaBench(bench, iterations=20)
     comp = SystemComposition(jvm, node)
-    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> 'times' >> unpack >> num >> [('values', 'times'), ('numbers', 'iter')] >> send]
+    comp.flow = [
+            jvm.workload >> ['stderr', 'exit_code'] >> \
+                    f >> 'times' \
+                    >> unpack \
+                    >> num >> [('values', 'times'), ('numbers', 'iter')] >> \
+                    send
+                    ]
     comps.append(comp)
 
 # Server side filters
 condense = filters.CondensingReceive(('time', 'iter' ,'bench'),
-                                     [(com, 'times', 'iter', Value(bench)) for com, bench in zip(comps, benchmarks)])
-plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot', xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
+        [(com, 'times', 'iter', Value(bench)) for com, bench in \
+            zip(comps, benchmarks)])
+
+# Plotting
+plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot',
+        xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
 
 job = Job(compositions=comps,
-          server_flow=[
-              condense >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
-          ],
-          invocations = 1
-          )
+        server_flow=[
+            condense >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
+            ]
+        )
