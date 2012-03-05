@@ -165,6 +165,50 @@ class HProfCpuTimes(HProf):
                                             start_re=TOTAL_RE)
 
 
+class HProfCpuSamples(HProf):
+    """
+    Filters cpu=samples output of hprof
+
+    Inputs:
+
+    - ``hprof``: Path to the hprof output file
+
+    Outputs:
+
+    - ``total``: Total samples
+    - ``rank``: Rank of the method
+    - ``self``: Thread time (%)
+    - ``accum``: Thread time (%)
+    - ``count``: How often a stack trace was active
+    - ``trace``: Stack trace number
+    - ``method``: Absolute method name
+    """
+    outputs = Types(('total', list, int),
+                    ('rank', list, list, int),
+                    ('selftime', list, list, float),
+                    ('accum', list, list, float),
+                    ('count', list, list, int),
+                    ('trace', list, list, int),
+                    ('method', list, list, str))
+
+    def __init__(self):
+        TOTAL_RE = re.compile('total = (\d+)')
+        DATA_RE = re.compile("""
+           \s+(?P<rank>\d+)
+           \s+(?P<selftime>\d+\.\d{2})%
+           \s+(?P<accum>\d+\.\d{2})%
+           \s+(?P<count>\d+)
+           \s+(?P<trace>\d+)
+           \s+(?P<method>(\w|\.|\$)+)
+           """, re.VERBOSE)
+        super(HProfCpuSamples, self).__init__(outputs=self.outputs,
+                                            start_marker='CPU SAMPLE (ms) BEGIN',
+                                            end_marker='CPU SAMPLE (ms) END',
+                                            skip=1,
+                                            data_re=DATA_RE,
+                                            start_re=TOTAL_RE)
+
+
 class DacapoHarness(Filter):
     """
     Filters output of a DaCapo Harness.
