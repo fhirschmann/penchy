@@ -114,6 +114,10 @@ def check_matplotlib():
         die('Could not import matplotlib - did you install it?')
         raise
 
+    checkattrs([
+        (matplotlib.pyplot, 'figure')
+        ])
+
     expected = ArgSpec(args=['num', 'figsize', 'dpi', 'facecolor',
         'edgecolor', 'frameon', 'FigureClass'], varargs=None,
         keywords='kwargs', defaults=(None, None, None, None,
