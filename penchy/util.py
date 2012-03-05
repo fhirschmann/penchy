@@ -18,6 +18,7 @@ import shutil
 import sys
 import tempfile
 import inspect
+import math
 from contextlib import contextmanager
 from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
@@ -276,7 +277,7 @@ def sample_standard_deviation(xs):
     :rtype: float
     """
     avg = average(xs)
-    return sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
+    return math.sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
 
 
 class Value(object):
