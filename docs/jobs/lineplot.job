@@ -27,7 +27,7 @@ for bench in benchmarks:
     comps.append(comp)
 
 # Server side filters
-condense = filters.CondensingReceive(('time', 'iter' ,'bench'),
+condense = filters.CondensingReceive(('time', 'iter', 'bench'),
         [(com, 'times', 'iter', Value(bench)) for com, bench in
             zip(comps, benchmarks)])
 
