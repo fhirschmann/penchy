@@ -987,7 +987,7 @@ class ConfidenceIntervalTwo(Filter):
         ys = kwargs['ys']
 
         # These computations are common to both of the following two cases
-        n1, n2 = len(xs), math.leng(ys)
+        n1, n2 = len(xs), len(ys)
         s1 = sample_standard_deviation(xs)
         s2 = sample_standard_deviation(ys)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
