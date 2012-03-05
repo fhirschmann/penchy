@@ -6,6 +6,7 @@ Library which abstracts SFTP and FTP connections
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
+import os
 import logging
 import shutil
 from contextlib import contextmanager
@@ -119,8 +120,9 @@ class FTPDeploy(Deploy):
         self._connected = True
 
     def put(self, local, remote):
+        self.conn.cwd(os.path.dirname(remote))
         with open(local, 'rb') as upload:
-            self.conn.storbinary('STOR %s' % remote, upload)
+            self.conn.storbinary('STOR %s' % os.path.basename(remote), upload)
 
     def disconnect(self):
         if self.conn:
