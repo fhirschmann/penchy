@@ -177,18 +177,5 @@ class CopyDeploy(Deploy):
     def __init__(self):
         super(SFTPDeploy, self).__init__(None, None, None)
 
-    def connect(self):
-        pass
-
-    def dissconnect(self):
-        pass
-
     def put(self, local, remote):
         shutil.copyfile(local, remote)
-
-    def disconnect(self):
-        pass
-
-    @property
-    def connected(self):
-        return True
