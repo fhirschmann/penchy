@@ -175,7 +175,7 @@ class CopyDeploy(Deploy):
     Allows you to copy files locally.
     """
     def __init__(self):
-        super(SFTPDeploy, self).__init__(None, None, None)
+        super(CopyDeploy, self).__init__(None, None, None)
 
     def connect(self):
         pass
