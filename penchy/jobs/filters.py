@@ -733,9 +733,11 @@ class Read(Filter):
     Reads and returns the content of filepaths.
 
     Inputs:
+
     - ``paths``: the filepaths to read
 
     Outputs:
+
     - ``data``: the content of the filepaths
     """
     inputs = Types(('paths', list, path))
@@ -782,9 +784,11 @@ class Mean(Filter):
     Computes the mean of given values.
 
     Inputs:
+
     - ``values``: numeric values
 
     Outputs:
+
     - ``mean``: mean of the numeric values
     """
     inputs = Types(('values', list, (int, float)))
@@ -799,9 +803,11 @@ class StandardDeviation(Filter):
     Computes the standard deviation of given values.
 
     Inputs:
+
     - ``values``: numeric values
 
     Outputs:
+
     - ``standard_deviation``: mean of the numeric values
     """
     inputs = Types(('values', list, (int, float)))
@@ -827,9 +833,11 @@ class Sum(Filter):
     Computes the sum of a list of integers or floats
 
     Inputs:
+
     - ``values``: numeric values
 
     Outputs:
+
     - ``sum``: sum of the numeric values
     """
 
@@ -845,9 +853,11 @@ class Enumerate(Filter):
     Enumerates the given values.
 
     Inputs:
+
     - ``values``: a list of arbitrary objects
 
     Outputs:
+
     - ``values``: the same list of arbitrary objects
     - ``numbers``: a list of numbers
     """
@@ -882,9 +892,11 @@ class Decorate(Filter):
     is the position of the input value.
 
     Inputs (default):
+
     - ``values``: a list of int or float values that shall be decorated
 
     Outputs:
+
     - ``values``: the decorated list
     """
     outputs = Types(('values', list, str))
