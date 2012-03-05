@@ -127,10 +127,3 @@ class SFTPDeploy(Deploy):
         if transport and transport.is_active():
             return True
         return False
-
-
-if __name__ == '__main__':
-    import paramiko
-    s = SFTPDeploy('localhost', 'fabian', None)
-    with s.connection_required():
-        s.put('test.txt', '/tmp/foo.xx')
