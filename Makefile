@@ -61,3 +61,6 @@ clean:
 	find . -type f -name '*.pyc' -delete
 	find . -type f -name '*.pyo' -delete
 	find . -type f -regex '.*.log\(.[0-9]+\)?' -delete
+
+check-jobs:
+	pep8 --exclude .git,.ropeproject,*pyc,*pyo --filename=*.job --ignore=E201,E202,E203,E501 --repeat --count --show-source --show-pep8 examples/ docs/jobs/

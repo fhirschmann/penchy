@@ -17,7 +17,7 @@ def main(additional=None, human=False):
     os.environ['PYTHONVER'] = '2.6'
     cmds = [['pep8',
              '--exclude', '.git,.ropeproject,*pyc,*pyo',
-             '--filename=*.py,*.job',
+             '--filename=*.py',
              '--ignore=E201,E202,E203,E501',
              '--repeat',
              '--count']
