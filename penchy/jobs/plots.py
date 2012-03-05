@@ -30,7 +30,8 @@ class Plot(Filter):
 
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None,
-                 x_scale="linear", y_scale="linear"):
+                 x_scale="linear", y_scale="linear",
+                 grid=False):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -52,6 +53,8 @@ class Plot(Filter):
         :type x_scale: string
         :param y_scale: scale of the y axis, either linear, log or symlog
         :type y_scale: string
+        :param grid: show grid
+        :type grid: bool
         """
         super(Plot, self).__init__()
         self.filename = filename
@@ -87,6 +90,8 @@ class Plot(Filter):
             else:
                 raise ValueError("y_scale must be either 'linear', 'log',"
                                  " or 'symlog'")
+            # Set grid
+            self.plot.grid(grid)
 
             hooks = [lambda: self.plot.set_xlabel(self.xlabel),
                      lambda: self.plot.set_ylabel(self.ylabel),
