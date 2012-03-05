@@ -53,8 +53,9 @@ class HProf(Filter):
     """
     inputs = Types(('hprof', list, path))
 
-    def __init__(self, start_marker, end_marker, skip, data_re, start_re=None):
+    def __init__(self, outputs, start_marker, end_marker, skip, data_re, start_re=None):
         super(HProf, self).__init__()
+        self.outputs = outputs
         self.start_marker = start_marker
         self.end_marker = end_marker
         self.start_re = start_re
@@ -156,7 +157,8 @@ class HProfCpuTimes(HProf):
            \s+(?P<trace>\d+)
            \s+(?P<method>(\w|\.|\$)+)
            """, re.VERBOSE)
-        super(HProfCpuTimes, self).__init__(start_marker='CPU TIME (ms) BEGIN',
+        super(HProfCpuTimes, self).__init__(outputs=self.outputs,
+                                            start_marker='CPU TIME (ms) BEGIN',
                                             end_marker='CPU TIME (ms) END',
                                             skip=1,
                                             data_re=DATA_RE,
