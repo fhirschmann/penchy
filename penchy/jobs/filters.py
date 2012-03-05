@@ -567,9 +567,12 @@ class Upload(Filter):
     def __init__(self, method, path, *args, **kwargs):
         """
         :param method: method to use
-        :type method: :class:`~penchs.deploy.Deploy`
+        :type method: descendant of :class:`~penchy.deploy.Deploy`
         :param path: path to upload to
         :type path: str
+
+        Additionally, you can pass any arguments you'd normally
+        pass to your implementation of :class:`~penchy.deploy.Deploy`
         """
         super(Upload, self).__init__()
         if not issubclass(method, Deploy):

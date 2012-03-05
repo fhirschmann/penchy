@@ -31,16 +31,33 @@ class Deploy(object):
         self.port = port
 
     def connect(self):
+        """
+        Establish connection to this host.
+        """
         raise NotImplementedError("connect must be implemented")
 
     def disconnect(self):
+        """
+        Disconnect from this host.
+        """
         raise NotImplementedError("disconnect must be implemented")
 
-    def put(self, local):
+    def put(self, local, remote):
+        """
+        Upload a file to this host.
+
+        :param local: file to upload
+        :type local: str
+        :param remote: destination to upload to
+        :type remote: str
+        """
         raise NotImplementedError("put must be implemented")
 
     @property
     def connected(self):
+        """
+        Indicates if we are connected to the host.
+        """
         raise NotImplementedError("connected must be implemented")
 
     @contextmanager
