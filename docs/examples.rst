@@ -13,3 +13,15 @@ A simple lineplot, which can also be found in :file:`docs/examples/lineplot.job`
     :language: python
     :linenos:
     :encoding: utf8
+
+Barplot
+-------
+
+A simple barlot, which can also be found in :file:`docs/examples/barplot.job`:
+
+.. image:: jobs/barplot.png
+
+.. literalinclude:: jobs/barplot.job
+    :language: python
+    :linenos:
+    :encoding: utf8

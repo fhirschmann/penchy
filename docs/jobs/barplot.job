@@ -1,0 +1,54 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+jvm1 = jvms.JVM('java')
+jvm2 = jvms.JVM('java')
+comp1 = SystemComposition(jvm1, node)
+comp2 = SystemComposition(jvm2, node)
+
+fop = workloads.ScalaBench('fop')
+batik = workloads.ScalaBench('batik')
+jvm1.workload = fop
+jvm2.workload = batik
+
+f = filters.DacapoHarness()
+unpack = filters.Map(filters.Unpack())
+enum = filters.Enumerate()
+deco = filters.Decorate("Invocation {0}")
+
+send = filters.Send()
+condense = filters.CondensingReceive(('time', 'bench'),
+        [(comp1, 'times', Value('fop')),
+            (comp2, 'times', Value('batik'))])
+
+aggregate = filters.AggregatingReceive('invoc')
+
+plot = plots.BarPlot(filename='/tmp/barplot.png',title='fop vs. batik',
+        xlabel='Benchmark', ylabel='Wallclocktime', colors=['blue', 'red'])
+
+comp1.flow = [
+        fop >> ['stderr', 'exit_code']
+        >> f >> ('times', 'values')
+        >> unpack >> ('result', 'values')
+        >> enum >> [('numbers', 'invoc'), ('values', 'times')]
+        >> send
+        ]
+
+comp2.flow = [
+        batik >> ['stderr', 'exit_code']
+        >> f >> ('times', 'values')
+        >> unpack >> ('result', 'values')
+        >> enum >> [('numbers', 'invoc'), ('values', 'times')] >>
+        send
+        ]
+
+job = Job(compositions=[comp1, comp2],
+        server_flow=[
+            condense >> [('bench', 'x'), ('time', 'y')] >> plot,
+            aggregate >> ('invoc', 'values') >> deco >> ('values', 'z') >> plot
+            ],
+        invocations = 2
+        )
