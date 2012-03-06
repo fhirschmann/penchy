@@ -24,7 +24,7 @@ from penchy import __version__
 from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.util import *
+import penchy.util as util
 from penchy.deploy import Deploy
 
 
@@ -404,8 +404,8 @@ class Evaluation(Filter):
         """
         super(Evaluation, self).__init__()
         self.evaluator = evaluator
-        self.inputs = default(inputs, Types())
-        self.outputs = default(outputs, Types())
+        self.inputs = util.default(inputs, Types())
+        self.outputs = util.default(outputs, Types())
 
     def _run(self, **kwargs):
         if self.inputs == Types():
@@ -471,7 +471,7 @@ def evaluate_runtimes(times):
 
     maxs = [max(iteration) for iteration in grouped_by_iteration]
     mins = [min(iteration) for iteration in grouped_by_iteration]
-    avgs = [average(iteration) for iteration in grouped_by_iteration]
+    avgs = [util.average(iteration) for iteration in grouped_by_iteration]
     pos_deviations = [abs(max_ - avg) / avg for max_, avg in zip(maxs, avgs)]
     neg_deviations = [abs(min_ - avg) / avg for min_, avg in zip(mins, avgs)]
 
@@ -600,7 +600,7 @@ class Condense(Filter):
                         raise WrongInputError('Column "{0}" is not contained in the resultset'.format(field))
 
                 # if it is a ``Value``, just append it
-                elif isinstance(field, Value):
+                elif isinstance(field, util.Value):
                     self.out[name].append(field.value)
                 else:
                     #FIXME: Catch this error before running the job
@@ -934,7 +934,7 @@ class Mean(Filter):
     outputs = Types(('mean', float))
 
     def _run(self, **kwargs):
-        self.out['mean'] = average(kwargs['values'])
+        self.out['mean'] = util.average(kwargs['values'])
 
 
 class StandardDeviation(Filter):
@@ -962,7 +962,7 @@ class StandardDeviation(Filter):
 
     def _run(self, **kwargs):
         vs = kwargs['values']
-        avg = average(vs)
+        avg = util.average(vs)
         std = math.sqrt(sum((v - avg) ** 2 for v in vs) / (len(vs) - self.ddof))
         self.out['standard_deviation'] = std
 
@@ -1087,7 +1087,7 @@ class ConfidenceIntervalMean(Filter):
 
         # These computations are common to both of the following two cases
         n = len(xs)
-        avg = average(xs)
+        avg = util.average(xs)
         s = sample_standard_deviation(xs)
 
         # If the number of samples is large
@@ -1144,8 +1144,8 @@ class ConfidenceIntervalTwo(Filter):
         s1 = sample_standard_deviation(xs)
         s2 = sample_standard_deviation(ys)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
-        avgx = average(xs)
-        avgy = average(ys)
+        avgx = util.average(xs)
+        avgy = util.average(ys)
         avg = avgx - avgy
 
         # If the number of samples is large in both samples
@@ -1206,6 +1206,6 @@ class SteadyState(Filter):
 
         for xs in xss:
             for i in range(0, len(xs) - self.k):
-                if coefficient_of_variation(xs[i:self.k]) < self.threshold:
+                if util.coefficient_of_variation(xs[i:self.k]) < self.threshold:
                     self.out['xs'].append(xs[i:self.k])
                     break
