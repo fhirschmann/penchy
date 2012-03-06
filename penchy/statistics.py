@@ -20,7 +20,7 @@ def average(xs):
     :returns: averaged numbers
     :rtype: float
     """
-    return float(sum(xs)) / len(xs)
+    return sum(xs) / len(xs)
 
 
 def sample_standard_deviation(xs):
