@@ -25,6 +25,7 @@ from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 import penchy.util as util
+import penchy.statistics as stats
 from penchy.deploy import Deploy
 
 
@@ -484,7 +485,7 @@ def evaluate_runtimes(times):
 
     maxs = [max(iteration) for iteration in grouped_by_iteration]
     mins = [min(iteration) for iteration in grouped_by_iteration]
-    avgs = [util.average(iteration) for iteration in grouped_by_iteration]
+    avgs = [stats.average(iteration) for iteration in grouped_by_iteration]
     pos_deviations = [abs(max_ - avg) / avg for max_, avg in zip(maxs, avgs)]
     neg_deviations = [abs(min_ - avg) / avg for min_, avg in zip(mins, avgs)]
 
@@ -947,7 +948,7 @@ class Mean(Filter):
     outputs = Types(('mean', float))
 
     def _run(self, **kwargs):
-        self.out['mean'] = util.average(kwargs['values'])
+        self.out['mean'] = stats.average(kwargs['values'])
 
 
 class StandardDeviation(Filter):
@@ -975,7 +976,7 @@ class StandardDeviation(Filter):
 
     def _run(self, **kwargs):
         vs = kwargs['values']
-        avg = util.average(vs)
+        avg = stats.average(vs)
         std = math.sqrt(sum((v - avg) ** 2 for v in vs) / (len(vs) - self.ddof))
         self.out['standard_deviation'] = std
 
@@ -1100,8 +1101,8 @@ class ConfidenceIntervalMean(Filter):
 
         # These computations are common to both of the following two cases
         n = len(xs)
-        avg = util.average(xs)
-        s = util.sample_standard_deviation(xs)
+        avg = stats.average(xs)
+        s = stats.sample_standard_deviation(xs)
 
         # If the number of samples is large
         if n > 29:
@@ -1154,11 +1155,11 @@ class ConfidenceIntervalTwo(Filter):
 
         # These computations are common to both of the following two cases
         n1, n2 = len(xs), len(ys)
-        s1 = util.sample_standard_deviation(xs)
-        s2 = util.sample_standard_deviation(ys)
+        s1 = stats.sample_standard_deviation(xs)
+        s2 = stats.sample_standard_deviation(ys)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
-        avgx = util.average(xs)
-        avgy = util.average(ys)
+        avgx = stats.average(xs)
+        avgy = stats.average(ys)
         avg = avgx - avgy
 
         # If the number of samples is large in both samples
@@ -1219,6 +1220,6 @@ class SteadyState(Filter):
 
         for xs in xss:
             for i in range(0, len(xs) - self.k):
-                if util.coefficient_of_variation(xs[i:self.k]) < self.threshold:
+                if stats.coefficient_of_variation(xs[i:self.k]) < self.threshold:
                     self.out['xs'].append(xs[i:self.k])
                     break

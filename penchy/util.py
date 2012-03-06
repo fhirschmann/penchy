@@ -18,7 +18,6 @@ import shutil
 import sys
 import tempfile
 import inspect
-import math
 from contextlib import contextmanager
 from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
@@ -253,44 +252,6 @@ def die(msg):
     """
     print(msg, file=sys.stderr)
     sys.exit(1)
-
-
-def average(xs):
-    """
-    Average the numbers in ``xs``.
-
-    :param xs: numbers to average
-    :type xs: list of numbers
-    :returns: averaged numbers
-    :rtype: float
-    """
-    return float(sum(xs)) / len(xs)
-
-
-def sample_standard_deviation(xs):
-    """
-    Computes the sample standard deviation of the samples ``xs``.
-
-    :param xs: sample values
-    :type xs: list of numbers
-    :returns: sample standard deviation
-    :rtype: float
-    """
-    avg = average(xs)
-    return math.sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
-
-
-def coefficient_of_variation(xs):
-    """
-    Computes the coefficient of variation of the samples ``xs``,
-    i.e. the standard deviation divided by the mean.
-
-    :param xs: sample values
-    :type xs: list of numbers
-    :returns: coefficient of variation
-    :rtype: float
-    """
-    return sample_standard_deviation(xs) / average(xs)
 
 
 def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')):

@@ -85,6 +85,7 @@ Internal
 Utilities
 ---------
 .. automodule:: penchy.util
+.. automodule:: penchy.statistics
 
 Pipeline dependency resolution
 ------------------------------
