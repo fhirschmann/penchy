@@ -28,7 +28,7 @@ for bench in benchmarks:
 
 # Server side filters
 condense = filters.CondensingReceive(('time', 'iter', 'bench'),
-        [(com, 'times', 'iter', Value(bench)) for com, bench in
+        [(com, 'times', 'iter', filters.Value(bench)) for com, bench in
             zip(comps, benchmarks)])
 
 # Plotting
