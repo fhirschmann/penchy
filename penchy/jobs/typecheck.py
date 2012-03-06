@@ -164,7 +164,7 @@ class Types(object):
         if other.descriptions is not None and mapping is not None:
             for _, sink in mapping:
                 if sink not in other.descriptions:
-                    log.error('Sink has no input "{0}"'.format(sink))
+                    log.warn('Sink has no input "{0}"'.format(sink))
 
         return valid
 
