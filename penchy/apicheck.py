@@ -115,7 +115,8 @@ def check_matplotlib():
         raise
 
     checkattrs([
-        (matplotlib.pyplot, 'figure')
+        (matplotlib.pyplot, 'figure'),
+        (matplotlib.figure, 'Figure'),
         ])
 
     expected = ArgSpec(args=['num', 'figsize', 'dpi', 'facecolor',
