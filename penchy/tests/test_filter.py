@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 from penchy.compat import unittest, write
 from penchy.jobs.filters import *
 from penchy.jobs.typecheck import Types
-from penchy.util import tempdir, Value
+from penchy.util import tempdir
 from penchy.tests.util import get_json_data, make_system_composition
 
 

@@ -38,6 +38,17 @@ class WrongInputError(Exception):
     pass
 
 
+class Value(object):
+    """
+    Represents a value in the context of the Condense filter.
+    It is used to distinguish direct values from filter inputs.
+
+    TODO: refere to the not yet existing Condense filter documentation.
+    """
+    def __init__(self, value):
+        self.value = value
+
+
 class Tamiflex(Filter):
     pass
 
@@ -566,7 +577,7 @@ class Condense(Filter):
         :param names: names of outputs
         :type names: tuple string
         :param data: the columns that should be merged and the identifiers
-        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string, :class:`~penchy.util.Value`)
+        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string, :class:`~penchy.jobs.filters.Value`)
         """
         super(Condense, self).__init__()
         self.data = data
@@ -600,7 +611,7 @@ class Condense(Filter):
                         raise WrongInputError('Column "{0}" is not contained in the resultset'.format(field))
 
                 # if it is a ``Value``, just append it
-                elif isinstance(field, util.Value):
+                elif isinstance(field, Value):
                     self.out[name].append(field.value)
                 else:
                     #FIXME: Catch this error before running the job

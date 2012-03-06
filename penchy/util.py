@@ -293,17 +293,6 @@ def coefficient_of_variation(xs):
     return sample_standard_deviation(xs) / average(xs)
 
 
-class Value(object):
-    """
-    Represents a value in the context of the Condense filter.
-    It is used to distinguish direct values from filter inputs.
-
-    TODO: refere to the not yet existing Condense filter documentation.
-    """
-    def __init__(self, value):
-        self.value = value
-
-
 def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')):
     """
     Extracts the username and password for a given ``id_``
