@@ -625,7 +625,8 @@ class Condense(Filter):
         :param names: names of outputs
         :type names: tuple string
         :param data: the columns that should be merged and the identifiers
-        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string, :class:`~penchy.jobs.filters.Value`)
+        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string,
+                           :class:`~penchy.jobs.filters.Value`)
         """
         super(Condense, self).__init__()
         self.data = data
@@ -668,7 +669,8 @@ class Condense(Filter):
 
 class AggregatingReceive(Receive, Aggregate):
     """
-    A composition of the :class:`~penchy.jobs.filters.Receive` and :class:`~penchy.jobs.filters.Aggregate` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive`
+    and :class:`~penchy.jobs.filters.Aggregate` filter.
     """
     inputs = Types((':environment:', dict))
 
@@ -685,7 +687,8 @@ class AggregatingReceive(Receive, Aggregate):
 
 class CondensingReceive(Receive, Condense):
     """
-    A composition of the :class:`~penchy.jobs.filters.Receive` and :class:`~penchy.jobs.filters.Condense` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive`
+    and :class:`~penchy.jobs.filters.Condense` filter.
     """
     inputs = Types((':environment:', dict))
 
@@ -710,7 +713,8 @@ class Map(Filter):
     to pick one with ``finput`` and ``foutput``.
     """
 
-    def __init__(self, filter_, input='values', output='result', finput=None, foutput=None):
+    def __init__(self, filter_, input='values', output='result', finput=None,
+                 foutput=None):
         """
         :param filter_: the filter to be applied
         :type filter_: :class:`~penchy.jobs.elements.Filter`
