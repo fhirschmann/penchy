@@ -7,7 +7,7 @@ This module provides miscellaneous utilities.
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
 """
-from __future__ import print_function
+from __future__ import print_function, division
 
 import functools
 import hashlib
