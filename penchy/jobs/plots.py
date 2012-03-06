@@ -117,7 +117,7 @@ class BarPlot(Plot):
     - ``x``: Labels for the first dimension of ``y``
     - ``y``: 2d list of bar heights
     - ``z``: Labels for the second dimension of ``y``
-    - ``err``: list of error values (only visible if error_bars is True)
+    - ``err``: list of error values (only visible if ``error_bars`` is True)
 
     Outputs:
 
@@ -255,6 +255,10 @@ class LinePlot(Plot):
     - ``x``: 2d list of x-values
     - ``y``: 2d list of y-values
     - ``z``: labels for the first dimension of ``x`` and ``y`` values
+
+    Outputs:
+
+    - ``filename``: Filename of the generated image
     """
     inputs = Types(('x', list, list, (int, float)),
                    ('y', list, list, (int, float)),
@@ -287,10 +291,21 @@ class Histogram(Plot):
     Inputs:
 
     - ``x``: list of values
+
+    Outputs:
+
+    - ``filename``: Filename of the generated image
     """
     inputs = Types(('x', list, (int, float)))
 
-    def __init__(self, bins, normed=True, *arg, **kwargs):
+    def __init__(self, bins, normed=False, *arg, **kwargs):
+        """
+        :param bins: if ``bins`` is a number ``bins`` + 1 egdes are
+        drawn. Unequally spaced bins are supported by sequences.
+        :type bins: integer or list integers
+        :param normed: draw a normalized histogram
+        :type normed: bool
+        """
         super(Histogram, self).__init__()
         self.bins = bins
         self.normed = normed
