@@ -589,3 +589,15 @@ class SteadyStateTest(unittest.TestCase):
         f._run(xs=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38],
                    [15, 36, 21, 1, 2, 15, 47, 7, 19, 28, 39, 29, 32, 17, 15, 18, 14, 8, 39, 0]])
         self.assertEqual(f.out['xs'], [[36, 49, 32, 24, 39], [19, 28, 39, 29, 32] ])
+
+
+class ConfidenceIntervalMeanTest(unittest.TestCase):
+    def test_small_sample_set(self):
+        f = ConfidenceIntervalMean(significance_level=0.9)
+        f._run(values=[1, 2, 3])
+        self.assertAlmostEqual(f.out['interval'], (1.9179390061550845, 2.0820609938449155))
+
+    def test_large_sample_set(self):
+        f = ConfidenceIntervalMean(significance_level=0.9)
+        f._run(values=range(31))
+        self.assertAlmostEqual(f.out['interval'], (14.794795879876117, 15.205204120123883))
