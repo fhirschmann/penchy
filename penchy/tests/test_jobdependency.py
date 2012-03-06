@@ -95,20 +95,20 @@ class SugaredPipelineTest(unittest.TestCase):
         self.assertItemsEqual(e.edges, [e])
 
     def test_tuple_mapping(self):
-        p = self.elem1 >> ('a', 'b') >> self.elem2
+        self.elem1 >> ('a', 'b') >> self.elem2
         e = Edge(self.elem1, self.elem2, [('a', 'b')])
         self.assertItemsEqual(e.edges, [e])
 
     def test_string_mapping(self):
-        p = self.elem1 >> 'a' >> self.elem2
+        self.elem1 >> 'a' >> self.elem2
         e = Edge(self.elem1, self.elem2, [('a', 'a')])
         self.assertItemsEqual(e.edges, [e])
 
     def test_list_string_mapping(self):
-        p = self.elem1 >> ['a', 'b'] >> self.elem2
+        self.elem1 >> ['a', 'b'] >> self.elem2
         e = Edge(self.elem1, self.elem2, [('a', 'a'), ('b', 'b')])
         self.assertItemsEqual(e.edges, [e])
-        p = self.elem1 >> [('a', 'a'), 'b'] >> self.elem2
+        self.elem1 >> [('a', 'a'), 'b'] >> self.elem2
         self.assertItemsEqual(e.edges, [e])
 
     def test_explicit_mapping(self):
