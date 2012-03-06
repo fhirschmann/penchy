@@ -92,9 +92,9 @@ class Tamiflex(Filter):
                         'line': [], 'optional': []}
                 tamiflex_reader = csv.reader(fobj, delimiter=';')
                 for row in tamiflex_reader:
-                    if len(row) != len(data.keys()):
+                    if len(row) != len(data):
                         raise WrongInputError("The reflection log is malformed: {0}".format(row))
-                    for value, name in zip(row, data.keys()):
+                    for value, name in zip(row, data):
                         data[name].append(value)
 
                 for key, val in data.items():
