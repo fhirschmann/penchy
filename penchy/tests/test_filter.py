@@ -162,11 +162,11 @@ class AggregateTest(unittest.TestCase):
 
     def test_no_arguments(self):
         with self.assertRaises(ValueError):
-            f = Aggregate()
+            Aggregate()
 
     def test_malformed_argument(self):
         with self.assertRaises(ValueError):
-            f = Aggregate('a', (1, 'a', 'b'))
+            Aggregate('a', (1, 'a', 'b'))
 
 
 class CondenseTest(unittest.TestCase):
@@ -545,12 +545,12 @@ class MapTest(unittest.TestCase):
     def test_wrong_inputs(self):
         wrong = Evaluation(lambda x, y: {'x': x}, Types(('x', object), ('y', object)), Types(('x', object)))
         with self.assertRaises(TypeCheckError):
-            f = Map(wrong)
+            Map(wrong)
 
     def test_wrong_outputs(self):
         wrong = Evaluation(lambda x: {'x': x, 'y': x}, Types(('x', object)), Types(('x', object), ('y', object)))
         with self.assertRaises(TypeCheckError):
-            f = Map(wrong)
+            Map(wrong)
 
     def test_with_all_arguments(self):
         identity = Evaluation(lambda c: {'d': c}, Types(('c', object)), Types(('d', object)))
