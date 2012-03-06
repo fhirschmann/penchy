@@ -31,7 +31,7 @@ class Plot(Filter):
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None,
                  x_scale="linear", y_scale="linear",
-                 grid=False):
+                 grid=False, legend_position=None):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -55,6 +55,8 @@ class Plot(Filter):
         :type y_scale: string
         :param grid: show grid
         :type grid: bool
+        :param legend_position: position of the legend (see ``matplotlib.legend.legend``)
+        :type legend_position: string or integer
         """
         super(Plot, self).__init__()
         self.filename = filename
@@ -62,6 +64,7 @@ class Plot(Filter):
         self.title = title
         self.xlabel = xlabel
         self.ylabel = ylabel
+        self.legend_position = legend_position
 
         if is_server:
             self.fig = plt.figure()
@@ -218,7 +221,7 @@ class BarPlot(Plot):
             self.plot.set_xticklabels(xs)
 
         # Draw the legend with zlabels
-        self.fig.legend(bars, zs)
+        self.fig.legend(bars, zs, self.legend_position)
 
 
 class ScatterPlot(Plot):
@@ -274,7 +277,7 @@ class LinePlot(Plot):
         for x, y, c in zip(xs, ys, self.colors):
             lines.append(self.plot.plot(x, y, c)[0])
 
-        self.fig.legend(lines, zs)
+        self.fig.legend(lines, zs, self.legend_position)
 
 
 class Histogram(Plot):
