@@ -26,7 +26,7 @@ for bench in benchmarks:
 
 # Server side filters
 condense = filters.CondensingReceive(('sum', 'total', 'bench'),
-                                     [(com, 'sum', 'total', Value(bench)) for com, bench in zip(comps, benchmarks)])
+                                     [(com, 'sum', 'total', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
 
 plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='Scatterplot',
                      xlabel='Sum of method calls', ylabel='Total execution time')

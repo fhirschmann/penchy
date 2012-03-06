@@ -23,7 +23,7 @@ for bench in benchmarks:
 
 # Server side filters
 condense = filters.CondensingReceive(('time','bench'),
-                                     [(com, 'times', Value(bench)) for com, bench in zip(comps, benchmarks)])
+                                     [(com, 'times', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
 
 aggregate = filters.AggregatingReceive('times')
 deco = filters.Decorate('Invocation {0}')
