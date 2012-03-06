@@ -1,0 +1,22 @@
+# -*- mode: python -*-
+
+import os
+from penchy.jobs import *
+
+node = NodeSetting('localhost', 22, os.environ['USER'], '/tmp', '/usr/bin')
+
+jvm = jvms.JVM('java')
+composition = SystemComposition(jvm, node)
+
+w = workloads.ScalaBench('dummy')
+t = tools.Tamiflex()
+jvm.workload = w
+jvm.tool = t
+
+f = filters.Print()
+composition.flow = [t >> f]
+
+job = Job(compositions=composition,
+          server_flow=[],
+          invocations = 1
+          )
