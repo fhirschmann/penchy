@@ -301,7 +301,7 @@ class Histogram(Plot):
     def __init__(self, bins, normed=False, *arg, **kwargs):
         """
         :param bins: if ``bins`` is a number ``bins`` + 1 egdes are
-        drawn. Unequally spaced bins are supported by sequences.
+                     drawn. Unequally spaced bins are supported by sequences.
         :type bins: integer or list integers
         :param normed: draw a normalized histogram
         :type normed: bool

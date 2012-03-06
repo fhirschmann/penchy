@@ -30,7 +30,7 @@ def standard_deviation(xs, ddof):
     :param xs: sample values
     :type xs: list of numbers
     :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
-    is substracted from the divisor.
+                 is substracted from the divisor.
     :type ddof: integer
     :returns: sample standard deviation
     :rtype: float

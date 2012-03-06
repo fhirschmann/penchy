@@ -969,7 +969,7 @@ class StandardDeviation(Filter):
     def __init__(self, ddof=1):
         """
         :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
-        is substracted from the divisor.
+                     is substracted from the divisor.
         :type ddof: integer
         """
         super(StandardDeviation, self).__init__()
