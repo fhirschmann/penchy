@@ -218,7 +218,7 @@ class BarPlot(Plot):
             self.plot.set_xticklabels(xs)
 
         # Draw the legend with zlabels
-        self.plot.legend(bars, zs)
+        self.fig.legend(bars, zs)
 
 
 class ScatterPlot(Plot):
@@ -274,7 +274,7 @@ class LinePlot(Plot):
         for x, y, c in zip(xs, ys, self.colors):
             lines.append(self.plot.plot(x, y, c)[0])
 
-        self.plot.legend(lines, zs)
+        self.fig.legend(lines, zs)
 
 
 class Histogram(Plot):
