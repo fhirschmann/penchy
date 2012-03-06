@@ -1088,7 +1088,7 @@ class ConfidenceIntervalMean(Filter):
         # These computations are common to both of the following two cases
         n = len(xs)
         avg = util.average(xs)
-        s = sample_standard_deviation(xs)
+        s = util.sample_standard_deviation(xs)
 
         # If the number of samples is large
         if n > 29:
@@ -1141,8 +1141,8 @@ class ConfidenceIntervalTwo(Filter):
 
         # These computations are common to both of the following two cases
         n1, n2 = len(xs), len(ys)
-        s1 = sample_standard_deviation(xs)
-        s2 = sample_standard_deviation(ys)
+        s1 = util.sample_standard_deviation(xs)
+        s2 = util.sample_standard_deviation(ys)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
         avgx = util.average(xs)
         avgy = util.average(ys)
