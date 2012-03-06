@@ -9,7 +9,7 @@ This module provides the foundation of job elements.
 import logging
 from collections import defaultdict
 
-from penchy.compat import str, unicode, path
+from penchy.compat import path
 from penchy.jobs.dependency import Pipeline
 from penchy.jobs.typecheck import Types
 
