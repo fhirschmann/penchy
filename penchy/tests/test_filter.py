@@ -579,12 +579,12 @@ class DropFirstTest(unittest.TestCase):
 
 
 class SteadyStateTest(unittest.TestCase):
-    def test_one_dimension(self):
+    def test_one_invocation(self):
         f = SteadyState(k=5, threshold=0.3)
         f._run(xs=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38]])
         self.assertEqual(f.out['xs'], [[36, 49, 32, 24, 39]])
 
-    def test_two_dimensions(self):
+    def test_two_invocations(self):
         f = SteadyState(k=5, threshold=0.3)
         f._run(xs=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38],
                    [15, 36, 21, 1, 2, 15, 47, 7, 19, 28, 39, 29, 32, 17, 15, 18, 14, 8, 39, 0]])
