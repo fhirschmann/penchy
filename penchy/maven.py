@@ -49,7 +49,7 @@ def get_classpath(path=None):
             break
 
     if not path or not os.path.isfile(path):
-        raise OSError('No pom.xml found!')
+        raise OSError('No pom-file found at {0}!'.format(path))
 
     if path:
         log.debug('Using %s' % path)
