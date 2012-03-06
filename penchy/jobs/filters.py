@@ -18,7 +18,6 @@ import os
 import re
 import shutil
 import math
-import itertools
 from pprint import pprint
 
 from penchy import __version__
