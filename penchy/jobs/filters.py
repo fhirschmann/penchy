@@ -24,7 +24,7 @@ from penchy import __version__
 from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.util import default, average, sample_standard_deviation, Value
+from penchy.util import default, average, sample_standard_deviation, coefficient_of_variation, Value
 from penchy.deploy import Deploy
 
 
@@ -1205,7 +1205,7 @@ class SteadyState(Filter):
         xss = kwargs['xs']
 
         for xs in xss:
-            for i in range(0, len(xs) - k):
-                if coefficient_of_variation(xs[i:k]) < threshold:
-                    self.out['xs'].append(xs[i:k])
+            for i in range(0, len(xs) - self.k):
+                if coefficient_of_variation(xs[i:self.k]) < self.threshold:
+                    self.out['xs'].append(xs[i:self.k])
                     break
