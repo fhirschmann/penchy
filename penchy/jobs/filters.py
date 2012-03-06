@@ -40,12 +40,14 @@ class WrongInputError(Exception):
 
 class Value(object):
     """
-    Represents a value in the context of the Condense filter.
-    It is used to distinguish direct values from filter inputs.
-
-    TODO: refere to the not yet existing Condense filter documentation.
+    Represents a value in the context of the :class:`~penchy.jobs.filters.Condense`
+    filter. It is used to distinguish direct values from filter inputs.
     """
     def __init__(self, value):
+        """
+        :param value: the value
+        :type value: object
+        """
         self.value = value
 
 
