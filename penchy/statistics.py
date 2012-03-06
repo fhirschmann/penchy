@@ -8,6 +8,8 @@ This module provides common statistical functions.
 """
 from __future__ import division
 
+import math
+
 
 def average(xs):
     """
