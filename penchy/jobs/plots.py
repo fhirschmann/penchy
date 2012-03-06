@@ -207,7 +207,7 @@ class BarPlot(Plot):
                 rects.append(self.plot.bar(**options))
 
             if self.stacked:
-                    bottoms += bottoms + ys
+                bottoms += bottoms + ys
 
             # Save the bar identifier for assoziation wit zlabels
             bars.append(rects[i][0])
