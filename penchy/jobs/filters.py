@@ -24,7 +24,7 @@ from penchy import __version__
 from penchy.compat import str, path, unicode, try_unicode
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
-from penchy.util import default, average, sample_standard_deviation, coefficient_of_variation, Value
+from penchy.util import *
 from penchy.deploy import Deploy
 
 
