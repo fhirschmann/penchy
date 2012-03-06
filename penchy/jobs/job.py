@@ -329,8 +329,12 @@ class Job(object):
 
             # measure usertime after
             after = os.times()[0]
+            diff = after - before
             log.debug('CPU time after invocation: {0}, difference: '
-                      '{1}'.format(after, after - before))
+                      '{1}'.format(after, diff))
+
+            if diff > 0.1:
+                log.error('CPU time differs by too much, difference: '.format(diff))
 
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):
