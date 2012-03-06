@@ -1155,8 +1155,8 @@ class ConfidenceIntervalTwo(Filter):
 
         # These computations are common to both of the following two cases
         n1, n2 = len(xs), len(ys)
-        s1 = stats.sample_standard_deviation(xs, ddof=1)
-        s2 = stats.sample_standard_deviation(ys, ddof=1)
+        s1 = stats.standard_deviation(xs, ddof=1)
+        s2 = stats.standard_deviation(ys, ddof=1)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
         avgx = stats.average(xs)
         avgy = stats.average(ys)
