@@ -18,6 +18,7 @@ import os
 import re
 import shutil
 import math
+import csv
 from pprint import pprint
 
 from penchy import __version__
@@ -53,7 +54,51 @@ class Value(object):
 
 
 class Tamiflex(Filter):
-    pass
+    """
+    A filter for the reflection log file of the tamiflex
+    play-out-agent.
+
+    Inputs:
+
+    - ``reflection_log``: Path to the reflection log file
+
+    Outputs:
+
+    - ``kind``: Kind of reflection call
+    - ``name``: qualified name of instantiated class or the
+                signature of the called method/constructor
+    - ``parent_name``: the fully qualified name of the method
+                       that contains the reflective call
+    - ``line``: the line number at which the reflective call
+                took place (maybe empty)
+    - ``optional``: optionally additional information, such as
+                    the accessibility status of the member in question
+    """
+    inputs = Types(('reflection_log', list, path))
+    outputs = Types(('kind', list, list, str),
+                    ('name', list, list, str),
+                    ('parent_name', list, list, str),
+                    ('line', list, list, str),
+                    ('optional', list, list, str))
+
+    def _run(self, **kwargs):
+        files = kwargs['reflection_log']
+
+        for f in files:
+            if not os.path.getsize(f):
+                raise WrongInputError("The reflection log is empty")
+            with open(f) as fobj:
+                data = {'kind': [], 'name': [], 'parent_name': [],
+                        'line': [], 'optional': []}
+                tamiflex_reader = csv.reader(fobj, delimiter=';')
+                for row in tamiflex_reader:
+                    if len(row) != len(data.keys()):
+                        raise WrongInputError("The reflection log is malformed: {0}".format(row))
+                    for value, name in zip(row, data.keys()):
+                        data[name].append(value)
+
+                for key, val in data.items():
+                    self.out[key].append(val)
 
 
 class HProf(Filter):
