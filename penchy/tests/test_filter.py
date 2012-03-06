@@ -605,15 +605,15 @@ class ConfidenceIntervalMeanTest(unittest.TestCase):
             self.assertAlmostEqual(actual, expected)
 
 
-class ConfidenceIntervalTwoTest(unittest.TestCase):
+class CI2AlternativesTest(unittest.TestCase):
     def test_small_sample_set(self):
-        f = ConfidenceIntervalTwo(significance_level=0.9)
+        f = CI2Alternatives(significance_level=0.9)
         f._run(xs=[1, 2, 3], ys=range(31))
         for actual, expected in zip(f.out['interval'], (-13.219442204882425, -12.780557795117575)):
             self.assertAlmostEqual(actual, expected)
 
     def test_large_sample_set(self):
-        f = ConfidenceIntervalTwo(significance_level=0.9)
+        f = CI2Alternatives(significance_level=0.9)
         f._run(xs=range(31), ys=range(31))
         for actual, expected in zip(f.out['interval'], (-0.29020244973403198, 0.29020244973403198)):
             self.assertAlmostEqual(actual, expected)

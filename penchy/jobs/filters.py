@@ -1117,14 +1117,13 @@ class ConfidenceIntervalMean(Filter):
         self.out['interval'] = (c1, c2)
 
 
-class ConfidenceIntervalTwo(Filter):
+class CI2Alternatives(Filter):
     """
     A filter that computes the confidence interval for the mean of
     two alternatives.
     The implementation is based on the paper 'Statisically Rigorous
     Java Performance Evaluation' by Andy Georges et.al.
     TODO: Refere to the paper via bibtex or so.
-    TODO: Better class name
 
     Note: If the resulting confidence interval includes zero, we can
     conclude, at the confidence level choosen, that there is no
@@ -1141,7 +1140,7 @@ class ConfidenceIntervalTwo(Filter):
         :param significance_level: the significance level for the confidence interval
         :type significance_level: float
         """
-        super(ConfidenceIntervalTwo, self).__init__()
+        super(CI2Alternatives, self).__init__()
         self.sig_level = significance_level
 
     def _run(self, **kwargs):
