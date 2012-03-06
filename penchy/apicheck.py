@@ -112,7 +112,6 @@ def check_matplotlib():
         import matplotlib.pyplot
     except ImportError:
         die('Could not import matplotlib - did you install it?')
-        raise
 
     checkattrs([
         (matplotlib.pyplot, 'figure'),
