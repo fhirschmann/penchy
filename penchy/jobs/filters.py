@@ -1076,7 +1076,6 @@ class ConfidenceIntervalMean(Filter):
     A filter that computes the confidence intervall for the mean.
     The implementation is based on the paper 'Statisically Rigorous
     Java Performance Evaluation' by Andy Georges et.al.
-    TODO: Refere to the paper via bibtex or so.
 
     Note: It is assumed that the samples are statistically independend.
     """
@@ -1123,7 +1122,6 @@ class CI2Alternatives(Filter):
     two alternatives.
     The implementation is based on the paper 'Statisically Rigorous
     Java Performance Evaluation' by Andy Georges et.al.
-    TODO: Refere to the paper via bibtex or so.
 
     Note: If the resulting confidence interval includes zero, we can
     conclude, at the confidence level choosen, that there is no
