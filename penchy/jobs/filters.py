@@ -1220,6 +1220,6 @@ class SteadyState(Filter):
 
         for xs in xss:
             for i in range(0, len(xs) - self.k):
-                if stats.coefficient_of_variation(xs[i:self.k]) < self.threshold:
-                    self.out['xs'].append(xs[i:self.k])
+                if stats.coefficient_of_variation(xs[i:self.k + i]) < self.threshold:
+                    self.out['xs'].append(xs[i:self.k + i])
                     break
