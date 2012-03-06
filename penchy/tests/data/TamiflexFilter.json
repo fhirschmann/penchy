@@ -1,0 +1,10 @@
+{
+ "single_iterations": [
+"Class.forName;avrora.Main;org.dacapo.harness.Avrora.<init>;26;\nClass.forName;java.security.interfaces.RSAPrivateKey;java.security.Provider$Service.getKeyClass;1402;\nClass.forName;java.security.interfaces.RSAPublicKey;java.security.Provider$Service.getKeyClass;1402;\nClass.forName;java.util.CurrencyData;java.util.Currency$1.run;128;\nClass.forName;org.dacapo.harness.Avrora;org.dacapo.harness.TestHarness.findClass;281;\nClass.forName;sun.net.www.protocol.jar.Handler;java.net.URL.getURLStreamHandler;1140;\nClass.forName;sun.security.provider.SHA;java.security.Provider$Service.getImplClass;1260;\nClass.forName;sun.security.rsa.RSAKeyFactory;java.security.Provider$Service.getImplClass;1260;\nClass.forName;sun.security.rsa.RSASignature$SHA1withRSA;java.security.Provider$Service.getImplClass;1260;\nClass.newInstance;avrora.Defaults$AutoProgramReader;cck.util.ClassMap.getObjectOfClass;171;"
+         ],
+  "wrong_input": [
+  "",
+  "This is invalid input!",
+  "Class.newInstance;avrora.Defaults$AutoProgramReader;cck.util.ClassMap.getObjectOfClass;171"
+  ]
+}

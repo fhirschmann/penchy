@@ -108,6 +108,43 @@ class HProfCpuTimesTest(unittest.TestCase):
             self.assertEqual(len(self.h.out[k]), invocations)
 
 
+class TamiflexTest(unittest.TestCase):
+
+    @classmethod
+    def setUpClass(cls):
+        h = get_json_data('TamiflexFilter')
+        cls.single_iterations = h['single_iterations']
+        cls.wrong_input = h['wrong_input']
+
+    def setUp(self):
+        super(TamiflexTest, self).setUp()
+        self.h = Tamiflex()
+
+        self.si = write_to_tempfiles(TamiflexTest.single_iterations)
+        self.wrong_input = write_to_tempfiles(TamiflexTest.wrong_input)
+
+    def tearDown(self):
+        for f in itertools.chain(self.si, self.wrong_input):
+            f.close()
+
+    def test_single_iteration_path(self):
+        invocations = len(self.si)
+        ref_log = [i.name for i in self.si]
+        self.h.run(reflection_log=ref_log)
+        self._assert_correct_out(invocations)
+
+    def test_wrong_input(self):
+        ref_logs = [i.name for i in self.wrong_input]
+        for ref_log in ref_logs:
+            with self.assertRaises(WrongInputError):
+                self.h.run(reflection_log=[ref_log])
+
+    def _assert_correct_out(self, invocations):
+        self.assertSetEqual(set(self.h.out), self.h._output_names)
+        for k in self.h.out.keys():
+            self.assertEqual(len(self.h.out[k]), invocations)
+
+
 def write_to_tempfiles(data):
     files = []
     for d in data:
