@@ -23,17 +23,20 @@ def average(xs):
     return sum(xs) / len(xs)
 
 
-def sample_standard_deviation(xs):
+def standard_deviation(xs, ddof):
     """
     Computes the sample standard deviation of the samples ``xs``.
 
     :param xs: sample values
     :type xs: list of numbers
+    :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
+    is substracted from the divisor.
+    :type ddof: integer
     :returns: sample standard deviation
     :rtype: float
     """
     avg = average(xs)
-    return math.sqrt(sum((x - avg) ** 2 for x in xs) / len(xs) - 1)
+    return math.sqrt(sum((x - avg) ** 2 for x in xs) / (len(xs) - ddof))
 
 
 def coefficient_of_variation(xs):
@@ -46,4 +49,4 @@ def coefficient_of_variation(xs):
     :returns: coefficient of variation
     :rtype: float
     """
-    return sample_standard_deviation(xs) / average(xs)
+    return standard_deviation(xs, ddof=1) / average(xs)

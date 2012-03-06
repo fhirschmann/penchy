@@ -968,16 +968,16 @@ class StandardDeviation(Filter):
 
     def __init__(self, ddof=1):
         """
-        :param ddof: Delta Degrees of Freedom (ddof): ``ddof`` is substracted from the divisor.
-        :type ddof: int
+        :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
+        is substracted from the divisor.
+        :type ddof: integer
         """
         super(StandardDeviation, self).__init__()
         self.ddof = ddof
 
     def _run(self, **kwargs):
         vs = kwargs['values']
-        avg = stats.average(vs)
-        std = math.sqrt(sum((v - avg) ** 2 for v in vs) / (len(vs) - self.ddof))
+        std = stats.standard_deviation(vs, self.ddof)
         self.out['standard_deviation'] = std
 
 
@@ -1102,7 +1102,7 @@ class ConfidenceIntervalMean(Filter):
         # These computations are common to both of the following two cases
         n = len(xs)
         avg = stats.average(xs)
-        s = stats.sample_standard_deviation(xs)
+        s = stats.standard_deviation(xs, ddof=1)
 
         # If the number of samples is large
         if n > 29:
@@ -1155,8 +1155,8 @@ class ConfidenceIntervalTwo(Filter):
 
         # These computations are common to both of the following two cases
         n1, n2 = len(xs), len(ys)
-        s1 = stats.sample_standard_deviation(xs)
-        s2 = stats.sample_standard_deviation(ys)
+        s1 = stats.sample_standard_deviation(xs, ddof=1)
+        s2 = stats.sample_standard_deviation(ys, ddof=1)
         sx = math.sqrt((s1 ** 2) / n1 + (s2 ** 2) / n2)
         avgx = stats.average(xs)
         avgy = stats.average(ys)
