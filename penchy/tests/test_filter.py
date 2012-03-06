@@ -3,15 +3,13 @@ import json
 import os
 from numpy import average, std
 from numpy.random import random_integers, random_sample
-from operator import attrgetter
 from tempfile import NamedTemporaryFile
 
 from penchy.compat import unittest, write
-from penchy.jobs.job import Job
 from penchy.jobs.filters import *
 from penchy.jobs.typecheck import Types
 from penchy.util import tempdir, Value
-from penchy.tests.util import get_json_data, make_system_composition, MockPipelineElement
+from penchy.tests.util import get_json_data, make_system_composition
 
 
 class DacapoHarnessTest(unittest.TestCase):
