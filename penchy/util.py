@@ -30,6 +30,8 @@ from penchy import bootstrap
 log = logging.getLogger(__name__)
 
 
+# Taken from http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
+# Licensed under the terms of the GNU General Public License version 2
 class _memoized(object):
     """
     Decorator that caches a function's return value each time it is called.
