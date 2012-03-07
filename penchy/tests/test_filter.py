@@ -165,7 +165,7 @@ class HProfTest(unittest.TestCase):
                   skip=1, data_re=None, start_re=None)
 
 
-class AggregateTest(unittest.TestCase):
+class ExtractTest(unittest.TestCase):
     def setUp(self):
         self.results = {1: {'a': 42,
                             'b': 32},
@@ -173,37 +173,37 @@ class AggregateTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = Aggregate('a', 'b')
+        f = Extract('a', 'b')
         f._run(results=self.results)
         self.assertEqual(f.out, {'a': 42, 'b': 32})
 
     def test_explicit(self):
-        f = Aggregate((1, 'a'), (2, 'b'))
+        f = Extract((1, 'a'), (2, 'b'))
         f._run(results=self.results)
         self.assertEqual(f.out, {'a': 42, 'b': 0})
 
     def test_implicit_fail(self):
-        f = Aggregate('a', 'd')
+        f = Extract('a', 'd')
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_column(self):
-        f = Aggregate((1, 'a'), (2, 'd'))
+        f = Extract((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_composition(self):
-        f = Aggregate((1, 'a'), (3, 'c'))
+        f = Extract((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_no_arguments(self):
         with self.assertRaises(ValueError):
-            Aggregate()
+            Extract()
 
     def test_malformed_argument(self):
         with self.assertRaises(ValueError):
-            Aggregate('a', (1, 'a', 'b'))
+            Extract('a', (1, 'a', 'b'))
 
 
 class CondenseTest(unittest.TestCase):
@@ -279,7 +279,7 @@ class CondensingReceiveTest(unittest.TestCase):
             f._run(**self.kwargs)
 
 
-class AggregatingReceiveTest(unittest.TestCase):
+class ExtractingReceiveTest(unittest.TestCase):
     def setUp(self):
         environment = {'receive': lambda: self.results}
         self.kwargs = {':environment:' : environment}
@@ -289,27 +289,27 @@ class AggregatingReceiveTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = AggregatingReceive('a', 'b')
+        f = ExtractingReceive('a', 'b')
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'a': 42, 'b': 32})
 
     def test_explicit(self):
-        f = AggregatingReceive((1, 'a'), (2, 'b'))
+        f = ExtractingReceive((1, 'a'), (2, 'b'))
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'a': 42, 'b': 0})
 
     def test_implicit_fail(self):
-        f = AggregatingReceive('a', 'd')
+        f = ExtractingReceive('a', 'd')
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_column(self):
-        f = AggregatingReceive((1, 'a'), (2, 'd'))
+        f = ExtractingReceive((1, 'a'), (2, 'd'))
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_composition(self):
-        f = AggregatingReceive((1, 'a'), (3, 'c'))
+        f = ExtractingReceive((1, 'a'), (3, 'c'))
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 

@@ -541,7 +541,7 @@ def evaluate_runtimes(times):
             'negative_deviations' : neg_deviations}
 
 
-class Aggregate(Filter):
+class Extract(Filter):
     """
     Extracts data out of the resultssets sent by the clients.
 
@@ -558,10 +558,10 @@ class Aggregate(Filter):
         :param args: names of the data
         :type evaluator: list str or list (:class:`~penchy.jobs.job.SystemComposition`, str)
         """
-        super(Aggregate, self).__init__()
+        super(Extract, self).__init__()
 
         if not args:
-            raise ValueError("Aggregate Filter needs at least one argument")
+            raise ValueError("Extract Filter needs at least one argument")
 
         # build the output types and check the given arguments
         names = []
@@ -572,7 +572,7 @@ class Aggregate(Filter):
                 try:
                     _, name = col
                 except ValueError:
-                    raise ValueError("Aggregate Filter takes only input names and pairs of system"
+                    raise ValueError("Extract Filter takes only input names and pairs of system"
                                      "compositions and input names.")
                 names.append((name, object))
 
@@ -667,22 +667,22 @@ class Condense(Filter):
                     raise ValueError("Condense filter is malformed.")
 
 
-class AggregatingReceive(Receive, Aggregate):
+class ExtractingReceive(Receive, Extract):
     """
-    A composition of the :class:`~penchy.jobs.filters.Receive`
-    and :class:`~penchy.jobs.filters.Aggregate` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive` and
+    :class:`~penchy.jobs.filters.Extract` filter.
     """
     inputs = Types((':environment:', dict))
 
     def __init__(self, *args):
-        Aggregate.__init__(self, *args)
+        Extract.__init__(self, *args)
         Receive.__init__(self)
 
     def _run(self, **kwargs):
         Receive._run(self, **kwargs)
         results = self.out['results']
         self.reset()
-        Aggregate._run(self, results=results)
+        Extract._run(self, results=results)
 
 
 class CondensingReceive(Receive, Condense):
