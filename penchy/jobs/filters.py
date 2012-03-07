@@ -19,6 +19,7 @@ import re
 import shutil
 import math
 import csv
+import operator
 from pprint import pprint
 
 from penchy import __version__
@@ -1269,3 +1270,25 @@ class SteadyState(Filter):
                 if stats.coefficient_of_variation(xs[i:self.k + i]) < self.threshold:
                     self.out['xs'].append(xs[i:self.k + i])
                     break
+
+
+class Sort(Filter):
+    """
+    Sorts the table according to a specific column.
+    """
+    inputs = Types()
+    outputs = Types()
+
+    def __init__(self, sort_by, reverse=False):
+        super(Sort, self).__init__()
+        self.sort_by = sort_by
+        self.reverse = reverse
+
+    def _run(self, **kwargs):
+        names = list(kwargs)
+        values = zip(*kwargs.values())
+        columns = [i for i, x in enumerate(names) if x in self.sort_by]
+        for column in columns:
+            values = sorted(values, key=operator.itemgetter(column))
+        for name, value in zip(names, zip(*values)):
+            self.out[name] = list(value)
