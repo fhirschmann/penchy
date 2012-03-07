@@ -204,9 +204,6 @@ class CopyDeploy(Deploy):
     def put(self, local, remote):
         shutil.copyfile(local, remote)
 
-    def disconnect(self):
-        pass
-
     @property
     def connected(self):
         return True
