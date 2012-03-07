@@ -153,6 +153,7 @@ class JVM(object):
                       '{1}'.format(after, diff))
 
             if diff > 0.1:
+                # TODO: Time in seconds?
                 log.error('High cpu difference: {0}'.format(diff))
 
             self.workload.out['exit_code'].append(self.proc.returncode)
