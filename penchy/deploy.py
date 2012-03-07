@@ -198,7 +198,7 @@ class CopyDeploy(Deploy):
     def connect(self):
         pass
 
-    def dissconnect(self):
+    def disconnect(self):
         pass
 
     def put(self, local, remote):
