@@ -31,8 +31,8 @@ extract = filters.ExtractingReceive('invoc')
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
                      colors=['blue', 'red'])
 
-flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
-flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
+flow1 = [fop >> 'stderr' >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
+flow2 = [batik >> 'stderr' >> f >> ('times', 'values') >> unpack >> ('result', 'values') >> enum >> [('numbers', 'invoc'), ('values', 'times')] >> send]
 comp1.flow = flow1
 comp2.flow = flow2
 

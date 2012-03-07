@@ -30,7 +30,7 @@ plot = plots.BarPlot(filename='/tmp/barplot.png', title='fop vs. batik',
         xlabel='Benchmark', ylabel='Wallclocktime', colors=['blue', 'red'])
 
 comp1.flow = [
-        fop >> ['stderr', 'exit_code']
+        fop >> 'stderr'
         >> f >> ('times', 'values')
         >> unpack >> ('result', 'values')
         >> enum >> [('numbers', 'invoc'), ('values', 'times')]
@@ -38,7 +38,7 @@ comp1.flow = [
         ]
 
 comp2.flow = [
-        batik >> ['stderr', 'exit_code']
+        batik >> 'stderr'
         >> f >> ('times', 'values')
         >> unpack >> ('result', 'values')
         >> enum >> [('numbers', 'invoc'), ('values', 'times')] >>

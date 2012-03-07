@@ -18,7 +18,7 @@ for bench in benchmarks:
     jvm.workload = workloads.ScalaBench(bench, iterations=20)
     comp = SystemComposition(jvm, node)
     comp.flow = [
-            jvm.workload >> ['stderr', 'exit_code']
+            jvm.workload >> 'stderr'
             >> f >> 'times'
             >> unpack
             >> num >> [('values', 'times'), ('numbers', 'iter')]

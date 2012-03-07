@@ -19,7 +19,7 @@ for bench in benchmarks:
     jvm = jvms.JVM('java')
     jvm.workload = workloads.ScalaBench(bench, iterations=2)
     comp = SystemComposition(jvm, node)
-    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> mean >> ('result', 'means') >> send,
+    comp.flow = [jvm.workload >> 'stderr' >> f >> ('times', 'values') >> mean >> ('result', 'means') >> send,
                  f >> ('times', 'values') >> std >> ('result', 'std') >> send]
     comps.append(comp)
 

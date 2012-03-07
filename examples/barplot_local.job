@@ -28,8 +28,8 @@ merge = filters.MergingReceive(('time', 'bench'),
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
                      zlabels=["Invocation " + str(i) for i in range(1, 3)], colors=['blue', 'red'])
 
-flow1 = [fop >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
-flow2 = [batik >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+flow1 = [fop >> 'stderr' >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+flow2 = [batik >> 'stderr' >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
 comp1.flow = flow1
 comp2.flow = flow2
 

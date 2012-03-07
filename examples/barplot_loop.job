@@ -18,7 +18,7 @@ for bench in benchmarks:
     jvm = jvms.JVM('java')
     jvm.workload = workloads.ScalaBench(bench)
     comp = SystemComposition(jvm, node)
-    comp.flow = [jvm.workload >> ['stderr', 'exit_code'] >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
+    comp.flow = [jvm.workload >> 'stderr' >> f >> ('times', 'values') >> unpack >> ('result', 'times') >> send]
     comps.append(comp)
 
 # Server side filters

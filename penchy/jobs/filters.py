@@ -340,7 +340,6 @@ class DacapoHarness(Filter):
     Inputs:
 
     - ``stderr``:  List of Paths to stderror output files
-    - ``exit_code``: List of program exit codes
 
     Outputs:
 
@@ -348,8 +347,7 @@ class DacapoHarness(Filter):
     - ``times``: execution time per itertion per invocation
     - ``valid``: flag that indicates if execution was valid
     """
-    inputs = Types(('stderr', list, path),
-                   ('exit_code', list, int))
+    inputs = Types(('stderr', list, path))
 
     outputs = Types(('failures', list, int, int),
                     ('times', list, list, int),
@@ -365,10 +363,9 @@ class DacapoHarness(Filter):
     _VALIDITY_RE = re.compile(r'^\n?={5} DaCapo .*?={5}\n={5} DaCapo')
 
     def _run(self, **kwargs):
-        exit_codes = kwargs['exit_code']
         stderror = kwargs['stderr']
 
-        for f, exit_code in zip(stderror, exit_codes):
+        for f in stderror:
             failures = 0
             times = []
             with open(f) as fobj:
@@ -386,7 +383,7 @@ class DacapoHarness(Filter):
 
             self.out['failures'].append(failures)
             self.out['times'].append(times)
-            self.out['valid'].append(exit_code == 0 and failures == 0)
+            self.out['valid'].append(failures == 0)
 
 
 class Send(SystemFilter):

@@ -38,31 +38,28 @@ class DacapoHarnessTest(unittest.TestCase):
 
     def test_multi_iteration_path(self):
         invocations = len(self.mi)
-        exit_codes = [0] * invocations
         stderr = [i.name for i in self.mi]
-        self.d.run(exit_code=exit_codes, stderr=stderr)
+        self.d.run(stderr=stderr)
 
         self._assert_correct_out(invocations)
 
     def test_single_iteration_path(self):
         invocations = len(self.si)
-        exit_codes = [0] * invocations
         stderr = [i.name for i in self.si]
-        self.d.run(exit_code=exit_codes, stderr=stderr)
+        self.d.run(stderr=stderr)
         self._assert_correct_out(invocations)
 
     def test_failed(self):
         invocations = len(self.failed)
-        exit_codes = [0] * invocations
         stderr = [i.name for i in self.failed]
-        self.d.run(exit_code=exit_codes, stderr=stderr)
+        self.d.run(stderr=stderr)
         self.assertListEqual(self.d.out['failures'], [1] * invocations)
 
     def test_wrong_input(self):
         stderr = [i.name for i in self.wrong_input]
         for e in stderr:
             with self.assertRaises(WrongInputError):
-                self.d.run(exit_code=[0], stderr=[e])
+                self.d.run(stderr=[e])
 
     def _assert_correct_out(self, invocations):
         self.assertSetEqual(set(self.d.out), self.d._output_names)

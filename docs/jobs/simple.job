@@ -42,9 +42,9 @@ f2 = filters.Print()
 # specify the flow of data on compositions
 composition.flow = [
     # flow from Scalabench workload to DacapoHarness filter
-    w >> \
-    # pipe stderr to stderr and exit_code to exit_code (implicit same names)
-    ['stderr', 'exit_code'] >> \
+    w >>
+    # pipe stderr to stderr (implicit same names)
+    'stderr' >>
     # feed whole output of DacapoHarness filter to Print filter (with the name of the output)
     f1 >> f2,
     # and feed stderr and exit_code output prefix with 'workload_' to send filter

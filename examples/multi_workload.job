@@ -19,12 +19,12 @@ h1 = filters.DacapoHarness()
 h2 = filters.DacapoHarness()
 
 comp1.flow = [
-    w1 >> ['stderr', 'exit_code'] >> h1,
+    w1 >> 'stderr' >> h1,
     h1 >> filters.Print()
 ]
 
 comp2.flow = [
-    w2 >> ['stderr', 'exit_code'] >> h2,
+    w2 >> 'stderr' >> h2,
     h2 >> filters.Print()
 ]
 
