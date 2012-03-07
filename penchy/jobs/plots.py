@@ -176,7 +176,7 @@ class BarPlot(Plot):
 
         # Use gray shades if no colors are given
         if self.colors is None:
-            self.colors = gray_gradient_colors(len(zs))
+            self.colors = gray_contrast_colors(len(zs))
 
         ind = np.arange(len(xs))
 
@@ -316,30 +316,35 @@ class Histogram(Plot):
 
 # Several alternatives for automatically assigning colors:
 
-def gray_gradient_colors(range_):
+def gray_gradient_colors(n):
     """
     Generates the specified number of neighboring shades of gray.
     """
-    step = float(1) / range_
-    return [str(n) for n in np.arange(0, 1, step)]
+    step = float(1) / n
+    # Strings between "0.0" and "1.0" represent levels of gray
+    return [str(x) for x in np.arange(0, 1, step)]
 
 
-def gray_contrast_colors(range_):
+def gray_contrast_colors(n):
     """
     Generates the specified number of contrasting shades of gray.
     """
-    if range_ % 2 == 0:
-        pass  # TODO
-    else:
-        distance = (range_ // 2)
-        distribution = [(i * distance) % range_ for i in range(range_)]
-    output = [str(float(i) / range_) for i in distribution]
+    middle = int((n + 0.5) / 2)
+    # take numbers alternating from the first and second half
+    halves = (range(0, middle), range(middle, n))
+    distribution = [halves[i % 2][i // 2] for i in range(n)]
+
+    output = [str(float(i) / n) for i in distribution]
     return output
 
 
-def contrast_colors(range_):
+def contrast_colors(n):
     """
     Generates the specified number of contrasting colors.
     """
+    middle = int((n + 0.5) / 2)
+    # take numbers alternating from the first and second half
+    halves = (range(0, middle), range(middle, n))
+    distribution = [halves[i % 2][i // 2] for i in range(n)]
     # matplotlib.colors.hsv_to_rgb(hsv)
-    pass  # TODO
+    # TODO
