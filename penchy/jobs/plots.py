@@ -13,6 +13,7 @@ from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
 from penchy.compat import path
 from penchy import is_server
+from colorsys import hsv_to_rgb
 
 if is_server:
     import numpy as np
@@ -176,7 +177,7 @@ class BarPlot(Plot):
 
         # Use gray shades if no colors are given
         if self.colors is None:
-            self.colors = gray_contrast_colors(len(zs))
+            self.colors = contrast_colors(len(zs))
 
         ind = np.arange(len(xs))
 
@@ -329,22 +330,20 @@ def gray_contrast_colors(n):
     """
     Generates the specified number of contrasting shades of gray.
     """
-    middle = int((n + 0.5) / 2)
+    middle = int(round((n + 0.5) / 2))
     # take numbers alternating from the first and second half
     halves = (range(0, middle), range(middle, n))
     distribution = [halves[i % 2][i // 2] for i in range(n)]
 
-    output = [str(float(i) / n) for i in distribution]
-    return output
+    return [str(float(i) / n) for i in distribution]
 
 
 def contrast_colors(n):
     """
     Generates the specified number of contrasting colors.
     """
-    middle = int((n + 0.5) / 2)
+    middle = int(round((n + 0.5) / 2))
     # take numbers alternating from the first and second half
     halves = (range(0, middle), range(middle, n))
     distribution = [halves[i % 2][i // 2] for i in range(n)]
-    # matplotlib.colors.hsv_to_rgb(hsv)
-    # TODO
+    return [hsv_to_rgb(float(i) / n, 1, 1) for i in distribution]
