@@ -105,6 +105,9 @@ def check_paramiko():
 
 
 def check_matplotlib():
+    """
+    Check for API changes in matplotlib.
+    """
     log.debug('Checking for API changes in matplotlib')
     try:
         import matplotlib
