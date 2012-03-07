@@ -101,9 +101,9 @@ class FTPDeploy(Deploy):
         :type password: str
         :param port: port of the service
         :type port: int
-        :param tls: use TLS support as described in RFC 4217
+        :param tls: use TLS support as described in RFC 4217 (defaults to True)
         :type tls: boolean
-        :param passive: ftp passive mode
+        :param passive: ftp passive mode (defaults to True)
         :type passive: boolean
         """
         tls = kwargs.pop('tls') if 'tls' in kwargs else False
