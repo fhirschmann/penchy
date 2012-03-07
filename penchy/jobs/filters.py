@@ -324,7 +324,7 @@ class HProfHeapSites(HProf):
            \s+(?P<alloc_objs>\d+)
            \s+(?P<class>(\w|\.|\$)+)
            """, re.VERBOSE)
-        super(HProfCpuSamples, self).__init__(outputs=self.outputs,
+        super(HProfHeapSites, self).__init__(outputs=self.outputs,
                                             start_marker='SITES BEGIN',
                                             end_marker='SITES END',
                                             skip=2,
