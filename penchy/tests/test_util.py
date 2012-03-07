@@ -1,7 +1,7 @@
 import os
 import sys
 import hashlib
-from random import randint
+import random
 from tempfile import NamedTemporaryFile
 
 from penchy import util
@@ -39,7 +39,7 @@ class MemoizedTest(unittest.TestCase):
     def test_cache(self):
         @util.memoized
         def func():
-            return randint(0, 1000)
+            return random.randint(0, 1000)
 
         self.assertEqual(func(), func())
 
@@ -58,6 +58,16 @@ class MemoizedTest(unittest.TestCase):
 
         self.assertEqual(func([1, 2]), [1, 2])
         self.assertEqual(func([1, 2]), [1, 2])
+
+    def test_kwargs_arguments(self):
+        # using two different seeds guarantees we will get different values, at
+        # least for these two
+        random.seed(42)
+        f = util.memoized(lambda n: random.randint(0, 1000))
+        a = f(n=23)
+        random.seed(23)
+        b = f(n=23)
+        self.assertEqual(a, b)
 
 
 class MiscTest(unittest.TestCase):

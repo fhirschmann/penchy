@@ -41,14 +41,15 @@ def memoized(f):
     cache = {}
 
     @wraps(f)
-    def _memoized(*args):
+    def _memoized(*args, **kwargs):
+        key = tuple(args) + tuple(kwargs.items())
         try:
-            if args in cache:
-                return cache[args]
+            if key in cache:
+                return cache[key]
         except TypeError:       # if passed an unhashable type evaluate directly
-            return f(*args)
-        ret = f(*args)
-        cache[args] = ret
+            return f(*args, **kwargs)
+        ret = f(*args, **kwargs)
+        cache[key] = ret
         return ret
     return _memoized
 
