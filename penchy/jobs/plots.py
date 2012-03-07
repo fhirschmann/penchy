@@ -329,13 +329,13 @@ def gray_contrast_colors(range_):
     Generates the specified number of contrasting shades of gray.
     """
     if range_ % 2 == 0:
-        pass # TODO
+        pass  # TODO
     else:
         distance = (range_ // 2)
         distribution = [(i * distance) % range_ for i in range(range_)]
     output = [str(float(i) / range_) for i in distribution]
     return output
-    
+
 
 def contrast_colors(range_):
     """
