@@ -9,7 +9,6 @@ This module provides miscellaneous utilities.
 """
 from __future__ import print_function
 
-import functools
 import hashlib
 import imp
 import logging
@@ -19,6 +18,7 @@ import sys
 import tempfile
 import inspect
 from contextlib import contextmanager
+from functools import wraps
 from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
 from tempfile import NamedTemporaryFile
@@ -30,57 +30,27 @@ from penchy import bootstrap
 log = logging.getLogger(__name__)
 
 
-# Taken from http://wiki.python.org/moin/PythonDecoratorLibrary#Memoize
-# Licensed under the terms of the GNU General Public License version 2
-class _memoized(object):
-    """
-    Decorator that caches a function's return value each time it is called.
-    If called later with the same arguments, the cached value is returned, and
-    not re-evaluated.
-    """
-
-    def __init__(self, func):
-        self.func = func
-        self.cache = {}
-
-    def __call__(self, *args):
-        try:
-            return self.cache[args]
-        except KeyError:
-            value = self.func(*args)
-            self.cache[args] = value
-            return value
-        except TypeError:
-            # uncachable -- for instance, passing a list as an argument.
-            # Better to not cache than to blow up entirely.
-            return self.func(*args)
-
-    def __repr__(self):  # pragma: no cover
-        """Return the function's docstring."""
-        return self.func.__doc__
-
-    def __get__(self, obj, objtype):
-        """Support instance methods."""
-        return functools.partial(self.__call__, obj)
-
-
 def memoized(f):
     """
-    Wraps the _memoized decorator using functools so that,
-    for example, the correct docstring will be used.
+    Decorator that provides memoization, i.e. a cache that saves the result of
+    a function call and returns them if called with the same arguments.
 
-    :param f: function to memoize
-    :type f: function
-    :return: memoized function
-    :rtype: function
+    The function will not be evaluated if the arguments are present in the
+    cache.
     """
-    memoize = _memoized(f)
+    cache = {}
 
-    @functools.wraps(f)
-    def helper(*args, **kwargs):
-        return memoize(*args, **kwargs)
-
-    return helper
+    @wraps(f)
+    def _memoized(*args):
+        try:
+            if args in cache:
+                return cache[args]
+        except TypeError:       # if passed an unhashable type evaluate directly
+            return f(*args)
+        ret = f(*args)
+        cache[args] = ret
+        return ret
+    return _memoized
 
 
 # Copyright (c) 1995-2010 by Frederik Lundh
