@@ -206,7 +206,7 @@ class ExtractTest(unittest.TestCase):
             Extract('a', (1, 'a', 'b'))
 
 
-class CondenseTest(unittest.TestCase):
+class MergeTest(unittest.TestCase):
     def setUp(self):
         self.results = {1: {'a': 42,
                             'b': 32},
@@ -214,37 +214,37 @@ class CondenseTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = Condense(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
+        f = Merge(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
         f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
+        f = Merge(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
         f._run(results=self.results)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
-        f = Condense(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
+        f = Merge(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_column(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
+        f = Merge(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_explicit_fail_composition(self):
-        f = Condense(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
+        f = Merge(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(results=self.results)
 
     def test_malformed_arguments(self):
-        f = Condense(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
+        f = Merge(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
         with self.assertRaises(ValueError):
             f._run(results=self.results)
 
 
-class CondensingReceiveTest(unittest.TestCase):
+class MergingReceiveTest(unittest.TestCase):
     def setUp(self):
         environment = {'receive': lambda: self.results}
         self.kwargs = {':environment:' : environment}
@@ -254,27 +254,27 @@ class CondensingReceiveTest(unittest.TestCase):
                             'c': 21}}
 
     def test_implicit(self):
-        f = CondensingReceive(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
+        f = MergingReceive(('col1', 'col2'), [('a', Value('id1')), ('b', Value('id2'))])
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 32], 'col2': ['id1', 'id2']})
 
     def test_explicit(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
+        f = MergingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'b', Value('id2'))])
         f._run(**self.kwargs)
         self.assertEqual(f.out, {'col1': [42, 0], 'col2': ['id1', 'id2']})
 
     def test_implicit_fail(self):
-        f = CondensingReceive(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
+        f = MergingReceive(('col1', 'col2'), [('a', Value('id1')), ('d', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_column(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
+        f = MergingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (2, 'd', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 
     def test_explicit_fail_composition(self):
-        f = CondensingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
+        f = MergingReceive(('col1', 'col2'), [(1, 'a', Value('id1')), (3, 'c', Value('id2'))])
         with self.assertRaises(WrongInputError):
             f._run(**self.kwargs)
 

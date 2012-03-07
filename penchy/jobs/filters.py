@@ -42,7 +42,7 @@ class WrongInputError(Exception):
 
 class Value(object):
     """
-    Represents a value in the context of the :class:`~penchy.jobs.filters.Condense`
+    Represents a value in the context of the :class:`~penchy.jobs.filters.Merge`
     filter. It is used to distinguish direct values from filter inputs.
     """
     def __init__(self, value):
@@ -608,7 +608,7 @@ class Extract(Filter):
                     raise WrongInputError('Column is not contained in the resultset')
 
 
-class Condense(Filter):
+class Merge(Filter):
     """
     Merges the data with the given identifiers.
 
@@ -628,7 +628,7 @@ class Condense(Filter):
         :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string,
                            :class:`~penchy.jobs.filters.Value`)
         """
-        super(Condense, self).__init__()
+        super(Merge, self).__init__()
         self.data = data
         self.names = names
         self.outputs = Types(*[(n, object) for n in names])
@@ -664,7 +664,7 @@ class Condense(Filter):
                     self.out[name].append(field.value)
                 else:
                     #FIXME: Catch this error before running the job
-                    raise ValueError("Condense filter is malformed.")
+                    raise ValueError("Merge filter is malformed.")
 
 
 class ExtractingReceive(Receive, Extract):
@@ -685,22 +685,22 @@ class ExtractingReceive(Receive, Extract):
         Extract._run(self, results=results)
 
 
-class CondensingReceive(Receive, Condense):
+class MergingReceive(Receive, Merge):
     """
-    A composition of the :class:`~penchy.jobs.filters.Receive`
-    and :class:`~penchy.jobs.filters.Condense` filter.
+    A composition of the :class:`~penchy.jobs.filters.Receive` and
+    :class:`~penchy.jobs.filters.Merge` filter.
     """
     inputs = Types((':environment:', dict))
 
     def __init__(self, names, data):
-        Condense.__init__(self, names, data)
+        Merge.__init__(self, names, data)
         Receive.__init__(self)
 
     def _run(self, **kwargs):
         Receive._run(self, **kwargs)
         results = self.out['results']
         self.reset()
-        Condense._run(self, results=results)
+        Merge._run(self, results=results)
 
 
 class Map(Filter):
