@@ -326,7 +326,7 @@ class HProfHeapSites(HProf):
        """, re.VERBOSE)
 
     def __init__(self):
-        super(HProfCpuSamples, self).__init__(outputs=self.outputs,
+        super(HProfHeapSites, self).__init__(outputs=self.outputs,
                                             start_marker='SITES BEGIN',
                                             end_marker='SITES END',
                                             skip=2,
