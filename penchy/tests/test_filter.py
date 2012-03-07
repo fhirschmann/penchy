@@ -651,3 +651,12 @@ class CI2AlternativesTest(unittest.TestCase):
         f._run(xs=range(31), ys=range(31))
         for actual, expected in zip(f.out['interval'], (-0.29020244973403198, 0.29020244973403198)):
             self.assertAlmostEqual(actual, expected)
+
+
+class SortTest(unittest.TestCase):
+    #TODO: more tests
+    def test_valid(self):
+        f = Sort(["values"])
+        f._run(values=[1, 3, 2], names=['a', 'c', 'b'])
+        self.assertEqual(f.out['values'], [1, 2, 3])
+        self.assertEqual(f.out['names'], ['a', 'b', 'c'])
