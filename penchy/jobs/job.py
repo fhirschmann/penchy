@@ -319,22 +319,9 @@ class Job(object):
         _, edge_order = edgesort(composition.starts, composition.flow)
 
         for i in range(1, self.invocations + 1):
-            # measure usertime before
-            before = os.times()[0]
-            log.debug('CPU time before invocation: {0}'.format(before))
-
             log.info('Run invocation {0}'.format(i))
             with tempdir(prefix='penchy-invocation{0}-'.format(i)):
                 composition.jvm.run()
-
-            # measure usertime after
-            after = os.times()[0]
-            diff = after - before
-            log.debug('CPU time after invocation: {0}, difference: '
-                      '{1}'.format(after, diff))
-
-            if diff > 0.1:
-                log.error('CPU time differs by too much, difference: '.format(diff))
 
         log.info('Run pipeline')
         for sink, group in groupby(edge_order, attrgetter('sink')):

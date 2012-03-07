@@ -139,7 +139,21 @@ class JVM(object):
             as (stderr, stdout):
             self.proc = subprocess.Popen(self.cmdline,
                     stdout=stdout, stderr=stderr)
+
+            # measure usertime before
+            before = os.times()[0]
+            log.debug('CPU time before invocation: {0}'.format(before))
+
             self.proc.communicate()
+
+            # measure usertime after
+            after = os.times()[0]
+            diff = after - before
+            log.debug('CPU time after invocation: {0}, difference: '
+                      '{1}'.format(after, diff))
+
+            if diff > 0.1:
+                log.error('CPU time differs by too much, difference: '.format(diff))
 
             self.workload.out['exit_code'].append(self.proc.returncode)
             self.workload.out['stdout'].append(stdout.name)
