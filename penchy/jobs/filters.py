@@ -265,22 +265,23 @@ class HProfCpuSamples(HProf):
                     ('trace', list, list, int),
                     ('method', list, list, str))
 
+    _TOTAL_RE = re.compile('total = (\d+)')
+    _DATA_RE = re.compile("""
+       \s+(?P<rank>\d+)
+       \s+(?P<selftime>\d+\.\d{2})%
+       \s+(?P<accum>\d+\.\d{2})%
+       \s+(?P<count>\d+)
+       \s+(?P<trace>\d+)
+       \s+(?P<method>(\w|\.|\$)+)
+       """, re.VERBOSE)
+
     def __init__(self):
-        TOTAL_RE = re.compile('total = (\d+)')
-        DATA_RE = re.compile("""
-           \s+(?P<rank>\d+)
-           \s+(?P<selftime>\d+\.\d{2})%
-           \s+(?P<accum>\d+\.\d{2})%
-           \s+(?P<count>\d+)
-           \s+(?P<trace>\d+)
-           \s+(?P<method>(\w|\.|\$)+)
-           """, re.VERBOSE)
         super(HProfCpuSamples, self).__init__(outputs=self.outputs,
                                             start_marker='CPU SAMPLE (ms) BEGIN',
                                             end_marker='CPU SAMPLE (ms) END',
                                             skip=1,
-                                            data_re=DATA_RE,
-                                            start_re=TOTAL_RE)
+                                            data_re=HProfCpuSamples._DATA_RE,
+                                            start_re=HProfCpuSamples._TOTAL_RE)
 
 
 class HProfHeapSites(HProf):
@@ -313,22 +314,23 @@ class HProfHeapSites(HProf):
                     ('trace', list, list, int),
                     ('class', list, list, str))
 
+    _DATA_RE = re.compile("""
+       \s+(?P<rank>\d+)
+       \s+(?P<self>\d+\.\d{2})%
+       \s+(?P<accum>\d+\.\d{2})%
+       \s+(?P<live_bytes>\d+)
+       \s+(?P<live_objs>\d+)
+       \s+(?P<alloc_bytes>\d+)
+       \s+(?P<alloc_objs>\d+)
+       \s+(?P<class>(\w|\.|\$)+)
+       """, re.VERBOSE)
+
     def __init__(self):
-        DATA_RE = re.compile("""
-           \s+(?P<rank>\d+)
-           \s+(?P<self>\d+\.\d{2})%
-           \s+(?P<accum>\d+\.\d{2})%
-           \s+(?P<live_bytes>\d+)
-           \s+(?P<live_objs>\d+)
-           \s+(?P<alloc_bytes>\d+)
-           \s+(?P<alloc_objs>\d+)
-           \s+(?P<class>(\w|\.|\$)+)
-           """, re.VERBOSE)
-        super(HProfHeapSites, self).__init__(outputs=self.outputs,
+        super(HProfCpuSamples, self).__init__(outputs=self.outputs,
                                             start_marker='SITES BEGIN',
                                             end_marker='SITES END',
                                             skip=2,
-                                            data_re=DATA_RE)
+                                            data_re=HProfHeapSites._DATA_RE)
 
 
 class DacapoHarness(Filter):
