@@ -417,7 +417,7 @@ class CallGrindJVM(ValgrindJVM):
     def __init__(self, *args, **kwargs):
         super(CallGrindJVM, self).__init__(*args, **kwargs)
         self._hooks = [Hook(teardown=lambda: self.out['callgrind']
-                            .append(os.path.abspath(CacheGrindJVM._callgrind_file)))]
+                            .append(os.path.abspath(CallGrindJVM._callgrind_file)))]
 
 
 class MassifJVM(ValgrindJVM):
