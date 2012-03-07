@@ -873,7 +873,7 @@ class Save(SystemFilter):
 
     - ``data``: data to save (encoded)
     """
-    inputs = Types(('data', path))
+    inputs = Types(('data', str))
 
     def __init__(self, target_path):
         """
