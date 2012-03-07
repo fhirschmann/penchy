@@ -22,10 +22,10 @@ for bench in benchmarks:
     comps.append(comp)
 
 # Server side filters
-condense = filters.CondensingReceive(('time','bench'),
+merge = filters.MergingReceive(('time','bench'),
                                      [(com, 'times', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
 
-aggregate = filters.AggregatingReceive('times')
+extract = filters.ExtractingReceive('times')
 deco = filters.Decorate('Invocation {0}')
 enum = filters.Enumerate()
 
@@ -34,8 +34,8 @@ plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', 
 
 job = Job(compositions=comps,
           server_flow=[
-              condense >> [('bench', 'x'), ('time', 'y')] >> plot,
-              aggregate >> ('times', 'values') >> enum >> ('numbers', 'values') >> deco >> ('values', 'z') >> plot
+              merge >> [('bench', 'x'), ('time', 'y')] >> plot,
+              extract >> ('times', 'values') >> enum >> ('numbers', 'values') >> deco >> ('values', 'z') >> plot
           ],
           invocations = 2
           )

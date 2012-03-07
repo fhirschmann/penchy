@@ -27,7 +27,7 @@ for bench in benchmarks:
     comps.append(comp)
 
 # Server side filters
-condense = filters.CondensingReceive(('time', 'iter', 'bench'),
+merge = filters.MergingReceive(('time', 'iter', 'bench'),
         [(com, 'times', 'iter', filters.Value(bench)) for com, bench in
             zip(comps, benchmarks)])
 
@@ -37,6 +37,6 @@ plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot',
 
 job = Job(compositions=comps,
         server_flow=[
-            condense >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
+            merge >> [('iter', 'x'), ('time', 'y'), ('bench', 'z')] >> plot
             ]
         )

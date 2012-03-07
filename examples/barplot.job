@@ -22,11 +22,11 @@ enum = filters.Enumerate()
 deco = filters.Decorate("Invocation {0}")
 
 send = filters.Send()
-condense = filters.CondensingReceive(('time', 'bench'),
+merge = filters.MergingReceive(('time', 'bench'),
                                     [(comp1, 'times', filters.Value('fop')),
                                     (comp2, 'times', filters.Value('batik'))])
 
-aggregate = filters.AggregatingReceive('invoc')
+extract = filters.ExtractingReceive('invoc')
 
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='fop vs. batik', xlabel='Benchmark', ylabel='Wallclocktime',
                      colors=['blue', 'red'])
@@ -38,8 +38,8 @@ comp2.flow = flow2
 
 job = Job(compositions=[comp1, comp2],
           server_flow=[
-              condense >> [('bench', 'x'), ('time', 'y')] >> plot,
-              aggregate >> ('invoc', 'values') >> deco >> ('values', 'z') >> plot
+              merge >> [('bench', 'x'), ('time', 'y')] >> plot,
+              extract >> ('invoc', 'values') >> deco >> ('values', 'z') >> plot
           ],
           invocations = 2
           )

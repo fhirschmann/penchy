@@ -25,7 +25,7 @@ for bench in benchmarks:
     comps.append(comp)
 
 # Server side filters
-condense = filters.CondensingReceive(('sum', 'total', 'bench'),
+merge = filters.MergingReceive(('sum', 'total', 'bench'),
                                      [(com, 'sum', 'total', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
 
 plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='Scatterplot',
@@ -33,7 +33,7 @@ plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='Scatterplot',
 
 job = Job(compositions=comps,
           server_flow=[
-              condense >> [('bench', 'z'), ('sum', 'x'), ('total', 'y')] >> plot
+              merge >> [('bench', 'z'), ('sum', 'x'), ('total', 'y')] >> plot
           ],
           invocations = 1
           )

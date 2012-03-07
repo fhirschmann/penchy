@@ -21,7 +21,7 @@ f = filters.DacapoHarness()
 unpack = filters.Map(filters.Unpack('result'))
 
 send = filters.Send()
-condense = filters.CondensingReceive(('time', 'bench'),
+merge = filters.MergingReceive(('time', 'bench'),
                                     [(comp1, 'times', Value('fop')),
                                     (comp2, 'times', Value('batik'))])
 
@@ -35,7 +35,7 @@ comp2.flow = flow2
 
 job = Job(compositions=[comp1, comp2],
           server_flow=[
-              condense >> [('bench', 'x'), ('time', 'y')] >> plot
+              merge >> [('bench', 'x'), ('time', 'y')] >> plot
           ],
           invocations=2
           )
