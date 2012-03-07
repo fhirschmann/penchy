@@ -305,7 +305,7 @@ class Histogram(Plot):
         :param normed: draw a normalized histogram
         :type normed: bool
         """
-        super(Histogram, self).__init__()
+        super(Histogram, self).__init__(*arg, **kwargs)
         self.bins = bins
         self.normed = normed
 
