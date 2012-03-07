@@ -57,7 +57,7 @@ def memoized(f):
 # Copyright (c) 1995-2010 by Frederik Lundh
 # http://effbot.org/zone/element-lib.htm#prettyprint
 # Licensed under the terms of the Historical Permission Notice
-# and Disclaimer.
+# and Disclaimer, see http://effbot.org/zone/copyright.htm.
 def tree_pp(elem, level=0):
     """
     Pretty-prints an ElementTree.
