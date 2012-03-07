@@ -22,7 +22,7 @@ import csv
 from pprint import pprint
 
 from penchy import __version__
-from penchy.compat import str, path, unicode, try_unicode
+from penchy.compat import str, path, unicode, try_unicode, write
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 import penchy.util as util
@@ -871,9 +871,9 @@ class Save(SystemFilter):
 
     Inputs:
 
-    - ``data``: data to save (encoded)
+    - ``data``: data to save (encoded)  # TODO: cofi
     """
-    inputs = Types(('data', str))
+    inputs = Types(('data', (str, unicode)))
 
     def __init__(self, target_path):
         """
@@ -893,7 +893,7 @@ class Save(SystemFilter):
             self.target_path = os.path.join(node_setting.path, self.target_path)
         log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
         with open(self.target_path, 'w') as f:
-            f.write(kwargs['data'])
+            write(f, kwargs['data'])
 
 
 class BackupFile(SystemFilter):
