@@ -176,8 +176,7 @@ class BarPlot(Plot):
 
         # Use gray shades if no colors are given
         if self.colors is None:
-            step = float(1) / len(zs)
-            self.colors = [str(n) for n in np.arange(0, 1, step)]
+            self.colors = gray_gradient_colors(len(zs))
 
         ind = np.arange(len(xs))
 
@@ -313,3 +312,34 @@ class Histogram(Plot):
     def _run(self, **kwargs):
         xs = kwargs['x']
         self.plot.hist(xs, bins=self.bins, normed=self.normed)
+
+
+# Several alternatives for automatically assigning colors:
+
+def gray_gradient_colors(range_):
+    """
+    Generates the specified number of neighboring shades of gray.
+    """
+    step = float(1) / range_
+    return [str(n) for n in np.arange(0, 1, step)]
+
+
+def gray_contrast_colors(range_):
+    """
+    Generates the specified number of contrasting shades of gray.
+    """
+    if range_ % 2 == 0:
+        pass # TODO
+    else:
+        distance = (range_ // 2)
+        distribution = [(i * distance) % range_ for i in range(range_)]
+    output = [str(float(i) / range_) for i in distribution]
+    return output
+    
+
+def contrast_colors(range_):
+    """
+    Generates the specified number of contrasting colors.
+    """
+    # matplotlib.colors.hsv_to_rgb(hsv)
+    pass  # TODO
