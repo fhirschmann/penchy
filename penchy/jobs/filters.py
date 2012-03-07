@@ -220,8 +220,8 @@ class HProfCpuTimes(HProf):
                     ('trace', list, list, int),
                     ('method', list, list, str))
 
-    TOTAL_RE = re.compile('total = (\d+)')
-    DATA_RE = re.compile("""
+    total_re = re.compile('total = (\d+)')
+    data_re = re.compile("""
        \s+(?P<rank>\d+)
        \s+(?P<selftime>\d+\.\d{2})%
        \s+(?P<accum>\d+\.\d{2})%
@@ -235,8 +235,8 @@ class HProfCpuTimes(HProf):
                                             start_marker='CPU TIME (ms) BEGIN',
                                             end_marker='CPU TIME (ms) END',
                                             skip=1,
-                                            data_re=HProfCpuTimes.DATA_RE,
-                                            start_re=HProfCpuTimes.TOTAL_RE)
+                                            data_re=HProfCpuTimes.data_re,
+                                            start_re=HProfCpuTimes.total_re)
 
 
 class HProfCpuSamples(HProf):
