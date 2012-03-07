@@ -943,14 +943,14 @@ class Read(Filter):
     - ``data``: the content of the filepaths
     """
     inputs = Types(('paths', list, path))
-    outputs = Types(('data', list, path))
+    outputs = Types(('data', list, str))
 
     def _run(self, **kwargs):
         paths = kwargs['paths']
         data = []
         for p in paths:
             log.debug('Reading "{0}"'.format(os.path.abspath(p)))
-            with open(p) as f:
+            with open(p, 'rb') as f:
                 data.append(f.read())
         self.out['data'] = data
 
