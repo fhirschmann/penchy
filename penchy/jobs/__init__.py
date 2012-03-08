@@ -4,7 +4,7 @@ PenchY job description language is build upon.
 """
 from penchy.jobs import jvms, tools, filters, workloads
 from penchy.jobs.job import Job, SystemComposition, NodeSetting
-from penchy.util import extract_maven_credentials
+from penchy.maven import extract_maven_credentials
 from penchy.deploy import SFTPDeploy, FTPDeploy
 
 JVM = jvms.JVM

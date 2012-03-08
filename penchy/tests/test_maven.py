@@ -3,7 +3,6 @@ from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import ElementTree as ET
 
 from penchy.compat import unittest
-from penchy.util import extract_maven_credentials
 from penchy.maven import *
 
 

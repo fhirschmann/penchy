@@ -19,7 +19,6 @@ import tempfile
 import inspect
 from contextlib import contextmanager
 from functools import wraps
-from xml.etree import ElementTree
 from xml.etree.ElementTree import SubElement
 from tempfile import NamedTemporaryFile
 
@@ -225,24 +224,3 @@ def die(msg):
     """
     print(msg, file=sys.stderr)
     sys.exit(1)
-
-
-def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')):
-    """
-    Extracts the username and password for a given ``id_``
-    from a maven settings.xml.
-
-    :param id_: id of the remote machine as defined in the settings file
-    :type id_: str
-    :param filename: path to settings.xml
-    :type filename: str
-    """
-    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'
-    tree = ElementTree.parse(path).getroot()
-    servers = tree.find('{0}servers'.format(xmlns))
-    for server in servers.findall('{0}server'.format(xmlns)):
-        if server.find('{0}id'.format(xmlns)).text == id_:
-            return server.find('{0}username'.format(xmlns)).text, \
-                   server.find('{0}password'.format(xmlns)).text
-
-    raise ValueError("Credentials for '{0}' not found".format(id_))
