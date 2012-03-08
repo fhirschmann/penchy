@@ -634,6 +634,14 @@ class Merge(Filter):
         self.names = names
         self.outputs = Types(*[(n, object) for n in names])
 
+        for row in data:
+            # We can not cover row[0] because importing SystemComposition
+            # would lead to cyclic imports
+            for field in row[1:]:
+                if not (isinstance(try_unicode(field), unicode) or
+                        isinstance(field, Value)):
+                    raise ValueError("Merge filter is malformed.")
+
     def _run(self, **kwargs):
         results = kwargs['results']
         for row in self.data:
@@ -662,9 +670,6 @@ class Merge(Filter):
                 # if it is a ``Value``, just append it
                 elif isinstance(field, Value):
                     self.out[name].append(field.value)
-                else:
-                    #FIXME: Catch this error before running the job
-                    raise ValueError("Merge filter is malformed.")
 
 
 class ExtractingReceive(Receive, Extract):

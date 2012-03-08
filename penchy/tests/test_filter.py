@@ -236,9 +236,8 @@ class MergeTest(unittest.TestCase):
             f._run(results=self.results)
 
     def test_malformed_arguments(self):
-        f = Merge(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
         with self.assertRaises(ValueError):
-            f._run(results=self.results)
+            f = Merge(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
 
 
 class MergingReceiveTest(unittest.TestCase):
