@@ -21,8 +21,8 @@ deco = filters.Decorate("Invocation {0}")
 
 send = filters.Send()
 merge = filters.MergingReceive(('time', 'bench'),
-        [(comp1, 'times', filters.Value('fop')),
-            (comp2, 'times', filters.Value('batik'))])
+        [(comp1, 'times', Value('fop')),
+            (comp2, 'times', Value('batik'))])
 
 extract = filters.ExtractingReceive('invoc')
 

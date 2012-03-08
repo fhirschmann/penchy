@@ -23,7 +23,7 @@ for bench in benchmarks:
 
 # Server side filters
 merge = filters.MergingReceive(('time','bench'),
-                                     [(com, 'times', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
+                                     [(com, 'times', Value(bench)) for com, bench in zip(comps, benchmarks)])
 
 extract = filters.ExtractingReceive('times')
 deco = filters.Decorate('Invocation {0}')
