@@ -637,7 +637,6 @@ class Merge(Filter):
     def _run(self, **kwargs):
         results = kwargs['results']
         for row in self.data:
-            #FIXME: Check for isinstance(first, SystemComposition)
             # check if a system composition is explicitly given for that row
             if not isinstance(try_unicode(row[0]), unicode):
                 comp = row[0]
