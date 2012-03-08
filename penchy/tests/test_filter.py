@@ -666,3 +666,10 @@ class SortTest(unittest.TestCase):
         self.assertEqual(f.out['a'], [1, 1, 3])
         self.assertEqual(f.out['b'], ['a', 'c', 'b'])
         self.assertEqual(f.out['c'], [3, 2, 1])
+
+
+class AccumTest(unittest.TestCase):
+    def test_valid(self):
+        f = Accum('a')
+        f._run(a=[1, 2, 3])
+        self.assertEqual(f.out['accum'], [1, 3, 6])
