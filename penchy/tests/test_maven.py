@@ -3,6 +3,7 @@ from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import ElementTree as ET
 
 from penchy.compat import unittest
+from penchy.util import extract_maven_credentials
 from penchy.maven import *
 
 
@@ -138,3 +139,26 @@ class MavenTest(unittest.TestCase):
 
     def test_required_keywords(self):
         self.assertRaises(POMError, POM)
+
+
+class MavenUtilTest(unittest.TestCase):
+    def test_extract_password(self):
+        with NamedTemporaryFile() as tf:
+            tf.write("""
+                <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                    http://maven.apache.org/xsd/settings-1.0.0.xsd">
+                    <servers>
+                        <server>
+                            <id>server001</id>
+                            <username>my_login</username>
+                            <password>my_password</password>
+                        </server>
+                    </servers>
+                </settings>
+                """)
+            tf.flush()
+            username, password = extract_maven_credentials('server001', tf.name)
+            self.assertEqual(username, 'my_login')
+            self.assertEqual(password, 'my_password')
