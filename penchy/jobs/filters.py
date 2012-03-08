@@ -1292,6 +1292,7 @@ class Sort(Filter):
         values = zip(*kwargs.values())
         columns = [i for i, x in enumerate(names) if x in self.sort_by]
         for column in columns:
-            values = sorted(values, key=operator.itemgetter(column))
+            values = sorted(values, key=operator.itemgetter(column),
+                            reverse=self.reverse)
         for name, value in zip(names, zip(*values)):
             self.out[name] = list(value)
