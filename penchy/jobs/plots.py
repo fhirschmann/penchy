@@ -255,31 +255,47 @@ class LinePlot(Plot):
     - ``x``: 2d list of x-values
     - ``y``: 2d list of y-values
     - ``z``: labels for the first dimension of ``x`` and ``y`` values
+    - ``err`: list of error values (only visible if ``error_bars`` is True)
 
     Outputs:
 
     - ``filename``: Filename of the generated image
     """
-    inputs = Types(('x', list, list, (int, float)),
-                   ('y', list, list, (int, float)),
-                   ('z', list, str))
 
-    def __init__(self, colors, *arg, **kwarg):
+    def __init__(self, colors, error_bars=False, ecolor='red', *arg, **kwarg):
         """
         :param colors: colors according to z-values
         :type colors: list ``matplotlib.colors``
         """
         super(LinePlot, self).__init__(*arg, **kwarg)
         self.colors = colors
+        self.error_bars = error_bars
+        self.ecolor = ecolor
+
+        if error_bars:
+            self.inputs = Types(('x', list, list, (int, float)),
+                           ('y', list, list, (int, float)),
+                           ('err', list, list, (int, float)),
+                           ('z', list, str))
+        else:
+            self.inputs = Types(('x', list, list, (int, float)),
+                           ('y', list, list, (int, float)),
+                           ('z', list, str))
 
     def _run(self, **kwargs):
         xs = kwargs['x']
         ys = kwargs['y']
         zs = kwargs['z']
 
+        if self.error_bars:
+            err = kwargs['err']
+
         lines = []
         for x, y, c in zip(xs, ys, self.colors):
             lines.append(self.plot.plot(x, y, c)[0])
+            if self.error_bars:
+                self.plot.errorbar(x, y, yerr=err.pop(),
+                                   ecolor=self.ecolor)
 
         self.fig.legend(lines, zs, self.legend_position)
 
