@@ -18,6 +18,7 @@ from colorsys import hsv_to_rgb
 if is_server:
     import numpy as np
     import matplotlib.pyplot as plt
+    import matplotlib.cm as cm
 
 
 class Plot(Filter):
@@ -32,7 +33,8 @@ class Plot(Filter):
     def __init__(self, filename, title="", xlabel="", ylabel="",
                  x_max=None, x_min=None, y_max=None, y_min=None,
                  x_scale="linear", y_scale="linear",
-                 grid=False, legend_position=None):
+                 grid=False, legend_position=None,
+                 cmap=cm.prism):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -58,6 +60,8 @@ class Plot(Filter):
         :type grid: bool
         :param legend_position: position of the legend (see ``matplotlib.legend.legend``)
         :type legend_position: string or integer
+        :param cmap: colormap to use (see ``matplotlib.cm``)
+        :type cmap: colormap
         """
         super(Plot, self).__init__()
         self.filename = filename
@@ -66,6 +70,7 @@ class Plot(Filter):
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend_position = legend_position
+        self.cmap = cmap
 
         if is_server:
             self.fig = plt.figure()
