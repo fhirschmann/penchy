@@ -32,7 +32,7 @@ deco = filters.Decorate('Invocation {0}')
 enum = filters.Enumerate()
 
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='Benchmarks', ylabel='Wallclocktime',
-                     colors=['blue', 'yellow'], error_bars=True)
+                     error_bars=True)
 
 job = Job(compositions=comps,
           server_flow=[merge >> [('bench', 'x'), ('avg', 'y'), ('std', 'err')] >> plot,

@@ -29,8 +29,7 @@ extract = filters.ExtractingReceive('times')
 deco = filters.Decorate('Invocation {0}')
 enum = filters.Enumerate()
 
-plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y',
-                     colors=['blue', 'red'])
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='testplot', xlabel='x', ylabel='y')
 
 job = Job(compositions=comps,
           server_flow=[

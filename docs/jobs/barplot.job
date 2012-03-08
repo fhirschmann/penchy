@@ -27,7 +27,7 @@ merge = filters.MergingReceive(('time', 'bench'),
 extract = filters.ExtractingReceive('invoc')
 
 plot = plots.BarPlot(filename='/tmp/barplot.png', title='fop vs. batik',
-        xlabel='Benchmark', ylabel='Wallclocktime', colors=['blue', 'red'])
+        xlabel='Benchmark', ylabel='Wallclocktime')
 
 comp1.flow = [
         fop >> 'stderr'
