@@ -237,11 +237,12 @@ def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')
     :param filename: path to settings.xml
     :type filename: str
     """
-    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'
-    tree = ElementTree.parse(path)
-    xpath = './/{0}server[{0}id="{1}"]'.format(xmlns, id_)
-    servers = tree.findall(xpath)
+    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'  # xml namespace
+    tree = ElementTree.parse(path).getroot()
+    servers = tree.find('{0}servers'.format(xmlns))
+    for server in servers.findall('{0}server'.format(xmlns)):
+        if server.find('{0}id'.format(xmlns)).text == id_:
+            return server.find('{0}username'.format(xmlns)).text, \
+                   server.find('{0}password'.format(xmlns)).text
 
-    username = servers[0].findtext(".//{0}username".format(xmlns))
-    password = servers[0].findtext(".//{0}password".format(xmlns))
-    return username, password
+    raise ValueError("Credentials for '{0}' not found".format(id_))
