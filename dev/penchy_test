@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-for node in 192.168.56.10; do
+for node in 192.168.56.10 192.168.56.11; do
     echo "Syncing $node"
     rsync -az --exclude '*.log' --exclude '*.pyc' . bench@${node}:~/penchy
 done
