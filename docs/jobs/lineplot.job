@@ -33,7 +33,7 @@ merge = filters.MergingReceive(('time', 'iter', 'bench'),
 
 # Plotting
 plot = plots.LinePlot(filename='/tmp/lineplot.png', title='lineplot',
-        xlabel='Iteration', ylabel='Wallclocktime', colors=['blue', 'red'])
+                      xlabel='Iteration', ylabel='Wallclocktime')
 
 job = Job(compositions=comps,
         server_flow=[

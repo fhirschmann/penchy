@@ -8,6 +8,8 @@ This module provides plotting filters.
 """
 from __future__ import division
 
+import itertools
+
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
@@ -265,11 +267,9 @@ class LinePlot(Plot):
     - ``filename``: Filename of the generated image
     """
 
-    def __init__(self, colors, xerror_bars=False, yerror_bars=False,
+    def __init__(self, xerror_bars=False, yerror_bars=False,
                  xecolor='red', yecolor='red', *arg, **kwarg):
         """
-        :param colors: colors according to z-values
-        :type colors: list ``matplotlib.colors``
         :param xerror_bars: enable x error bars
         :type xerror_bars: bool
         :param yerror_bars: enable y error bars
@@ -280,7 +280,6 @@ class LinePlot(Plot):
         :type yecolor: ``matplotlib.color``
         """
         super(LinePlot, self).__init__(*arg, **kwarg)
-        self.colors = colors
         self.xerror_bars = xerror_bars
         self.yerror_bars = yerror_bars
         self.xecolor = xecolor
@@ -308,8 +307,8 @@ class LinePlot(Plot):
             yerr = kwargs['yerr']
 
         lines = []
-        for x, y, c in zip(xs, ys, self.colors):
-            lines.append(self.plot.plot(x, y, c)[0])
+        for i, x, y in zip(itertools.count(), xs, ys):
+            lines.append(self.plot.plot(x, y, color=self.cmap(i / len(xs)))[0])
             if self.xerror_bars:
                 self.plot.errorbar(x, y, xerr=xerr.pop(),
                                    ecolor=self.xecolor)
