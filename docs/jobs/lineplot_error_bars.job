@@ -1,0 +1,38 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+import config
+
+# Only the i386 node
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = ['fop', 'batik']
+
+# Client side filters
+f = filters.DacapoHarness()
+mean = filters.Map(filters.Mean())
+std = filters.Map(filters.StandardDeviation())
+enum = filters.Enumerate()
+send = filters.Send()
+
+comps = []
+for bench in benchmarks:
+    jvm = jvms.JVM('java')
+    jvm.workload = workloads.ScalaBench(bench, iterations=5)
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.workload >> 'stderr' >> f >> ('times', 'values') >> mean >> ('result', 'means') >> send,
+                 f >> ('times', 'values') >> std >> ('result', 'std') >> send,
+                 mean >> ('result', 'values') >> enum >> ('numbers', 'invoc') >> send]
+    comps.append(comp)
+
+# Server side filters
+merge = filters.MergingReceive(('avg', 'std', 'invoc', 'bench'),
+                                     [(com, 'means', 'std', 'invoc', filters.Value(bench)) for com, bench in zip(comps, benchmarks)])
+
+plot = plots.LinePlot(filename='/tmp/barplot.svg', title='testplot', xlabel='Benchmarks', ylabel='Wallclocktime',
+                     colors=['blue', 'yellow'], yerror_bars=True)
+
+job = Job(compositions=comps,
+          server_flow=[merge >> [('invoc', 'x'), ('avg', 'y'), ('bench', 'z'), ('std', 'yerr')] >> plot],
+          invocations = 5
+          )
