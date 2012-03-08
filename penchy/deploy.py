@@ -9,7 +9,7 @@ Library which abstracts SFTP and FTP connections
 import os
 import logging
 import shutil
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta, abstractmethod, abstractproperty
 from contextlib import contextmanager
 
 from penchy import is_server
@@ -71,12 +71,12 @@ class Deploy(object):
         """
         pass
 
-    @property
+    @abstractproperty
     def connected(self):
         """
         Indicates if we are connected to the host.
         """
-        raise NotImplementedError("connected must be implemented")
+        pass
 
     @contextmanager
     def connection_required(self):
