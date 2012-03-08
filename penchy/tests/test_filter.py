@@ -659,3 +659,10 @@ class SortTest(unittest.TestCase):
         f._run(values=[1, 3, 2], names=['a', 'c', 'b'])
         self.assertEqual(f.out['values'], [1, 2, 3])
         self.assertEqual(f.out['names'], ['a', 'b', 'c'])
+
+    def test_sort_by_multiple_cols(self):
+        f = Sort(["a", "b"])
+        f._run(a=[3, 1, 1], b=['b', 'c', 'a'], c=[1, 2, 3])
+        self.assertEqual(f.out['a'], [1, 1, 3])
+        self.assertEqual(f.out['b'], ['a', 'c', 'b'])
+        self.assertEqual(f.out['c'], [3, 2, 1])
