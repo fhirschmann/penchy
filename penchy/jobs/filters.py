@@ -1321,6 +1321,7 @@ class Accumulate(Filter):
 
     Inputs: One input ``name`` (where ``name`` is configurable via
             the constructor) that is a list of numbers.
+
     Outputs:
 
     - ``accum``: The accumulated values.
