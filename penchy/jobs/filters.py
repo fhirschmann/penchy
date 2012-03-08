@@ -1274,12 +1274,22 @@ class SteadyState(Filter):
 
 class Sort(Filter):
     """
-    Sorts the table according to a specific column.
+    Sorts the table (i.e. the inputs) by the columns specified
+    in ``sort_by``.
+
+    Inputs: the (unsorted) table
+    Outputs: the sorted table
     """
     inputs = Types()
     outputs = Types()
 
     def __init__(self, sort_by, reverse=False):
+        """
+        :param sort_by: the table is sorted by these columns
+        :type sort_by: string or list string
+        :param reverse: order the table in reverse
+        :type reverse: bool
+        """
         super(Sort, self).__init__()
         if isinstance(sort_by, list):
             self.sort_by = sort_by
@@ -1288,12 +1298,18 @@ class Sort(Filter):
         self.reverse = reverse
 
     def _run(self, **kwargs):
+        # Split the dict in its keys and values
         names = list(kwargs)
         values = zip(*kwargs.values())
+
+        # Get the posisitions of the columns in ``sort_by``
         columns = [i for i, x in enumerate(names) if x in self.sort_by]
+
+        # Sort the table
         for column in reversed(columns):
             values = sorted(values, key=operator.itemgetter(column),
                             reverse=self.reverse)
+
         for name, value in zip(names, zip(*values)):
             self.out[name] = list(value)
 
@@ -1302,6 +1318,12 @@ class Accumulate(Filter):
     """
     Accumulates the numbers in the given column and writes every partial
     sum into a column accum.
+
+    Inputs: One input ``name`` (where ``name`` is configurable via
+            the constructor) that is a list of numbers.
+    Outputs:
+
+    - ``accum``: The accumulated values.
     """
     outputs = Types(('accum', list, float))
 
