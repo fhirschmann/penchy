@@ -97,12 +97,14 @@ class Plot(Filter):
             # Set grid
             self.plot.grid(grid)
 
-            hooks = [lambda: self.plot.set_xlabel(self.xlabel),
-                     lambda: self.plot.set_ylabel(self.ylabel),
-                     lambda: self.plot.set_title(self.title),
-                     lambda: plt.savefig(self.filename)]
+            # Set labels
+            self.plot.set_xlabel(self.xlabel)
+            self.plot.set_ylabel(self.ylabel)
 
-            self.hooks.extend(Hook(teardown=f) for f in hooks)
+            # Set title
+            self.plot.set_title(self.title)
+
+            self.hooks.append(Hook(teardown=lambda: plt.savefig(self.filename)))
 
 
 class BarPlot(Plot):
