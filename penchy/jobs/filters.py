@@ -497,11 +497,11 @@ class StatisticRuntimeEvaluation(Evaluation):
     Outputs: see ``evaluate_runtimes``
     """
     inputs = Types(('times', list, list, int))
-    outputs = Types(('averages', list, int),
+    outputs = Types(('averages', list, float),
                     ('maximals', list, int),
                     ('minimals', list, int),
-                    ('positive_deviations', list, int),
-                    ('negative_deviations', list, int))
+                    ('positive_deviations', list, float),
+                    ('negative_deviations', list, float))
 
     def __init__(self):
         super(StatisticRuntimeEvaluation, self).__init__(evaluate_runtimes,
