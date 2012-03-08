@@ -654,9 +654,8 @@ class CI2AlternativesTest(unittest.TestCase):
 
 
 class SortTest(unittest.TestCase):
-    #TODO: more tests
     def test_valid(self):
-        f = Sort(["values"])
+        f = Sort("values")
         f._run(values=[1, 3, 2], names=['a', 'c', 'b'])
         self.assertEqual(f.out['values'], [1, 2, 3])
         self.assertEqual(f.out['names'], ['a', 'b', 'c'])
