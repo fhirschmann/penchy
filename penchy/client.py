@@ -53,7 +53,7 @@ class Client(object):
         """
         log.info('Received signal %s' % signum)
         if signum == signal.SIGHUP:
-            self.send_signal_to_composition(signal.SIGTERM)
+            self.send_signal_to_composition(signal.SIGKILL)
 
     def send_signal_to_composition(self, signum):
         """
