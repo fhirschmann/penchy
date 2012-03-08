@@ -128,9 +128,31 @@ def check_matplotlib():
     compare_argspec(matplotlib.pyplot.figure, expected)
 
 
+def check_scipy():
+    """
+    Check for API changes in scipy.
+    """
+    log.debug('Checking for API changes in scipy')
+    try:
+        from scipy.stats import t, norm
+    except ImportError:
+        die('Could not import scipy - did you install it?')
+
+    checkattrs([
+        (t, 'ppf'),
+        (norm, 'ppf'),
+        ])
+
+    expected = ArgSpec(args=['self', 'q'], varargs='args', keywords='kwds',
+            defaults=None)
+    compare_argspec(t.ppf, expected)
+    compare_argspec(norm.ppf, expected)
+
+
 def check_all():
     check_paramiko()
     check_matplotlib()
+    check_scipy()
 
 
 if __name__ == '__main__':
