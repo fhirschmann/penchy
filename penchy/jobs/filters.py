@@ -1281,7 +1281,10 @@ class Sort(Filter):
 
     def __init__(self, sort_by, reverse=False):
         super(Sort, self).__init__()
-        self.sort_by = sort_by
+        if isinstance(sort_by, list):
+            self.sort_by = sort_by
+        else:
+            self.sort_by = [sort_by]
         self.reverse = reverse
 
     def _run(self, **kwargs):
