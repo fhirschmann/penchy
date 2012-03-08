@@ -459,7 +459,7 @@ def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')
     :param filename: path to settings.xml
     :type filename: str
     """
-    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'  # xml namespace
+    xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'
     tree = parse(path).getroot()
     servers = tree.find('{0}servers'.format(xmlns))
     for server in servers.findall('{0}server'.format(xmlns)):
