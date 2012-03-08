@@ -6,7 +6,7 @@ This module provides plotting filters.
   :copyright: PenchY Developers 2011-2012, see AUTHORS
   :license: MIT License, see LICENSE
 """
-import itertools
+from __future__ import division
 
 from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
@@ -134,7 +134,7 @@ class BarPlot(Plot):
     - ``filename``: Filename of the generated image
     """
 
-    def __init__(self, colors=None, error_bars=False, ecolor="red",
+    def __init__(self, error_bars=False, ecolor="red",
                  horizontal=False, stacked=False, width=0.2, *arg, **kwarg):
         """
         :param colors: list of corresponding to the z-values
@@ -152,7 +152,6 @@ class BarPlot(Plot):
         """
         super(BarPlot, self).__init__(*arg, **kwarg)
         self.width = width
-        self.colors = colors
         self.horizontal = horizontal
         self.error_bars = error_bars
         self.stacked = stacked
@@ -184,16 +183,12 @@ class BarPlot(Plot):
         if self.error_bars:
             errs = zip(*kwargs['err'])
 
-        # Use gray shades if no colors are given
-        if self.colors is None:
-            self.colors = contrast_colors(len(zs))
-
         ind = np.arange(len(xs))
 
         bars, rects, bottoms = [], [], ()
-        for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
+        for i, ys in enumerate(zip(*yss)):
             # Configure the plot function
-            options = {'height': ys, 'width': self.width, 'color': self.cmap(1.0 * i / len(yss))}
+            options = {'height': ys, 'width': self.width, 'color': self.cmap(i / len(yss))}
 
             if self.error_bars:
                 if self.horizontal:
@@ -356,37 +351,3 @@ class Histogram(Plot):
     def _run(self, **kwargs):
         xs = kwargs['x']
         self.plot.hist(xs, bins=self.bins, normed=self.normed)
-
-
-# Several alternatives for automatically assigning colors:
-
-def gray_gradient_colors(n):
-    """
-    Generates the specified number of neighboring shades of gray.
-    """
-    step = float(1) / n
-    # Strings between "0.0" and "1.0" represent levels of gray
-    return [str(x) for x in np.arange(0, 1, step)]
-
-
-def gray_contrast_colors(n):
-    """
-    Generates the specified number of contrasting shades of gray.
-    """
-    middle = int(round((n + 0.5) / 2))
-    # take numbers alternating from the first and second half
-    halves = (range(0, middle), range(middle, n))
-    distribution = [halves[i % 2][i // 2] for i in range(n)]
-
-    return [str(float(i) / n) for i in distribution]
-
-
-def contrast_colors(n):
-    """
-    Generates the specified number of contrasting colors.
-    """
-    middle = int(round((n + 0.5) / 2))
-    # take numbers alternating from the first and second half
-    halves = (range(0, middle), range(middle, n))
-    distribution = [halves[i % 2][i // 2] for i in range(n)]
-    return [hsv_to_rgb(float(i) / n, 1, 1) for i in distribution]
