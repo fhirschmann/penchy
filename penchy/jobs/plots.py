@@ -73,6 +73,8 @@ class Plot(Filter):
 
         if is_server:
             self.cmap = cm.get_cmap(cmap)
+            if not self.cmap:
+                raise ValueError("Color map not found!")
             self.fig = plt.figure()
             # Add the (only) subplot
             self.plot = self.fig.add_subplot(1, 1, 1)
