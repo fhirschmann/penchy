@@ -1298,7 +1298,7 @@ class Sort(Filter):
             self.out[name] = list(value)
 
 
-class Accum(Filter):
+class Accumulate(Filter):
     """
     Accumulates the numbers in the given column and writes every partial
     sum into a column accum.
@@ -1310,7 +1310,7 @@ class Accum(Filter):
         :param name: name of the input
         :type name: string
         """
-        super(Accum, self).__init__()
+        super(Accumulate, self).__init__()
         self.name = name
         self.inputs = Types((name, list, (int, float)))
 
