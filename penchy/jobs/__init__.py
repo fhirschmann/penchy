@@ -8,6 +8,7 @@ from penchy.util import extract_maven_credentials
 from penchy.deploy import SFTPDeploy, FTPDeploy
 
 JVM = jvms.JVM
+Value = filters.Value
 
 # all job elements that are interesting for the user have to be enumerated here
 __all__ = [
@@ -27,4 +28,6 @@ __all__ = [
     'plots',
     'workloads',
     'tools',
+    # misc
+    'Value',
 ]
