@@ -34,7 +34,7 @@ class Plot(Filter):
                  x_max=None, x_min=None, y_max=None, y_min=None,
                  x_scale="linear", y_scale="linear",
                  grid=False, legend_position=None,
-                 cmap=None):
+                 cmap='prism'):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -72,7 +72,7 @@ class Plot(Filter):
         self.legend_position = legend_position
 
         if is_server:
-            self.cmap = cmap or cm.prism
+            self.cmap = cm.get_cmap(cmap)
             self.fig = plt.figure()
             # Add the (only) subplot
             self.plot = self.fig.add_subplot(1, 1, 1)
