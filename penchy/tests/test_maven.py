@@ -142,23 +142,33 @@ class MavenTest(unittest.TestCase):
 
 
 class MavenUtilTest(unittest.TestCase):
+    def setUp(self):
+        self.tf = NamedTemporaryFile()
+        self.tf.write("""
+            <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
+                                http://maven.apache.org/xsd/settings-1.0.0.xsd">
+                <servers>
+                    <server>
+                        <id>server001</id>
+                        <username>my_login</username>
+                        <password>my_password</password>
+                    </server>
+                </servers>
+            </settings>
+            """)
+        self.tf.flush()
+
+    def tearDown(self):
+        self.tf.close()
+
     def test_extract_password(self):
+        username, password = extract_maven_credentials('server001', self.tf.name)
+        self.assertEqual(username, 'my_login')
+        self.assertEqual(password, 'my_password')
+
+    def test_extract_no_credentials(self):
         with NamedTemporaryFile() as tf:
-            tf.write("""
-                <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
-                xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
-                                    http://maven.apache.org/xsd/settings-1.0.0.xsd">
-                    <servers>
-                        <server>
-                            <id>server001</id>
-                            <username>my_login</username>
-                            <password>my_password</password>
-                        </server>
-                    </servers>
-                </settings>
-                """)
-            tf.flush()
-            username, password = extract_maven_credentials('server001', tf.name)
-            self.assertEqual(username, 'my_login')
-            self.assertEqual(password, 'my_password')
+            with self.assertRaises(ValueError):
+                extract_maven_credentials('server002', self.tf.name)
