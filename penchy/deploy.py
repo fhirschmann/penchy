@@ -9,7 +9,6 @@ Library which abstracts SFTP and FTP connections
 import os
 import logging
 import shutil
-from abc import ABCMeta, abstractmethod
 from contextlib import contextmanager
 
 from penchy import is_server
@@ -27,8 +26,6 @@ class Deploy(object):
     Base class from which all deployment methods must
     inherit from.
     """
-    __metaclass__ = ABCMeta
-
     def __init__(self, hostname, username, password, port=None):
         """
         :param hostname: hostname of the host
@@ -45,21 +42,18 @@ class Deploy(object):
         self.password = password
         self.port = port
 
-    @abstractmethod
     def connect(self):
         """
         Establish connection to this host.
         """
-        pass
+        raise NotImplementedError("connect must be implemented")
 
-    @abstractmethod
     def disconnect(self):
         """
         Disconnect from this host.
         """
-        pass
+        raise NotImplementedError("disconnect must be implemented")
 
-    @abstractmethod
     def put(self, local, remote):
         """
         Upload a file to this host.
@@ -69,7 +63,7 @@ class Deploy(object):
         :param remote: destination to upload to
         :type remote: str
         """
-        pass
+        raise NotImplementedError("put must be implemented")
 
     @property
     def connected(self):
