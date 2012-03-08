@@ -228,7 +228,7 @@ class HProfCpuTimes(HProf):
        \s+(?P<accum>\d+\.\d{2})%
        \s+(?P<count>\d+)
        \s+(?P<trace>\d+)
-       \s+(?P<method>(\w|\.|\$)+)
+       \s+(?P<method>[^\s]+)
        """, re.VERBOSE)
 
     def __init__(self):
@@ -273,7 +273,7 @@ class HProfCpuSamples(HProf):
        \s+(?P<accum>\d+\.\d{2})%
        \s+(?P<count>\d+)
        \s+(?P<trace>\d+)
-       \s+(?P<method>(\w|\.|\$)+)
+       \s+(?P<method>[^\s]+)
        """, re.VERBOSE)
 
     def __init__(self):
@@ -323,7 +323,7 @@ class HProfHeapSites(HProf):
        \s+(?P<live_objs>\d+)
        \s+(?P<alloc_bytes>\d+)
        \s+(?P<alloc_objs>\d+)
-       \s+(?P<class>(\w|\.|\$)+)
+       \s+(?P<class>[^\s]+)
        """, re.VERBOSE)
 
     def __init__(self):
