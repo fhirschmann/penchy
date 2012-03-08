@@ -137,8 +137,6 @@ class BarPlot(Plot):
     def __init__(self, error_bars=False, ecolor="red",
                  horizontal=False, stacked=False, width=0.2, *arg, **kwarg):
         """
-        :param colors: list of corresponding to the z-values
-        :type colors: list ``matplotlib.colors``
         :param error_bars: draw error bars
         :type error_bars: bool
         :param ecolor: color of the error bars
