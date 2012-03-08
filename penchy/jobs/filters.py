@@ -1296,3 +1296,28 @@ class Sort(Filter):
                             reverse=self.reverse)
         for name, value in zip(names, zip(*values)):
             self.out[name] = list(value)
+
+
+class Accum(Filter):
+    """
+    Accumulates the numbers in the given column and writes every partial
+    sum into a column accum.
+    """
+    outputs = Types(('accum', list, float))
+
+    def __init__(self, name):
+        """
+        :param name: name of the input
+        :type name: string
+        """
+        super(Accum, self).__init__()
+        self.name = name
+        self.inputs = Types((name, list, (int, float)))
+
+    def _run(self, **kwargs):
+        numbers = kwargs[self.name]
+
+        accum = 0
+        for n in numbers:
+            accum += n
+            self.out['accum'].append(accum)
