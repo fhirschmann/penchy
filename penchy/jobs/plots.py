@@ -34,7 +34,7 @@ class Plot(Filter):
                  x_max=None, x_min=None, y_max=None, y_min=None,
                  x_scale="linear", y_scale="linear",
                  grid=False, legend_position=None,
-                 cmap=cm.prism):
+                 cmap=None):
         """
         :param filename: filename of the resulting svg image
         :type filename: string
@@ -70,9 +70,9 @@ class Plot(Filter):
         self.xlabel = xlabel
         self.ylabel = ylabel
         self.legend_position = legend_position
-        self.cmap = cmap
 
         if is_server:
+            self.cmap = cmap or cm.prism
             self.fig = plt.figure()
             # Add the (only) subplot
             self.plot = self.fig.add_subplot(1, 1, 1)
@@ -191,7 +191,7 @@ class BarPlot(Plot):
         bars, rects, bottoms = [], [], ()
         for i, ys, c in zip(itertools.count(), zip(*yss), self.colors):
             # Configure the plot function
-            options = {'height': ys, 'width': self.width, 'color': c}
+            options = {'height': ys, 'width': self.width, 'color': self.cmap(1.0 * i / len(yss))}
 
             if self.error_bars:
                 if self.horizontal:
