@@ -6,6 +6,10 @@ from penchy.jobs.plots import Plot
 
 
 class PlotTest(unittest.TestCase):
+    def test_set_scale(self):
+        Plot(filename='', x_scale='log')
+        Plot(filename='', y_scale='linear')
+
     def test_wrong_scale(self):
         with self.assertRaises(ValueError):
             Plot(filename='', x_scale='foo')
