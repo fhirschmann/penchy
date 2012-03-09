@@ -965,6 +965,11 @@ class Read(Filter):
 class Unpack(Filter):
     """
     Reduces a singleton list to its only element.
+
+    .. warning::
+
+        Raises :class:`~penchy.jobs.filters.WrongInputError` if the list
+        has not exactly one element.
     """
 
     def __init__(self, input='singleton', output='result'):
@@ -982,8 +987,10 @@ class Unpack(Filter):
 
     def _run(self, **kwargs):
         singleton = kwargs[self.input]
-        if len(singleton) != 1:
+        if len(singleton) > 1:
             raise WrongInputError('The list has more than one element.')
+        if len(singleton) < 1:
+            raise WrongInputError('The list is empty.')
         value = singleton.pop()
         self.out[self.output] = value
 
