@@ -47,19 +47,24 @@ class JVM(object):
     is run.
     """
 
-    def __init__(self, path, options="", timeout_factor=1):
+    def __init__(self, path, options="", timeout_factor=1, name=None):
         """
         :param path: path to jvm executable relative to node's basepath
                      (can also be absolute)
+        :type path: path
         :param options: string of options that will be passed to JVM needs to be
                         properly escaped for a shell
         :type options: str
+        :param name: decorative name, if None the JVM path with user options is used
+        :type name: str
         """
         self.basepath = '/'
         self.timeout_factor = timeout_factor
         self._path = path
         # keep user_options for log messages and comparisons around
         self._user_options = options
+
+        self.name = name
 
         self._options = shlex.split(options)
         self._classpath = _extract_classpath(self._options)
@@ -232,8 +237,11 @@ class JVM(object):
         return hash(hash(self._path) + hash(self._user_options))
 
     def __repr__(self):
-        return "{2}({0}, '{1}')".format(self._path, self._user_options,
-                                        self.__class__.__name__)
+        if self.name is None:
+            return "{2}({0}, '{1}')".format(self._path, self._user_options,
+                                            self.__class__.__name__)
+        else:
+            return self.name
 
     def hash(self):
         """
