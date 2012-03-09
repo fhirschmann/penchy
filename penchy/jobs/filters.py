@@ -1262,6 +1262,14 @@ class DropFirst(Filter):
 
     For example it can be used to discard the first iteration of a measurement
     to reach indepedency of the measurements.
+
+    Inputs:
+
+    - ``values``: a list of values
+
+    Outputs:
+
+    - ``values``: a list of values without the first element
     """
     inputs = Types(('values', list, object))
     outputs = Types(('values', list, object))
