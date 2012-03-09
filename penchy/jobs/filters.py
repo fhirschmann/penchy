@@ -688,6 +688,17 @@ class Merge(Filter):
         self.outputs = Types(*[(n, object) for n in names])
 
         for row in data:
+            if (isinstance(try_unicode(row[0]), unicode) or
+                isinstance(row[0], Value)):
+                n = len(row)
+            else:
+                n = len(row[1:])
+
+            if n > len(names):
+                raise ValueError("More outputs are used then are defined")
+            if n < len(names):
+                raise ValueError("Not all defined outputs are used")
+
             # We can not cover row[0] because importing SystemComposition
             # would lead to cyclic imports
             for field in row[1:]:
