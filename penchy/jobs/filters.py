@@ -561,7 +561,7 @@ class Extract(Filter):
         extract = filters.Extract((composition2, 'column1'), 'column2')
 
         job = Job(compositions=...,
-                  server_flow=[filters.Receive() >> extract >> ...]
+                  server_flow=[filters.Receive() >> extract >> ['column1', 'column2']]
                   )
 
     Inputs:
@@ -662,7 +662,8 @@ class Merge(Filter):
                 (composition2, 'column1'      , 'column3'      )])
 
         job = Job(compositions=...,
-                  server_flow=[filters.Receive() >> merge >> ...]
+                  server_flow=[filters.Receive() >>
+                               merge >> ['mergedcolumn1', 'mergedcolumn2'] >> ...
                   )
 
     Input:
