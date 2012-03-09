@@ -545,10 +545,29 @@ class Extract(Filter):
     """
     Extracts data out of the resultssets sent by the clients.
 
-    Input:
+    This filter is useful if you want to pick just specific data from a specific
+    :class:`~penchy.jobs.job.SystemComposition`. In the constructor you specify
+    which data you want to extract by their name. If the name is not unique to
+    all :class:`~penchy.jobs.job.SystemComposition`s you have to use a pair of
+    the :class:`~penchy.jobs.job.SystemComposition` and the name, otherwise the
+    Extract filter will use the first occurence in the ``results`` dictionary
+    produced by :class:`~penchy.jobs.filters.Receive`. Both ways can be mixed.
+
+    Example::
+
+        composition1.flow = [ ... >> ['column1', 'column2'] >> send]
+        composition2.flow = [ ... >> 'column1' >> send]
+
+        extract = filters.Extract((composition2, 'column1'), 'column2')
+
+        job = Job(compositions=...,
+                  server_flow=[filters.Receive() >> extract >> ...]
+                  )
+
+    Inputs:
        - ``results``: Resultset as produced by the :class:`~penchy.jobs.filters.Receive` filter
 
-    Output: The extracted data associated with the names specified in the constructor.
+    Outputs: The extracted data associated with the names specified in the constructor.
     """
 
     inputs = Types(('results', dict))
