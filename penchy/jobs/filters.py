@@ -389,12 +389,11 @@ class DacapoHarness(Filter):
 
 class Send(SystemFilter):
     """
-    Send data to the server.
+    Sends all data fed to it to the server.
 
     Inputs:
 
     - ``:environment:``: see :meth:`Job._build_environment`
-    - ``payload``: data to send
     """
     inputs = Types()
 
