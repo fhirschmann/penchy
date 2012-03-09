@@ -1310,6 +1310,11 @@ class Sort(Filter):
 
     Inputs: the (unsorted) table
     Outputs: the sorted table
+
+    .. warning::
+
+        Since this filter is very generic no typechecking will
+        take place.
     """
     inputs = Types()
     outputs = Types()
