@@ -117,8 +117,15 @@ class Plot(Filter):
             # Set title
             self.plot.set_title(self.title)
 
-            #TODO: log where the plot is saved
-            self.hooks.append(Hook(teardown=lambda: plt.savefig(self.filename)))
+            self.hooks.append(Hook(teardown=lambda: self._savefig(self.filename)))
+
+    def _savefig(self, filename):
+        """
+        :param filename: location to save the plot
+        :type filename: path
+        """
+        plt.savefig(filename)
+        log.info("Plot is saved at {0}".format(filename))
 
 
 class BarPlot(Plot):
