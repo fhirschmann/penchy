@@ -695,16 +695,17 @@ class Merge(Filter):
                 n = len(row[1:])
 
             if n > len(names):
-                raise ValueError("More outputs are used then are defined")
+                raise ValueError("More outputs are used then are defined.")
             if n < len(names):
-                raise ValueError("Not all defined outputs are used")
+                raise ValueError("Not all defined outputs are used.")
 
             # We can not cover row[0] because importing SystemComposition
             # would lead to cyclic imports
             for field in row[1:]:
                 if not (isinstance(try_unicode(field), unicode) or
                         isinstance(field, Value)):
-                    raise ValueError("Merge filter is malformed.")
+                    raise ValueError("Given value is neither a string nor"
+                                     "wrapped by Value.")
 
     def _run(self, **kwargs):
         results = kwargs['results']
