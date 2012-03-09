@@ -113,6 +113,7 @@ class Plot(Filter):
             # Set title
             self.plot.set_title(self.title)
 
+            #TODO: log where the plot is saved
             self.hooks.append(Hook(teardown=lambda: plt.savefig(self.filename)))
 
 
