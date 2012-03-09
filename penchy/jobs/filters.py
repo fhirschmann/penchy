@@ -548,7 +548,7 @@ class Extract(Filter):
     This filter is useful if you want to pick just specific data from a specific
     :class:`~penchy.jobs.job.SystemComposition`. In the constructor you specify
     which data you want to extract by their name. If the name is not unique to
-    all :class:`~penchy.jobs.job.SystemComposition`s you have to use a pair of
+    all :class:`~penchy.jobs.job.SystemComposition` s you have to use a pair of
     the :class:`~penchy.jobs.job.SystemComposition` and the name, otherwise the
     Extract filter will use the first occurence in the ``results`` dictionary
     produced by :class:`~penchy.jobs.filters.Receive`. Both ways can be mixed.
