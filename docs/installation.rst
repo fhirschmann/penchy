@@ -19,10 +19,11 @@ In addition to python itself, the following python packages are required:
  * argparse
  * numpy
  * matplotlib
+ * scipy
 
 On debian, these packages can be installed with a single command::
 
-    apt-get install python-paramiko python-argparse python-numpy python-matplotlib
+    apt-get install python-paramiko python-argparse python-numpy python-matplotlib python-scipy
 
 Once you have downloaded PenchY, extract it to a folder of your choice and
 continue with the :doc:`configuration`.
