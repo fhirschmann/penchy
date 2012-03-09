@@ -631,6 +631,40 @@ class Merge(Filter):
     """
     Merges the data with the given identifiers.
 
+    This filter is useful if you want to combine data of the same kind
+    from multiple :class:`~penchy.jobs.job.SystemComposition` s. If you think
+    of the data as columns of a table, then the Merge filter basically puts
+    these columns one below the other. To keep track of which columns came from
+    where, you can put static values (identifiers) in an extra column.
+
+    This is all configured in the constructor. The first argument defines the outputs
+    of the filter by a tuple of names. In the table analogy it would be the header of the table. The
+    second (and last) argument defines where the data comes from. It is a list of
+    tuples. The tupels are the rows (possible multiple "rows", because the data form
+    the system compositions might be multidimensional) of the table. In each tuple
+    you have first the possiblity to define from which system composition the data
+    is taken. If no system composition is given the first matching system composition
+    will be used for the whole tuple. The rest of the tuple can consist either of data names or
+    :class:`~penchy.jobs.filters.Value` objects. These Value objects are just a wrapper
+    around an ordinary value to distinguish between data names and strings used as
+    identifiers. Obviously the lenght of all tuples in the second argument have to be
+    equal to the number of outputs specified in the first argument.
+
+    Example::
+
+        # Assume column1 of composition1 and composition2 are of the same kind
+        # and column2 and column3 are of the same kind.
+        composition1.flow = [ ... >> ['column1', 'column2'] >> send]
+        composition2.flow = [ ... >> ['column1', 'column3'] >> send]
+
+        merge = filters.Merge(('mergedcolumn1', 'mergedcolumn2'),
+               [(composition1, 'column1'      , 'column2'      ),
+                (composition2, 'column1'      , 'column3'      )])
+
+        job = Job(compositions=...,
+                  server_flow=[filters.Receive() >> merge >> ...]
+                  )
+
     Input:
        - ``results``: Resultset as produced by the :class:`~penchy.jobs.filters.Receive` filter
 
