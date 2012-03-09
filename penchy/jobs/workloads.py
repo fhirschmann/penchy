@@ -32,6 +32,20 @@ class Dacapo(Workload):
             checksum='fb68895a6716cc5e77f62ed7992d027b1dbea355'
         ),
     ))
+    BENCHMARKS = set(( 'avrora'
+                      , 'batik'
+                      , 'eclipse'
+                      , 'fop'
+                      , 'h2'
+                      , 'jython'
+                      , 'luindex'
+                      , 'lusearch'
+                      , 'pmd'
+                      , 'sunflow'
+                      , 'tomcat'
+                      , 'tradebeans'
+                      , 'tradesoap'
+                      , 'xalan'))
 
     def __init__(self, benchmark, iterations=1, args='', *wargs, **wkwargs):
         """
@@ -80,4 +94,32 @@ class ScalaBench(Dacapo):
     This class represents the workload for the `Scalabench Benchmark-Suite
     <http://scalabench.org/>`_.
     """
-    pass
+    BENCHMARKS = set((  # dacapo
+                        'avrora'
+                      , 'batik'
+                      , 'eclipse'
+                      , 'fop'
+                      , 'h2'
+                      , 'jython'
+                      , 'luindex'
+                      , 'lusearch'
+                      , 'pmd'
+                      , 'sunflow'
+                      , 'tomcat'
+                      , 'tradebeans'
+                      , 'tradesoap'
+                      , 'xalan'
+                        # scalabench
+                      , 'actors'
+                      , 'apparat'
+                      , 'dummy'
+                      , 'factorie'
+                      , 'kiama'
+                      , 'scalac'
+                      , 'scaladoc'
+                      , 'scalap'
+                      , 'scalariform'
+                      , 'scalatest'
+                      , 'scalaxb'
+                      , 'specs'
+                      , 'tmt'))
