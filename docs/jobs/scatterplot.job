@@ -12,7 +12,7 @@ benchmarks = ['fop', 'batik']
 # Client side filters
 f = filters.HProfCpuTimes()
 send = filters.Send()
-unpack_sum = filters.Unpack(input='result', output='sum')
+unpack_sum = filters.Unpack(input='values', output='sum')
 unpack_total = filters.Unpack(input='total', output='total')
 
 compositions = []
@@ -22,7 +22,7 @@ for bench in benchmarks:
     jvm.tool = tools.HProf('cpu=times')
     composition = SystemComposition(jvm, node)
     composition.flow = [jvm.tool >> f >> ('count', 'values') >>
-                        filters.Map(filters.Sum()) >> 'result' >>
+                        filters.Map(filters.Sum()) >>
                         unpack_sum >> send,
                         f >> 'total' >> unpack_total >> send]
     compositions.append(composition)
