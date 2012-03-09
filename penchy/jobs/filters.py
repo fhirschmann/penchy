@@ -966,6 +966,14 @@ class Unpack(Filter):
     """
     Reduces a singleton list to its only element.
 
+    Input (default names):
+
+    - ``singleton``: the singleton list
+
+    Outputs (default names):
+
+    - ``result``: the extracted element
+
     .. warning::
 
         Raises :class:`~penchy.jobs.filters.WrongInputError` if the list
@@ -1048,11 +1056,11 @@ class Sum(Filter):
     """
     Computes the sum of a list of numbers.
 
-    Inputs:
+    Inputs (default names):
 
     - ``values``: list of numbers
 
-    Outputs:
+    Outputs (default names):
 
     - ``sum``: sum of the list of numbers
     """
@@ -1112,7 +1120,7 @@ class Decorate(Filter):
     with the argument ``inputs``. The interpolation syntax '{i}' where ``i``
     is the position of the input value.
 
-    Inputs (default):
+    Inputs (default names):
 
     - ``values``: a list of int or float values that shall be decorated
 
