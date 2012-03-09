@@ -32,7 +32,7 @@ plot = plots.BarPlot(filename='/tmp/barplot.png', title='fop vs. batik',
 comp1.flow = [
         fop >> 'stderr'
         >> f >> ('times', 'values')
-        >> unpack >> ('result', 'values')
+        >> unpack
         >> enum >> [('numbers', 'invoc'), ('values', 'times')]
         >> send
         ]
@@ -40,7 +40,7 @@ comp1.flow = [
 comp2.flow = [
         batik >> 'stderr'
         >> f >> ('times', 'values')
-        >> unpack >> ('result', 'values')
+        >> unpack
         >> enum >> [('numbers', 'invoc'), ('values', 'times')] >>
         send
         ]
