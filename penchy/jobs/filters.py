@@ -1046,22 +1046,27 @@ class StandardDeviation(Filter):
 
 class Sum(Filter):
     """
-    Computes the sum of a list of integers or floats
+    Computes the sum of a list of numbers.
 
     Inputs:
 
-    - ``values``: numeric values
+    - ``values``: list of numbers
 
     Outputs:
 
-    - ``sum``: sum of the numeric values
+    - ``sum``: sum of the list of numbers
     """
 
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('sum', (int, float)))
 
+    def __init__(self, input='values', output='sum'):
+        super(Sum, self).__init__()
+        self.input = input
+        self.output = output
+
     def _run(self, **kwargs):
-        self.out['sum'] = sum(kwargs['values'])
+        self.out[self.output] = sum(kwargs[self.input])
 
 
 class Enumerate(Filter):
