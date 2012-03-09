@@ -69,7 +69,7 @@ class HProf(Tool):
 
     Outputs:
 
-    - ``hprof``: HProf output
+    - ``hprof``: HProf output, i.e. the path to the java.hprof.txt file
     """
 
     DEPENDENCIES = set()
