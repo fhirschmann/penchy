@@ -672,3 +672,10 @@ class AccumulateTest(unittest.TestCase):
         f = Accumulate('a')
         f._run(a=[1, 2, 3])
         self.assertEqual(f.out['accum'], [1, 3, 6])
+
+
+class NormalizeTest(unittest.TestCase):
+    def test_valid(self):
+        f = Normalize()
+        f._run(numbers=[67, 22, 7, 5, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], n=126)
+        self.assertAlmostEqual(1.0 - sum(f.out['norm']), 0.0)

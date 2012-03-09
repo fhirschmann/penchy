@@ -1350,3 +1350,41 @@ class Accumulate(Filter):
         for n in numbers:
             accum += n
             self.out['accum'].append(accum)
+
+
+class Normalize(Filter):
+    """
+    Normalizes ``numbers`` according to a given number ``n``.
+
+    FIXME: Better names for inputs
+    Inputs:
+
+    - ``numbers``: a list of numbers
+    - ``n``: the number normalized by
+
+    Outputs:
+
+    - ``norm``: a list of normalized numbers
+    """
+    inputs = Types(('numbers', list, (int, float)),
+                   ('n', (int, float)))
+    outputs = Types(('norm', list, float))
+
+    def __init__(self, epsilon=0.0001):
+        """
+        :param epsilon: if the normalized sum differes more than ``epsilon``
+                        from 1.0 a warning is given.
+        :type espilon: float
+        """
+        super(Normalize, self).__init__()
+        self.epsilon = epsilon
+
+    def _run(self, **kwargs):
+        numbers = kwargs['numbers']
+        n = kwargs['n']
+
+        for number in numbers:
+            self.out['norm'].append(number / n)
+
+        if abs(1.0 - sum(self.out['norm'])) < self.epsilon:
+            log.warn("The normalized sum differes more than {0} from 1.0".format(self.epsilon))
