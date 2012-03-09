@@ -717,7 +717,7 @@ class Map(Filter):
     to pick one with ``finput`` and ``foutput``.
     """
 
-    def __init__(self, filter_, input='values', output='result', finput=None,
+    def __init__(self, filter_, input='values', output='values', finput=None,
                  foutput=None):
         """
         :param filter_: the filter to be applied
@@ -1263,11 +1263,11 @@ class DropFirst(Filter):
     For example it can be used to discard the first iteration of a measurement
     to reach indepedency of the measurements.
     """
-    inputs = Types(('xs', list, object))
-    outputs = Types(('xs', list, object))
+    inputs = Types(('values', list, object))
+    outputs = Types(('values', list, object))
 
     def _run(self, **kwargs):
-        self.out['xs'] = kwargs['xs'][1:]
+        self.out['values'] = kwargs['values'][1:]
 
 
 class SteadyState(Filter):
@@ -1279,14 +1279,14 @@ class SteadyState(Filter):
 
     Inputs:
 
-    - ``xs``: 2d list of measurements
+    - ``values``: 2d list of measurements
 
     Outputs:
 
-    - ``xs``: 2d list of steady-state iterations
+    - ``values``: 2d list of steady-state iterations
     """
-    inputs = Types(('xs', list, list, (int, float)))
-    outputs = Types(('xs', list, list, (int, float)))
+    inputs = Types(('values', list, list, (int, float)))
+    outputs = Types(('values', list, list, (int, float)))
 
     def __init__(self, k, threshold):
         super(SteadyState, self).__init__()
@@ -1294,12 +1294,12 @@ class SteadyState(Filter):
         self.k = k
 
     def _run(self, **kwargs):
-        xss = kwargs['xs']
+        xss = kwargs['values']
 
         for xs in xss:
             for i in range(0, len(xs) - self.k):
                 if stats.coefficient_of_variation(xs[i:self.k + i]) < self.threshold:
-                    self.out['xs'].append(xs[i:self.k + i])
+                    self.out['values'].append(xs[i:self.k + i])
                     break
 
 
@@ -1384,16 +1384,16 @@ class Normalize(Filter):
     FIXME: Better names for inputs
     Inputs:
 
-    - ``numbers``: a list of numbers
-    - ``n``: the number normalized by
+    - ``values``: a list of numbers
+    - ``norm``: the number normalized by
 
     Outputs:
 
-    - ``norm``: a list of normalized numbers
+    - ``values``: a list of normalized numbers
     """
-    inputs = Types(('numbers', list, (int, float)),
-                   ('n', (int, float)))
-    outputs = Types(('norm', list, float))
+    inputs = Types(('values', list, (int, float)),
+                   ('norm', (int, float)))
+    outputs = Types(('values', list, float))
 
     def __init__(self, epsilon=0.0001):
         """
@@ -1405,11 +1405,11 @@ class Normalize(Filter):
         self.epsilon = epsilon
 
     def _run(self, **kwargs):
-        numbers = kwargs['numbers']
-        n = kwargs['n']
+        numbers = kwargs['values']
+        n = kwargs['norm']
 
         for number in numbers:
-            self.out['norm'].append(number / n)
+            self.out['values'].append(number / n)
 
-        if abs(1.0 - sum(self.out['norm'])) < self.epsilon:
+        if abs(1.0 - sum(self.out['values'])) < self.epsilon:
             log.warn("The normalized sum differes more than {0} from 1.0".format(self.epsilon))

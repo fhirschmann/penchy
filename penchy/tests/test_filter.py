@@ -567,13 +567,13 @@ class MapTest(unittest.TestCase):
         identity = Evaluation(lambda x: {'x': x}, Types(('x', object)), Types(('x', object)))
         f = Map(identity)
         f._run(values=[1, 2, 3])
-        self.assertEqual(f.out['result'], [1, 2, 3])
+        self.assertEqual(f.out['values'], [1, 2, 3])
 
     def test_multidimensional(self):
         multi = Evaluation(lambda x: {'x': [x]}, Types(('x', object)), Types(('x', object)))
         f = Map(multi)
         f._run(values=[1, 2, 3])
-        self.assertEqual(f.out['result'], [[1], [2], [3]])
+        self.assertEqual(f.out['values'], [[1], [2], [3]])
 
     def test_wrong_inputs(self):
         wrong = Evaluation(lambda x, y: {'x': x}, Types(('x', object), ('y', object)), Types(('x', object)))
@@ -607,21 +607,21 @@ class DecorateTest(unittest.TestCase):
 class DropFirstTest(unittest.TestCase):
     def test_valid(self):
         f = DropFirst()
-        f._run(xs=[1, 2, 3])
-        self.assertEqual(f.out['xs'], [2, 3])
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], [2, 3])
 
 
 class SteadyStateTest(unittest.TestCase):
     def test_one_invocation(self):
         f = SteadyState(k=5, threshold=0.3)
-        f._run(xs=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38]])
-        self.assertEqual(f.out['xs'], [[36, 49, 32, 24, 39]])
+        f._run(values=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38]])
+        self.assertEqual(f.out['values'], [[36, 49, 32, 24, 39]])
 
     def test_two_invocations(self):
         f = SteadyState(k=5, threshold=0.3)
-        f._run(xs=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38],
-                   [15, 36, 21, 1, 2, 15, 47, 7, 19, 28, 39, 29, 32, 17, 15, 18, 14, 8, 39, 0]])
-        self.assertEqual(f.out['xs'], [[36, 49, 32, 24, 39], [19, 28, 39, 29, 32] ])
+        f._run(values=[[30, 33, 4, 16, 29, 34, 10, 44, 12, 25, 22, 25, 36, 49, 32, 24, 39, 36, 34, 38],
+                       [15, 36, 21, 1, 2, 15, 47, 7, 19, 28, 39, 29, 32, 17, 15, 18, 14, 8, 39, 0]])
+        self.assertEqual(f.out['values'], [[36, 49, 32, 24, 39], [19, 28, 39, 29, 32] ])
 
 
 class ConfidenceIntervalMeanTest(unittest.TestCase):
@@ -677,5 +677,5 @@ class AccumulateTest(unittest.TestCase):
 class NormalizeTest(unittest.TestCase):
     def test_valid(self):
         f = Normalize()
-        f._run(numbers=[67, 22, 7, 5, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], n=126)
-        self.assertAlmostEqual(1.0 - sum(f.out['norm']), 0.0)
+        f._run(values=[67, 22, 7, 5, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], norm=126)
+        self.assertAlmostEqual(1.0 - sum(f.out['values']), 0.0)
