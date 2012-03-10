@@ -28,7 +28,7 @@ if __name__ == "__main__":
     conf_parser.add_argument("-c", "--config",
             action="store", dest="config",
             default=os.path.expanduser("~/.penchyrc"),
-            help="config module to use")
+            help="config module to use (defaults to ~/.penchyrc)")
     args, _ = conf_parser.parse_known_args()
     try:
         config = load_config(args.config)
@@ -68,7 +68,7 @@ if __name__ == "__main__":
     mode_group.add_argument("--check", action="store_true",
             dest="check", help="check a job for validity and exit")
     mode_group.add_argument("--run-locally", action="store_true",
-            dest="local", help="test a job by running it locally")
+            dest="local", help="runs the job locally")
     mode_group.add_argument("--visualize", action="store_true",
             dest="visualize", help="draw a visualization of pipeline dependencies")
 
