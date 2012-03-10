@@ -82,11 +82,11 @@ if __name__ == "__main__":
     job_module = load_job(args.job)
     job = job_module.job
 
+    configure_logging(args.loglevel, args.logfile)
+
     if not args.skip_apicheck:
         from penchy.apicheck import check_all
         check_all()
-
-    configure_logging(args.loglevel, args.logfile)
 
     if args.check:
         if job.check():
