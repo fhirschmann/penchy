@@ -58,7 +58,7 @@ class Dacapo(Workload):
         :param timeout: timeout (in seconds) after which this workload should
                         be terminated
         :type timeout: int
-        :param name: descriptive name of this workload
+        :param name: descriptive name of this workload (defaults to benchmark name)
         :type name: str
         """
         super(Dacapo, self).__init__(timeout, name)
