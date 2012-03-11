@@ -39,8 +39,12 @@ class Tamiflex(Tool):
     outputs = Types(('reflection_log', list, str),
                     ('classfolder', list, str))
 
-    def __init__(self, *args, **kwargs):
-        super(Tamiflex, self).__init__(*args, **kwargs)
+    def __init__(self, name=None):
+        """
+        :param name: descriptive name of this tool
+        :type name: str
+        """
+        super(Tamiflex, self).__init__(name)
         self.hooks.extend([
             Hook(teardown=lambda: self.out['reflection_log']
                             .append(os.path.abspath('out/refl.log'))),
@@ -76,11 +80,13 @@ class HProf(Tool):
 
     outputs = Types(('hprof', list, str))
 
-    def __init__(self, option, *args, **kwargs):
+    def __init__(self, option, name=None):
         """
         :param option: the argument for hprof
+        :param name: descriptive name of this tool
+        :type name: str
         """
-        super(HProf, self).__init__(*args, **kwargs)
+        super(HProf, self).__init__(name)
         # chooses always the right file because a new directory
         # is generated for each invocation
         self.hooks.append(Hook(teardown=lambda: self.out['hprof']

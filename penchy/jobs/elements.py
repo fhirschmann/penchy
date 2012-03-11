@@ -132,7 +132,7 @@ class Tool(NotRunnable, PipelineElement):
     """
     def __init__(self, name=None):
         """
-        :param name: descriptive name of this workload
+        :param name: descriptive name of this tool
         :type name: str
         """
         super(Tool, self).__init__()
