@@ -99,7 +99,7 @@ class FTPDeploy(Deploy):
         :type username: str
         :param password: password on the host
         :type password: str
-        :param port: port of the service
+        :param port: port of the service (defaults to 21)
         :type port: int
         :param tls: use TLS support as described in RFC 4217 (defaults to True)
         :type tls: boolean
@@ -151,7 +151,7 @@ class SFTPDeploy(Deploy):
                          public key authentication or set
                          to the passphrase of a key
         :type password: str
-        :param port: port of the service
+        :param port: port of the service (defaults to 22)
         :type port: int
         """
         self.keyfile = kwargs.pop('keyfile') if 'keyfile' in kwargs else None
