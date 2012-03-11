@@ -144,7 +144,7 @@ class SFTPDeploy(Deploy):
         :type hostname: str
         :param username: username on the host
         :type username: str
-        :param keyfile: private key to use
+        :param keyfile: private key to use (defaults to system keyfile)
         :type keyfile: str
         :param password: password on the host
                          can be empty for passphraseless
