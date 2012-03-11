@@ -180,6 +180,9 @@ class Workload(NotRunnable, PipelineElement):
         self.timeout = timeout
         self.name = name
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
     @property
     def arguments(self):  # pragma: no cover
         """
