@@ -241,7 +241,7 @@ class JVM(object):
                 self.__class__.__name__)
 
     def __str__(self):
-        return self.name if self.name else repr(self)
+        return self.name or repr(self)
 
     def hash(self):
         """
