@@ -375,7 +375,7 @@ class Job(object):
 
         # all starts are receivers, run them with the environment
         for start in starts:
-            start.run(**{':environment:' : self._build_environment()})
+            start.run(**{':environment:': self._build_environment()})
 
         # run other filters
         for sink, group in groupby(edge_order, attrgetter('sink')):
