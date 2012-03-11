@@ -130,6 +130,13 @@ class Tool(NotRunnable, PipelineElement):
     A Tool modifies the JVM on which it runs, so that data about that run is
     gathered. Hprof, for example, is a Tool.
     """
+    def __init__(self, name=None):
+        """
+        :param name: descriptive name of this workload
+        :type name: str
+        """
+        super(Tool, self).__init__()
+        self.name = name
 
     @property
     def arguments(self):  # pragma: no cover
