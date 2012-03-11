@@ -145,6 +145,9 @@ class Tool(NotRunnable, PipelineElement):
         """
         raise NotImplementedError("Tools must implement this")
 
+    def __str__(self):  # pragma: no cover
+        return self.name
+
 
 class Workload(NotRunnable, PipelineElement):
     """
