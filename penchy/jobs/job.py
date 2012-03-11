@@ -56,7 +56,7 @@ class NodeSetting(object):
         :param password: this is either the password for a given username
                          or the passphrase to unlock the keyfile
         :type password: string
-        :param keyfile: path to the ssh keyfile to use
+        :param keyfile: path to the ssh keyfile to use (defaults to system keyfile)
         :type keyfile: string
         :param timeout_factor: this is either an integer or a function
                                which gets executed client-side and returns
