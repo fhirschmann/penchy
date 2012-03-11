@@ -471,7 +471,7 @@ class Evaluation(Filter):
             if 'input' not in kwargs:
                 raise ValueError('Evaluation inputs not set, expected input in arguments')
             else:
-                args = {'input' : kwargs['input']}
+                args = {'input': kwargs['input']}
         else:
             try:
                 args = dict([(name, kwargs[name]) for name in self.inputs.names])
@@ -534,11 +534,11 @@ def evaluate_runtimes(times):
     pos_deviations = [abs(max_ - avg) / avg for max_, avg in zip(maxs, avgs)]
     neg_deviations = [abs(min_ - avg) / avg for min_, avg in zip(mins, avgs)]
 
-    return {'averages' : avgs,
-            'maximals' : maxs,
-            'minimals' : mins,
-            'positive_deviations' : pos_deviations,
-            'negative_deviations' : neg_deviations}
+    return {'averages': avgs,
+            'maximals': maxs,
+            'minimals': mins,
+            'positive_deviations': pos_deviations,
+            'negative_deviations': neg_deviations}
 
 
 class Extract(Filter):
@@ -917,8 +917,8 @@ class Dump(SystemFilter):
         else:
             job = os.path.basename(env['job'])
         system = {
-            'job' : job,
-            'penchy' : __version__
+            'job': job,
+            'penchy': __version__
         }
         if env['current_composition'] is not None:
             comp = env['current_composition']
@@ -930,8 +930,8 @@ class Dump(SystemFilter):
                                            for c in classes
                                           if c.DEPENDENCIES)
         dump = {
-            'system' : system,
-            'data' : kwargs
+            'system': system,
+            'data': kwargs
         }
         s = json.dumps(dump, indent=self.indent)
         self.out['dump'] = s
