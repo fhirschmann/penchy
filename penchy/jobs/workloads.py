@@ -88,6 +88,9 @@ class Dacapo(Workload):
     def __repr__(self):  # pragma: no cover
         return '{0}({1})'.format(self.__class__.__name__, self.benchmark)
 
+    def __str__(self):  # pragma: no cover
+        return self.name or self.benchmark
+
 
 class ScalaBench(Dacapo):
     """

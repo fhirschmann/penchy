@@ -158,14 +158,17 @@ class Workload(NotRunnable, PipelineElement):
                     ('stderr', list, path),
                     ('exit_code', list, int))
 
-    def __init__(self, timeout=0):
+    def __init__(self, timeout=0, name=None):
         """
         :param timeout: timeout (in seconds) after which this workload should
                         be terminated
         :type timeout: int
+        :param name: descriptive name of this workload
+        :type name: str
         """
         super(Workload, self).__init__()
         self.timeout = timeout
+        self.name = name
 
     @property
     def arguments(self):  # pragma: no cover
