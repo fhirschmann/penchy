@@ -47,7 +47,7 @@ class Dacapo(Workload):
                       , 'tradesoap'
                       , 'xalan'))
 
-    def __init__(self, benchmark, iterations=1, args='', *wargs, **wkwargs):
+    def __init__(self, benchmark, iterations=1, args='', timeout=0, name=None):
         """
         :param benchmark: benchmark to execute
         :type benchmark: string
@@ -55,8 +55,13 @@ class Dacapo(Workload):
         :type iterations: int
         :param args: additional arguments for harness (shell escaped)
         :type args: string
+        :param timeout: timeout (in seconds) after which this workload should
+                        be terminated
+        :type timeout: int
+        :param name: descriptive name of this workload
+        :type name: str
         """
-        super(Dacapo, self).__init__(*wargs, **wkwargs)
+        super(Dacapo, self).__init__(timeout, name)
 
         self.benchmark = benchmark
         self.iterations = iterations
