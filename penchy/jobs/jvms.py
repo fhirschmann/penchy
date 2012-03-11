@@ -237,11 +237,11 @@ class JVM(object):
         return hash(hash(self._path) + hash(self._user_options))
 
     def __repr__(self):
-        if self.name is None:
-            return "{2}({0}, '{1}')".format(self._path, self._user_options,
-                                            self.__class__.__name__)
-        else:
-            return self.name
+        return "{2}({0}, '{1}')".format(self._path, self._user_options,
+                self.__class__.__name__)
+
+    def __str__(self):
+        return self.name if self.name else repr(self)
 
     def hash(self):
         """
