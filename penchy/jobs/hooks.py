@@ -76,6 +76,7 @@ class ExecuteHook(BaseHook):
                      see :class:`subprocess.Popen` for details
         :type args: string or sequence
         """
+        super(ExecuteHook, self).__init__()
         self.args = args
         self.proc = None
 
