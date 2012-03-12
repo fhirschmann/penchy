@@ -48,6 +48,7 @@ class Hook(BaseHook):  # pragma: no cover
         :param teardown: the callable executed as teardown
         :type teardown: callable or None
         """
+        super(Hook, self).__init__()
         self.setup = default(setup, lambda: None)
         self.teardown = default(teardown, lambda: None)
 
