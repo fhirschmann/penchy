@@ -16,7 +16,6 @@ from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
 from penchy.compat import path
 from penchy import is_server
-from colorsys import hsv_to_rgb
 
 
 log = logging.getLogger(__name__)
