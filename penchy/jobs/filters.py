@@ -839,11 +839,11 @@ class Upload(Filter):  # pragma: no cover
     """
     inputs = Types(('filename', path))
 
-    def __init__(self, method, path, *args, **kwargs):
+    def __init__(self, method, remote_path, *args, **kwargs):
         """
         :param method: method to use
         :type method: descendant of :class:`~penchy.deploy.Deploy`
-        :param path: path to upload to
+        :param remote_path: path to upload to
         :type path: str
 
         Additionally, you can pass any arguments you'd normally
@@ -870,14 +870,14 @@ class Upload(Filter):  # pragma: no cover
             raise ValueError('deploy must be a descendant of ``Deploy``')
 
         self.method = method
-        self.path = path
+        self.remote_path = remote_path
         self.args = args
         self.kwargs = kwargs
 
     def _run(self, **kwargs):
         method = self.method(*self.args, **self.kwargs)
         with method.connection_required():
-            method.put(kwargs['filename'], self.path)
+            method.put(kwargs['filename'], self.remote_path)
 
 
 class Dump(SystemFilter):
