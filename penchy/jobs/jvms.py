@@ -80,10 +80,20 @@ class JVM(object):
 
     @property
     def workload(self):
+        """
+        The current workload.
+        """
         return self._workload
 
     @workload.setter
     def workload(self, workload):
+        """
+        Setter for the workload.
+
+        .. note:
+
+            Warns if a existing workload gets overwritten.
+        """
         if self._workload is not None:  # pragma: no cover
             log.warn("Overwriting workload!")
 
