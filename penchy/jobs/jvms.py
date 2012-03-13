@@ -92,7 +92,7 @@ class JVM(object):
 
         .. note:
 
-            Warns if a existing workload gets overwritten.
+            Warns if an existing workload gets overwritten.
         """
         if self._workload is not None:  # pragma: no cover
             log.warn("Overwriting workload!")
@@ -101,10 +101,20 @@ class JVM(object):
 
     @property
     def tool(self):
+        """
+        The current tool.
+        """
         return self._tool
 
     @tool.setter
     def tool(self, tool):
+        """
+        Setter for the tool.
+
+        .. note:
+
+            Warns if an existing tool gets overwritten.
+        """
         if self._tool is not None:  # pragma: no cover
             log.warn("Overwriting Tool!")
 
