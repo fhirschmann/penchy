@@ -84,6 +84,9 @@ class Types(object):
 
     @property
     def names(self):
+        """
+        A set of all names of the current types.
+        """
         return set(self.descriptions) if self.descriptions is not None else set()
 
     def check_input(self, kwargs):
