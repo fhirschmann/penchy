@@ -464,7 +464,7 @@ class Receive(SystemFilter):
 
     Outputs:
 
-    - ``results``: dict that maps :class:`SystemComposition` to their results.
+    - ``results``: dict that maps :class:`~penchy.jobs.job.SystemComposition` to their results.
     """
     inputs = Types((':environment:', dict))
     outputs = Types(('results', dict))
