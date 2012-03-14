@@ -1519,3 +1519,28 @@ class Zip(Filter):
 
     def _run(self, **kwargs):
         self.out['values'] = [list(l) for l in zip(*kwargs['values'])]
+
+
+class Slice(Filter):
+    """
+    This filter returns a slice of a list.
+
+    Inputs:
+
+    - ``values``: a list of values
+
+    Outputs:
+
+    - ``values``: a list of values (zipped)
+    """
+    inputs = Types(('values', list, object))
+    outputs = Types(('values', list, object))
+
+    def __init__(self, start=None, stop=None, step=1):
+        super(Slice, self).__init__()
+        self.start = start
+        self.stop = stop
+        self.step = step
+
+    def _run(self, **kwargs):
+        self.out['values'] = kwargs['values'][self.start:self.stop:self.step]

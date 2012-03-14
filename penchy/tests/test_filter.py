@@ -626,6 +626,13 @@ class ZipTest(unittest.TestCase):
         self.assertEqual(f.out['values'], [[1, 3, 5], [2, 4, 6]])
 
 
+class SliceTest(unittest.TestCase):
+    def test_slice1(self):
+        f = Slice(0, 2)
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], [1, 2])
+
+
 class SteadyStateTest(unittest.TestCase):
     def test_one_invocation(self):
         f = SteadyState(k=5, threshold=0.3)
