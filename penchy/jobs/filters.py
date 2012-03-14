@@ -361,6 +361,17 @@ class DacapoHarness(Filter):
     """
     Filters output of a DaCapo Harness.
 
+    Example::
+
+        # This example show only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        jvm = jvms.JVM('...')
+        jvm.workload = workloads.Dacapo('...')
+        dacapo = filters.DacapoHarness()
+
+        composition.flow = [jvm.workload >> dacapo >> "times" >> ...
+
+
     Inputs:
 
     - ``stderr``:  List of Paths to stderror output files
