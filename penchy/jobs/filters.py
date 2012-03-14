@@ -447,6 +447,16 @@ class Send(SystemFilter):
 class Receive(SystemFilter):
     """
     Makes received data available for the serverside pipeline.
+    Typically a :class:`~penchy.jobs.filters.Merge` or
+    :class:`~penchy.jobs.filters.Extract` filter follow the
+    Recieve filter.
+
+    Example::
+
+        # This example show only the relevant parts.
+        job = Job(compositions=...,
+                  server_flow=[filters.Receive() >> ...]
+                  )
 
     Inputs:
 
