@@ -964,7 +964,7 @@ class Save(SystemFilter):
             node_setting = kwargs[':environment:']['current_composition'].node_setting
             self.target_path = os.path.join(node_setting.path, self.target_path)
         log.debug('Save to "{0}"'.format(os.path.abspath(self.target_path)))
-        with open(self.target_path, 'w') as f:
+        with open(self.target_path, 'wb') as f:
             write(f, kwargs['data'])
 
 
