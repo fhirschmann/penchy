@@ -14,7 +14,7 @@ composition = SystemComposition(jvm, node)
 w = workloads.ScalaBench('dummy')
 jvm.workload = w
 
-read = filters.Read()
+read = filters.Read('utf-8')
 dump = filters.Dump(indent=2)
 dump2 = filters.Dump(include_complete_job=True, indent=2)
 

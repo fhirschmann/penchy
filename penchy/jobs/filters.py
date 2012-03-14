@@ -1017,13 +1017,27 @@ class Read(Filter):
     inputs = Types(('paths', list, path))
     outputs = Types(('data', list, str))
 
+    def __init__(self, encoding=None):
+        """
+        :param encoding: decode files with this encoding (will return unicode
+                         objects when used)
+        :type encoding: str (valid codec name, see codecs module of stdlib)
+        """
+        super(Read, self).__init__()
+        self.encoding = encoding
+        if encoding:
+            self.outputs = Types(('data', list, unicode))
+
     def _run(self, **kwargs):
         paths = kwargs['paths']
         data = []
         for p in paths:
             log.debug('Reading "{0}"'.format(os.path.abspath(p)))
             with open(p, 'rb') as f:
-                data.append(f.read())
+                if self.encoding:
+                    data.append(f.read().decode(self.encoding))
+                else:
+                    data.append(f.read())
         self.out['data'] = data
 
 
