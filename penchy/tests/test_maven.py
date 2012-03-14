@@ -2,7 +2,7 @@ from random import randint
 from tempfile import NamedTemporaryFile
 from xml.etree.ElementTree import ElementTree as ET
 
-from penchy.compat import unittest
+from penchy.compat import unittest, write
 from penchy.maven import *
 
 
@@ -143,7 +143,7 @@ class MavenTest(unittest.TestCase):
 class MavenUtilTest(unittest.TestCase):
     def setUp(self):
         self.tf = NamedTemporaryFile()
-        self.tf.write("""
+        write(self.tf, """
             <settings xmlns="http://maven.apache.org/SETTINGS/1.0.0"
             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
             xsi:schemaLocation="http://maven.apache.org/SETTINGS/1.0.0
