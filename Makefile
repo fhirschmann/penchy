@@ -33,9 +33,9 @@ full-coverage: .coverage
 .DELETE_ON_ERROR:
 .coverage:
 	coverage run -m unittest2 discover -p '*.py' -s penchy/tests -t .
-	coverage run --append bin/penchy -c penchyrc.example --run-locally plans/jobs/dump.job
-	coverage run --append bin/penchy -c penchyrc.example --run-locally plans/jobs/valgrind.job
-	coverage run --append bin/penchy -c penchyrc.example --run-locally plans/jobs/fast_tamiflex.job
+	coverage run --append bin/penchy --skip-apicheck -c penchyrc.example --run-locally plans/jobs/dump.job
+	coverage run --append bin/penchy --skip-apicheck -c penchyrc.example --run-locally plans/jobs/valgrind.job
+	coverage run --append bin/penchy --skip-apicheck -c penchyrc.example --run-locally plans/jobs/fast_tamiflex.job
 
 coverage-upload: coverage
 	chmod -R 755 htmlcov
