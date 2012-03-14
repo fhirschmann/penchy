@@ -632,6 +632,11 @@ class SliceTest(unittest.TestCase):
         f._run(values=[1, 2, 3])
         self.assertEqual(f.out['values'], [1, 2])
 
+    def test_reverse(self):
+        f = Reverse()
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], [3, 2, 1])
+
 
 class SteadyStateTest(unittest.TestCase):
     def test_one_invocation(self):

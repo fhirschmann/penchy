@@ -1531,7 +1531,7 @@ class Slice(Filter):
 
     Outputs:
 
-    - ``values``: a list of values (zipped)
+    - ``values``: a list of values
     """
     inputs = Types(('values', list, object))
     outputs = Types(('values', list, object))
@@ -1544,3 +1544,20 @@ class Slice(Filter):
 
     def _run(self, **kwargs):
         self.out['values'] = kwargs['values'][self.start:self.stop:self.step]
+
+
+class Reverse(Slice):
+    """
+    Reverses a list.
+
+
+    Inputs:
+
+    - ``values``: a list of values
+
+    Outputs:
+
+    - ``values``: a list of values
+    """
+    def __init__(self):
+        super(Reverse, self).__init__(None, None, -1)
