@@ -460,7 +460,7 @@ class ReadTest(unittest.TestCase):
             write(f, s)
             f.flush()
 
-            r = Read()
+            r = Read('utf8')
             r.run(paths=[f.name])
             self.assertListEqual(r.out['data'], [s])
 
