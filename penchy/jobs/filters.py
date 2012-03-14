@@ -59,6 +59,16 @@ class Tamiflex(Filter):
     A filter for the reflection log file of the tamiflex
     play-out-agent.
 
+    Example::
+
+        # This example show only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        jvm = jvms.JVM('...')
+        jvm.tool = tools.Tamiflex()
+        tamiflex = filters.Tamiflex()
+        composition.flow = [jvm.tool >> tamiflex >> 'kind' > ...]
+
+
     Inputs:
 
     - ``reflection_log``: Path to the reflection log file
