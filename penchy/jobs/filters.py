@@ -446,7 +446,7 @@ class Send(SystemFilter):
 
 class Receive(SystemFilter):
     """
-    Makes received data available for the serverside pipeline.
+    Makes sent data available for the serverside pipeline.
     Typically a :class:`~penchy.jobs.filters.Merge` or
     :class:`~penchy.jobs.filters.Extract` filter follow the
     Receive filter.
