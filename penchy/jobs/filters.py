@@ -425,6 +425,14 @@ class Send(SystemFilter):
     """
     Sends all data fed to it to the server.
 
+    Example::
+
+        # This example show only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        send = filters.Send()
+        composition.flow = [... >> ['data1', 'data2'] >> send]
+
+
     Inputs:
 
     - ``:environment:``: see :meth:`Job._build_environment`
