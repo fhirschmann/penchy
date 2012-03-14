@@ -638,6 +638,13 @@ class SliceTest(unittest.TestCase):
         self.assertEqual(f.out['values'], [3, 2, 1])
 
 
+class ReduceTest(unittest.TestCase):
+    def test_reduce(self):
+        f = Reduce(lambda x, y: x + y, 0)
+        f._run(values=[1, 2, 3])
+        self.assertEqual(f.out['values'], 6)
+
+
 class SteadyStateTest(unittest.TestCase):
     def test_one_invocation(self):
         f = SteadyState(k=5, threshold=0.3)

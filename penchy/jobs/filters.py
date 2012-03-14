@@ -1571,3 +1571,25 @@ class Reverse(Slice):
     """
     def __init__(self):
         super(Reverse, self).__init__(None, None, -1)
+
+
+class Reduce(Slice):
+    """
+    Apply function of two arguments cumulatively to the items of `iterable`.
+    """
+    inputs = Types(('values', list, object))
+    outputs = Types(('values', object))
+
+    def __init__(self, function, initializer=None):
+        """
+        :param function: function to apply
+        :type function: function of two arguments
+        :param initializer: if present, placed before the items of the iterable
+                            in the calculation
+        """
+        super(Filter, self).__init__()
+        self.function = function
+        self.initializer = initializer
+
+    def _run(self, **kwargs):
+        self.out['values'] = reduce(self.function, kwargs['values'], self.initializer)
