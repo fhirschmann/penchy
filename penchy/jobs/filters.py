@@ -169,21 +169,20 @@ class HProf(Filter):
             with open(f) as fobj:
                 for line in fobj:
                     if line.startswith(self.start_marker):
+                        # Extract information from the start marker
+                        if self.start_re is not None:
+                            s = self.start_re.search(line)
+                            if s is None:
+                                log.error('Received invalid input:\n{0}'.format(line))
+                                raise WrongInputError('Received invalid input.')
+                            start_value = s.groups()[0]
+                            name = self.names1d[0]
+                            type_ = self.outputs.descriptions[name][-1]
+                            self.out[name].append(type_(start_value))
                         break
                 # We did not break, i.e. no begin marker was found
                 else:
                     raise WrongInputError("Marker {0} not found.".format(self.start_marker))
-
-                # Extract information from the start marker
-                if self.start_re is not None:
-                    s = self.start_re.search(line)
-                    if s is None:
-                        log.error('Received invalid input:\n{0}'.format(line))
-                        raise WrongInputError('Received invalid input.')
-                    start_value = s.groups()[0]
-                    name = self.names1d[0]
-                    type_ = self.outputs.descriptions[name][-1]
-                    self.out[name].append(type_(start_value))
 
                 # Jump over the heading
                 for _ in range(self.skip):
