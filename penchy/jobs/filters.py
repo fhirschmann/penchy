@@ -160,6 +160,9 @@ class HProf(Filter):
                     raise WrongInputError("Marker {0} not found.".format(self.start_marker))
 
                 # Extract information from the start marker
+                # FIXME: this will only be reached if the break above triggered,
+                #        we don't have to search again, also line leaks from the
+                #        loop above
                 if self.start_re is not None:
                     s = self.start_re.search(line)
                     if s is None:
@@ -183,6 +186,7 @@ class HProf(Filter):
                         raise WrongInputError('Received invalid input.')
                     result = self.data_re.match(line).groupdict()
 
+                    # FIXME: This really needs to be documented
                     # Cast and save the extracted values
                     for name in self.names2d:
                         type_ = self.outputs.descriptions[name][-1]
