@@ -1498,7 +1498,7 @@ class Zip(Filter):
     """
     This filter Zips a list of lists.
 
-    If you, for example, pass:
+    If you, for example, pass::
 
         [[1, 2], [3, 4], [5, 6]]
 
@@ -1525,6 +1525,9 @@ class Slice(Filter):
     """
     This filter returns a slice of a list.
 
+    Please consult the Python documentation in order to learn
+    how slicing is done.
+
     Inputs:
 
     - ``values``: a list of values
@@ -1537,6 +1540,14 @@ class Slice(Filter):
     outputs = Types(('values', list, object))
 
     def __init__(self, start=None, stop=None, step=1):
+        """
+        :param start: position to start slice at
+        :type start: int
+        :param stop: position to stop slice at
+        :type stop: int
+        :param step: step to use
+        :type step: int
+        """
         super(Slice, self).__init__()
         self.start = start
         self.stop = stop
@@ -1549,7 +1560,6 @@ class Slice(Filter):
 class Reverse(Slice):
     """
     Reverses a list.
-
 
     Inputs:
 
