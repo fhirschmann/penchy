@@ -1322,28 +1322,6 @@ class CI2Alternatives(Filter):
         self.out['interval'] = (c1, c2)
 
 
-class DropFirst(Filter):
-    """
-    This filter drops the first element of a list.
-
-    For example it can be used to discard the first iteration of a measurement
-    to reach indepedency of the measurements.
-
-    Inputs:
-
-    - ``values``: a list of values
-
-    Outputs:
-
-    - ``values``: a list of values without the first element
-    """
-    inputs = Types(('values', list, object))
-    outputs = Types(('values', list, object))
-
-    def _run(self, **kwargs):
-        self.out['values'] = kwargs['values'][1:]
-
-
 class SteadyState(Filter):
     """
     Determines for each invocation the iteration where steady-state performance is
@@ -1571,6 +1549,25 @@ class Reverse(Slice):
     """
     def __init__(self):
         super(Reverse, self).__init__(None, None, -1)
+
+
+class DropFirst(Slice):
+    """
+    This filter drops the first element of a list.
+
+    For example it can be used to discard the first iteration of a measurement
+    to reach indepedency of the measurements.
+
+    Inputs:
+
+    - ``values``: a list of values
+
+    Outputs:
+
+    - ``values``: a list of values without the first element
+    """
+    def __init__(self):
+        super(DropFirst, self).__init__(1, None)
 
 
 class Reduce(Slice):
