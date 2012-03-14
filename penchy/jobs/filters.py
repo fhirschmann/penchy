@@ -178,7 +178,10 @@ class HProf(Filter):
                             start_value = s.groups()[0]
                             name = self.names1d[0]
                             type_ = self.outputs.descriptions[name][-1]
-                            self.out[name].append(type_(start_value))
+                            value = type_(start_value) \
+                                    if isinstance(type_, HProf._PARSED_TYPES)\
+                                    else start_value
+                            self.out[name].append(value)
                         break
                 # We did not break, i.e. no begin marker was found
                 else:
