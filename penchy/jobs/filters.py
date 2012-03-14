@@ -23,7 +23,7 @@ import operator
 from pprint import pprint
 
 from penchy import __version__
-from penchy.compat import str, path, unicode, try_unicode, write
+from penchy.compat import str, path, unicode, try_unicode, write, reduce
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 import penchy.util as util

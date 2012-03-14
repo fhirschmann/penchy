@@ -23,11 +23,13 @@ if on_python3:  # pragma: no cover
     str = bytes
     from io import StringIO
     from xmlrpc.server import SimpleXMLRPCServer
+    from functools import reduce
 else:
     str = str
     unicode = unicode
     from StringIO import StringIO
     from SimpleXMLRPCServer import SimpleXMLRPCServer
+    reduce = reduce
 
 path = (str, unicode)
 
