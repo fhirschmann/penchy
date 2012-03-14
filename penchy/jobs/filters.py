@@ -111,6 +111,7 @@ class HProf(Filter):
     supports ``groupdict`` and that the resulting keys
     match with the keys in ``outputs``.
     """
+    _PARSED_TYPES = (int, float)
     inputs = Types(('hprof', list, path))
 
     def __init__(self, outputs, start_marker, end_marker, skip, data_re, start_re=None):
@@ -185,7 +186,10 @@ class HProf(Filter):
                     # Cast and save the extracted values
                     for name in self.names2d:
                         type_ = self.outputs.descriptions[name][-1]
-                        data[name].append(type_(result[name]))
+                        value = type_(result[name]) \
+                                if isinstance(type_, HProf._PARSED_TYPES) \
+                                else result[name]
+                        data[name].append(value)
 
                 # We did not break, i.e. no end marker was found
                 else:
