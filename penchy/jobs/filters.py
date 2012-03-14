@@ -117,9 +117,14 @@ class HProf(Filter):
     A filter that abstracts the hprof output and aims
     to make it easy creating new hprof filters.
 
-    It is nessasarry, that the ``data_re`` regular expression
-    supports ``groupdict`` and that the resulting keys
-    match with the keys in ``outputs``.
+    .. note:
+
+        It is nessasarry, that the ``data_re`` regular expression
+        supports ``groupdict`` and that the resulting keys
+        match with the keys in ``outputs``.
+
+        If you want to parse other types than int and float, you
+        have to define them in ``_PARSED_TYPES``.
     """
     _PARSED_TYPES = (int, float)
     inputs = Types(('hprof', list, path))
