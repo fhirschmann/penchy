@@ -619,6 +619,13 @@ class DropFirstTest(unittest.TestCase):
         self.assertEqual(f.out['values'], [2, 3])
 
 
+class ZipTest(unittest.TestCase):
+    def test_valid(self):
+        f = Zip()
+        f._run(values=[[1, 2], [3, 4], [5, 6]])
+        self.assertEqual(f.out['values'], [[1, 3, 5], [2, 4, 6]])
+
+
 class SteadyStateTest(unittest.TestCase):
     def test_one_invocation(self):
         f = SteadyState(k=5, threshold=0.3)

@@ -1492,3 +1492,22 @@ class Normalize(Filter):
 
         if abs(1.0 - sum(self.out['values'])) < self.epsilon:
             log.warn("The normalized sum differes more than {0} from 1.0".format(self.epsilon))
+
+
+class Zip(Filter):
+    """
+    This filter Zips a list of lists
+
+    Inputs:
+
+    - ``values``: a list of values
+
+    Outputs:
+
+    - ``values``: a list of values (zipped)
+    """
+    inputs = Types(('values', list, list, object))
+    outputs = Types(('values', list, list, object))
+
+    def _run(self, **kwargs):
+        self.out['values'] = [list(l) for l in zip(*kwargs['values'])]
