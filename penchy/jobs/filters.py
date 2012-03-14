@@ -1496,7 +1496,7 @@ class Normalize(Filter):
 
 class Zip(Filter):
     """
-    This filter Zips a list of lists.
+    Zips a list of lists.
 
     If you, for example, pass::
 
@@ -1523,7 +1523,7 @@ class Zip(Filter):
 
 class Slice(Filter):
     """
-    This filter returns a slice of a list.
+    Returns a slice of a list.
 
     Please consult the Python documentation in order to learn
     how slicing is done.
