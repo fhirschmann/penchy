@@ -1496,7 +1496,15 @@ class Normalize(Filter):
 
 class Zip(Filter):
     """
-    This filter Zips a list of lists
+    This filter Zips a list of lists.
+
+    If you, for example, pass:
+
+        [[1, 2], [3, 4], [5, 6]]
+
+    to this filter, the output will be::
+
+        [[1, 3, 5], [2, 4, 6]]
 
     Inputs:
 
