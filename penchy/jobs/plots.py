@@ -22,8 +22,8 @@ log = logging.getLogger(__name__)
 
 if is_server:
     import numpy as np
-    import matplotlib.pyplot as plt
-    import matplotlib.cm as cm
+    from matplotlib import pyplot as plt
+    from matplotlib import cm
 
 
 class Plot(Filter):
