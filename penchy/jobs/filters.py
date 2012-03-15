@@ -179,7 +179,7 @@ class HProf(Filter):
                             name = self.names1d[0]
                             type_ = self.outputs.descriptions[name][-1]
                             value = type_(start_value) \
-                                    if isinstance(type_, HProf._PARSED_TYPES)\
+                                    if type_ in HProf._PARSED_TYPES \
                                     else start_value
                             self.out[name].append(value)
                         break
@@ -205,7 +205,7 @@ class HProf(Filter):
                     for name in self.names2d:
                         type_ = self.outputs.descriptions[name][-1]
                         value = type_(result[name]) \
-                                if isinstance(type_, HProf._PARSED_TYPES) \
+                                if type_ in HProf._PARSED_TYPES \
                                 else result[name]
                         data[name].append(value)
 
