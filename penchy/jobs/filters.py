@@ -1649,7 +1649,7 @@ class Reduce(Slice):
         :param initializer: if present, placed before the items of the iterable
                             in the calculation
         """
-        super(Filter, self).__init__()
+        super(Reduce, self).__init__()
         self.function = function
         self.initializer = initializer
 
