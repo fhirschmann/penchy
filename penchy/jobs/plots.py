@@ -244,12 +244,12 @@ class ScatterPlot(Plot):
     Scatterplot
     """
 
-    def __init__(self, labels=True, shapes=False, colors=False, *arg, **kwarg):
+    def __init__(self, labels=True, markers=False, colors=False, *arg, **kwarg):
         """
         """
         super(ScatterPlot, self).__init__(*arg, **kwarg)
         self.labels = labels
-        self.shapes = shapes
+        self.markers = markers
         self.colors = colors
 
         input_types = [('x', list, (int, float)),
@@ -257,7 +257,7 @@ class ScatterPlot(Plot):
 
         if labels:
             input_types.append(('labels', list, str))
-        if shapes:
+        if markers:
             input_types.append(('shapes', list, str))
         if colors:
             input_types.append(('colors', list, str))
@@ -270,7 +270,7 @@ class ScatterPlot(Plot):
 
         if self.labels:
             labels = kwargs['labels']
-        if self.shapes:
+        if self.markers:
             shapes = kwargs['shapes']
         if self.colors:
             colors = kwargs['colors']
@@ -284,8 +284,9 @@ class ScatterPlot(Plot):
             options = dict()
             if self.colors:
                 options['color'] = colors.pop()
-            if self.shapes:
-                options['marker'] = shapes.pop()
+
+            if self.markers:
+                options['marker'] = markers.pop()
             else:
                 options['marker'] = 'o'
 
