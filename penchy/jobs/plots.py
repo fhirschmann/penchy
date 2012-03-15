@@ -243,22 +243,53 @@ class ScatterPlot(Plot):
     """
     Scatterplot
     """
-    inputs = Types(('x', list, (int, float)),
-                   ('y', list, (int, float)),
-                   ('z', list, str))
 
-    #TODO: allow to draw circles and squares
-    def __init__(self, *arg, **kwarg):
+    def __init__(self, labels=True, shapes=False, colors=False, *arg, **kwarg):
+        """
+        """
         super(ScatterPlot, self).__init__(*arg, **kwarg)
+        self.labels = labels
+        self.shapes = shapes
+        self.colors = colors
+
+        input_types = [('x', list, (int, float)),
+                       ('y', list, (int, float))]
+
+        if labels:
+            input_types.append(('labels', list, str))
+        if shapes:
+            input_types.append(('shapes', list, str))
+        if colors:
+            input_types.append(('colors', list, str))
+
+        self.inputs = Types(*input_types)
 
     def _run(self, **kwargs):
         xs = kwargs['x']
         ys = kwargs['y']
-        zs = kwargs['z']
 
-        for x, y, z in zip(xs, ys, zs):
-            self.plot.text(x, y, z, rotation=-45)
-        self.plot.plot(xs, ys, 'o')
+        if self.labels:
+            labels = kwargs['labels']
+        if self.shapes:
+            shapes = kwargs['shapes']
+        if self.colors:
+            colors = kwargs['colors']
+
+        for x, y in zip(xs, ys):
+            if self.labels:
+                self.plot.text(x, y, labels.pop(), rotation=-45)
+            else:
+                self.plot.text(x, y)
+
+            options = dict()
+            if self.colors:
+                options['color'] = colors.pop()
+            if self.shapes:
+                options['marker'] = shapes.pop()
+            else:
+                options['marker'] = 'o'
+
+            self.plot.plot(x, y, **options)
 
 
 class LinePlot(Plot):
