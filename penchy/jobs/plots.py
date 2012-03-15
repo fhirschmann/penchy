@@ -241,11 +241,38 @@ class BarPlot(Plot):
 
 class ScatterPlot(Plot):
     """
-    Scatterplot
+    This class represents a scatterplot filter. It is possible:
+
+    - to draw a label for each point
+    - to set the color for each point
+    - to set the shape of each point
+
+    Inputs:
+
+    - ``x``: x coordinates of the points
+    - ``y``: y coordinates of the points
+    - ``labels``: list of labels for each point (only avaible if ``labels`` is True)
+    - ``markers``: list of shapes for each point (only avaible if ``markers`` is True)
+    - ``colors``: list of colors for each point (only avaible if ``colors`` is True)
+
+    Valid colors can be obtained from ``matplotlib.colors`` and valid shapes from
+    ``matplotlib.lines.line2D.set_marker``.
+
+    Outputs:
+
+    - ``filename``: Filename of the generated image
     """
 
     def __init__(self, labels=True, markers=False, colors=False, *arg, **kwarg):
         """
+        :param labels: draw labels (default is True)
+        :type labels: bool
+        :param markers: draw different markers (default is False,
+                        thus normal dots are drawn)
+        :type markers: bool
+        :param colors: draw different colors (default is False,
+                       all dots are blue)
+        :type colors: bool
         """
         super(ScatterPlot, self).__init__(*arg, **kwarg)
         self.labels = labels
