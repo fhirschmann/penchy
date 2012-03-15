@@ -40,6 +40,6 @@ plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg',
 
 job = Job(compositions=compositions,
           server_flow=[
-              merge >> [('bench', 'z'), ('sum', 'x'), ('total', 'y')] >> plot
+              merge >> [('bench', 'labels'), ('sum', 'x'), ('total', 'y')] >> plot
           ],
           invocations = 1)
