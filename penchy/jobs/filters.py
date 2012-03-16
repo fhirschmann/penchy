@@ -1694,16 +1694,18 @@ class Composer(object):
     Example::
 
        dacapo = DacapoHarness()
-       c = Composer(dacapo, ('times', 'values'), DropFirst,
-                    Dropfirst, (Reduce, lambda x, y: x + sum(y), 10))
+       c = Composer(dacapo, ('times', 'values'),
+                    DropFirst,
+                    (Slice, {'step' : 2}),
+                    (Reduce, lambda x, y: x + sum(y), 10))
 
     Where dacapo is accessible from the outside always as the same object, the
     other filters will not be instantiated until they are part of a pipeline.
     ``(Reduce, lambda x, y: x + sum(y), 10)`` will be instantiated as
     ``(Reduce, lambda x, y: x + sum(y), 10)``.
 
-    So this pipeline part will drop the first 2 invocations and then sum the
-    times of the remaining ones up.
+    So this pipeline part will drop the first invocation and then sum the
+    times of every second remaining invocation up.
     """
     def __init__(self, *args):
         """
@@ -1731,12 +1733,19 @@ class Composer(object):
           :meth:`~penchy.jobs.dependency.Pipeline.__rshift__`)
         - a Filter class (which will be instantiated)
         - a tuple/list with a filter as its first element, this filter will be
-          instantiated with the rest of the sequence as its arguments
+          instantiated with the rest of the sequence as its arguments. If the
+          last argument is a dict it will be treated as keyword arguments for
+          the filter
         """
         if isinstance(part, (tuple, list)) and isinstance(part[0], type) \
            and issubclass(part[0], Filter):
             filter_, args = part[0], part[1:]
-            element = filter_(*args)
+            if isinstance(args[-1], dict):
+                kwargs = args[-1]
+                args = args[:-1]
+            else:
+                kwargs = {}
+            element = filter_(*args, **kwargs)
         elif isinstance(part, type) and issubclass(part, Filter):
             element = part()
         else:
