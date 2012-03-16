@@ -124,7 +124,10 @@ class HProf(Filter):
         match with the keys in ``outputs``.
 
         If you want to parse other types than int and float, you
-        have to define them in ``_PARSED_TYPES``.
+        have to define them in ``_PARSED_TYPES``. The filter tries
+        to convert the parsed data into these types. It is nessasary
+        that the type constructor has only one parameter and supports
+        conversion from ``string`` to itself.
     """
     _PARSED_TYPES = (int, float)
     inputs = Types(('hprof', list, path))
@@ -200,7 +203,6 @@ class HProf(Filter):
                         raise WrongInputError('Received invalid input.')
                     result = self.data_re.match(line).groupdict()
 
-                    # FIXME: This really needs to be documented
                     # Cast and save the extracted values
                     for name in self.names2d:
                         type_ = self.outputs.descriptions[name][-1]
