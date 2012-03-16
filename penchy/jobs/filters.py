@@ -61,7 +61,7 @@ class Tamiflex(Filter):
 
     Example::
 
-        # This example show only the relevant parts.
+        # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
         jvm = jvms.JVM('...')
         jvm.tool = tools.Tamiflex()
@@ -362,7 +362,7 @@ class DacapoHarness(Filter):
 
     Example::
 
-        # This example show only the relevant parts.
+        # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
         jvm = jvms.JVM('...')
         jvm.workload = workloads.Dacapo('...')
@@ -426,7 +426,7 @@ class Send(SystemFilter):
 
     Example::
 
-        # This example show only the relevant parts.
+        # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
         send = filters.Send()
         composition.flow = [... >> ['data1', 'data2'] >> send]
@@ -452,7 +452,7 @@ class Receive(SystemFilter):
 
     Example::
 
-        # This example show only the relevant parts.
+        # This example shows only the relevant parts.
         job = Job(compositions=...,
                   server_flow=[filters.Receive() >> ...]
                   )
