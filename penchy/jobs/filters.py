@@ -24,6 +24,7 @@ from pprint import pprint
 
 from penchy import __version__
 from penchy.compat import str, path, unicode, try_unicode, write, reduce
+from penchy.jobs.dependency import Pipeline
 from penchy.jobs.elements import Filter, SystemFilter
 from penchy.jobs.typecheck import Types, TypeCheckError
 import penchy.util as util
@@ -1684,3 +1685,60 @@ class Reduce(Slice):
 
     def _run(self, **kwargs):
         self.out['values'] = reduce(self.function, kwargs['values'], self.initializer)
+
+
+class Composer(object):
+    """
+    Compose the elements passed to it.
+
+    Example::
+
+       dacapo = DacapoHarness()
+       c = Composer(dacapo, ('times', 'values'), DropFirst,
+                    Dropfirst, (Reduce, lambda x, y: x + sum(y), 10))
+
+    Where dacapo is accessible from the outside always as the same object, the
+    other filters will not be instantiated until they are part of a pipeline.
+    ``(Reduce, lambda x, y: x + sum(y), 10)`` will be instantiated as
+    ``(Reduce, lambda x, y: x + sum(y), 10)``.
+
+    So this pipeline part will drop the first 2 invocations and then sum the
+    times of the remaining ones up.
+    """
+    def __init__(self, *args):
+        """
+        :param args: the arguments to compose
+        :type args: see :class:`~penchy.jobs.filters.Composer._build_part`
+        """
+        self.parts = args
+
+    def __rshift__(self, other):
+        parts = [self._build_part(part) for part in self.parts]
+        first, rest = parts[0], parts[1:]
+        pipeline = Pipeline(first)
+        for part in rest:
+            pipeline >>= part
+        return pipeline >> other
+
+    @staticmethod
+    def _build_part(part):
+        """
+        Build the passed part depending on its type.
+
+        part can be
+
+        - everything the :class:`~penchy.jobs.dependency.Pipeline` accepts (see
+          :meth:`~penchy.jobs.dependency.Pipeline.__rshift__`)
+        - a Filter class (which will be instanciated)
+        - a tuple/list with a filter as its first element, this filter will be
+          instanciated with the rest of the sequence as its arguments
+        """
+        if isinstance(part, (tuple, list)) and isinstance(part[0], type) \
+           and issubclass(part[0], Filter):
+            filter_, args = part[0], part[1:]
+            element = filter_(*args)
+        elif isinstance(part, type) and issubclass(part, Filter):
+            element = part()
+        else:
+            element = part
+        return element
