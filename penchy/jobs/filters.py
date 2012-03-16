@@ -223,7 +223,7 @@ class HProfCpuTimes(HProf):
     """
     Filters cpu=times output of hprof.
 
-    Example:
+    Example::
 
         # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
@@ -277,7 +277,7 @@ class HProfCpuSamples(HProf):
     """
     Filters cpu=samples output of hprof.
 
-    Example:
+    Example::
 
         # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
@@ -331,7 +331,7 @@ class HProfHeapSites(HProf):
     """
     Filters heap=sites output of hprof.
 
-    Example:
+    Example::
 
         # This example shows only the relevant parts.
         # Assume ``composition`` is a valid SystemComposition.
