@@ -336,7 +336,7 @@ class HProfHeapSites(HProf):
         jvm = jvms.JVM('...')
         jvm.tool = tools.HProf('heap=sites')
         hprof = filters.HProfHeapSites()
-        composition.flow = [jvm.tool >> hprof >> "total" >> ...]
+        composition.flow = [jvm.tool >> hprof >> "rank" >> ...]
 
     Inputs:
 
