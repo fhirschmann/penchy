@@ -219,7 +219,16 @@ class HProf(Filter):
 
 class HProfCpuTimes(HProf):
     """
-    Filters cpu=times output of hprof
+    Filters cpu=times output of hprof.
+
+    Example:
+
+        # This example shows only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        jvm = jvms.JVM('...')
+        jvm.tool = tools.HProf('cpu=times')
+        hprof = filters.HProfCpuTimes()
+        composition.flow = [jvm.tool >> hprof >> "total" >> ...]
 
     Inputs:
 
@@ -264,7 +273,16 @@ class HProfCpuTimes(HProf):
 
 class HProfCpuSamples(HProf):
     """
-    Filters cpu=samples output of hprof
+    Filters cpu=samples output of hprof.
+
+    Example:
+
+        # This example shows only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        jvm = jvms.JVM('...')
+        jvm.tool = tools.HProf('cpu=samples')
+        hprof = filters.HProfCpuSamples()
+        composition.flow = [jvm.tool >> hprof >> "total" >> ...]
 
     Inputs:
 
@@ -309,7 +327,16 @@ class HProfCpuSamples(HProf):
 
 class HProfHeapSites(HProf):
     """
-    Filters heap=sites output of hprof
+    Filters heap=sites output of hprof.
+
+    Example:
+
+        # This example shows only the relevant parts.
+        # Assume ``composition`` is a valid SystemComposition.
+        jvm = jvms.JVM('...')
+        jvm.tool = tools.HProf('heap=sites')
+        hprof = filters.HProfHeapSites()
+        composition.flow = [jvm.tool >> hprof >> "total" >> ...]
 
     Inputs:
 
