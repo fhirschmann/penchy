@@ -713,3 +713,35 @@ class NormalizeTest(unittest.TestCase):
         f = Normalize()
         f._run(values=[67, 22, 7, 5, 3, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], norm=126)
         self.assertAlmostEqual(1.0 - sum(f.out['values']), 0.0)
+
+
+class ComposerTest(unittest.TestCase):
+    def setUp(self):
+        self.dacapo = DacapoHarness()
+        self.composed = Composer(self.dacapo, Print, 'a', Print, ('a', 'b'))
+        self.composed2 = Composer(self.dacapo, (Slice, 42, {'step' : 2}),
+                                  'a', Print, ('a', 'b'))
+
+    @staticmethod
+    def elements_of(pipeline):
+        elements = set()
+        for edge in pipeline.edges:
+            elements.add(edge.source)
+            elements.add(edge.sink)
+        return elements
+
+    def test_unchanged_instance(self):
+        self.assertIn(self.dacapo, self.elements_of(self.composed >> Print()))
+
+    def test_new_generated_instances(self):
+        self.assertNotEqual(id((self.composed >> Print()).edges[0].sink),
+                            id((self.composed >> Print()).edges[0].sink))
+
+    def test_generation_with_arguments(self):
+        slice = (self.composed2 >> Print()).edges[0].sink
+        self.assertEqual(slice.start, 42)
+        self.assertEqual(slice.step, 2)
+
+    def test_passing_of_maps(self):
+        maps = [edge.map_ for edge in (self.composed >> Print()).edges]
+        self.assertItemsEqual([None, [('a', 'a')], [('a', 'b')]], maps)
