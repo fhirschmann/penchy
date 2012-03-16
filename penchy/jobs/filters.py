@@ -1691,6 +1691,9 @@ class Composer(object):
     """
     Compose the elements passed to it.
 
+    The arguments have to be passed similar to building the flow. Instead of
+    chaining them with ``>>`` you them as arguments.
+
     Example::
 
        dacapo = DacapoHarness()
@@ -1713,12 +1716,12 @@ class Composer(object):
     So this pipeline part will drop the first invocation and then sum the
     times of every second remaining invocation up.
     """
-    def __init__(self, *args):
+    def __init__(self, *elements):
         """
-        :param args: the arguments to compose
-        :type args: see :class:`~penchy.jobs.filters.Composer._build_part`
+        :param elements: the elements to compose
+        :type elements: see :class:`~penchy.jobs.filters.Composer._build_part`
         """
-        self.parts = args
+        self.parts = elements
 
     def __rshift__(self, other):
         parts = [self._build_part(part) for part in self.parts]
