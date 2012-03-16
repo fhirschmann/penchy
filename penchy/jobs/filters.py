@@ -1725,13 +1725,13 @@ class Composer(object):
         """
         Build the passed part depending on its type.
 
-        part can be
+        ``part`` can be
 
         - everything the :class:`~penchy.jobs.dependency.Pipeline` accepts (see
           :meth:`~penchy.jobs.dependency.Pipeline.__rshift__`)
-        - a Filter class (which will be instanciated)
+        - a Filter class (which will be instantiated)
         - a tuple/list with a filter as its first element, this filter will be
-          instanciated with the rest of the sequence as its arguments
+          instantiated with the rest of the sequence as its arguments
         """
         if isinstance(part, (tuple, list)) and isinstance(part[0], type) \
            and issubclass(part[0], Filter):
