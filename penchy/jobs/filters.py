@@ -118,6 +118,13 @@ class HProf(Filter):
     A filter that abstracts the hprof output and aims
     to make it easy creating new hprof filters.
 
+    This filter is used to implement::
+
+    - :class:`~penchy.jobs.filters.HProfCpuTimes`
+    - :class:`~penchy.jobs.filters.HProfCpuSamples`
+    - :class:`~penchy.jobs.filters.HProfHeapSites`
+
+
     .. note:
 
         It is nessasarry, that the ``data_re`` regular expression
