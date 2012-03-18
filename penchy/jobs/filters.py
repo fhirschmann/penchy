@@ -124,6 +124,9 @@ class HProf(Filter):
     - :class:`~penchy.jobs.filters.HProfCpuSamples`
     - :class:`~penchy.jobs.filters.HProfHeapSites`
 
+    This filter is not intended for direct usage.
+    Use :class:`HProfCpuSamples`, :class:`HProfCpuTimes` or
+    :class:`HProfHeapSites`.
 
     .. note:
 
@@ -133,7 +136,7 @@ class HProf(Filter):
 
         If you want to parse other types than int and float, you
         have to define them in ``_PARSED_TYPES``. The filter tries
-        to convert the parsed data into these types. It is nessasary
+        to convert the parsed data into these types. It is necessary
         that the type constructor has only one parameter and supports
         conversion from ``string`` to itself.
 
