@@ -328,7 +328,16 @@ class Job(object):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
                 kwargs[':environment:'] = self._build_environment()
-            sink.run(**kwargs)
+            try:
+                sink.run(**kwargs)
+            except TypeCheckError:
+                log.error('Type check failed on component {0} and arguments {1}'
+                          .format(sink.__class__.__name__, kwargs))
+                raise
+            except WrongInputError:
+                log.error('Run failed on component {0} and arguments {1}'
+                          .format(sink.__class__.__name__, kwargs))
+                raise
 
         # reset state of filters for running multiple configurations
         composition._reset()
