@@ -593,6 +593,11 @@ class StatisticRuntimeEvaluation(Evaluation):
     """
     Filter to evaluate runtime statistically.
 
+    Example::
+
+        composition.flow = [... DacapoHarness() >> 'times' >>
+                             StatisticRuntimeEvaluation() >> ...]
+
     Inputs:
 
     - ``times``: list of invocations of iterations of
