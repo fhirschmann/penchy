@@ -882,6 +882,11 @@ class Map(Filter):
     The applied filter needs exactly one in- and output. If
     the filter has more than one in- and output, it is possible
     to pick one with ``finput`` and ``foutput``.
+
+    Example::
+
+        # Computes the means of all lists of numbers in a given list.
+        means = filters.Map(filters.Mean)
     """
 
     def __init__(self, filter_, input='values', output='values', finput=None,
