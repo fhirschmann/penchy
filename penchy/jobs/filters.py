@@ -366,7 +366,7 @@ class HProfHeapSites(HProf):
     - ``live_objs``: TODO
     - ``alloc_bytes``: TODO
     - ``alloc_objs``: TODO
-    - ``trace``: TODO
+    - ``trace``: stack trace number
     - ``class``: class name
     """
     outputs = Types(('rank', list, list, int),
