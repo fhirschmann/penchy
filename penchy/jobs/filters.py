@@ -539,6 +539,14 @@ class Evaluation(Filter):
     A Filter that allows to use an arbitrary function as a filter (i.e.
     makes a function act as a filter).
 
+    Example::
+
+        multiplication = Evaluation(lambda n m: {'product': n * m},
+                                    Types(('n', (int, float)),
+                                          ('m', (int, float))),
+                                    Types(('product', (int, float)))
+                                    )
+
     .. warning::
 
         You should set ``inputs`` and ``outputs`` or no checking will take place.
