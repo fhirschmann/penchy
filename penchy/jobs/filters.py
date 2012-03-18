@@ -1556,9 +1556,8 @@ class Accumulate(Filter):
 
 class Normalize(Filter):
     """
-    Normalizes ``numbers`` according to a given number ``n``.
+    Normalizes ``numbers`` according to a given number ``norm``.
 
-    FIXME: Better names for inputs
     Inputs:
 
     - ``values``: a list of numbers
