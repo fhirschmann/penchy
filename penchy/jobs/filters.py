@@ -1053,7 +1053,7 @@ class Save(SystemFilter):
 
     Inputs:
 
-    - ``data``: data to save (encoded)  # TODO: cofi
+    - ``data``: data to save (encoded, will be utf8 encoded if not encoded)
     """
     inputs = Types(('data', (str, unicode)))
 
