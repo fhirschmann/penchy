@@ -170,7 +170,8 @@ class HProf(Filter):
         # Names of 1 dimensional outputs
         self.names1d = [k for k, d in self.outputs.descriptions.items() if len(d) == 2]
         if len(self.names1d) > 1:
-            raise ValueError("The current implementation only allows one 1 dimensional output")
+            raise ValueError("The current implementation only allows one one-dimensional"
+                             " filter output")
 
         # Names of 2 dimensional outputs
         self.names2d = [k for k, d in self.outputs.descriptions.items() if len(d) == 3]
