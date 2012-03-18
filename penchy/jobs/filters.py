@@ -127,7 +127,7 @@ class HProf(Filter):
 
     .. note:
 
-        It is nessasarry, that the ``data_re`` regular expression
+        It is necessary, that the ``data_re`` regular expression
         supports ``groupdict`` and that the resulting keys
         match with the keys in ``outputs``.
 
