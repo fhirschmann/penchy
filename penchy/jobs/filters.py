@@ -1733,7 +1733,7 @@ class Composer(object):
     Compose the elements passed to it.
 
     The arguments have to be passed similar to building the flow. Instead of
-    chaining them with ``>>`` you them as arguments.
+    chaining them with ``>>`` you pass them as arguments.
 
     Example::
 
