@@ -1700,7 +1700,15 @@ class DropFirst(Slice):
 
 class Reduce(Slice):
     """
-    Apply function of two arguments cumulatively to the items of `iterable`.
+    Apply a function of two arguments cumulatively to the items of ``iterable``.
+
+    Inputs:
+
+    - ``values``: a list of objects
+
+    Outputs:
+
+    - ``values``: the resulting object
     """
     inputs = Types(('values', list, object))
     outputs = Types(('values', object))
