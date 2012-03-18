@@ -136,6 +136,10 @@ class HProf(Filter):
         to convert the parsed data into these types. It is nessasary
         that the type constructor has only one parameter and supports
         conversion from ``string`` to itself.
+
+    .. note:
+
+        The current implementation allows only one one-dimensional filter output.
     """
     _PARSED_TYPES = (int, float)
     inputs = Types(('hprof', list, path))
