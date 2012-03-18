@@ -544,11 +544,12 @@ class Evaluation(Filter):
 
     Example::
 
+        # a multiplication filter that accepts ints and floats and returns ints
+        # or floats
         multiplication = Evaluation(lambda n m: {'product': n * m},
                                     Types(('n', (int, float)),
                                           ('m', (int, float))),
-                                    Types(('product', (int, float)))
-                                    )
+                                    Types(('product', (int, float))))
 
     .. warning::
 
