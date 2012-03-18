@@ -257,7 +257,7 @@ class HProfCpuTimes(HProf):
 
     _TOTAL_RE = re.compile('total = (\d+)')
     _DATA_RE = re.compile("""
-       \s+(?P<rank>\d+)
+       \s*(?P<rank>\d+)
        \s+(?P<selftime>\d+\.\d{2})%
        \s+(?P<accum>\d+\.\d{2})%
        \s+(?P<count>\d+)
