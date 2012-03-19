@@ -362,13 +362,15 @@ class HProfHeapSites(HProf):
 
     Outputs:
 
-    - ``rank``: Rank of the method
+    - ``rank``: Rank of the object
     - ``self``: space at a particular site (%)
     - ``accum``: total space at a particular site (%)
-    - ``live_bytes``: TODO
-    - ``live_objs``: TODO
-    - ``alloc_bytes``: TODO
-    - ``alloc_objs``: TODO
+    - ``live_bytes``: number of bytes that are allocated but
+                      not yet garbage collected at the given site
+    - ``live_objs``: number of objects that are alloctated but
+                     not yet garbage collected at the given site
+    - ``alloc_bytes``: number of allocated bytes at the given site
+    - ``alloc_objs``: number of allocated objects at the given site
     - ``trace``: stack trace number
     - ``class``: class name
     """
