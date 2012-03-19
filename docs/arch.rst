@@ -73,7 +73,7 @@ Every element (not just :class:`~penchy.jobs.elements.PipelineElement`) has
 support for hooks, that provide methods for ``setup`` and ``teardown`` methods.
 The execution of ``run`` is surrounded by those two, i.e. ``setup`` is executed
 at the beginning of ``run``, and ``teardown`` at the end.
-Tools and Workloads are not run, but they have hooks nevertheless.
+Tools and Workloads are not run [#]_, but they have hooks nevertheless.
 Those hooks are executed when their associated :class:`~penchy.jobs.jvms.JVM` is
 run.
 
@@ -175,3 +175,6 @@ times within a single job.
 
 .. [#] (e.g. a object is seen as a file if it has the attributes and methods of
        a file, not only if it is a subclass of file).
+
+.. [#] They are part of the JVM configuration and their hooks are executed by
+       the respective JVM.
