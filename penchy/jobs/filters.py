@@ -1803,3 +1803,53 @@ class Composer(object):
         else:
             element = part
         return element
+
+
+class Export(Filter):
+    """
+    Exports the given data as a tab-separated file.
+
+    Inputs:
+
+    - ``values``: the values to export
+
+    No outputs.
+    """
+
+    inputs = Types(('values', list, object))
+
+    def __init__(self, filename, heading, functions=None):
+        """
+        :param filename: the filename in which the export is saved
+        :type filename: path
+        :param heading: the frist row (heading) of the exported file
+        :type heading: list string
+        :param functions: functions that map descriptions to the value positions
+        :type functions: list func
+        """
+        self.filename = filename
+        self.heading = heading
+        self.functions = functions
+
+    def _run(self, **kwargs):
+        values = kwargs['values']
+
+        if self.functions:
+            if util.depth(values) != len(self.functions):
+                raise ValueError("Number of levels in the values does not "
+                                 "match with the number of functions.")
+        else:
+            self.functions = [id] * util.depth(values)
+
+        with open(self.filename, 'wb') as f:
+            writer = csv.writer(f, delimiter='\t')
+            writer.writerow(self.heading)
+            self._export(writer, values, self.functions, [])
+
+    def _export(self, writer, values, functions, accum):
+        if isinstance(values, list):
+            for i, v in enumerate(values):
+                self._export(writer, v, functions[1:],
+                        accum + [functions[0](i)])
+        else:
+            writer.writerow(accum + [values])

@@ -745,3 +745,10 @@ class ComposerTest(unittest.TestCase):
     def test_passing_of_maps(self):
         maps = [edge.map_ for edge in (self.composed >> Print()).edges]
         self.assertItemsEqual([None, [('a', 'a')], [('a', 'b')]], maps)
+
+
+class ExportTest(unittest.TestCase):
+    def test_simle(self):
+        f = Export('/tmp/export', ['test1', 'test2', 'values'],
+                   [lambda x: ['v1', 'v2'][x], lambda x: ['z1', 'z2'][x]])
+        f._run(values=[[1, 2], [3, 4]])
