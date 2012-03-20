@@ -1836,14 +1836,14 @@ class Export(Filter):
         depth = util.depth(values)
 
         if self.functions:
-            if (depth < len(self.functions) or
-                depth > len(self.functions) + 1):
+            if (depth != len(self.functions) and
+                depth + 1 != len(self.functions)):
                 raise ValueError("Number of levels in the values does not "
                                  "match with the number of functions.")
             if depth == len(self.functions):
-                self.functions.append(id)
+                self.functions.append(lambda x: x)
         else:
-            self.functions = [id] * (depth + 1)
+            self.functions = [lambda x: x] * (depth + 1)
 
         with open(self.filename, 'wb') as f:
             writer = csv.writer(f, delimiter='\t')
