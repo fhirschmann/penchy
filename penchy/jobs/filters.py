@@ -1833,13 +1833,17 @@ class Export(Filter):
 
     def _run(self, **kwargs):
         values = kwargs['values']
+        depth = util.depth(values)
 
         if self.functions:
-            if util.depth(values) != len(self.functions):
+            if (depth < len(self.functions) or
+                depth > len(self.functions) + 1):
                 raise ValueError("Number of levels in the values does not "
                                  "match with the number of functions.")
+            if depth == len(self.functions):
+                self.functions.append(id)
         else:
-            self.functions = [id] * util.depth(values)
+            self.functions = [id] * (depth + 1)
 
         with open(self.filename, 'wb') as f:
             writer = csv.writer(f, delimiter='\t')
@@ -1852,4 +1856,4 @@ class Export(Filter):
                 self._export(writer, v, functions[1:],
                         accum + [functions[0](i)])
         else:
-            writer.writerow(accum + [values])
+            writer.writerow(accum + [functions[0](values)])
