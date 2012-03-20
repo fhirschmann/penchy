@@ -328,6 +328,9 @@ class Job(object):
             kwargs = build_keys(group)
             if isinstance(sink, SystemFilter):
                 kwargs[':environment:'] = self._build_environment()
+            log.debug('Passing this input to {0}:\n{1}'
+                      .format(sink.__class__.__name__,
+                              kwargs))
             try:
                 sink.run(**kwargs)
             except TypeCheckError:
@@ -338,6 +341,8 @@ class Job(object):
                 log.error('Run failed on component {0} and arguments {1}'
                           .format(sink.__class__.__name__, kwargs))
                 raise
+            log.debug('{0} transformed input to:\n{1}'
+                      .format(sink.__class__.__name__, sink.out))
 
         # reset state of filters for running multiple configurations
         composition._reset()
