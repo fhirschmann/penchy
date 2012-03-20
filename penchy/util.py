@@ -228,15 +228,18 @@ def die(msg):
 
 def depth(l):
     """
-    Computes the depth of a nested list
+    Computes the depth of a nested balanced list.
+    Raises ``ValueError`` if the lists are not
+    balanced.
 
     :param l: the nested list
     :rtype: int
+    :raises: ValueError
     """
     if isinstance(l, list):
         depths = map(depth, l)
         if min(depths) != max(depths):
-            log.warning("Lists are not balanced")
+            raise ValueError("Lists are not balanced.")
         return max(depths) + 1
     else:
         return 0
