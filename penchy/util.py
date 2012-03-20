@@ -224,3 +224,19 @@ def die(msg):
     """
     print(msg, file=sys.stderr)
     sys.exit(1)
+
+
+def depth(l):
+    """
+    Computes the depth of a nested list
+
+    :param l: the nested list
+    :rtype: int
+    """
+    if isinstance(l, list):
+        depths = map(depth, l)
+        if min(depths) != max(depths):
+            log.warning("Lists are not balanced")
+        return max(depths) + 1
+    else:
+        return 0
