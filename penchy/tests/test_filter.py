@@ -750,5 +750,11 @@ class ComposerTest(unittest.TestCase):
 class ExportTest(unittest.TestCase):
     def test_simle(self):
         f = Export('/tmp/export', ['test1', 'test2', 'values'],
-                   [lambda x: ['v1', 'v2'][x], lambda x: ['z1', 'z2'][x]])
+                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         f._run(values=[[1, 2], [3, 4]])
+
+    def test_unbalanced_values(self):
+        f = Export('/tmp/export', ['test1', 'test2', 'values'],
+                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
+        with self.assertRaises(ValueError):
+            f._run(values=[[1, [2]], [3, 4]])
