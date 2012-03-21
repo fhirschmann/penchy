@@ -1,6 +1,7 @@
 import itertools
 import json
 import os
+import tempfile
 from numpy import average, std
 from numpy.random import random_integers, random_sample
 from tempfile import NamedTemporaryFile
@@ -748,8 +749,11 @@ class ComposerTest(unittest.TestCase):
 
 
 class ExportTest(unittest.TestCase):
+    def setUp(self):
+        self.tempfile = tempfile.mkstemp()[1]
+
     def test_simple(self):
-        f = Export('/tmp/export', ['test1', 'test2', 'values'],
+        f = Export(self.tempfile, ['test1', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         f._run(values=[[1, 2], [3, 4]])
         expected = "test1\ttest2\tvalues\r\n" \
@@ -757,14 +761,14 @@ class ExportTest(unittest.TestCase):
             "v1\tz2\t2\r\n" \
             "v2\tz1\t3\r\n" \
             "v2\tz2\t4\r\n"
-        actual = open('/tmp/export').read()
+        actual = open(self.tempfile).read()
         try:
             self.assertMultiLineEqual(actual, expected)
         finally:
-            os.remove('/tmp/export')
+            os.remove(self.tempfile)
 
     def test_function_for_value(self):
-        f = Export('/tmp/export', ['test1', 'test2', 'values'],
+        f = Export(self.tempfile, ['test1', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__],
                     lambda x: "small" if x < 2 else "big")
         f._run(values=[[1, 2], [3, 4]])
@@ -773,40 +777,40 @@ class ExportTest(unittest.TestCase):
             "v1\tz2\tbig\r\n" \
             "v2\tz1\tbig\r\n" \
             "v2\tz2\tbig\r\n"
-        actual = open('/tmp/export').read()
+        actual = open(self.tempfile).read()
         try:
             self.assertMultiLineEqual(actual, expected)
         finally:
-            os.remove('/tmp/export')
+            os.remove(self.tempfile)
 
     def test_without_functions(self):
-        f = Export('/tmp/export', ['test1', 'test2', 'values'])
+        f = Export(self.tempfile, ['test1', 'test2', 'values'])
         f._run(values=[[1, 2], [3, 4]])
         expected = "test1\ttest2\tvalues\r\n" \
             "0\t0\t1\r\n" \
             "0\t1\t2\r\n" \
             "1\t0\t3\r\n" \
             "1\t1\t4\r\n"
-        actual = open('/tmp/export').read()
+        actual = open(self.tempfile).read()
         try:
             self.assertMultiLineEqual(actual, expected)
         finally:
-            os.remove('/tmp/export')
+            os.remove(self.tempfile)
 
     def test_unbalanced_values(self):
-        f = Export('/tmp/export', ['test1', 'test2', 'values'],
+        f = Export(self.tempfile, ['test1', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
             f._run(values=[[1, [2]], [3, 4]])
 
     def test_too_depth_values(self):
-        f = Export('/tmp/export', ['test', 'test2', 'values'],
+        f = Export(self.tempfile, ['test', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
             f._run(values=[[[1, 2], [2, 3]], [[3, 4], [4, 5]]])
 
     def test_too_shallow_values(self):
-        f = Export('/tmp/export', ['test', 'test2', 'values'],
+        f = Export(self.tempfile, ['test', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
             f._run(values=[1, 2])
