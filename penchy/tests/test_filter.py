@@ -8,7 +8,7 @@ from tempfile import NamedTemporaryFile
 from penchy.compat import unittest, write
 from penchy.jobs.filters import *
 from penchy.jobs.typecheck import Types
-from penchy.util import tempdir
+from penchy.util import tempdir, depth
 from penchy.tests.util import get_json_data, make_system_composition
 
 
@@ -804,3 +804,9 @@ class ExportTest(unittest.TestCase):
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
             f._run(values=[[[1, 2], [2, 3]], [[3, 4], [4, 5]]])
+
+    def test_too_shallow_values(self):
+        f = Export('/tmp/export', ['test', 'test2', 'values'],
+                   [['v1', 'v2'].__getitem__, lambda x: x])
+        with self.assertRaises(ValueError):
+            f._run(values=1)
