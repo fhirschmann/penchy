@@ -1832,7 +1832,7 @@ class Export(Filter):
 
     inputs = Types(('values', list, object))
 
-    def __init__(self, filename, heading, functions=None):
+    def __init__(self, filename, heading, functions=None, valuefunction=None):
         """
         :param filename: the filename in which the export is saved
         :type filename: path
@@ -1844,17 +1844,19 @@ class Export(Filter):
         self.filename = filename
         self.heading = heading
         self.functions = functions
+        self.valuefunction = valuefunction
 
     def _run(self, **kwargs):
         values = kwargs['values']
         depth = util.depth(values)
 
         if self.functions:
-            if (depth != len(self.functions) and
-                depth + 1 != len(self.functions)):
+            if depth != len(self.functions):
                 raise ValueError("Number of levels in the values does not "
                                  "match with the number of functions.")
-            if depth == len(self.functions):
+            if self.valuefunction:
+                self.functions.append(self.valuefunction)
+            else:
                 self.functions.append(lambda x: x)
         else:
             self.functions = [lambda x: x] * (depth + 1)

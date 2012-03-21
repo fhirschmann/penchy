@@ -765,8 +765,8 @@ class ExportTest(unittest.TestCase):
 
     def test_function_for_value(self):
         f = Export('/tmp/export', ['test1', 'test2', 'values'],
-                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__,
-                    lambda x: "small" if x < 2 else "big"])
+                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__],
+                    lambda x: "small" if x < 2 else "big")
         f._run(values=[[1, 2], [3, 4]])
         expected = "test1\ttest2\tvalues\r\n" \
             "v1\tz1\tsmall\r\n" \
@@ -807,6 +807,6 @@ class ExportTest(unittest.TestCase):
 
     def test_too_shallow_values(self):
         f = Export('/tmp/export', ['test', 'test2', 'values'],
-                   [['v1', 'v2'].__getitem__, lambda x: x])
+                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
-            f._run(values=1)
+            f._run(values=[1, 2])
