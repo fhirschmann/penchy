@@ -1809,6 +1809,20 @@ class Export(Filter):
     """
     Exports the given data as a tab-separated file.
 
+    The list of functions is used in first place to
+    choose meaningful names to associate the values
+    with their dimensions. If you use these functions
+    you have to provide a function for every nesting-level
+    of the ``values`` input list. The functions need to
+    take exactly one parameter and are fed with the current
+    position in the list. Typically such a function would
+    look like::
+
+        ['batik', 'fop'].__getitem__
+
+    If you do not provide a list of funtions the identity
+    function will be used.
+
     Inputs:
 
     - ``values``: the values to export
