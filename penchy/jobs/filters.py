@@ -1824,7 +1824,7 @@ class Export(Filter):
     If you do not provide a list of funtions the identity
     function will be used.
 
-    In addition you can pass a valuefunction with is fed
+    In addition you can pass a valuefunction which is fed
     with the concrete values. This is useful if you are
     not interessed in the plain values, but rather in some
     sort of abstraction. Such a function could look like::
