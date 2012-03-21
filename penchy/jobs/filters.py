@@ -6,6 +6,7 @@ Outputs are available via the ``out`` attribute.
 
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
  .. moduleauthor:: Pascal Wittmann <mail@pascal-wittmann.de>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
