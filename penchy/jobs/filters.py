@@ -1823,9 +1823,35 @@ class Export(Filter):
     If you do not provide a list of funtions the identity
     function will be used.
 
+    In addition you can pass a valuefunction with is fed
+    with the concrete values. This is useful if you are
+    not interessed in the plain values, but rather in some
+    sort of abstraction. Such a function could look like::
+
+        lambda x: "small" if x < 21 else "big"
+
+    Example:
+
+    Running this Export filter::
+
+        Export('/tmp/export', ['bench', 'iteration', 'times'],
+               [['batik', 'fop'].__getitem__, lambda x: x])
+
+    with the following input::
+
+        [[1, 2], [3, 4]]
+
+    results in a tab-separated file '/tmp/export' with the following content::
+
+        bench    iteration    times
+        batik    0            1
+        batik    1            2
+        fop      0            3
+        fop      1            4
+
     Inputs:
 
-    - ``values``: the values to export
+    - ``values``: the (nested) list of values to export
 
     No outputs.
     """
