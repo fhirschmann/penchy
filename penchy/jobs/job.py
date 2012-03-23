@@ -20,9 +20,10 @@ from tempfile import NamedTemporaryFile
 from penchy.compat import update_hasher, write
 from penchy.jobs.dependency import build_keys, edgesort
 from penchy.jobs.elements import PipelineElement, SystemFilter
-from penchy.jobs.filters import Receive, Send
+from penchy.jobs.filters import Receive, Send, WrongInputError
 from penchy.jobs.plots import Plot
 from penchy.jobs.hooks import Hook
+from penchy.jobs.typecheck import TypeCheckError
 from penchy.maven import get_classpath, setup_dependencies
 from penchy.util import tempdir, default
 
