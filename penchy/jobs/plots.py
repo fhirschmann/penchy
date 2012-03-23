@@ -313,7 +313,7 @@ class ScatterPlot(Plot):
                 options['color'] = colors.pop()
 
             if self.markers:
-                options['marker'] = markers.pop()
+                options['marker'] = shapes.pop()
             else:
                 options['marker'] = 'o'
 
