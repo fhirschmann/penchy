@@ -238,15 +238,15 @@ class MergeTest(unittest.TestCase):
 
     def test_malformed_arguments_type(self):
         with self.assertRaises(ValueError):
-            f = Merge(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
+            Merge(('col1', 'col2'), [(1, 42, Value('id1')), (2, 'c', Value('id2'))])
 
     def test_malformed_arguments_length_too_small(self):
         with self.assertRaises(ValueError):
-            f = Merge(('col1', 'col2'), [(1, 'b'), (2, 'c', Value('id2'))])
+            Merge(('col1', 'col2'), [(1, 'b'), (2, 'c', Value('id2'))])
 
     def test_malformed_arguments_length_too_big(self):
         with self.assertRaises(ValueError):
-            f = Merge(('col1', 'col2'), [(1, 'b', Value('id1'), Value('foo')), (2, 'c', Value('id2'))])
+            Merge(('col1', 'col2'), [(1, 'b', Value('id1'), Value('foo')), (2, 'c', Value('id2'))])
 
 
 class MergingReceiveTest(unittest.TestCase):
