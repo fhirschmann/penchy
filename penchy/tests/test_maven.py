@@ -168,6 +168,5 @@ class MavenUtilTest(unittest.TestCase):
         self.assertEqual(password, 'my_password')
 
     def test_extract_no_credentials(self):
-        with NamedTemporaryFile() as tf:
-            with self.assertRaises(ValueError):
-                extract_maven_credentials('server002', self.tf.name)
+        with self.assertRaises(ValueError):
+            extract_maven_credentials('server002', self.tf.name)
