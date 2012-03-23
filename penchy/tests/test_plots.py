@@ -14,6 +14,12 @@ class PlotTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             Plot(filename='', y_scale='bar')
 
+    def test_wrong_color_map(self):
+        with self.assertRaises(ValueError):
+            # We assume 'foo' is not a valid
+            # colormap.
+            Plot(filename='', cmap='foo')
+
     def test_xlim(self):
         Plot(filename='', x_min=30)
         x_min, _ = xlim()
