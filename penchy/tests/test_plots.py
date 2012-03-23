@@ -1,5 +1,3 @@
-import sys
-
 from matplotlib.pyplot import xlim, ylim
 from penchy.compat import unittest
 from penchy.jobs.plots import Plot
