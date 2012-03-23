@@ -202,9 +202,8 @@ class Types(object):
                 valid = False
 
         missing_inputs = self.names - set(connections)
-        for input_ in missing_inputs:
-            if input_.startswith(':') and input_.endswith(':'):
-                missing_inputs.discard(input_)
+        missing_inputs = filter(lambda i: not (i.startswith(':') and i.endswith(':')),
+                                missing_inputs)
         if missing_inputs:
             valid = False
             log.error('Sink inputs not satisfied: {0}'.format(', '.join(missing_inputs)))
