@@ -1749,13 +1749,13 @@ class Composer(object):
     Where dacapo is accessible from the outside always as the same object, the
     other filters will not be instantiated until they are part of a pipeline.
 
-    ``(Slice, {'step' : 2})`` will be instantiated as ``(Slice,
-    step=2)``. Whenever a dict is passed as the last argument to such a filter
+    ``(Slice, {'step' : 2})`` will be instantiated as ``Slice(step=2)``.
+    Whenever a dict is passed as the last argument to such a filter
     instantiation sequence (it can be either a list or a tuple) it will be
     treated as keyword arguments.
 
     ``(Reduce, lambda x, y: x + sum(y), 10)`` will be instantiated as
-    ``(Reduce, lambda x, y: x + sum(y), 10)``.
+    ``Reduce(lambda x, y: x + sum(y), 10)``.
 
     So this pipeline part will drop the first invocation and then sum the
     times of every second remaining invocation up.
