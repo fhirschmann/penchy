@@ -1877,6 +1877,7 @@ class Export(Filter):
         values = kwargs['values']
         depth = util.depth(values)
 
+        # TODO: support less functions than depth, fill up with identity funs
         if self.functions:
             if depth != len(self.functions):
                 raise ValueError("Number of levels in the values does not "
