@@ -1237,7 +1237,7 @@ class StandardDeviation(Filter):
     def __init__(self, ddof=1):
         """
         :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
-                     is substracted from the divisor.
+                     is subtracted from the divisor.
         :type ddof: integer
         """
         super(StandardDeviation, self).__init__()
@@ -1522,7 +1522,7 @@ class Sort(Filter):
         names = list(kwargs)
         values = zip(*kwargs.values())
 
-        # Get the posisitions of the columns in ``sort_by``
+        # Get the positions of the columns in ``sort_by``
         columns = [i for i, x in enumerate(names) if x in self.sort_by]
 
         # Sort the table
@@ -1585,9 +1585,9 @@ class Normalize(Filter):
 
     def __init__(self, epsilon=0.0001):
         """
-        :param epsilon: if the normalized sum differes more than ``epsilon``
+        :param epsilon: if the normalized sum differs more than ``epsilon``
                         from 1.0 a warning is given.
-        :type espilon: float
+        :type epsilon: float
         """
         super(Normalize, self).__init__()
         self.epsilon = epsilon
@@ -1600,7 +1600,7 @@ class Normalize(Filter):
             self.out['values'].append(number / n)
 
         if abs(1.0 - sum(self.out['values'])) < self.epsilon:
-            log.warn("The normalized sum differes more than {0} from 1.0".format(self.epsilon))
+            log.warn("The normalized sum differs more than {0} from 1.0".format(self.epsilon))
 
 
 class Zip(Filter):

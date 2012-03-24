@@ -41,7 +41,7 @@ class Plot(Filter):
                  grid=False, legend_position=None,
                  cmap='prism'):
         """
-        :param filename: filename of the resulting svg image
+        :param filename: filename of the resulting SVG image
         :type filename: string
         :param title: title of the plot
         :type title: string
@@ -224,7 +224,7 @@ class BarPlot(Plot):
             if self.stacked:
                 bottoms += bottoms + ys
 
-            # Save the bar identifier for assoziation wit zlabels
+            # Save the bar identifier for association wit zlabels
             bars.append(rects[i][0])
 
         # Display bar names
@@ -251,9 +251,9 @@ class ScatterPlot(Plot):
 
     - ``x``: x coordinates of the points
     - ``y``: y coordinates of the points
-    - ``labels``: list of labels for each point (only avaible if ``labels`` is True)
-    - ``markers``: list of shapes for each point (only avaible if ``markers`` is True)
-    - ``colors``: list of colors for each point (only avaible if ``colors`` is True)
+    - ``labels``: list of labels for each point (only available if ``labels`` is True)
+    - ``markers``: list of shapes for each point (only available if ``markers`` is True)
+    - ``colors``: list of colors for each point (only available if ``colors`` is True)
 
     Valid colors can be obtained from ``matplotlib.colors`` and valid shapes from
     ``matplotlib.lines.line2D.set_marker``.
@@ -405,7 +405,7 @@ class Histogram(Plot):
 
     def __init__(self, bins, normed=False, *arg, **kwargs):
         """
-        :param bins: if ``bins`` is a number ``bins`` + 1 egdes are
+        :param bins: if ``bins`` is a number ``bins`` + 1 edges are
                      drawn. Unequally spaced bins are supported by sequences.
         :type bins: integer or list integers
         :param normed: draw a normalized histogram
