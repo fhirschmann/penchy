@@ -1869,6 +1869,9 @@ class Export(Filter):
         :type heading: list string
         :param functions: functions that map descriptions to the value positions
         :type functions: list of functions
+        :type functions: list functions
+        :param valuefunction: function that can modify the actual value
+        :type valuefunction: function
         """
         self.filename = filename
         self.heading = heading
