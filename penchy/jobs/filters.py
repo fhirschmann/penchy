@@ -153,11 +153,11 @@ class HProf(Filter):
         :param outputs: outputs of the filter
         :type outputs: :class:`~penchy.jobs.typecheck.Types`
         :param start_marker: the string with which the data segment starts
-        :type start_marker: string
+        :type start_marker: str
         :param end_marker: the string with which the data segment ends
-        :type end_maker: string
+        :type end_maker: str
         :param skip: lines to skip before the actual data begin
-        :type skip: integer
+        :type skip: int
         :param data_re: regular expression to match one data line
         :type data_re: ``re``
         :param start_re: regular expression to extract information out of the first line
@@ -790,9 +790,9 @@ class Merge(Filter):
     def __init__(self, names, data):
         """
         :param names: names of outputs
-        :type names: tuple string
+        :type names: tuple of string
         :param data: the columns that should be merged and the identifiers
-        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, string,
+        :type data: tuple (:class:`~penchy.jobs.job.SystemComposition`, str,
                            :class:`~penchy.jobs.filters.Value`)
         """
         super(Merge, self).__init__()
@@ -907,13 +907,13 @@ class Map(Filter):
         :param filter_: the filter to be applied
         :type filter_: :class:`~penchy.jobs.elements.Filter`
         :param input: the name of the input of :class:`~penchy.jobs.filters.Map`
-        :type input: string
+        :type input: str
         :param output: the name of the output of :class:`~penchy.jobs.filters.Map`
-        :type output: string
+        :type output: str
         :param finput: the name of an input of the applied filter
-        :type finput: string
+        :type finput: str
         :param foutput: the name of an output of the applied filter
-        :type foutput: string
+        :type foutput: str
         """
         super(Map, self).__init__()
         self.input = input
@@ -1180,9 +1180,9 @@ class Unpack(Filter):
     def __init__(self, input='singleton', output='result'):
         """
         :param input: the name of the input
-        :type input: string
+        :type input: str
         :param output: the name of the output
-        :type output: string
+        :type output: str
         """
         super(Unpack, self).__init__()
         self.input = input
@@ -1238,7 +1238,7 @@ class StandardDeviation(Filter):
         """
         :param ddof: Delta Degrees of Freedom (ddof): ``ddof``
                      is subtracted from the divisor.
-        :type ddof: integer
+        :type ddof: int
         """
         super(StandardDeviation, self).__init__()
         self.ddof = ddof
@@ -1330,9 +1330,9 @@ class Decorate(Filter):
     def __init__(self, string, inputs=['values']):
         """
         :param string: the decorate/interpolation string
-        :type string: string
+        :type string: str
         :param inputs: list of input names
-        :type inputs: list string
+        :type inputs: list of str
         """
         super(Decorate, self).__init__()
 
@@ -1506,7 +1506,7 @@ class Sort(Filter):
     def __init__(self, sort_by, reverse=False):
         """
         :param sort_by: the table is sorted by these columns
-        :type sort_by: string or list string
+        :type sort_by: str or list of str
         :param reverse: order the table in reverse
         :type reverse: bool
         """
@@ -1551,7 +1551,7 @@ class Accumulate(Filter):
     def __init__(self, name):
         """
         :param name: name of the input
-        :type name: string
+        :type name: str
         """
         super(Accumulate, self).__init__()
         self.name = name
@@ -1863,10 +1863,10 @@ class Export(Filter):
         """
         :param filename: the filename in which the export is saved
         :type filename: path
-        :param heading: the frist row (heading) of the exported file
+        :param heading: the first row (heading) of the exported file
         :type heading: list string
         :param functions: functions that map descriptions to the value positions
-        :type functions: list func
+        :type functions: list of functions
         """
         self.filename = filename
         self.heading = heading
