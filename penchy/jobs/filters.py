@@ -1890,13 +1890,11 @@ class Export(Filter):
 
             diff = abs(depth - len(self.functions))
             self.functions.extend([lambda x: x] * diff)
-
-            if self.valuefunction:
-                self.functions.append(self.valuefunction)
-            else:
-                self.functions.append(lambda x: x)
         else:
             self.functions = [lambda x: x] * (depth + 1)
+
+        if not self.valuefunction:
+            self.valuefunction = lambda x: x
 
         with open(self.filename, 'wb') as f:
             writer = csv.writer(f, delimiter='\t')
@@ -1909,4 +1907,4 @@ class Export(Filter):
                 self._export(writer, v, functions[1:],
                         accum + [functions[0](i)])
         else:
-            writer.writerow(accum + [functions[0](values)])
+            writer.writerow(accum + [self.valuefunction(values)])
