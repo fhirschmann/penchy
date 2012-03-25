@@ -1269,6 +1269,8 @@ class Sum(Filter):
         super(Sum, self).__init__()
         self.input = input
         self.output = output
+        self.inputs = Types((input, list, (int, float)))
+        self.outputs = Types((output, (int, float)))
 
     def _run(self, **kwargs):
         self.out[self.output] = sum(kwargs[self.input])
