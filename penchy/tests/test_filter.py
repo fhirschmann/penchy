@@ -797,20 +797,23 @@ class ExportTest(unittest.TestCase):
         finally:
             os.remove(self.tempfile)
 
+    def test_short_function_list(self):
+        f = Export(self.tempfile, ['bench', 'iteration', 'times'],
+                   [['batik', 'fop'].__getitem__])
+        f._run(values=[[1, 2], [3, 4]])
+        expected = "bench\titeration\ttimes\r\n" \
+            "batik\t0\t1\r\n" \
+            "batik\t1\t2\r\n" \
+            "fop\t0\t3\r\n" \
+            "fop\t1\t4\r\n"
+        actual = open(self.tempfile).read()
+        try:
+            self.assertMultiLineEqual(actual, expected)
+        finally:
+            os.remove(self.tempfile)
+
     def test_unbalanced_values(self):
         f = Export(self.tempfile, ['test1', 'test2', 'values'],
                    [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
         with self.assertRaises(ValueError):
             f._run(values=[[1, [2]], [3, 4]])
-
-    def test_too_depth_values(self):
-        f = Export(self.tempfile, ['test', 'test2', 'values'],
-                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
-        with self.assertRaises(ValueError):
-            f._run(values=[[[1, 2], [2, 3]], [[3, 4], [4, 5]]])
-
-    def test_too_shallow_values(self):
-        f = Export(self.tempfile, ['test', 'test2', 'values'],
-                   [['v1', 'v2'].__getitem__, ['z1', 'z2'].__getitem__])
-        with self.assertRaises(ValueError):
-            f._run(values=[1, 2])

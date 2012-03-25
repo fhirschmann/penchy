@@ -1814,12 +1814,12 @@ class Export(Filter):
 
     The list of functions is used in first place to
     choose meaningful names to associate the values
-    with their dimensions. If you use these functions
-    you have to provide a function for every nesting-level
-    of the ``values`` input list. The functions need to
-    take exactly one parameter and are fed with the current
-    position in the list. Typically such a function would
-    look like::
+    with their dimensions. If you do not provide a function
+    for each nesting-level of the ``values`` input list
+    the identity function is used for all deeper nesting-levels.
+    The functions need to take exactly one parameter and are
+    fed with the current position in the list. Typically such
+    a function would look like::
 
         ['batik', 'fop'].__getitem__
 
@@ -1838,7 +1838,7 @@ class Export(Filter):
     Running this Export filter::
 
         Export('/tmp/export', ['bench', 'iteration', 'times'],
-               [['batik', 'fop'].__getitem__, lambda x: x])
+               [['batik', 'fop'].__getitem__])
 
     with the following input::
 
@@ -1881,9 +1881,13 @@ class Export(Filter):
 
         # TODO: support less functions than depth, fill up with identity funs
         if self.functions:
-            if depth != len(self.functions):
-                raise ValueError("Number of levels in the values does not "
-                                 "match with the number of functions.")
+            if depth < len(self.functions):
+                log.warn("You have specified more functions than "
+                         "nested-levels in the input list are available.")
+
+            diff = abs(depth - len(self.functions))
+            self.functions.extend([lambda x: x] * diff)
+
             if self.valuefunction:
                 self.functions.append(self.valuefunction)
             else:
