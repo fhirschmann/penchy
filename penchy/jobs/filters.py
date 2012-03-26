@@ -1354,7 +1354,7 @@ class ConfidenceIntervalMean(Filter):
 
     .. note::
 
-        It is assumed that the samples are statistically independend.
+        It is assumed that the samples are statistically independent.
     """
     inputs = Types(('values', list, (int, float)))
     outputs = Types(('interval', tuple, float))
@@ -1408,7 +1408,7 @@ class CI2Alternatives(Filter):
 
     .. note::
 
-        It is assumed that the samples are statistically independend.
+        It is assumed that the samples are statistically independent.
     """
     inputs = Types(('xs', list, (int, float)),
                    ('ys', list, (int, float)))
