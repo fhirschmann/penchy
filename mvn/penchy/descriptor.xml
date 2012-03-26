@@ -12,20 +12,19 @@
             <directory>${basedir}/../../</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
-                <include>penchy/*.py</include>
-                <include>penchy/*/*.py</include>
-                <include>examples/*.job</include>
-                <include>argparse.py</include>
+                <include>penchy/**/*.py</include>
+                <include>docs/**/*.py</include>
+                <include>**/*.job</include>
+                <include>**/*.rst</include>
+                <include>**/*.json</include>
+                <include>bin/*</include>
                 <include>setup.py</include>
                 <include>penchy.requirements</include>
+                <include>penchyrc.example</include>
                 <include>README</include>
                 <include>AUTHORS</include>
                 <include>LICENSE</include>
-                <include>bin/*</include>
-                <include>docs/*.rst</include>
-                <include>docs/*.py</include>
             </includes>
         </fileSet>
     </fileSets>
 </assembly>
-
