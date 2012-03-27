@@ -1,5 +1,9 @@
 # -*- mode: python -*-
 
+# This example shows how to create a lineplot
+# showing the wallclocktime of multiple iterations
+# and benchmarks.
+
 from penchy.jobs import *
 
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
