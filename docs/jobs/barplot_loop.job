@@ -1,5 +1,8 @@
 # -*- mode: python -*-
 
+# This job does the same as ``barplot.job``,
+# but uses loops to avoid redundancy.
+
 from penchy.jobs import *
 import config
 
