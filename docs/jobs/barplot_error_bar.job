@@ -1,5 +1,11 @@
 # -*- mode: python -*-
 
+# This example shows how to create a barplot
+# showing the mean wallclocktime of multiple
+# iterations for multiple invocations and
+# benchmarks. Additionally it prints an error
+# bar showing the standard deviation.
+
 from penchy.jobs import *
 import config
 
