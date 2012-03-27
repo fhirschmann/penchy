@@ -9,7 +9,6 @@
 from penchy.jobs import *
 import config
 
-# Only the i386 node
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
 benchmarks = ['fop', 'batik']
