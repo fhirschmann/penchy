@@ -1,7 +1,11 @@
 # -*- mode: python -*-
 
+# This example shows how to create a scatterplot
+# showing the sum of method calls and the total
+# execution time for different benchmarks.
+# (Only one iteration and invocation.)
+
 from penchy.jobs import *
-import config
 
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
