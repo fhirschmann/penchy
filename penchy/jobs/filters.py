@@ -1223,6 +1223,12 @@ class StandardDeviation(Filter):
     """
     Computes the standard deviation of given values.
 
+    .. warning::
+
+        By default computing the standard deviation of a list
+        with one element will result in a division by
+        zero, because ``ddof`` is by default 1.
+
     Inputs:
 
     - ``values``: numeric values
