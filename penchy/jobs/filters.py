@@ -688,7 +688,7 @@ class Extract(Filter):
     def __init__(self, *args):
         """
         :param args: names of the data
-        :type evaluator: list str or list (:class:`~penchy.jobs.job.SystemComposition`, str)
+        :type args: str or (:class:`~penchy.jobs.job.SystemComposition`, str)
         """
         super(Extract, self).__init__()
 
@@ -858,6 +858,9 @@ class ExtractingReceive(Receive, Extract):
     inputs = Types((':environment:', dict))
 
     def __init__(self, *args):
+        """
+        :param args: see :class:`Extract`
+        """
         Extract.__init__(self, *args)
         Receive.__init__(self)
 
@@ -876,6 +879,10 @@ class MergingReceive(Receive, Merge):
     inputs = Types((':environment:', dict))
 
     def __init__(self, names, data):
+        """
+        :param names: see :class:`Merge`
+        :param data: see :class:`Merge`
+        """
         Merge.__init__(self, names, data)
         Receive.__init__(self)
 
@@ -1022,6 +1029,13 @@ class Dump(SystemFilter):
     outputs = Types(('dump', str))
 
     def __init__(self, include_complete_job=False, indent=None):
+        """
+        :param include_complete_job: include the complete job (not just the
+                                     filename)
+        :type include_complete_job: bool
+        :param indent: maximal indentation level of generated JSON
+        :type indent: None or int (>= 0)
+        """
         super(Dump, self).__init__()
         self.include = include_complete_job
         self.indent = indent
@@ -1272,6 +1286,12 @@ class Sum(Filter):
     outputs = Types(('sum', (int, float)))
 
     def __init__(self, input='values', output='sum'):
+        """
+        :param input: the name of the input
+        :type input: str
+        :param output: the name of the output
+        :type output: str
+        """
         super(Sum, self).__init__()
         self.input = input
         self.output = output
@@ -1481,6 +1501,12 @@ class SteadyState(Filter):
     outputs = Types(('values', list, list, (int, float)))
 
     def __init__(self, k, threshold):
+        """
+        :param k: count of measurements
+        :type k: int
+        :param threshold: threshold for coefficient variation
+        :type threshold: float
+        """
         super(SteadyState, self).__init__()
         self.threshold = threshold
         self.k = k
@@ -1771,7 +1797,7 @@ class Composer(object):
     def __init__(self, *elements):
         """
         :param elements: the elements to compose
-        :type elements: see :class:`~penchy.jobs.filters.Composer._build_part`
+        :type elements: see :meth:`Composer._build_part`
         """
         self.parts = elements
 
@@ -1870,7 +1896,7 @@ class Export(Filter):
     def __init__(self, filename, heading, functions=None, valuefunction=None):
         """
         :param filename: the filename in which the export is saved
-        :type filename: path
+        :type filename: str
         :param heading: the first row (heading) of the exported file
         :type heading: list string
         :param functions: functions that map descriptions to the value positions
