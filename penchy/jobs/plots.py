@@ -323,8 +323,11 @@ class ScatterPlot(Plot):
             y_values = []
             colors = []
             markers = []
-            for _, group in itertools.groupby(sorted(zip(keys, xss), key=lambda x: x[0]),
-                                                     lambda x: x[0]):
+            print keys
+            print legend
+            keys, legend, xss, yss = zip(*sorted(zip(keys, legend, xss, yss), key=lambda x: x[0]))
+            print legend
+            for _, group in itertools.groupby(zip(keys, xss), lambda x: x[0]):
                 xs = []
                 for key, values in group:
                     xs.extend(values)
@@ -338,8 +341,7 @@ class ScatterPlot(Plot):
             markers = unify(markers)
             colors = unify(markers)
 
-            for _, group in itertools.groupby(sorted(zip(keys, yss), key=lambda x: x[0]),
-                                              lambda x: x[0]):
+            for _, group in itertools.groupby(zip(keys, yss), lambda x: x[0]):
                 ys = []
                 for _, values in group:
                     ys.extend(values)
