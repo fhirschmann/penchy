@@ -128,3 +128,8 @@ class DieTest(unittest.TestCase):
         io.seek(0)
         self.assertEqual(io.read(), s + os.linesep)
         sys.stderr = err
+
+
+class UnifyTest(unittest.TestCase):
+    def test_unify(self):
+        self.assertEqual(util.unify([1, 2, 2, 3, 3]), [1, 2, 3])
