@@ -5,13 +5,11 @@ import config
 
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
-benchmarks = ['fop', 'batik']
+benchmarks = ['dummy']
 
 # Client side filters
 f = filters.HProfCpuTimes()
 send = filters.Send()
-unpack_sum = filters.Unpack(input='values', output='sum')
-unpack_total = filters.Unpack(input='total', output='total')
 
 compositions = []
 for bench in benchmarks:
@@ -20,9 +18,8 @@ for bench in benchmarks:
     jvm.tool = tools.HProf('cpu=times')
     composition = SystemComposition(jvm, node)
     composition.flow = [jvm.tool >> f >> ('count', 'values') >>
-                        filters.Map(filters.Sum()) >>
-                        unpack_sum >> send,
-                        f >> 'total' >> unpack_total >> send]
+                        filters.Map(filters.Sum()) >> ('values', 'sum') >> send,
+                        f >> 'total' >> send]
     compositions.append(composition)
 
 # Server side filters
