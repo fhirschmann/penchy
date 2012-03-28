@@ -243,3 +243,14 @@ def depth(l):
         return max(depths) + 1
     else:
         return 0
+
+
+def unify(xs):
+    """
+    Removes duplicates from xs while preserving the order.
+
+    :param xs: the list
+    :type xs: list object
+    """
+    seen = set()
+    return [x for x in xs if x not in seen and not seen.add(x)]
