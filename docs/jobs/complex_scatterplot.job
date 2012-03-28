@@ -31,10 +31,10 @@ for benchmark, size in benchmarks:
 merge = filters.MergingReceive(('time', 'iter', 'bench', 'size', 'legend'),
                         [(c, 'times', 'numbers', Value(str(c.jvm.workload)),
                           Value('o' if 'small' in c.jvm.workload.args else '+'),
-                          Value(c.jvm.workload.args.strip('--size '))) for c in compositions])
+                          Value(c.jvm.workload.args.strip('--'))) for c in compositions])
 
-plot = plots.ScatterPlot(filename='/tmp/barplot.svg', title='Barplot', markers=True,
-                     xlabel='Benchmarks (Size)',ylabel='Wallclocktime')
+plot = plots.ScatterPlot(filename='/tmp/scatterplot.svg', title='Scatterplot', markers=True,
+                     xlabel='Iterations',ylabel='Wallclocktime')
 
 job = Job(compositions=compositions,
           server_flow=[

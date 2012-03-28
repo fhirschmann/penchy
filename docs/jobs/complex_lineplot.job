@@ -34,8 +34,8 @@ merge = filters.MergingReceive(('time', 'std', 'iter', 'bench'),
                         [(comp, 'times', 'std', 'numbers', Value(str(comp.jvm.workload))) for comp in compositions])
 
 
-plot = plots.LinePlot(filename='/tmp/barplot.svg', title='Barplot', yerror_bars=True,
-                     xlabel='Benchmarks (Size)',ylabel='Wallclocktime')
+plot = plots.LinePlot(filename='/tmp/lineplot.svg', title='Lineplot', yerror_bars=True,
+                     xlabel='Iterations',ylabel='Wallclocktime')
 
 job = Job(compositions=compositions,
           server_flow=[
