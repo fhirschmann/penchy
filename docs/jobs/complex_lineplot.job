@@ -1,0 +1,45 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = [('fop', 'small'),
+              ('fop', 'default'),
+              ('batik', 'small'),
+              ('batik', 'default')]
+
+# Client side filters
+mean = filters.Mean()
+std  = filters.StandardDeviation()
+flip = filters.Zip()
+send = filters.Send()
+
+compositions = []
+for benchmark, size in benchmarks:
+    jvm = JVM('java')
+    jvm.workload = workloads.ScalaBench(benchmark, iterations=5, args="--size " + size,
+                                        name=benchmark + " (" + size + ")")
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.workload >> 'stderr' >> filters.DacapoHarness() >> ('times', 'values') >>
+                 flip >> filters.Map(mean) >> ('values', 'times') >> send,
+
+                 flip >> filters.Map(std) >> ('values', 'std') >> send,
+
+                 flip >> filters.Map(mean) >> filters.Enumerate() >> send]
+    compositions.append(comp)
+
+# Server side filters
+merge = filters.MergingReceive(('time', 'std', 'iter', 'bench'),
+                        [(comp, 'times', 'std', 'numbers', Value(str(comp.jvm.workload))) for comp in compositions])
+
+
+plot = plots.LinePlot(filename='/tmp/barplot.svg', title='Barplot', yerror_bars=True,
+                     xlabel='Benchmarks (Size)',ylabel='Wallclocktime')
+
+job = Job(compositions=compositions,
+          server_flow=[
+               merge >> [('iter', 'x'), ('time', 'y'), ('bench', 'z'), ('std', 'yerr')] >> plot,
+          ],
+          invocations = 3
+          )
