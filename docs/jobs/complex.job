@@ -1,0 +1,47 @@
+# -*- mode: python -*-
+
+from penchy.jobs import *
+
+node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
+
+benchmarks = [('fop', 'small'),
+              ('fop', 'default'),
+              ('batik', 'small'),
+              ('batik', 'default')]
+
+# Client side filters
+mean = filters.Mean()
+std  = filters.StandardDeviation()
+flip = filters.Zip()
+send = filters.Send()
+
+compositions = []
+for benchmark, size in benchmarks:
+    jvm = JVM('java')
+    jvm.workload = workloads.ScalaBench(benchmark, iterations=5, args="--size " + size,
+                                        name=benchmark + " (" + size + ")")
+    comp = SystemComposition(jvm, node)
+    comp.flow = [jvm.workload >> 'stderr' >> filters.DacapoHarness() >> ('times', 'values') >>
+                 flip >> filters.Map(mean) >> ('values', 'times') >> send,
+
+                 flip >> filters.Map(std) >> ('values', 'std') >> send]
+    compositions.append(comp)
+
+# Server side filters
+merge = filters.MergingReceive(('time', 'std', 'bench'),
+                        [(comp, 'times', 'std', Value(str(comp.jvm.workload))) for comp in compositions])
+
+extract = filters.ExtractingReceive('times')
+deco = filters.Decorate('Iteration {0}')
+enum = filters.Enumerate()
+
+plot = plots.BarPlot(filename='/tmp/barplot.svg', title='Barplot', error_bars=True,
+                     xlabel='Benchmarks (Size)',ylabel='Wallclocktime')
+
+job = Job(compositions=compositions,
+          server_flow=[
+               merge >> [('bench', 'x'), ('time', 'y'), ('std', 'err')] >> plot,
+               extract >> ('times', 'values') >> enum >> ('numbers', 'values') >> deco >> ('values', 'z') >> plot
+          ],
+          invocations = 3
+          )
