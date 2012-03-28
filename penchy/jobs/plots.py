@@ -244,8 +244,10 @@ class ScatterPlot(Plot):
     This class represents a scatterplot filter. It is possible:
 
     - to draw a label for each point
-    - to set the color for each point
-    - to set the shape of each point
+    - to set the color for a group of points
+    - to set the shape of a group of points
+
+    If you use ``colors`` or ``markers`` you have to specifiy a ``legend``.
 
     Inputs:
 
@@ -254,6 +256,8 @@ class ScatterPlot(Plot):
     - ``labels``: list of labels for each point (only available if ``labels`` is True)
     - ``markers``: list of shapes for each point (only available if ``markers`` is True)
     - ``colors``: list of colors for each point (only available if ``colors`` is True)
+    - ``legend``: list of strings describing the what the markers and colors stand for
+                  (only avaibable if ``colors`` or ``markers`` is True)
 
     Valid colors can be obtained from ``matplotlib.colors`` and valid shapes from
     ``matplotlib.lines.line2D.set_marker``.
@@ -279,45 +283,54 @@ class ScatterPlot(Plot):
         self.markers = markers
         self.colors = colors
 
-        input_types = [('x', list, (int, float)),
-                       ('y', list, (int, float))]
+        input_types = [('x', list, list, (int, float)),
+                       ('y', list, list, (int, float))]
 
         if labels:
             input_types.append(('labels', list, str))
         if markers:
-            input_types.append(('shapes', list, str))
+            input_types.append(('markers', list, str))
         if colors:
             input_types.append(('colors', list, str))
+        if markers or colors:
+            input_types.append(('legend', list, str))
 
         self.inputs = Types(*input_types)
 
     def _run(self, **kwargs):
-        xs = kwargs['x']
-        ys = kwargs['y']
+        xss = kwargs['x']
+        yss = kwargs['y']
 
         if self.labels:
             labels = kwargs['labels']
         if self.markers:
-            shapes = kwargs['shapes']
+            markers = kwargs['markers']
         if self.colors:
             colors = kwargs['colors']
+        if self.colors or self.markers:
+            legend = kwargs['legend']
 
-        for x, y in zip(xs, ys):
+        handles = []
+        for xs, ys in zip(xss, yss):
             if self.labels:
-                self.plot.text(x, y, labels.pop(), rotation=-45)
-            else:
-                self.plot.text(x, y)
+                label = labels.pop()
+            for x, y in zip(xs, ys):
+                if self.labels:
+                    self.plot.text(x, y, label, rotation=-45)
 
             options = dict()
             if self.colors:
                 options['color'] = colors.pop()
 
             if self.markers:
-                options['marker'] = shapes.pop()
+                options['marker'] = markers.pop()
             else:
                 options['marker'] = 'o'
 
-            self.plot.plot(x, y, **options)
+            handles.append(self.plot.scatter(xs, ys, **options))
+
+        if self.markers or self.colors:
+            self.fig.legend(handles, legend, self.legend_position)
 
 
 class LinePlot(Plot):
