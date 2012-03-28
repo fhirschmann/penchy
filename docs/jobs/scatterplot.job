@@ -5,7 +5,7 @@ import config
 
 node = NodeSetting('192.168.56.10', 22, 'bench', '/home/bench', '/usr/bin')
 
-benchmarks = ['dummy']
+benchmarks = ['fop', 'batik']
 
 # Client side filters
 f = filters.HProfCpuTimes()
