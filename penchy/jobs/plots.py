@@ -323,10 +323,7 @@ class ScatterPlot(Plot):
             y_values = []
             colors = []
             markers = []
-            print keys
-            print legend
             keys, legend, xss, yss = zip(*sorted(zip(keys, legend, xss, yss), key=lambda x: x[0]))
-            print legend
             for _, group in itertools.groupby(zip(keys, xss), lambda x: x[0]):
                 xs = []
                 for key, values in group:
@@ -340,6 +337,7 @@ class ScatterPlot(Plot):
 
             markers = unify(markers)
             colors = unify(markers)
+            legend = unify(legend)
 
             for _, group in itertools.groupby(zip(keys, yss), lambda x: x[0]):
                 ys = []
