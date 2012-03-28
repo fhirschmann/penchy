@@ -449,16 +449,17 @@ def write_penchy_pom(dependencies, path):
     pom.write(path)
 
 
-def extract_maven_credentials(id_, path=os.path.expanduser('~/.m2/settings.xml')):
+def extract_maven_credentials(id_, path='~/.m2/settings.xml'):
     """
     Extracts the username and password for a given ``id_``
     from a maven settings.xml.
 
     :param id_: id of the remote machine as defined in the settings file
     :type id_: str
-    :param filename: path to settings.xml
+    :param filename: path to settings.xml; ~ constructions will be expanded
     :type filename: str
     """
+    path = os.path.expanduser(path)
     xmlns = '{http://maven.apache.org/SETTINGS/1.0.0}'
     tree = parse(path).getroot()
     servers = tree.find('{0}servers'.format(xmlns))
