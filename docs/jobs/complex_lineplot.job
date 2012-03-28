@@ -26,7 +26,7 @@ for benchmark, size in benchmarks:
 
                  flip >> filters.Map(std) >> ('values', 'std') >> send,
 
-                 flip >> filters.Map(mean) >> filters.Enumerate() >> send]
+                 flip >> filters.Map(mean) >> filters.Enumerate(start=1) >> send]
     compositions.append(comp)
 
 # Server side filters

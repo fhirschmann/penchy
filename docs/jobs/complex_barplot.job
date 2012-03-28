@@ -33,7 +33,7 @@ merge = filters.MergingReceive(('time', 'std', 'bench'),
 
 extract = filters.ExtractingReceive('times')
 deco = filters.Decorate('Iteration {0}')
-enum = filters.Enumerate()
+enum = filters.Enumerate(start=1)
 
 plot = plots.BarPlot(filename='/tmp/barplot.svg', title='Barplot', error_bars=True,
                      xlabel='Benchmarks (Size)',ylabel='Wallclocktime')
