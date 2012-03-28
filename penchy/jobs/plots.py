@@ -15,6 +15,7 @@ from penchy.jobs.elements import Filter
 from penchy.jobs.typecheck import Types
 from penchy.jobs.hooks import Hook
 from penchy.compat import path
+from penchy.util import unify
 from penchy import is_server
 
 
@@ -301,23 +302,54 @@ class ScatterPlot(Plot):
         xss = kwargs['x']
         yss = kwargs['y']
 
-        if self.labels:
-            labels = kwargs['labels']
+        keys = []
         if self.markers:
-            markers = kwargs['markers']
+            keys.append(kwargs['markers'])
+            markers = unify(kwargs['markers'])
         if self.colors:
-            colors = kwargs['colors']
+            keys.append(kwargs['colors'])
+            colors = unify(kwargs['colors'])
+
+        if self.labels:
+            for xs, ys in zip(xss, yss):
+                label = kwargs['labels'].pop()
+                for x, y in zip(xs, ys):
+                    self.plot.text(x, y, label, rotation=-45)
+
         if self.colors or self.markers:
             legend = kwargs['legend']
+            keys = zip(*keys)
+            x_values = []
+            y_values = []
+            colors = []
+            markers = []
+            for _, group in itertools.groupby(sorted(zip(keys, xss), key=lambda x: x[0]),
+                                                     lambda x: x[0]):
+                xs = []
+                for key, values in group:
+                    xs.extend(values)
+                    if self.colors:
+                        colors.append(key[1])
+                    if self.markers:
+                        markers.append(key[0])
+
+                x_values.append(xs)
+
+            markers = unify(markers)
+            colors = unify(markers)
+
+            for _, group in itertools.groupby(sorted(zip(keys, yss), key=lambda x: x[0]),
+                                              lambda x: x[0]):
+                ys = []
+                for _, values in group:
+                    ys.extend(values)
+                y_values.append(ys)
+
+            xss = x_values
+            yss = y_values
 
         handles = []
         for xs, ys in zip(xss, yss):
-            if self.labels:
-                label = labels.pop()
-            for x, y in zip(xs, ys):
-                if self.labels:
-                    self.plot.text(x, y, label, rotation=-45)
-
             options = dict()
             if self.colors:
                 options['color'] = colors.pop()
