@@ -4,7 +4,6 @@
 *.log*
 *.jar
 *~
-intern/*.svg
 /scratch
 /dacapo-9.12-bach.jar
 .ropeproject
