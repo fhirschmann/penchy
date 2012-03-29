@@ -7,7 +7,7 @@ PenchY.
 import sys
 
 # Version will be replaced by maven!
-__version__ = '0.2'
+__version__ = '0.4'
 
 is_server = not sys.argv[0].endswith('penchy_bootstrap')
 is_client = not is_server
