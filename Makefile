@@ -1,4 +1,4 @@
-.PHONY: tests help hooks coverage full-coverage dev latex-doc doc static-analysis
+.PHONY: tests help hooks coverage full-coverage dev latex-doc doc static-analysis abgabe
 
 help:
 	@echo "Please use \`make <target>', targets:"
@@ -65,3 +65,11 @@ clean:
 
 check-jobs:
 	pep8 --exclude .git,.ropeproject,*pyc,*pyo --filename=*.job --ignore=E201,E202,E203,E501 --repeat --count --show-source --show-pep8 examples/ docs/jobs/
+
+abgabe: doc latex-doc
+	mkdir -p penchy-final/doc/pdf
+	git archive --prefix=penchy-0.4/ v0.4 | gzip > penchy-final/penchy-0.4.tar.gz
+	cp docs/_build/latex/penchy.pdf penchy-final/doc/pdf
+	cp -av docs/_build/html penchy-final/doc/html
+	tar cvzf penchy-final.tar.gz penchy-final
+	rm -rf penchy-final
