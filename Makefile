@@ -68,6 +68,7 @@ check-jobs:
 
 abgabe: doc latex-doc
 	mkdir -p penchy-final/doc/pdf
+	git bundle create penchy-final/penchy.bundle HEAD
 	git archive --prefix=penchy-0.4/ v0.4 | gzip > penchy-final/penchy-0.4.tar.gz
 	cp docs/_build/latex/penchy.pdf penchy-final/doc/pdf
 	cp -av docs/_build/html penchy-final/doc/html
