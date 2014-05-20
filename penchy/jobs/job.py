@@ -2,7 +2,7 @@
 This module provides the foundation to define jobs.
 
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
- .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschmann.email>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE

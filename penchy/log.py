@@ -1,7 +1,7 @@
 """
 This module deals with logging in PenchY.
 
- .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschmann.email>
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS

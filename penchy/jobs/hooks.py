@@ -4,7 +4,7 @@ This module provides Hook elements that wrap the execution of
 :class:`~penchy.jobs.jvms.JVM`.
 
  .. moduleauthor:: Michael Markert <markert.michael@googlemail.com>
- .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschmann.email>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE

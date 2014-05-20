@@ -1,7 +1,7 @@
 """
 Executes benchmarks and filters generated data.
 
- .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschmann.email>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE

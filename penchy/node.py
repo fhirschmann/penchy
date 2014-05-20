@@ -2,7 +2,7 @@
 This module contains classes which deal with nodes
 (that is, connecting via ssh, uploading the job, starting it...).
 
- .. moduleauthor:: Fabian Hirschmann <fabian@hirschm.net>
+ .. moduleauthor:: Fabian Hirschmann <fabian@hirschmann.email>
 
  :copyright: PenchY Developers 2011-2012, see AUTHORS
  :license: MIT License, see LICENSE
